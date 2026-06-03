@@ -1,0 +1,34 @@
+tools:
+  rdkit:
+    enabled: true
+
+  python_exec:
+    enabled: true
+    timeout_seconds: 5
+    allow_imports: false
+
+  file_io:
+    enabled: true
+
+  plotting:
+    enabled: true
+
+  doc_writer:
+    enabled: true
+
+  paper_review:
+    enabled: true
+    max_chars: 250000
+    default_domain: chem_bio
+
+  xtb:
+    enabled: true
+    executable: xtb
+    timeout_seconds: 120
+    enabled_modes: [full, cheap, offline]
+
+  orca:
+    enabled: true
+    executable: orca
+    timeout_seconds: 300
+    enabled_modes: [full, offline]

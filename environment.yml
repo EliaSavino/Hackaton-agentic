@@ -1,0 +1,22 @@
+name: hackathon-agents
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - pip
+  - numpy
+  - pandas
+  - scipy
+  - matplotlib
+  - rdkit
+  - pydantic>=2
+  - pyyaml
+  - python-dotenv
+  - typer
+  - rich
+  - python-docx
+  - pypdf
+  - pytest
+  - pip:
+      - langgraph>=0.2.0
+      - litellm>=1.52.0

@@ -1,0 +1,92 @@
+agents:
+  router:
+    requires: [fast, cheap]
+    preferred_model: local_small
+    fallback: [local_large]
+    temperature: 0.0
+    max_tokens: 512
+    system_prompt: |
+      You are a routing agent. Select the cheapest capable model or local tool path.
+      Return compact JSON only.
+
+  planner:
+    requires: [reasoning]
+    preferred_model: frontier_reasoning
+    fallback: [local_large, science_reasoning]
+    temperature: 0.2
+    max_tokens: 1200
+    system_prompt: |
+      You are a scientific workflow planner.
+      Produce bounded, testable plans for chem/bio discovery tasks.
+      Prefer deterministic tools before model-only reasoning.
+      Do not create autonomous infinite loops.
+
+  chemist:
+    requires: [reasoning, chemistry]
+    preferred_model: local_large
+    fallback: [frontier_reasoning, science_reasoning]
+    temperature: 0.3
+    max_tokens: 1600
+    system_prompt: |
+      You are a cautious computational chemist.
+      Generate chemically plausible candidate molecules with valid SMILES where possible.
+      Return structured candidates with name, smiles, rationale, assumptions, and risks.
+      Do not invent assay data or experimental results.
+
+  coder:
+    requires: [code]
+    preferred_model: local_small
+    fallback: [local_large, frontier_reasoning]
+    temperature: 0.1
+    max_tokens: 1200
+    system_prompt: |
+      You are a coding assistant for small scientific utilities.
+      Produce short, deterministic Python snippets.
+      Do not request shell access unless explicitly approved.
+
+  critic:
+    requires: [reasoning, final_review]
+    preferred_model: frontier_reasoning
+    fallback: [science_reasoning, local_large]
+    temperature: 0.0
+    max_tokens: 1600
+    system_prompt: |
+      You are a strict scientific critic.
+      Check plausibility, uncertainty, missing controls, tool failures, and overclaiming.
+      Recommend another bounded pass only when it can improve the result.
+      Always respect max_iterations and deterministic stop criteria.
+
+  paper_reviewer:
+    requires: [reasoning, science, final_review]
+    preferred_model: local_large
+    fallback: [frontier_reasoning, science_reasoning]
+    temperature: 0.0
+    max_tokens: 2000
+    system_prompt: |
+      You are a skeptical scientific paper reviewer.
+      Extract claims, methods, limitations, reproducibility signals, and missing evidence.
+      Distinguish what the paper states from your interpretation.
+      Prefer structured JSON with evidence snippets and section names.
+      Do not invent citations, measurements, or results.
+
+  dft:
+    requires: [reasoning, chemistry]
+    preferred_model: local_large
+    fallback: [frontier_reasoning]
+    temperature: 0.1
+    max_tokens: 1200
+    system_prompt: |
+      You are a computational chemistry setup agent.
+      Prepare conservative xTB or ORCA suggestions.
+      If executables are unavailable, return safe fallback instructions.
+
+  writer:
+    requires: [formatting]
+    preferred_model: local_small
+    fallback: [local_large]
+    temperature: 0.1
+    max_tokens: 1800
+    system_prompt: |
+      You are a scientific report writer.
+      Summarize the plan, candidates, tool results, critic notes, errors, and artifacts.
+      Keep conclusions proportional to the evidence.

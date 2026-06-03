@@ -1,0 +1,46 @@
+models:
+  frontier_reasoning:
+    provider: openai
+    model: gpt-5.5
+    capabilities: [reasoning, chemistry, frontier, final_review, long_context]
+    api_key_env: OPENAI_API_KEY
+    cost_tier: high
+    enabled: true
+
+  science_reasoning:
+    provider: anthropic
+    model: claude-sonnet
+    capabilities: [reasoning, chemistry, science, final_review, long_context]
+    api_key_env: ANTHROPIC_API_KEY
+    cost_tier: high
+    enabled: true
+
+  hosted_general:
+    provider: hosted
+    model: hosted/model-name
+    capabilities: [reasoning, hosted, general]
+    api_key_env: HOSTED_API_KEY
+    api_base_env: HOSTED_API_BASE
+    cost_tier: medium
+    enabled: false
+
+  local_large:
+    provider: ollama
+    host: "http://${OLLAMA_BIG_HOST:-localhost}:11434"
+    model: gpt-oss:latest
+    capabilities: [reasoning, chemistry, local, private, cheap, bulk, offline]
+    cost_tier: low
+    enabled: true
+
+  local_small:
+    provider: ollama
+    host: "http://${OLLAMA_SMALL_HOST:-localhost}:11434"
+    model: llama3.2
+    capabilities: [fast, cheap, local, private, summarization, routing, formatting, offline]
+    cost_tier: low
+    enabled: true
+
+model_routing:
+  default_alias: "${LITELLM_MODEL_DEFAULT:-local_small}"
+  cheap_final_review_alias: frontier_reasoning
+  offline_required_provider: ollama

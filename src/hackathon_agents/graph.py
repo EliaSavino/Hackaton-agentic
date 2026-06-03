@@ -1,0 +1,238 @@
+from __future__ import annotations
+
+from pathlib import Path
+from typing import Any, Callable, TypedDict
+
+from hackathon_agents.agents import chemist, critic, planner, writer
+from hackathon_agents.config import AppConfig, RunMode
+from hackathon_agents.logging_config import get_logger
+from hackathon_agents.schemas.molecules import MoleculeFilterConstraints
+from hackathon_agents.state import DiscoveryStatePayload
+from hackathon_agents.tools.doc_writer import write_scientific_report
+from hackathon_agents.tools.file_io import write_csv
+from hackathon_agents.tools.orca import check_orca_availability, run_orca
+from hackathon_agents.tools.plotting import generate_plot
+from hackathon_agents.tools.rdkit_tools import compute_descriptors, filter_molecules, validate_smiles
+from hackathon_agents.tools.xtb import check_xtb_availability
+
+logger = get_logger(__name__)
+
+
+class _GraphState(TypedDict, total=False):
+    original_user_request: str
+    plan: dict[str, Any] | None
+    candidate_molecules: list[dict[str, Any]]
+    tool_results: list[dict[str, Any]]
+    errors: list[str]
+    critic_notes: list[str]
+    critic_decisions: list[dict[str, Any]]
+    final_report_path: str | None
+    messages: list[str]
+    run_dir: str | None
+    run_mode: str
+    iteration: int
+    max_iterations: int
+    needs_more_passes: bool
+    stop_reason: str | None
+    requested_next_actions: list[str]
+    metadata: dict[str, Any]
+
+
+class DiscoveryGraph:
+    def __init__(self, config: AppConfig):
+        self.config = config
+        self._compiled = self._try_build_langgraph()
+
+    def invoke(self, state: DiscoveryStatePayload | dict[str, Any]) -> DiscoveryStatePayload:
+        payload = state if isinstance(state, DiscoveryStatePayload) else DiscoveryStatePayload.model_validate(state)
+        if self._compiled is not None:
+            result = self._compiled.invoke(payload.model_dump(mode="json"))
+            return DiscoveryStatePayload.model_validate(result)
+        return self._invoke_fallback(payload)
+
+    def _invoke_fallback(self, state: DiscoveryStatePayload) -> DiscoveryStatePayload:
+        state = self._planner_node(state)
+        while True:
+            state = self._chemist_node(state)
+            state = self._tool_execution_node(state)
+            state = self._critic_node(state)
+            if self._route_after_critic_state(state) != "chemist":
+                break
+            state.append_message("graph: routing back to chemist for another bounded pass")
+        state = self._writer_node(state)
+        return state
+
+    def _try_build_langgraph(self):
+        try:
+            from langgraph.graph import END, StateGraph
+        except Exception:
+            logger.debug("LangGraph is not installed; using deterministic fallback runner.")
+            return None
+
+        workflow = StateGraph(_GraphState)
+        workflow.add_node("planner", self._dict_node(self._planner_node))
+        workflow.add_node("chemist", self._dict_node(self._chemist_node))
+        workflow.add_node("tool_execution", self._dict_node(self._tool_execution_node))
+        workflow.add_node("critic", self._dict_node(self._critic_node))
+        workflow.add_node("writer", self._dict_node(self._writer_node))
+        workflow.set_entry_point("planner")
+        workflow.add_edge("planner", "chemist")
+        workflow.add_edge("chemist", "tool_execution")
+        workflow.add_edge("tool_execution", "critic")
+        workflow.add_conditional_edges(
+            "critic",
+            self._route_after_critic,
+            {
+                "chemist": "chemist",
+                "writer": "writer",
+            },
+        )
+        workflow.add_edge("writer", END)
+        return workflow.compile()
+
+    def _dict_node(self, func: Callable[[DiscoveryStatePayload], DiscoveryStatePayload]):
+        def wrapped(raw_state: dict[str, Any]) -> dict[str, Any]:
+            state = DiscoveryStatePayload.model_validate(raw_state)
+            return func(state).model_dump(mode="json")
+
+        return wrapped
+
+    def _planner_node(self, state: DiscoveryStatePayload) -> DiscoveryStatePayload:
+        logger.info("planner node")
+        return planner.run(state)
+
+    def _chemist_node(self, state: DiscoveryStatePayload) -> DiscoveryStatePayload:
+        logger.info("chemist node")
+        state.iteration += 1
+        state.append_message(f"graph: starting pass {state.iteration}/{state.max_iterations}")
+        return chemist.run(state)
+
+    def _tool_execution_node(self, state: DiscoveryStatePayload) -> DiscoveryStatePayload:
+        logger.info("tool execution node")
+        run_dir = _ensure_run_dir(state)
+
+        descriptor_rows: list[dict[str, Any]] = []
+        for molecule in state.candidate_molecules:
+            if molecule.descriptors.get("qed") is not None:
+                descriptor_rows.append(
+                    {
+                        "name": molecule.name or molecule.smiles,
+                        "smiles": molecule.smiles,
+                        "mol_wt": molecule.descriptors.get("mol_wt"),
+                        "logp": molecule.descriptors.get("logp"),
+                        "qed": molecule.descriptors.get("qed"),
+                    }
+                )
+                continue
+
+            validation = validate_smiles(molecule.smiles)
+            state.add_tool_result("rdkit.validate_smiles", validation)
+            if not validation.ok or not validation.data.get("valid"):
+                continue
+
+            descriptors = compute_descriptors(molecule.smiles)
+            state.add_tool_result("rdkit.compute_descriptors", descriptors)
+            if descriptors.ok:
+                molecule.descriptors = descriptors.data
+                descriptor_rows.append(
+                    {
+                        "name": molecule.name or molecule.smiles,
+                        "smiles": molecule.smiles,
+                        "mol_wt": descriptors.data.get("mol_wt"),
+                        "logp": descriptors.data.get("logp"),
+                        "qed": descriptors.data.get("qed"),
+                    }
+                )
+
+        if descriptor_rows:
+            csv_result = write_csv(run_dir / "descriptors.csv", descriptor_rows)
+            state.add_tool_result("file_io.write_csv", csv_result)
+            plot_result = generate_plot(
+                {
+                    "data": descriptor_rows,
+                    "x_key": "name",
+                    "y_key": "qed",
+                    "output_path": str(run_dir / "qed_plot.png"),
+                    "title": "Candidate QED scores",
+                    "kind": "bar",
+                }
+            )
+            state.add_tool_result("plotting.generate_plot", plot_result)
+
+        filter_result = filter_molecules(
+            [molecule.smiles for molecule in state.candidate_molecules],
+            MoleculeFilterConstraints(max_mol_wt=500, max_logp=5.0),
+        )
+        state.add_tool_result("rdkit.filter_molecules", filter_result)
+
+        if self.config.run_mode != RunMode.NO_DFT:
+            if self.config.tool_enabled("xtb"):
+                xtb_result = check_xtb_availability(self.config.tools.get("xtb").executable or "xtb")
+                state.add_tool_result("xtb.check_availability", xtb_result)
+            if self.config.tool_enabled("orca"):
+                orca_tool = self.config.tools.get("orca")
+                orca_result = check_orca_availability(orca_tool.executable if orca_tool else "orca")
+                state.add_tool_result("orca.check_availability", orca_result)
+                if state.candidate_molecules:
+                    generated = run_orca(
+                        {
+                            "coordinates": "C 0.0 0.0 0.0\nH 0.0 0.0 1.0\nH 1.0 0.0 0.0\nH 0.0 1.0 0.0",
+                            "work_dir": str(run_dir / "orca"),
+                            "filename": "example.inp",
+                            "executable": orca_tool.executable if orca_tool else "orca",
+                            "timeout_seconds": orca_tool.timeout_seconds if orca_tool else 300,
+                            "run": bool(orca_result.data.get("available")),
+                        }
+                    )
+                    state.add_tool_result("orca.run_or_generate", generated)
+
+        return state
+
+    def _critic_node(self, state: DiscoveryStatePayload) -> DiscoveryStatePayload:
+        logger.info("critic node")
+        return critic.run(state)
+
+    def _writer_node(self, state: DiscoveryStatePayload) -> DiscoveryStatePayload:
+        logger.info("writer node")
+        state = writer.run(state)
+        run_dir = _ensure_run_dir(state)
+        report_path = run_dir / "report.docx"
+        result = write_scientific_report(
+            {
+                "output_path": str(report_path),
+                "user_request": state.original_user_request,
+                "plan": state.plan.model_dump(mode="json") if state.plan else None,
+                "candidates": [molecule.model_dump(mode="json") for molecule in state.candidate_molecules],
+                "tool_results": [record.model_dump(mode="json") for record in state.tool_results],
+                "critic_notes": state.critic_notes,
+                "errors": state.errors,
+            }
+        )
+        state.add_tool_result("doc_writer.write_scientific_report", result)
+        if result.ok:
+            state.final_report_path = result.data.get("path")
+        return state
+
+    def _route_after_critic(self, raw_state: dict[str, Any]) -> str:
+        return self._route_after_critic_state(DiscoveryStatePayload.model_validate(raw_state))
+
+    def _route_after_critic_state(self, state: DiscoveryStatePayload) -> str:
+        if state.needs_more_passes and state.iteration < state.max_iterations:
+            return "chemist"
+        if state.needs_more_passes and state.iteration >= state.max_iterations:
+            state.needs_more_passes = False
+            state.stop_reason = "max_iterations_reached"
+            state.append_message("graph: max_iterations reached; routing to writer")
+        return "writer"
+
+
+def build_graph(config: AppConfig) -> DiscoveryGraph:
+    return DiscoveryGraph(config)
+
+
+def _ensure_run_dir(state: DiscoveryStatePayload) -> Path:
+    if not state.run_dir:
+        state.run_dir = str(Path("runs") / "adhoc")
+    run_dir = Path(state.run_dir)
+    run_dir.mkdir(parents=True, exist_ok=True)
+    return run_dir

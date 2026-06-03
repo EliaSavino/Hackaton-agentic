@@ -1,0 +1,42 @@
+[project]
+name = "hackathon-agents"
+version = "0.1.0"
+description = "Scientific-discovery multi-agent workbench scaffold for chem/bio hackathons."
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [{ name = "Hackathon Agents Team" }]
+dependencies = [
+  "langgraph>=0.2.0",
+  "litellm>=1.52.0",
+  "pydantic>=2.7.0",
+  "python-dotenv>=1.0.1",
+  "pyyaml>=6.0.1",
+  "typer>=0.12.0",
+  "rich>=13.7.0",
+  "rdkit>=2023.9.0",
+  "pandas>=2.2.0",
+  "numpy>=1.26.0",
+  "scipy>=1.12.0",
+  "matplotlib>=3.8.0",
+  "python-docx>=1.1.0",
+  "pypdf>=4.0.0"
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.0.0"
+]
+
+[project.scripts]
+hackathon-agents = "hackathon_agents.cli:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/hackathon_agents"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
