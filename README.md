@@ -84,6 +84,37 @@ python -m hackathon_agents.cli benchmark-models
 
 This pings configured Ollama hosts, tests configured models on latency, JSON compliance, tool-call formatting, simple chemistry reasoning, and code generation, then saves results to `runs/model_benchmark_<date>.json`.
 
+## Snellius vLLM For Heavy Tasks
+
+The model router can send high-difficulty or large-context requests to a Snellius-hosted vLLM server through the disabled-by-default `snellius_vllm` alias in `configs/models.yaml`.
+
+Generate a Snellius SLURM script:
+
+```bash
+python -m hackathon_agents.cli snellius-vllm-script \
+  --model-checkpoint meta-llama/Llama-3.1-70B-Instruct \
+  --output-dir runs/snellius_vllm \
+  --partition gpu_a100 \
+  --gpus-per-node 1 \
+  --port 8000
+```
+
+Copy or create the script on Snellius, submit it with `sbatch`, then expose the vLLM OpenAI-compatible endpoint to your local machine. Once the endpoint is reachable, set:
+
+```bash
+SNELLIUS_VLLM_ENABLED=true
+SNELLIUS_VLLM_MODEL=meta-llama/Llama-3.1-70B-Instruct
+SNELLIUS_VLLM_BASE_URL=http://localhost:8000/v1
+```
+
+Then check availability:
+
+```bash
+python -m hackathon_agents.cli check-models
+```
+
+When enabled and reachable, high-difficulty or large-context routing requests prefer `snellius_vllm` before falling back to local or hosted models. The repo does not submit Snellius jobs automatically; the generated script is dry-run-safe and contains no credentials.
+
 ## Review A Paper
 
 ```bash
@@ -93,6 +124,68 @@ python -m hackathon_agents.cli review-paper path/to/paper.txt \
 ```
 
 Supported inputs are `.txt`, `.md`, `.pdf`, and `.docx`. PDF extraction uses `pypdf`; DOCX extraction uses `python-docx`. The output is a structured JSON review with metadata, detected sections, claim-like statements, strengths, limitations, reproducibility checklist items, focus-question evidence, and a deterministic recommendation.
+
+## Mechanism Discovery Workflow
+
+The `Mechanism Discovery Agent Workbench` extends the generic scaffold with a closed-loop workflow for inferring plausible reaction mechanisms from kinetic experiment data:
+
+```text
+literature prior -> mechanism hypothesis generation -> mechanistic class proposal
+-> kinetic experiment design -> robot experiment submission -> data ingestion
+-> kinetic model fitting -> RL / active learning update -> DFT request if needed
+-> critic / uncertainty check -> next experiment recommendation -> report
+```
+
+The workflow is bounded by an explicit `--rounds` value. It never runs an infinite autonomous loop, and all external systems are mockable by default.
+
+Run the mock loop:
+
+```bash
+python -m hackathon_agents.cli mechanism-loop \
+  --objective "Infer mechanism for photochemical reaction A + B -> P" \
+  --rounds 3 \
+  --mode mock
+```
+
+Run one analysis pass on existing kinetic data:
+
+```bash
+python -m hackathon_agents.cli mechanism-once \
+  --data path/to/kinetics.csv \
+  --objective "Infer mechanism"
+```
+
+Outputs are written to `runs/mechanism_<timestamp>/` or `runs/mechanism_once_<timestamp>/`:
+
+- `state.json`
+- `hypotheses.json`
+- `experiments.json`
+- `datasets/*.json` and `datasets/*.csv`
+- `dft_jobs/*.json`
+- `report.json`
+- `report.docx`
+- `trace.log`
+
+Mock mode uses `MockRobotClient`, `MockHPCClient`, and local mock literature text. The robot mock generates synthetic time-resolved concentration data from a hidden toy mechanism, fits each hypothesis with SciPy `least_squares`, ranks hypotheses, recommends the next experiment, and writes JSON/DOCX reports.
+
+Dry-run mode avoids real robot and cluster submissions. It still uses mock kinetic data, but the HPC backend writes SLURM submission scripts under the run directory instead of calling `sbatch`.
+
+Real robot mode is opt-in only. Use `--mode real --allow-real-robot --robot-base-url ...` after implementing project-specific HTTP semantics in `src/hackathon_agents/tools/robot_client.py`. Without the explicit flag, `HTTPRobotClient` refuses to submit.
+
+Real HPC submission is also opt-in. `SlurmHPCClient` writes scripts by default. Passing `--allow-hpc-submit` allows the client to call the configured submit command, but the repo does not hardcode cluster partitions, accounts, credentials, or ORCA paths.
+
+To add a new mechanism class:
+
+1. Add the class to `src/hackathon_agents/mechanism/mechanism_classes.py`.
+2. Add hypothesis details in `src/hackathon_agents/mechanism/hypothesis.py`.
+3. Add or map a kinetic model in `src/hackathon_agents/mechanism/kinetic_fitting.py`.
+4. Add a focused test using synthetic data.
+
+To add a new kinetic model, keep the graph contract unchanged and extend `fit_hypothesis_to_dataset()` or route a mechanism class to a new deterministic fitting function. Prefer identifiable models with fewer parameters before adding JAX, PyTorch, or richer ODE solvers.
+
+To connect a real robot, subclass or complete `HTTPRobotClient` with the scheduler payload, authentication, status polling, and result-fetching semantics for your platform. It must return either a `KineticDataset` or a CSV/JSON path parseable by `kinetics_io`.
+
+To connect SLURM/HPC, configure `SlurmHPCClient` with a project submission directory and command, then customize script generation in `src/hackathon_agents/tools/hpc_client.py`. Keep result parsing separate from submission so dry runs remain useful.
 
 ## Architecture
 

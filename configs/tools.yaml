@@ -21,14 +21,45 @@ tools:
     max_chars: 250000
     default_domain: chem_bio
 
+  literature_tools:
+    enabled: true
+    backend: local
+    allow_external_api: false
+    supported_extensions: [.txt, .md]
+
+  calculation_tools:
+    enabled: true
+    enabled_modes: [full, no_dft, cheap, offline]
+
+  statistics_tools:
+    enabled: true
+    bootstrap_default_iterations: 1000
+    enabled_modes: [full, no_dft, cheap, offline]
+
   xtb:
     enabled: true
     executable: xtb
     timeout_seconds: 120
     enabled_modes: [full, cheap, offline]
 
+  dft_tools:
+    enabled: true
+    default_method: B3LYP
+    default_basis: def2-SVP
+    default_program: orca
+    enabled_modes: [full, no_dft, cheap, offline]
+
   orca:
     enabled: true
     executable: orca
     timeout_seconds: 300
     enabled_modes: [full, offline]
+
+  snellius_vllm:
+    enabled: true
+    container_path: /projects/2/managed_datasets/containers/vllm/vllm.sif
+    fallback_container_path: /projects/2/managed_datasets/containers/vllm/cuda-13.0-vllm.sif
+    partition: gpu_a100
+    gpus_per_node: 1
+    port: 8000
+    allow_submit: false

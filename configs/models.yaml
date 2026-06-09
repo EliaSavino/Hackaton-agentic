@@ -24,6 +24,15 @@ models:
     cost_tier: medium
     enabled: false
 
+  snellius_vllm:
+    provider: vllm
+    model: "${SNELLIUS_VLLM_MODEL:-meta-llama/Llama-3.1-70B-Instruct}"
+    capabilities: [reasoning, chemistry, science, bulk, heavy, long_context, vllm, snellius]
+    api_base_env: SNELLIUS_VLLM_BASE_URL
+    api_key_env: SNELLIUS_VLLM_API_KEY
+    cost_tier: low
+    enabled: "${SNELLIUS_VLLM_ENABLED:-false}"
+
   local_large:
     provider: ollama
     host: "http://${OLLAMA_BIG_HOST:-localhost}:11434"
@@ -44,3 +53,4 @@ model_routing:
   default_alias: "${LITELLM_MODEL_DEFAULT:-local_small}"
   cheap_final_review_alias: frontier_reasoning
   offline_required_provider: ollama
+  heavy_task_alias: snellius_vllm

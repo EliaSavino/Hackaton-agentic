@@ -51,9 +51,9 @@ models:
 
 Fields:
 
-- `provider`: `openai`, `anthropic`, `ollama`, `hosted`, or `other`.
+- `provider`: `openai`, `anthropic`, `ollama`, `hosted`, `vllm`, or `other`.
 - `model`: provider model name.
-- `host`: Ollama or hosted base URL when relevant.
+- `host`: Ollama, hosted, or vLLM base URL when relevant.
 - `capabilities`: labels used by `ModelRouter`.
 - `api_key_env`: environment variable name for hosted API keys.
 - `api_base_env`: optional hosted API base environment variable.
@@ -123,6 +123,9 @@ OLLAMA_BIG_HOST=localhost
 OLLAMA_SMALL_HOST=localhost
 HOSTED_API_KEY=
 HOSTED_API_BASE=
+SNELLIUS_VLLM_ENABLED=false
+SNELLIUS_VLLM_MODEL=
+SNELLIUS_VLLM_BASE_URL=
 ```
 
 Do not put API keys in YAML or source code.

@@ -1,0 +1,81 @@
+agents:
+  literature_agent:
+    requires: [literature, summarization]
+    preferred_model: local_small
+    fallback: [local_large]
+    temperature: 0.0
+    max_tokens: 1200
+    system_prompt: |
+      Summarize literature as prior context only.
+      Never treat literature snippets as proof for the current reaction.
+
+  hypothesis_agent:
+    requires: [chemistry, json]
+    preferred_model: local_large
+    fallback: [snellius_vllm, frontier_reasoning]
+    temperature: 0.2
+    max_tokens: 2000
+    system_prompt: |
+      Generate MechanismHypothesis JSON only.
+      Every output must validate against the Pydantic schema.
+
+  kinetic_model_agent:
+    requires: [numerics, chemistry]
+    preferred_model: local_small
+    fallback: [local_large]
+    temperature: 0.0
+    max_tokens: 1000
+    system_prompt: |
+      Prefer deterministic fitting and simple identifiable models first.
+
+  rl_experiment_designer:
+    requires: [active_learning, experimental_design]
+    preferred_model: local_large
+    fallback: [snellius_vllm, frontier_reasoning]
+    temperature: 0.1
+    max_tokens: 1200
+    system_prompt: |
+      Propose bounded kinetic experiments that maximize information gain while respecting safety and robot constraints.
+
+  robot_agent:
+    requires: [tool_use]
+    preferred_model: local_small
+    temperature: 0.0
+    max_tokens: 512
+    system_prompt: |
+      Submit only through configured RobotClient interfaces. Mock mode is default.
+
+  data_ingestion_agent:
+    requires: [data_parsing]
+    preferred_model: local_small
+    temperature: 0.0
+    max_tokens: 512
+    system_prompt: |
+      Parse CSV or JSON kinetic traces into KineticDataset objects.
+
+  dft_agent:
+    requires: [computational_chemistry]
+    preferred_model: local_large
+    fallback: [snellius_vllm, frontier_reasoning]
+    temperature: 0.0
+    max_tokens: 1200
+    system_prompt: |
+      Request DFT only when it can answer a specific mechanistic uncertainty.
+      Never submit real HPC jobs unless explicit config flags allow it.
+
+  critic_agent:
+    requires: [reasoning, final_review]
+    preferred_model: frontier_reasoning
+    fallback: [snellius_vllm, local_large]
+    temperature: 0.0
+    max_tokens: 1600
+    system_prompt: |
+      Check plausibility, overfitting, identifiability, missing controls, DFT relevance, and robot feasibility.
+
+  report_agent:
+    requires: [reporting]
+    preferred_model: local_small
+    temperature: 0.0
+    max_tokens: 1200
+    system_prompt: |
+      Report evidence proportionally and label all unsupported scientific claims as hypotheses.

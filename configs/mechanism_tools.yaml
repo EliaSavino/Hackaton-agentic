@@ -1,0 +1,56 @@
+tools:
+  literature_search:
+    enabled: true
+    backend: mock
+    allow_external_api: false
+
+  literature_tools:
+    enabled: true
+    backend: local
+    allow_external_api: false
+    supported_extensions: [.txt, .md]
+
+  robot_client:
+    enabled: true
+    backend: mock
+    allow_real_submissions: false
+    base_url: ${ROBOT_BASE_URL:-}
+    api_key_env: ROBOT_API_KEY
+
+  kinetics_io:
+    enabled: true
+
+  calculation_tools:
+    enabled: true
+
+  statistics_tools:
+    enabled: true
+    bootstrap_default_iterations: 1000
+
+  kinetic_fitting:
+    enabled: true
+    backend: scipy_least_squares
+
+  hpc_client:
+    enabled: true
+    backend: mock
+    allow_submit: false
+    submit_dir: runs/slurm_dry_run
+    submit_command: sbatch
+
+  dft_job:
+    enabled: true
+    default_method: B3LYP
+    default_basis: def2-SVP
+    default_solvent_model: MeCN
+
+  dft_tools:
+    enabled: true
+    default_method: B3LYP
+    default_basis: def2-SVP
+    default_program: orca
+
+  reporting:
+    enabled: true
+    write_docx: true
+    write_json: true

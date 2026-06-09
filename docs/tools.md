@@ -54,6 +54,21 @@ Functions:
 
 See [Paper Review](paper-review.md).
 
+### Literature Tools
+
+Module: `src/hackathon_agents/tools/literature_tools.py`
+
+Functions:
+
+- `search_local_corpus(input)`
+- `build_evidence_table(input)`
+- `format_citations(input)`
+- `rank_literature_records(input)`
+- `deduplicate_literature_records(input)`
+- `extract_key_terms(input)`
+
+These tools provide offline/local literature support: rank text or markdown documents by query relevance, screen structured literature records, map claims to snippets, deduplicate by DOI/title, extract key terms, and format compact or BibTeX-style citations. They do not make external API calls.
+
 ### Python Execution
 
 Module: `src/hackathon_agents/tools/python_exec.py`
@@ -119,6 +134,64 @@ Functions:
 - `run_orca(input)`
 
 If ORCA is missing, the wrapper can still generate an input file and return a structured unavailable result.
+
+### DFT Tools
+
+Module: `src/hackathon_agents/tools/dft_tools.py`
+
+Functions:
+
+- `plan_dft_jobs(input)`
+- `render_dft_input(input)`
+- `parse_dft_output(input)`
+- `compare_dft_energies(input)`
+- `check_stationary_point(input)`
+
+These helpers sit above the ORCA/xTB/HPC wrappers. They produce typed `DFTJob` plans, render ORCA input files without submitting anything, parse common energy/frequency lines from quantum chemistry output, rank relative energies with Boltzmann populations, and classify minima/transition-state candidates from frequencies.
+
+### Calculation Tools
+
+Module: `src/hackathon_agents/tools/calculation_tools.py`
+
+Functions:
+
+- `calculate_expression(input)`
+- `convert_units(input)`
+- `calculate_reaction_yield(input)`
+- `thermochemistry(input)`
+- `calculate_dilution(input)`
+- `calculate_buffer_ph(input)`
+- `convert_mass_moles(input)`
+
+These are deterministic calculator utilities for short arithmetic, compatible unit conversions, limiting-reagent/yield calculations, basic Arrhenius/Eyring/equilibrium thermochemistry, C1V1 dilution math, Henderson-Hasselbalch buffer pH, and mass/moles conversions.
+
+### Statistics Tools
+
+Module: `src/hackathon_agents/tools/statistics_tools.py`
+
+Functions:
+
+- `describe_series(input)`
+- `linear_regression(input)`
+- `compare_groups(input)`
+- `bootstrap_confidence_interval(input)`
+- `correlation(input)`
+- `detect_outliers(input)`
+- `one_way_anova(input)`
+- `classification_metrics(input)`
+
+These cover common hackathon analysis needs: summary statistics, simple least-squares regression, Welch-style group comparison statistics, effect size, deterministic bootstrap intervals, Pearson/Spearman correlation, outlier detection, one-way ANOVA summaries, and binary classification metrics.
+
+### Snellius vLLM
+
+Module: `src/hackathon_agents/tools/snellius_vllm.py`
+
+Functions:
+
+- `generate_snellius_vllm_job(input)`
+- `render_snellius_vllm_job(input)`
+
+This writes a dry-run-safe SLURM script that starts `vllm serve` inside the Snellius Apptainer container. It does not submit to SLURM or assume credentials. After the job starts and the port is exposed or tunneled, set `SNELLIUS_VLLM_BASE_URL` so the `snellius_vllm` model alias can call the OpenAI-compatible `/v1/chat/completions` API.
 
 ## Add A Tool
 

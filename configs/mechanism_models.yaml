@@ -1,0 +1,42 @@
+model_routing:
+  default_alias: local_small
+  mechanism_reasoning_alias: local_large
+  mechanism_critic_alias: frontier_reasoning
+
+models:
+  kinetic_first_order:
+    provider: other
+    model: deterministic-first-order
+    capabilities: [numerics, kinetics]
+    cost_tier: low
+    enabled: true
+
+  kinetic_deactivation:
+    provider: other
+    model: deterministic-deactivation
+    capabilities: [numerics, kinetics]
+    cost_tier: low
+    enabled: true
+
+  kinetic_product_inhibition:
+    provider: other
+    model: deterministic-product-inhibition
+    capabilities: [numerics, kinetics]
+    cost_tier: low
+    enabled: true
+
+  active_learning_heuristic:
+    provider: other
+    model: deterministic-disagreement-uncertainty-policy
+    capabilities: [active_learning, experimental_design]
+    cost_tier: low
+    enabled: true
+
+  snellius_vllm:
+    provider: vllm
+    model: "${SNELLIUS_VLLM_MODEL:-meta-llama/Llama-3.1-70B-Instruct}"
+    capabilities: [reasoning, chemistry, science, mechanism, bulk, heavy, long_context, vllm, snellius]
+    api_base_env: SNELLIUS_VLLM_BASE_URL
+    api_key_env: SNELLIUS_VLLM_API_KEY
+    cost_tier: low
+    enabled: "${SNELLIUS_VLLM_ENABLED:-false}"

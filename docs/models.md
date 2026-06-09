@@ -10,6 +10,7 @@ Example aliases:
 
 - `frontier_reasoning`: high-quality hosted reasoning model.
 - `science_reasoning`: hosted science-capable reasoning model.
+- `snellius_vllm`: disabled-by-default OpenAI-compatible vLLM endpoint for heavyweight Snellius inference.
 - `local_large`: larger Ollama model for local reasoning, privacy, and bulk work.
 - `local_small`: smaller Ollama model for routing, summarization, formatting, and cheap tasks.
 
@@ -35,6 +36,35 @@ Practical default behavior:
 - `privacy_required`: only local Ollama providers are allowed.
 - `cheap`: favor `local_large` or `local_small`; allow frontier review for final criticism.
 - `full`: prefer hosted frontier models for difficult planning and final reasoning; use local models for bulk hypotheses.
+- high-difficulty or large-context requests prefer `model_routing.heavy_task_alias` when it is enabled and reachable.
+
+## Snellius vLLM
+
+SURF's Snellius vLLM setup serves models through an OpenAI-compatible HTTP API after a SLURM job starts the vLLM server. The repo models this as:
+
+```yaml
+snellius_vllm:
+  provider: vllm
+  model: "${SNELLIUS_VLLM_MODEL:-meta-llama/Llama-3.1-70B-Instruct}"
+  api_base_env: SNELLIUS_VLLM_BASE_URL
+  enabled: "${SNELLIUS_VLLM_ENABLED:-false}"
+```
+
+The endpoint should include `/v1`, for example:
+
+```bash
+SNELLIUS_VLLM_BASE_URL=http://localhost:8000/v1
+```
+
+Use the helper command to generate a SLURM script:
+
+```bash
+PYTHONPATH=src python -m hackathon_agents.cli snellius-vllm-script \
+  --model-checkpoint meta-llama/Llama-3.1-70B-Instruct \
+  --output-dir runs/snellius_vllm
+```
+
+Submit that script on Snellius, expose or tunnel the vLLM port, then run `check-models`. API keys are optional for vLLM unless a config sets `metadata.requires_api_key: true`.
 
 ## Good Local Tasks
 
@@ -67,6 +97,7 @@ PYTHONPATH=src python -m hackathon_agents.cli check-models
 ```
 
 For Ollama, this calls `/api/tags` and checks whether configured models are listed.
+For vLLM, this calls the OpenAI-compatible `/v1/models` endpoint.
 
 ## Benchmarking
 

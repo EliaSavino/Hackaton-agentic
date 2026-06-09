@@ -49,6 +49,9 @@ class LLMClient:
             except Exception as exc:
                 last_error = str(exc)
                 continue
+            if not model_config.enabled:
+                last_error = f"model alias {alias} is disabled in config"
+                continue
 
             for attempt in range(max(1, parsed.retries)):
                 started = time.perf_counter()
@@ -73,6 +76,8 @@ class LLMClient:
         except Exception:
             if model_config.provider == "ollama":
                 return self._direct_ollama_completion(alias, model_config, request)
+            if model_config.provider == "vllm":
+                return self._direct_vllm_completion(alias, model_config, request)
             return CompletionResult(
                 ok=False,
                 model_alias=alias,
@@ -115,6 +120,8 @@ class LLMClient:
         except Exception as exc:
             if model_config.provider == "ollama":
                 return self._direct_ollama_completion(alias, model_config, request, previous_error=str(exc))
+            if model_config.provider == "vllm":
+                return self._direct_vllm_completion(alias, model_config, request, previous_error=str(exc))
             return CompletionResult(ok=False, model_alias=alias, provider=model_config.provider, error=str(exc))
 
     def _direct_ollama_completion(
@@ -161,6 +168,59 @@ class LLMClient:
                 error = f"LiteLLM failed: {previous_error}; direct Ollama fallback failed: {error}"
             return CompletionResult(ok=False, model_alias=alias, provider=model_config.provider, error=error)
 
+    def _direct_vllm_completion(
+        self,
+        alias: str,
+        model_config: ModelConfig,
+        request: CompletionRequest,
+        previous_error: str | None = None,
+    ) -> CompletionResult:
+        base_url = model_config.api_base or model_config.host
+        if not base_url:
+            return CompletionResult(
+                ok=False,
+                model_alias=alias,
+                provider=model_config.provider,
+                error=previous_error or "vLLM base URL is not configured.",
+            )
+
+        payload = {
+            "model": model_config.model,
+            "messages": request.messages,
+            "temperature": request.temperature,
+            "max_tokens": request.max_tokens,
+            "stream": False,
+        }
+        headers = {"Content-Type": "application/json"}
+        if model_config.api_key:
+            headers["Authorization"] = f"Bearer {model_config.api_key}"
+        try:
+            req = urllib.request.Request(
+                _vllm_chat_completions_url(base_url),
+                data=json.dumps(payload).encode("utf-8"),
+                headers=headers,
+                method="POST",
+            )
+            with urllib.request.urlopen(req, timeout=120) as response:
+                data = json.loads(response.read().decode("utf-8"))
+            choices = data.get("choices") or []
+            content = ""
+            if choices:
+                content = (choices[0].get("message") or {}).get("content") or ""
+            return CompletionResult(
+                ok=True,
+                content=content,
+                model_alias=alias,
+                provider=model_config.provider,
+                usage=data.get("usage") or {},
+                raw=data,
+            )
+        except Exception as exc:
+            error = str(exc)
+            if previous_error:
+                error = f"LiteLLM failed: {previous_error}; direct vLLM fallback failed: {error}"
+            return CompletionResult(ok=False, model_alias=alias, provider=model_config.provider, error=error)
+
 
 def _extract_content(response: Any) -> str:
     try:
@@ -183,3 +243,10 @@ def _to_dict(response: Any) -> dict[str, Any]:
         return json.loads(json.dumps(response, default=str))
     except Exception:
         return {"repr": repr(response)}
+
+
+def _vllm_chat_completions_url(base_url: str) -> str:
+    base = base_url.rstrip("/")
+    if not base.endswith("/v1"):
+        base = f"{base}/v1"
+    return f"{base}/chat/completions"

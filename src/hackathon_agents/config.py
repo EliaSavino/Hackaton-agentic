@@ -18,7 +18,7 @@ class RunMode(str, Enum):
 
 
 class ModelConfig(BaseModel):
-    provider: Literal["openai", "anthropic", "ollama", "hosted", "other"]
+    provider: Literal["openai", "anthropic", "ollama", "hosted", "vllm", "other"]
     model: str
     host: str | None = None
     capabilities: list[str] = Field(default_factory=list)
@@ -34,11 +34,17 @@ class ModelConfig(BaseModel):
     def litellm_model(self) -> str:
         if self.provider == "ollama":
             return f"ollama/{self.model}"
+        if self.provider == "vllm":
+            return f"openai/{self.model}"
         return self.model
 
     @property
     def api_base(self) -> str | None:
         if self.provider == "ollama":
+            return self.host
+        if self.provider == "vllm":
+            if self.api_base_env:
+                return os.getenv(self.api_base_env)
             return self.host
         if self.api_base_env:
             return os.getenv(self.api_base_env)
@@ -83,6 +89,7 @@ class ModelRoutingConfig(BaseModel):
     default_alias: str = "local_small"
     cheap_final_review_alias: str | None = "frontier_reasoning"
     offline_required_provider: str = "ollama"
+    heavy_task_alias: str | None = "snellius_vllm"
 
     model_config = ConfigDict(extra="allow")
 

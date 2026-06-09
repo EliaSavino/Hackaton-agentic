@@ -12,7 +12,7 @@ agents:
   planner:
     requires: [reasoning]
     preferred_model: frontier_reasoning
-    fallback: [local_large, science_reasoning]
+    fallback: [snellius_vllm, local_large, science_reasoning]
     temperature: 0.2
     max_tokens: 1200
     system_prompt: |
@@ -24,7 +24,7 @@ agents:
   chemist:
     requires: [reasoning, chemistry]
     preferred_model: local_large
-    fallback: [frontier_reasoning, science_reasoning]
+    fallback: [snellius_vllm, frontier_reasoning, science_reasoning]
     temperature: 0.3
     max_tokens: 1600
     system_prompt: |
@@ -47,7 +47,7 @@ agents:
   critic:
     requires: [reasoning, final_review]
     preferred_model: frontier_reasoning
-    fallback: [science_reasoning, local_large]
+    fallback: [snellius_vllm, science_reasoning, local_large]
     temperature: 0.0
     max_tokens: 1600
     system_prompt: |
@@ -59,7 +59,7 @@ agents:
   paper_reviewer:
     requires: [reasoning, science, final_review]
     preferred_model: local_large
-    fallback: [frontier_reasoning, science_reasoning]
+    fallback: [snellius_vllm, frontier_reasoning, science_reasoning]
     temperature: 0.0
     max_tokens: 2000
     system_prompt: |
@@ -72,7 +72,7 @@ agents:
   dft:
     requires: [reasoning, chemistry]
     preferred_model: local_large
-    fallback: [frontier_reasoning]
+    fallback: [snellius_vllm, frontier_reasoning]
     temperature: 0.1
     max_tokens: 1200
     system_prompt: |
