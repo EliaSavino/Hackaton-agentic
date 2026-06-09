@@ -4,8 +4,9 @@ Agents are thin state transformers. They should not be autonomous scripts.
 
 ## Existing Agents
 
-- `planner`: creates a deterministic plan.
-- `chemist`: seeds and refines candidate molecules.
+- `planner`: creates a deterministic plan and proposes a default Saturn oracle.
+- `chemist`: seeds and refines candidate molecules; can generate candidates with
+  the Saturn generative tool when it is enabled in config.
 - `critic`: ranks candidates and decides whether another pass is needed.
 - `writer`: delegates report generation.
 - `dft`: placeholder for computational chemistry orchestration.

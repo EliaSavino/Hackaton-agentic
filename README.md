@@ -125,6 +125,30 @@ python -m hackathon_agents.cli review-paper path/to/paper.txt \
 
 Supported inputs are `.txt`, `.md`, `.pdf`, and `.docx`. PDF extraction uses `pypdf`; DOCX extraction uses `python-docx`. The output is a structured JSON review with metadata, detected sections, claim-like statements, strengths, limitations, reproducibility checklist items, focus-question evidence, and a deterministic recommendation.
 
+## Generative Molecules With Saturn
+
+The discovery pipeline can generate candidate molecules with [`schwallergroup/saturn`](https://github.com/schwallergroup/saturn), a sample-efficient generative molecular design framework, against an oracle (reward function) and reinforcement-learning setting of the agent's choice.
+
+This works automatically, with no human input at runtime:
+
+- The `planner` proposes a deterministic default oracle (`qed` drug-likeness + `sa` synthetic accessibility) and RL setting.
+- The discovery graph gates Saturn with `config.tool_enabled("saturn")`, exactly like the xTB and ORCA wrappers. When Saturn is disabled for the run mode, the `chemist` falls back to deterministic seed molecules.
+- The generated SMILES become typed `MoleculeRecord` objects that flow through the normal RDKit -> critic -> writer pipeline.
+
+Saturn is not a pip package: it is a separate cloned repository with its own conda environment (Python 3.10, GPU recommended) driven by a single JSON config (`python saturn.py config.json`). Because it cannot be imported in-process, the tool follows the same opt-in pattern as xTB/ORCA/Snellius:
+
+- By default Saturn runs in **mock mode** and returns a deterministic candidate set, so the pipeline stays offline-safe and never crashes when Saturn or a GPU is unavailable.
+- To run the **real** Saturn model, clone the Saturn repo and create its conda env, then set:
+
+```bash
+SATURN_ENABLED=true
+SATURN_REPO=/path/to/saturn
+SATURN_PYTHON=/path/to/saturn/conda/env/python
+SATURN_PRIOR=/path/to/pretrained_prior.ckpt
+```
+
+and set the Saturn input `run` flag to `true` (e.g. in the planner default or via `state.metadata["saturn"]`). See [Tools](docs/tools.md) for the oracle/RL settings schema.
+
 ## Mechanism Discovery Workflow
 
 The `Mechanism Discovery Agent Workbench` extends the generic scaffold with a closed-loop workflow for inferring plausible reaction mechanisms from kinetic experiment data:

@@ -126,6 +126,38 @@ HOSTED_API_BASE=
 SNELLIUS_VLLM_ENABLED=false
 SNELLIUS_VLLM_MODEL=
 SNELLIUS_VLLM_BASE_URL=
+SATURN_ENABLED=false
+SATURN_REPO=
+SATURN_PYTHON=python
+SATURN_PRIOR=
 ```
 
 Do not put API keys in YAML or source code.
+
+## Saturn Tool Config
+
+`configs/tools.yaml` includes a `saturn` block for generative molecular design
+(`schwallergroup/saturn`). It is disabled by default and reads its paths from the
+environment so no install paths are hardcoded:
+
+```yaml
+saturn:
+  enabled: ${SATURN_ENABLED:-false}
+  saturn_repo: ${SATURN_REPO:-}
+  saturn_python: ${SATURN_PYTHON:-python}
+  prior_checkpoint: ${SATURN_PRIOR:-}
+  timeout_seconds: 1800
+  allow_run: false
+  enabled_modes: [full, cheap]
+```
+
+Behavior:
+
+- The `planner` proposes a default oracle (`qed` + `sa`) with no human input.
+- The discovery graph gates Saturn with `config.tool_enabled("saturn")`, exactly
+  like xTB/ORCA. When disabled, the chemist falls back to deterministic seeds.
+- When Saturn is not installed (or the request uses `run=False`), the tool
+  returns a deterministic mock candidate set so the pipeline stays offline-safe.
+- Running the real Saturn model is opt-in: set `SATURN_ENABLED=true`, point
+  `SATURN_REPO`/`SATURN_PYTHON`/`SATURN_PRIOR` at a cloned Saturn checkout and its
+  conda environment, and set the Saturn input `run` flag to `true`.

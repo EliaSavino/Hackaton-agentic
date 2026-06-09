@@ -193,6 +193,44 @@ Functions:
 
 This writes a dry-run-safe SLURM script that starts `vllm serve` inside the Snellius Apptainer container. It does not submit to SLURM or assume credentials. After the job starts and the port is exposed or tunneled, set `SNELLIUS_VLLM_BASE_URL` so the `snellius_vllm` model alias can call the OpenAI-compatible `/v1/chat/completions` API.
 
+### Saturn (Generative Molecular Design)
+
+Module: `src/hackathon_agents/tools/saturn_tools.py`
+
+Functions:
+
+- `check_saturn_availability(saturn_repo, saturn_python)`
+- `build_saturn_config(input)`
+- `generate_with_saturn(input)`
+- `saturn_records(result_data)`
+
+This wraps [`schwallergroup/saturn`](https://github.com/schwallergroup/saturn), a sample-efficient, language-model-based generative design framework. It lets an agent run goal-directed molecule generation against an **oracle (reward function) of its choice** and a chosen **agent/RL setting**, then recover the generated SMILES as typed `MoleculeRecord` objects.
+
+Saturn is not a pip package: it is a separate cloned repository with its own conda environment (Python 3.10, GPU recommended) driven by a single JSON config (`python saturn.py config.json`). Because it cannot be imported in-process, this tool follows the xTB/ORCA/Snellius pattern:
+
+1. Build a Saturn-compatible JSON config from a small typed schema (`SaturnGenerationInput`): the `oracle` list (each an `OracleComponent` with `name`, `weight`, `specific_parameters`), plus agent knobs like `aggregator`, `batch_size`, `n_steps`, `sigma`, `learning_rate`, `experience_replay_memory`, and `use_diversity_filter`.
+2. Optionally run `saturn.py` as a subprocess in the Saturn repo using the Saturn interpreter (set `run=True`, `saturn_repo`, `saturn_python`, and a `prior_checkpoint`).
+3. Parse SMILES + scores from Saturn's CSV logs into ranked `MoleculeRecord` objects.
+
+When Saturn is unavailable or `run=False` (the default), the tool writes the config and returns a **deterministic mock** candidate set, so the workbench stays testable offline.
+
+Configure it in `configs/tools.yaml` under `saturn` (disabled by default) or via env vars `SATURN_ENABLED`, `SATURN_REPO`, `SATURN_PYTHON`, `SATURN_PRIOR`.
+
+The `chemist` agent can opt in by setting `state.metadata["saturn"]` to a dict of Saturn settings; otherwise it keeps its deterministic seed behavior. Example:
+
+```python
+state.metadata["saturn"] = {
+    "oracle": [
+        {"name": "qed", "weight": 1.0},
+        {"name": "sa", "weight": 0.5},
+    ],
+    "aggregator": "product",
+    "n_steps": 50,
+    "batch_size": 64,
+    "run": False,  # set True with saturn_repo/saturn_python to run the real model
+}
+```
+
 ## Add A Tool
 
 1. Define Pydantic input schema if the input is more than one or two primitives.

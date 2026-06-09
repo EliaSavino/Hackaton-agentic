@@ -105,7 +105,25 @@ class DiscoveryGraph:
         logger.info("chemist node")
         state.iteration += 1
         state.append_message(f"graph: starting pass {state.iteration}/{state.max_iterations}")
+        self._apply_saturn_gating(state)
         return chemist.run(state)
+
+    def _apply_saturn_gating(self, state: DiscoveryStatePayload) -> None:
+        """Config-gate Saturn like xTB/ORCA: drop the oracle if Saturn is off.
+
+        The planner proposes a default Saturn oracle in ``state.metadata``. Here
+        the graph enforces the same config/run-mode gate used for other tools.
+        When Saturn is disabled for the current run mode, the chemist falls back
+        to its deterministic seed molecules instead of generating with Saturn.
+        """
+
+        if "saturn" not in state.metadata:
+            return
+        if self.config.tool_enabled("saturn"):
+            return
+        state.metadata.pop("saturn", None)
+        state.metadata["saturn_source"] = "disabled_by_config"
+        state.append_message("graph: Saturn disabled for this run mode; using seed molecules")
 
     def _tool_execution_node(self, state: DiscoveryStatePayload) -> DiscoveryStatePayload:
         logger.info("tool execution node")

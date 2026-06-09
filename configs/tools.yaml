@@ -63,3 +63,16 @@ tools:
     gpus_per_node: 1
     port: 8000
     allow_submit: false
+
+  saturn:
+    # Generative molecular design via schwallergroup/saturn.
+    # Disabled by default: Saturn is a separate cloned repo with its own conda
+    # env (Python 3.10, GPU recommended) and cannot be imported in-process.
+    # When disabled or unconfigured, the tool returns a deterministic mock set.
+    enabled: ${SATURN_ENABLED:-false}
+    saturn_repo: ${SATURN_REPO:-}
+    saturn_python: ${SATURN_PYTHON:-python}
+    prior_checkpoint: ${SATURN_PRIOR:-}
+    timeout_seconds: 1800
+    allow_run: false
+    enabled_modes: [full, cheap]
