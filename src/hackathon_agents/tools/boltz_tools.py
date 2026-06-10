@@ -58,6 +58,24 @@ class BoltzJobInput(BaseModel):
         default=True,
         description="Bypasses the multiple sequence alignment (MSA) search for speed/convenience."
     )
+    # --- Advanced structural folding parameters -----------------------------
+    recycling_steps: int = Field(
+        default=3, ge=1, le=10,
+        description="Number of recycling steps through the model's structural module (more steps improve quality but increase latency)."
+    )
+    diffusion_steps: int = Field(
+        default=200, ge=10, le=1000,
+        description="Number of diffusion/sampling steps for molecular coordinates."
+    )
+    cofactors: list[str] = Field(
+        default_factory=list,
+        description="List of SMILES or names for co-factors to include in the binding pocket (e.g., GDP, GTP, metal ions) for structured protein environments."
+    )
+    pocket_residues: list[int] = Field(
+        default_factory=list,
+        description="1-based residue sequence numbers defining the known active binding pocket to guide localized structural docking."
+    )
+
     # --- HPC / SLURM settings (only used if run_mode=slurm) -----------------
     partition: str = "gpu_a100"
     gpus_per_node: int = 1
@@ -120,21 +138,36 @@ def check_boltz_availability(executable: str = "boltz") -> bool:
     return shutil.which(executable) is not None
 
 
-def write_boltz_yaml_input(work_dir: Path, job_id: str, sequence: str, smiles: str) -> Path:
+def write_boltz_yaml_input(parsed: BoltzJobInput, work_dir: Path, job_id: str) -> Path:
     """Write a standard Boltz-2 YAML input recipe file.
 
-    Boltz-2 accepts a structured YAML manifest describing the sequences and
-    ligands to fold. This helper writes that recipe.
+    Boltz-2 accepts a structured YAML manifest describing the sequences, co-factors,
+    and ligands to fold. This helper writes that recipe.
     """
     yaml_path = work_dir / f"{job_id}_input.yaml"
     recipe = [
         f"id: {job_id}",
         "sequences:",
         "  - protein:",
-        f"      sequence: {sequence}",
-        "  - ligand:",
-        f"      smiles: {smiles}",
+        f"      sequence: {parsed.target_protein_sequence}",
     ]
+    
+    # Expose pocket residues if specified to instruct localized docking
+    if parsed.pocket_residues:
+        pocket_str = ", ".join(map(str, parsed.pocket_residues))
+        recipe.append(f"      pocket_residues: [{pocket_str}]")
+
+    recipe.append("  - ligand:")
+    recipe.append(f"      smiles: {parsed.ligand_smiles}")
+
+    # Add optional co-factors (metal ions, nucleotides, small peptides) to the pocket
+    for i, cofactor in enumerate(parsed.cofactors):
+        recipe.append(f"  - cofactor_{i + 1}:")
+        if cofactor.startswith("smiles:") or "(" in cofactor or "=" in cofactor:
+            recipe.append(f"      smiles: {cofactor.replace('smiles:', '')}")
+        else:
+            recipe.append(f"      name: {cofactor}")
+
     yaml_path.write_text("\n".join(recipe), encoding="utf-8")
     return yaml_path
 
@@ -191,10 +224,9 @@ def run_boltz_2(input_data: BoltzJobInput | dict[str, Any]):
 
     # 1. Write the YAML co-folding recipe
     yaml_path = write_boltz_yaml_input(
+        parsed,
         work_dir,
         parsed.id,
-        parsed.target_protein_sequence,
-        parsed.ligand_smiles
     )
 
     # 2. Handle SLURM Mode
@@ -265,6 +297,10 @@ def run_boltz_2(input_data: BoltzJobInput | dict[str, Any]):
             "output",
             "--device",
             parsed.device,
+            "--recycling-steps",
+            str(parsed.recycling_steps),
+            "--diffusion-steps",
+            str(parsed.diffusion_steps),
             *extra_args,
         ]
 

@@ -39,6 +39,11 @@ agents:
       - When refining candidates across multiple passes, utilize the previous high-scoring candidates to warm-start Saturn's experience replay buffer via the 'seed_smiles' parameter.
       - To exploit a promising local chemical space (focused design), set 'use_diversity_filter' to True. To search broadly across novel structural scaffolds (broad exploration), set 'use_diversity_filter' to False or decrease 'diversity_min_score'.
 
+      Boltz-2 Structural Folding & Docking expert rules:
+      - When modeling proteins that require binding co-factors (e.g., GDP/GTP for KRAS systems, or metal ions like Zinc/Magnesium), always request these in the 'cofactors' metadata list to ensure proper pocket structural conformation.
+      - If the active pocket residues are known, specify them under 'pocket_residues' (1-based index) to enable localized guided docking instead of blind docking, which is significantly more accurate.
+      - For fast exploratory scans, keep 'recycling_steps' low (e.g., 3) and 'single_sequence' set to True. For final candidates or high-difficulty targets, increase 'recycling_steps' up to 10 and consider running MSA.
+
   coder:
     requires: [code]
     preferred_model: local_small

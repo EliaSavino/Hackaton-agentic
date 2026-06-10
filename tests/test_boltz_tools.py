@@ -52,16 +52,26 @@ class BoltzToolTests(unittest.TestCase):
     def test_write_yaml_input(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             work_dir = Path(tmp)
+            parsed = BoltzJobInput(
+                id="test-id",
+                work_dir=tmp,
+                target_protein_sequence="MTEYKLVVVG",
+                ligand_smiles="CCO",
+                pocket_residues=[12, 13, 14],
+                cofactors=["GTP"],
+            )
             yaml_path = write_boltz_yaml_input(
+                parsed,
                 work_dir,
-                "test-id",
-                "MTEYKLVVVG",
-                "CCO"
+                "test-id"
             )
             self.assertTrue(yaml_path.exists())
             text = yaml_path.read_text(encoding="utf-8")
             self.assertIn("id: test-id", text)
             self.assertIn("sequence: MTEYKLVVVG", text)
+            self.assertIn("pocket_residues: [12, 13, 14]", text)
+            self.assertIn("cofactor_1", text)
+            self.assertIn("name: GTP", text)
             self.assertIn("smiles: CCO", text)
 
     def test_render_slurm_script(self) -> None:

@@ -213,6 +213,12 @@ class DiscoveryGraph:
             device_val = boltz_tool.model_extra.get("device", "cpu") if boltz_tool else "cpu"
 
             target_seq = state.metadata.get("target_protein_sequence") or "MTEYKLVVVGAGGVGKSALTIQLIQNHFVDEYDPTIEDSYRKQVVIDGETCLLDILDTAGQEEYSAMRDQYMRTGEGFLCVFAINNTKSFEDIHQYREQIKRVKDSDDVPMVLVGNKCDLAARTVESRQAQDLARSYGIPYIETSAKTRQGVEDAFYTLVREIRQHKLRKLNPPDESGPGCMSCKCVLS"
+            
+            # Retrieve agent/metadata driven custom Boltz parameters if present
+            recycling_steps = state.metadata.get("boltz_recycling_steps", 3)
+            diffusion_steps = state.metadata.get("boltz_diffusion_steps", 200)
+            cofactors = state.metadata.get("boltz_cofactors", [])
+            pocket_residues = state.metadata.get("boltz_pocket_residues", [])
 
             state.append_message("graph: running Boltz-2 co-folding on generated candidates")
             for molecule in state.candidate_molecules:
@@ -225,6 +231,10 @@ class DiscoveryGraph:
                         "run": bool(allow_run),
                         "run_mode": run_mode_val,
                         "device": device_val,
+                        "recycling_steps": recycling_steps,
+                        "diffusion_steps": diffusion_steps,
+                        "cofactors": cofactors,
+                        "pocket_residues": pocket_residues,
                     }
                 )
                 state.add_tool_result("boltz_2.run_prediction", boltz_result)
