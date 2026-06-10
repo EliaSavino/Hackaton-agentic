@@ -34,10 +34,14 @@ def run(state: DiscoveryStatePayload) -> DiscoveryStatePayload:
             state.candidate_molecules = [candidate.model_copy(deep=True) for candidate in EXAMPLE_MOLECULES]
             state.append_message("chemist: loaded hardcoded example molecules")
     elif state.requested_next_actions:
-        added = _add_refinement_candidates(state)
-        state.append_message(
-            f"chemist: added {added} refinement candidates for actions {state.requested_next_actions}"
-        )
+        saturn_added = _maybe_generate_with_saturn(state)
+        if saturn_added:
+            state.append_message(f"chemist: refined and generated {saturn_added} candidates using Saturn warm start")
+        else:
+            added = _add_refinement_candidates(state)
+            state.append_message(
+                f"chemist: added {added} refinement candidates for actions {state.requested_next_actions}"
+            )
     else:
         state.append_message("chemist: using candidate molecules already present in state")
     state.needs_more_passes = False
@@ -120,6 +124,13 @@ def _maybe_generate_with_saturn(state: DiscoveryStatePayload) -> int:
     if "work_dir" not in saturn_input:
         run_dir = Path(state.run_dir) if state.run_dir else Path("runs") / "adhoc"
         saturn_input["work_dir"] = str(run_dir / "saturn")
+
+    # Pass existing candidates as seed_smiles for warm starting experience replay
+    if state.candidate_molecules:
+        existing_smiles = [mol.smiles for mol in state.candidate_molecules if mol.smiles]
+        if existing_smiles:
+            saturn_input["seed_smiles"] = existing_smiles
+            state.append_message(f"chemist: warm-starting Saturn experience replay memory with {len(existing_smiles)} active candidates")
 
     result = generate_with_saturn(saturn_input)
     state.add_tool_result("saturn.generate", result)

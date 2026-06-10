@@ -108,6 +108,12 @@ class SaturnGenerationInput(BaseModel):
     sigma: float = Field(default=128.0, gt=0.0)
     learning_rate: float = Field(default=1e-4, gt=0.0)
     experience_replay_memory: int = Field(default=64, ge=0)
+    seed_smiles: list[str] = Field(default_factory=list, description="SMILES to pre-populate experience replay memory for a warm start.")
+    model_architecture: Literal["mamba", "rnn", "transformer"] = Field(default="mamba", description="Deep learning backbone architecture.")
+    beam_enumeration: bool = Field(default=False, description="Whether to use beam enumeration in goal directed generation.")
+    hallucinated_memory: bool = Field(default=False, description="Whether to use hallucinated memory for exploration.")
+    diversity_bucket_size: int = Field(default=25, ge=1, description="Bucket size for Murcko Scaffold diversity filtering.")
+    diversity_min_score: float = Field(default=0.4, ge=0.0, le=1.0, description="Minimum score threshold for diversity filter buckets.")
     use_diversity_filter: bool = True
     running_mode: Literal["goal_directed_generation", "scoring"] = "goal_directed_generation"
     seed: int = 0
@@ -162,7 +168,7 @@ def build_saturn_config(input_data: SaturnGenerationInput | dict[str, Any]) -> d
         "running_mode": parsed.running_mode,
         "seed": parsed.seed,
         "device": parsed.device,
-        "model_architecture": {"name": "mamba"},
+        "model_architecture": {"name": parsed.model_architecture},
         "logging": {
             "logging_frequency": 1,
             "logging_path": logging_path,
@@ -184,15 +190,15 @@ def build_saturn_config(input_data: SaturnGenerationInput | dict[str, Any]) -> d
             "experience_replay": {
                 "memory_size": parsed.experience_replay_memory,
                 "sample_size": min(parsed.experience_replay_memory, parsed.batch_size),
-                "smiles": [],
+                "smiles": list(parsed.seed_smiles),
             },
             "diversity_filter": {
                 "name": "IdenticalMurckoScaffold" if parsed.use_diversity_filter else "NoFilter",
-                "bucket_size": 25,
-                "minscore": 0.4,
+                "bucket_size": parsed.diversity_bucket_size,
+                "minscore": parsed.diversity_min_score,
             },
-            "hallucinated_memory": {"use_hallucinated_memory": False},
-            "beam_enumeration": {"use_beam_enumeration": False},
+            "hallucinated_memory": {"use_hallucinated_memory": parsed.hallucinated_memory},
+            "beam_enumeration": {"use_beam_enumeration": parsed.beam_enumeration},
         },
     }
 

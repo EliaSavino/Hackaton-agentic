@@ -84,6 +84,39 @@ class SaturnToolTests(unittest.TestCase):
         self.assertFalse(result.data["available"])
         self.assertFalse(result.data["repo_ok"])
 
+    def test_build_config_supports_advanced_parameters(self) -> None:
+        config = build_saturn_config(
+            SaturnGenerationInput(
+                work_dir="unused",
+                seed_smiles=["CCO", "CCN"],
+                model_architecture="transformer",
+                beam_enumeration=True,
+                hallucinated_memory=True,
+                diversity_bucket_size=15,
+                diversity_min_score=0.6,
+            )
+        )
+        self.assertEqual(config["model_architecture"]["name"], "transformer")
+        self.assertEqual(config["goal_directed_generation"]["experience_replay"]["smiles"], ["CCO", "CCN"])
+        self.assertEqual(config["goal_directed_generation"]["diversity_filter"]["bucket_size"], 15)
+        self.assertEqual(config["goal_directed_generation"]["diversity_filter"]["minscore"], 0.6)
+        self.assertTrue(config["goal_directed_generation"]["beam_enumeration"]["use_beam_enumeration"])
+        self.assertTrue(config["goal_directed_generation"]["hallucinated_memory"]["use_hallucinated_memory"])
+
+    def test_chemist_warm_starts_saturn_when_candidates_exist(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            state = DiscoveryStatePayload(
+                original_user_request="Refine existing hits.",
+                run_dir=tmp,
+                candidate_molecules=[MoleculeRecord(smiles="CC(C)Cc1ccc(C(C)C(=O)O)cc1", name="ibuprofen")],
+                metadata={"saturn": {"oracle": [{"name": "qed"}], "run": False, "max_return": 3}},
+                requested_next_actions=["improve_candidates"],
+            )
+            state = chemist.run(state)
+            self.assertEqual(len(state.candidate_molecules), 3)
+            # Verify the warm-start message is in the message trail
+            self.assertTrue(any("warm-starting Saturn experience replay memory" in msg for msg in state.messages))
+
     def test_chemist_seeds_from_saturn_when_requested(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             state = DiscoveryStatePayload(
