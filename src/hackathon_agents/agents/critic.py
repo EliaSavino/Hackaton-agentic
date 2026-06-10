@@ -13,6 +13,8 @@ def run(state: DiscoveryStatePayload) -> DiscoveryStatePayload:
         qed = _float_or_none(descriptors.get("qed"))
         logp = _float_or_none(descriptors.get("logp"))
         mol_wt = _float_or_none(descriptors.get("mol_wt"))
+        boltz_energy = _float_or_none(descriptors.get("boltz_energy"))
+
         components = []
         if qed is not None:
             components.append(qed)
@@ -20,6 +22,17 @@ def run(state: DiscoveryStatePayload) -> DiscoveryStatePayload:
             components.append(max(0.0, 1.0 - abs(logp - 2.0) / 6.0))
         if mol_wt is not None:
             components.append(max(0.0, 1.0 - abs(mol_wt - 250.0) / 500.0))
+
+        if boltz_energy is not None:
+            # Convert predicted delta-G to 0-to-1 score where -15.0 kcal/mol is 1.0 and >= -2.0 is 0.0
+            if boltz_energy >= -2.0:
+                boltz_score = 0.0
+            elif boltz_energy <= -15.0:
+                boltz_score = 1.0
+            else:
+                boltz_score = (boltz_energy - (-2.0)) / (-15.0 - (-2.0))
+            components.append(boltz_score)
+
         molecule.score = mean(components) if components else None
         scored.append(molecule)
 

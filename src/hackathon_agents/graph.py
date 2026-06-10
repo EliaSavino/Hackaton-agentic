@@ -204,6 +204,37 @@ class DiscoveryGraph:
                     )
                     state.add_tool_result("orca.run_or_generate", generated)
 
+        if self.config.tool_enabled("boltz_2"):
+            import hashlib
+            from hackathon_agents.tools.boltz_tools import run_boltz_2
+            boltz_tool = self.config.tools.get("boltz_2")
+            allow_run = boltz_tool.model_extra.get("allow_run", False) if boltz_tool else False
+            run_mode_val = boltz_tool.model_extra.get("run_mode", "local") if boltz_tool else "local"
+            device_val = boltz_tool.model_extra.get("device", "cpu") if boltz_tool else "cpu"
+
+            target_seq = state.metadata.get("target_protein_sequence") or "MTEYKLVVVGAGGVGKSALTIQLIQNHFVDEYDPTIEDSYRKQVVIDGETCLLDILDTAGQEEYSAMRDQYMRTGEGFLCVFAINNTKSFEDIHQYREQIKRVKDSDDVPMVLVGNKCDLAARTVESRQAQDLARSYGIPYIETSAKTRQGVEDAFYTLVREIRQHKLRKLNPPDESGPGCMSCKCVLS"
+
+            state.append_message("graph: running Boltz-2 co-folding on generated candidates")
+            for molecule in state.candidate_molecules:
+                boltz_result = run_boltz_2(
+                    {
+                        "id": f"boltz-{hashlib.md5(molecule.smiles.encode('utf-8')).hexdigest()[:8]}",
+                        "work_dir": str(run_dir / "boltz"),
+                        "target_protein_sequence": target_seq,
+                        "ligand_smiles": molecule.smiles,
+                        "run": bool(allow_run),
+                        "run_mode": run_mode_val,
+                        "device": device_val,
+                    }
+                )
+                state.add_tool_result("boltz_2.run_prediction", boltz_result)
+                if boltz_result.ok:
+                    molecule.descriptors["boltz_energy"] = boltz_result.data.get("binding_energy_kcal_mol")
+                    molecule.descriptors["boltz_kd_nm"] = boltz_result.data.get("binding_affinity_kd_nm")
+                    molecule.descriptors["boltz_plddt"] = boltz_result.data.get("plddt")
+                    molecule.descriptors["boltz_iptm"] = boltz_result.data.get("iptm")
+                    molecule.metadata["boltz_pdb"] = boltz_result.data.get("pdb_file")
+
         return state
 
     def _critic_node(self, state: DiscoveryStatePayload) -> DiscoveryStatePayload:

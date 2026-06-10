@@ -89,5 +89,6 @@ tools:
     single_sequence: true
     partition: gpu_a100
     allow_submit: false
+    allow_run: false
     timeout_seconds: 1800
     enabled_modes: [full, cheap]
