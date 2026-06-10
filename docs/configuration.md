@@ -130,6 +130,10 @@ SATURN_ENABLED=false
 SATURN_REPO=
 SATURN_PYTHON=python
 SATURN_PRIOR=
+BOLTZ_ENABLED=false
+BOLTZ_EXECUTABLE=boltz
+BOLTZ_RUN_MODE=local
+BOLTZ_DEVICE=cpu
 ```
 
 Do not put API keys in YAML or source code.
@@ -161,3 +165,27 @@ Behavior:
 - Running the real Saturn model is opt-in: set `SATURN_ENABLED=true`, point
   `SATURN_REPO`/`SATURN_PYTHON`/`SATURN_PRIOR` at a cloned Saturn checkout and its
   conda environment, and set the Saturn input `run` flag to `true`.
+
+## Boltz-2 Tool Config
+
+`configs/tools.yaml` includes a `boltz_2` block for predicted protein-ligand structural co-folding and binding affinity:
+
+```yaml
+boltz_2:
+  enabled: ${BOLTZ_ENABLED:-false}
+  boltz_executable: ${BOLTZ_EXECUTABLE:-boltz}
+  run_mode: ${BOLTZ_RUN_MODE:-local}
+  device: ${BOLTZ_DEVICE:-cpu}
+  single_sequence: true
+  partition: gpu_a100
+  allow_submit: false
+  timeout_seconds: 1800
+  enabled_modes: [full, cheap]
+```
+
+Behavior:
+
+- Evaluates how generated ligands bind and co-fold with target proteins.
+- Yieldspredicted 3D complex structures (PDB), confidence values (pLDDT, ipTM), and quantitative binding affinity ($\Delta G$ and $K_d$).
+- Support zero-install mock fallback mode (used when `run=false` or local/HPC executable is absent).
+- Real-model execution (local or submitted to HPC via sbatch) can be enabled with `BOLTZ_ENABLED=true`, `BOLTZ_RUN_MODE=slurm`, and `allow_submit=true`.

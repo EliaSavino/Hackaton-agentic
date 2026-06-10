@@ -231,6 +231,26 @@ state.metadata["saturn"] = {
 }
 ```
 
+### Boltz-2 (Molecular Co-Folding and Docking)
+
+Module: `src/hackathon_agents/tools/boltz_tools.py`
+
+Functions:
+
+- `check_boltz_availability(executable)`
+- `write_boltz_yaml_input(work_dir, job_id, sequence, smiles)`
+- `render_boltz_slurm_script(parsed, yaml_path)`
+- `run_boltz_2(input)`
+
+This tool predicts how a generated small-molecule ligand co-folds and docks with a target protein, returning the predicted 3D structure (PDB), structural confidence (pLDDT, ipTM), and binding affinity ($\Delta G$ in kcal/mol and $K_d$ in nanomolar).
+
+It supports three powerful execution settings:
+1. **Local Mode**: Runs the local CLI `boltz predict ...` in a subprocess.
+2. **SLURM HPC Mode**: Generates a production-grade batch submission script (`.slurm`) for clusters (like Snellius), and optionally submits it via `sbatch`.
+3. **Mock Mode**: When `run=False` (default) or Boltz is not installed, it runs a high-fidelity deterministic simulation based on a hash of the sequence + ligand, returning custom binding affinities and mock 3D structures. This ensures the workflow is completely offline-safe and demo-ready.
+
+Configure it in `configs/tools.yaml` under `boltz_2` or via environment variables: `BOLTZ_ENABLED`, `BOLTZ_EXECUTABLE`, `BOLTZ_RUN_MODE` (`local` or `slurm`), `BOLTZ_DEVICE`.
+
 ## Add A Tool
 
 1. Define Pydantic input schema if the input is more than one or two primitives.

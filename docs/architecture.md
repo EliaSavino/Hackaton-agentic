@@ -38,6 +38,7 @@ src/hackathon_agents/
   tools/
     rdkit_tools.py       SMILES validation and descriptors
     saturn_tools.py      Saturn generative molecular design wrapper
+    boltz_tools.py       Boltz-2 molecular co-folding and docking wrapper
     paper_review.py      Structured deterministic paper review
     python_exec.py       Safe-ish Python snippets
     file_io.py           JSON/CSV IO

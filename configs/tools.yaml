@@ -76,3 +76,18 @@ tools:
     timeout_seconds: 1800
     allow_run: false
     enabled_modes: [full, cheap]
+
+  boltz_2:
+    # Co-folding, structural docking, and binding affinity via Boltz-2.
+    # Disabled by default: Boltz-2 is a heavy deep-learning model (GPU recommended).
+    # When disabled, unconfigured, or when run=false, the tool uses a
+    # high-fidelity deterministic mock co-folding simulation.
+    enabled: ${BOLTZ_ENABLED:-false}
+    boltz_executable: ${BOLTZ_EXECUTABLE:-boltz}
+    run_mode: ${BOLTZ_RUN_MODE:-local}
+    device: ${BOLTZ_DEVICE:-cpu}
+    single_sequence: true
+    partition: gpu_a100
+    allow_submit: false
+    timeout_seconds: 1800
+    enabled_modes: [full, cheap]
