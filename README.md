@@ -57,6 +57,16 @@ OLLAMA_SMALL_HOST=localhost
 HACKATHON_RUN_MODE=cheap
 ```
 
+Useful OpenRouter variables:
+
+```bash
+OPENROUTER_ENABLED=true
+OPENROUTER_API_KEY=
+OPENROUTER_MODEL=~openai/gpt-latest
+OPENROUTER_HTTP_REFERER=
+OPENROUTER_APP_TITLE=Hackathon Agents
+```
+
 The code supports four run modes:
 
 - `full`: prefer frontier models for final reasoning, use local models for bulk work.
@@ -83,6 +93,30 @@ python -m hackathon_agents.cli benchmark-models
 ```
 
 This pings configured Ollama hosts, tests configured models on latency, JSON compliance, tool-call formatting, simple chemistry reasoning, and code generation, then saves results to `runs/model_benchmark_<date>.json`.
+
+## Local RAG And Prompt Terminal
+
+Index local documents into the SQLite RAG database:
+
+```bash
+python -m hackathon_agents.cli rag-ingest docs --db-path data/rag.sqlite
+```
+
+Search indexed context:
+
+```bash
+python -m hackathon_agents.cli rag-search "photoredox light intensity" --context
+```
+
+Open an interactive prompting terminal with per-prompt RAG retrieval:
+
+```bash
+python -m hackathon_agents.cli prompt-terminal \
+  --model-alias openrouter_general \
+  --db-path data/rag.sqlite
+```
+
+Use `--no-rag` for plain chat, `/rag <query>` to inspect retrieved context, `/clear` to clear recent history, and `/exit` to leave the terminal.
 
 ## Snellius vLLM For Heavy Tasks
 

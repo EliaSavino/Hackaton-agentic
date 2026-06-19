@@ -51,7 +51,7 @@ models:
 
 Fields:
 
-- `provider`: `openai`, `anthropic`, `ollama`, `hosted`, `vllm`, or `other`.
+- `provider`: `openai`, `anthropic`, `ollama`, `hosted`, `vllm`, `openrouter`, or `other`.
 - `model`: provider model name.
 - `host`: Ollama, hosted, or vLLM base URL when relevant.
 - `capabilities`: labels used by `ModelRouter`.
@@ -126,6 +126,12 @@ HOSTED_API_BASE=
 SNELLIUS_VLLM_ENABLED=false
 SNELLIUS_VLLM_MODEL=
 SNELLIUS_VLLM_BASE_URL=
+OPENROUTER_ENABLED=false
+OPENROUTER_API_KEY=
+OPENROUTER_MODEL=~openai/gpt-latest
+OPENROUTER_HTTP_REFERER=
+OPENROUTER_APP_TITLE=Hackathon Agents
+RAG_DB_PATH=data/rag.sqlite
 ```
 
 Do not put API keys in YAML or source code.

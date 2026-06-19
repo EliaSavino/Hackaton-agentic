@@ -27,6 +27,13 @@ tools:
     allow_external_api: false
     supported_extensions: [.txt, .md]
 
+  rag:
+    enabled: true
+    db_path: "${RAG_DB_PATH:-data/rag.sqlite}"
+    supported_extensions: [.txt, .md, .markdown, .pdf, .docx]
+    chunk_size: 700
+    chunk_overlap: 100
+
   calculation_tools:
     enabled: true
     enabled_modes: [full, no_dft, cheap, offline]

@@ -10,6 +10,7 @@ Example aliases:
 
 - `frontier_reasoning`: high-quality hosted reasoning model.
 - `science_reasoning`: hosted science-capable reasoning model.
+- `openrouter_general`: disabled-by-default OpenRouter alias for the OpenAI-compatible OpenRouter gateway.
 - `snellius_vllm`: disabled-by-default OpenAI-compatible vLLM endpoint for heavyweight Snellius inference.
 - `local_large`: larger Ollama model for local reasoning, privacy, and bulk work.
 - `local_small`: smaller Ollama model for routing, summarization, formatting, and cheap tasks.
@@ -66,6 +67,30 @@ PYTHONPATH=src python -m hackathon_agents.cli snellius-vllm-script \
 
 Submit that script on Snellius, expose or tunnel the vLLM port, then run `check-models`. API keys are optional for vLLM unless a config sets `metadata.requires_api_key: true`.
 
+## OpenRouter
+
+OpenRouter is configured as an OpenAI-compatible hosted provider:
+
+```yaml
+openrouter_general:
+  provider: openrouter
+  model: "${OPENROUTER_MODEL:-~openai/gpt-latest}"
+  host: "${OPENROUTER_API_BASE:-https://openrouter.ai/api/v1}"
+  api_key_env: OPENROUTER_API_KEY
+  enabled: "${OPENROUTER_ENABLED:-false}"
+```
+
+Enable it with:
+
+```bash
+OPENROUTER_ENABLED=true
+OPENROUTER_API_KEY=...
+OPENROUTER_MODEL=~openai/gpt-latest
+OPENROUTER_APP_TITLE="Hackathon Agents"
+```
+
+`LLMClient` first attempts LiteLLM. If LiteLLM is unavailable or the provider call fails, OpenRouter uses a direct `/chat/completions` fallback against the configured `/api/v1` base URL. `check-models` calls the OpenAI-compatible `/models` endpoint when the API key is present.
+
 ## Good Local Tasks
 
 Use local models for:
@@ -97,7 +122,7 @@ PYTHONPATH=src python -m hackathon_agents.cli check-models
 ```
 
 For Ollama, this calls `/api/tags` and checks whether configured models are listed.
-For vLLM, this calls the OpenAI-compatible `/v1/models` endpoint.
+For vLLM and OpenRouter, this calls the OpenAI-compatible `/v1/models` endpoint.
 
 ## Benchmarking
 

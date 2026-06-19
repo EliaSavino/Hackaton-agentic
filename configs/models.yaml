@@ -24,6 +24,18 @@ models:
     cost_tier: medium
     enabled: false
 
+  openrouter_general:
+    provider: openrouter
+    model: "${OPENROUTER_MODEL:-~openai/gpt-latest}"
+    host: "${OPENROUTER_API_BASE:-https://openrouter.ai/api/v1}"
+    capabilities: [reasoning, hosted, general, long_context, openrouter]
+    api_key_env: OPENROUTER_API_KEY
+    cost_tier: medium
+    enabled: "${OPENROUTER_ENABLED:-false}"
+    metadata:
+      http_referer: "${OPENROUTER_HTTP_REFERER:-}"
+      app_title: "${OPENROUTER_APP_TITLE:-Hackathon Agents}"
+
   snellius_vllm:
     provider: vllm
     model: "${SNELLIUS_VLLM_MODEL:-meta-llama/Llama-3.1-70B-Instruct}"

@@ -69,6 +69,26 @@ Functions:
 
 These tools provide offline/local literature support: rank text or markdown documents by query relevance, screen structured literature records, map claims to snippets, deduplicate by DOI/title, extract key terms, and format compact or BibTeX-style citations. They do not make external API calls.
 
+### RAG Tools
+
+Module: `src/hackathon_agents/tools/rag_tools.py`
+
+Functions:
+
+- `ingest_rag_documents(input)`
+- `search_rag(input)`
+- `build_rag_context(input)`
+
+These tools persist local `.txt`, `.md`, `.pdf`, and `.docx` content into a SQLite database, chunk documents, build a lexical index, and return bounded context blocks for prompt augmentation. The default database path is `data/rag.sqlite`.
+
+CLI examples:
+
+```bash
+PYTHONPATH=src python -m hackathon_agents.cli rag-ingest docs --db-path data/rag.sqlite
+PYTHONPATH=src python -m hackathon_agents.cli rag-search "photoredox light intensity" --context
+PYTHONPATH=src python -m hackathon_agents.cli prompt-terminal --model-alias openrouter_general
+```
+
 ### Python Execution
 
 Module: `src/hackathon_agents/tools/python_exec.py`

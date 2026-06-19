@@ -18,7 +18,7 @@ class RunMode(str, Enum):
 
 
 class ModelConfig(BaseModel):
-    provider: Literal["openai", "anthropic", "ollama", "hosted", "vllm", "other"]
+    provider: Literal["openai", "anthropic", "ollama", "hosted", "vllm", "openrouter", "other"]
     model: str
     host: str | None = None
     capabilities: list[str] = Field(default_factory=list)
@@ -36,6 +36,10 @@ class ModelConfig(BaseModel):
             return f"ollama/{self.model}"
         if self.provider == "vllm":
             return f"openai/{self.model}"
+        if self.provider == "openrouter":
+            if self.model.startswith("openrouter/"):
+                return self.model
+            return f"openrouter/{self.model}"
         return self.model
 
     @property
@@ -46,6 +50,10 @@ class ModelConfig(BaseModel):
             if self.api_base_env:
                 return os.getenv(self.api_base_env)
             return self.host
+        if self.provider == "openrouter":
+            if self.api_base_env and os.getenv(self.api_base_env):
+                return os.getenv(self.api_base_env)
+            return self.host or "https://openrouter.ai/api/v1"
         if self.api_base_env:
             return os.getenv(self.api_base_env)
         return None

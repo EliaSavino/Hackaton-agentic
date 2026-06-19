@@ -7,11 +7,86 @@ from pathlib import Path
 from hackathon_agents.config import RunMode, load_config
 from hackathon_agents.demos.discovery_demo import run_demo
 from hackathon_agents.llm.benchmark import benchmark_models
+from hackathon_agents.llm.client import CompletionRequest, LLMClient
+from hackathon_agents.llm.prompt_terminal import build_prompt_messages, terminal_metadata, trim_history
 from hackathon_agents.llm.router import ModelRouter
 from hackathon_agents.logging_config import configure_logging
 from hackathon_agents.mechanism.graph import run_mechanism_loop, run_mechanism_once
+from hackathon_agents.rag import DEFAULT_RAG_DB_PATH, RAGStore
+from hackathon_agents.tools.rag_tools import build_rag_context, ingest_rag_documents, search_rag
 from hackathon_agents.tools.paper_review import review_paper
 from hackathon_agents.tools.snellius_vllm import generate_snellius_vllm_job
+
+
+def _run_prompt_terminal(
+    *,
+    config_dir: Path,
+    run_mode: RunMode | str,
+    model_alias: str | None,
+    db_path: Path,
+    use_rag: bool,
+    rag_limit: int,
+    max_context_chars: int,
+    system_prompt: str,
+    temperature: float,
+    max_tokens: int,
+) -> None:
+    configure_logging()
+    config = load_config(config_dir=config_dir, run_mode=run_mode)
+    client = LLMClient(config)
+    store = RAGStore(db_path)
+    history: list[dict[str, str]] = []
+
+    print("Prompt terminal. Commands: /exit, /clear, /rag <query>.")
+    while True:
+        try:
+            prompt = input("you> ").strip()
+        except (EOFError, KeyboardInterrupt):
+            print()
+            break
+        if not prompt:
+            continue
+        if prompt in {"/exit", "/quit"}:
+            break
+        if prompt == "/clear":
+            history.clear()
+            print("history cleared")
+            continue
+        if prompt.startswith("/rag "):
+            query = prompt.removeprefix("/rag ").strip()
+            context = store.build_context(query, limit=rag_limit, max_chars=max_context_chars)
+            print(context["context"] or "no matching RAG context")
+            continue
+
+        rag_context = ""
+        rag_result_count = 0
+        if use_rag:
+            context = store.build_context(prompt, limit=rag_limit, max_chars=max_context_chars)
+            rag_context = context["context"]
+            rag_result_count = int(context["result_count"])
+
+        messages = build_prompt_messages(
+            prompt,
+            system_prompt=system_prompt,
+            history=trim_history(history),
+            rag_context=rag_context,
+        )
+        result = client.complete(
+            CompletionRequest(
+                model_alias=model_alias,
+                messages=messages,
+                temperature=temperature,
+                max_tokens=max_tokens,
+                retries=1,
+                metadata=terminal_metadata(model_alias, use_rag, rag_result_count),
+            )
+        )
+        if not result.ok:
+            print(f"model error: {result.error}")
+            continue
+        print(f"\nassistant> {result.content}\n")
+        history.extend([{"role": "user", "content": prompt}, {"role": "assistant", "content": result.content}])
+
 
 try:
     import typer
@@ -88,6 +163,103 @@ try:
         typer.echo(f"Review: {output_path}")
         typer.echo(f"Recommendation: {review['recommendation']}")
         typer.echo(review["summary"])
+
+    @app.command("rag-ingest")
+    def rag_ingest_command(
+        path: Path = typer.Argument(..., help="File or directory to index."),
+        db_path: Path = typer.Option(DEFAULT_RAG_DB_PATH, "--db-path"),
+        extension: list[str] = typer.Option([".txt", ".md", ".markdown", ".pdf", ".docx"], "--extension", "-e"),
+        chunk_size: int = typer.Option(700, "--chunk-size", min=50, max=4000),
+        chunk_overlap: int = typer.Option(100, "--chunk-overlap", min=0, max=1000),
+        max_chars: int = typer.Option(2_000_000, "--max-chars", min=1),
+        replace: bool = typer.Option(True, "--replace/--skip-unchanged"),
+    ) -> None:
+        """Index local documents into the SQLite RAG database."""
+
+        result = ingest_rag_documents(
+            {
+                "path": str(path),
+                "db_path": str(db_path),
+                "extensions": extension,
+                "chunk_size": chunk_size,
+                "chunk_overlap": chunk_overlap,
+                "max_chars": max_chars,
+                "replace": replace,
+            }
+        )
+        if not result.ok:
+            typer.echo(f"RAG ingest failed: {result.error}")
+            raise typer.Exit(code=1)
+        typer.echo(f"Database: {result.data['db_path']}")
+        typer.echo(f"Indexed documents: {result.data['document_count']}")
+        typer.echo(f"Indexed chunks: {result.data['chunk_count']}")
+        if result.data["skipped"]:
+            typer.echo(f"Skipped: {len(result.data['skipped'])}")
+
+    @app.command("rag-search")
+    def rag_search_command(
+        query: str = typer.Argument(..., help="Search query."),
+        db_path: Path = typer.Option(DEFAULT_RAG_DB_PATH, "--db-path"),
+        limit: int = typer.Option(5, "--limit", "-n", min=1, max=50),
+        context: bool = typer.Option(False, "--context"),
+        max_context_chars: int = typer.Option(4_000, "--max-context-chars", min=200),
+    ) -> None:
+        """Search the local RAG database."""
+
+        if context:
+            result = build_rag_context(
+                {
+                    "query": query,
+                    "db_path": str(db_path),
+                    "limit": limit,
+                    "max_chars": max_context_chars,
+                }
+            )
+            if not result.ok:
+                typer.echo(f"RAG search failed: {result.error}")
+                raise typer.Exit(code=1)
+            typer.echo(result.data["context"] or "No matching RAG context.")
+            return
+
+        result = search_rag({"query": query, "db_path": str(db_path), "limit": limit})
+        if not result.ok:
+            typer.echo(f"RAG search failed: {result.error}")
+            raise typer.Exit(code=1)
+        for index, record in enumerate(result.data["records"], start=1):
+            source = record.get("source_path") or record["title"]
+            typer.echo(f"{index}. {record['title']} [{record['score']:.3f}] {source}")
+            typer.echo(record["snippet"])
+
+    @app.command("prompt-terminal")
+    def prompt_terminal_command(
+        config_dir: Path = typer.Option(Path("configs"), "--config-dir"),
+        run_mode: RunMode = typer.Option(RunMode.CHEAP, "--run-mode", "-m"),
+        model_alias: str | None = typer.Option(None, "--model-alias", "-M"),
+        db_path: Path = typer.Option(DEFAULT_RAG_DB_PATH, "--db-path"),
+        rag: bool = typer.Option(True, "--rag/--no-rag"),
+        rag_limit: int = typer.Option(4, "--rag-limit", min=1, max=20),
+        max_context_chars: int = typer.Option(4_000, "--max-context-chars", min=200),
+        system_prompt: str = typer.Option(
+            "You are a concise scientific discovery assistant. Use retrieved context only when relevant.",
+            "--system",
+        ),
+        temperature: float = typer.Option(0.1, "--temperature", min=0.0, max=2.0),
+        max_tokens: int = typer.Option(1200, "--max-tokens", min=1),
+    ) -> None:
+        """Open an interactive model prompting terminal with optional RAG context."""
+
+        _run_prompt_terminal(
+            config_dir=config_dir,
+            run_mode=run_mode,
+            model_alias=model_alias,
+            db_path=db_path,
+            use_rag=rag,
+            rag_limit=rag_limit,
+            max_context_chars=max_context_chars,
+            system_prompt=system_prompt,
+            temperature=temperature,
+            max_tokens=max_tokens,
+        )
 
     @app.command("mechanism-loop")
     def mechanism_loop_command(
@@ -229,6 +401,37 @@ except Exception:
         review_parser.add_argument("--focus-question", "-q", action="append", default=[])
         review_parser.add_argument("--review-depth", default="standard")
 
+        rag_ingest_parser = subparsers.add_parser("rag-ingest")
+        rag_ingest_parser.add_argument("path")
+        rag_ingest_parser.add_argument("--db-path", default=str(DEFAULT_RAG_DB_PATH))
+        rag_ingest_parser.add_argument("--extension", "-e", action="append", default=None)
+        rag_ingest_parser.add_argument("--chunk-size", type=int, default=700)
+        rag_ingest_parser.add_argument("--chunk-overlap", type=int, default=100)
+        rag_ingest_parser.add_argument("--max-chars", type=int, default=2_000_000)
+        rag_ingest_parser.add_argument("--skip-unchanged", action="store_true")
+
+        rag_search_parser = subparsers.add_parser("rag-search")
+        rag_search_parser.add_argument("query")
+        rag_search_parser.add_argument("--db-path", default=str(DEFAULT_RAG_DB_PATH))
+        rag_search_parser.add_argument("--limit", "-n", type=int, default=5)
+        rag_search_parser.add_argument("--context", action="store_true")
+        rag_search_parser.add_argument("--max-context-chars", type=int, default=4_000)
+
+        prompt_parser = subparsers.add_parser("prompt-terminal")
+        prompt_parser.add_argument("--config-dir", default="configs")
+        prompt_parser.add_argument("--run-mode", default=RunMode.CHEAP.value)
+        prompt_parser.add_argument("--model-alias", "-M", default=None)
+        prompt_parser.add_argument("--db-path", default=str(DEFAULT_RAG_DB_PATH))
+        prompt_parser.add_argument("--no-rag", action="store_true")
+        prompt_parser.add_argument("--rag-limit", type=int, default=4)
+        prompt_parser.add_argument("--max-context-chars", type=int, default=4_000)
+        prompt_parser.add_argument(
+            "--system",
+            default="You are a concise scientific discovery assistant. Use retrieved context only when relevant.",
+        )
+        prompt_parser.add_argument("--temperature", type=float, default=0.1)
+        prompt_parser.add_argument("--max-tokens", type=int, default=1200)
+
         mechanism_loop_parser = subparsers.add_parser("mechanism-loop")
         mechanism_loop_parser.add_argument("--objective", required=True)
         mechanism_loop_parser.add_argument("--rounds", type=int, default=3)
@@ -307,6 +510,60 @@ except Exception:
             print(f"Review: {output_path}")
             print(f"Recommendation: {review['recommendation']}")
             print(review["summary"])
+        elif args.command == "rag-ingest":
+            result = ingest_rag_documents(
+                {
+                    "path": args.path,
+                    "db_path": args.db_path,
+                    "extensions": args.extension or [".txt", ".md", ".markdown", ".pdf", ".docx"],
+                    "chunk_size": args.chunk_size,
+                    "chunk_overlap": args.chunk_overlap,
+                    "max_chars": args.max_chars,
+                    "replace": not args.skip_unchanged,
+                }
+            )
+            if not result.ok:
+                print(f"RAG ingest failed: {result.error}")
+                raise SystemExit(1)
+            print(f"Database: {result.data['db_path']}")
+            print(f"Indexed documents: {result.data['document_count']}")
+            print(f"Indexed chunks: {result.data['chunk_count']}")
+        elif args.command == "rag-search":
+            if args.context:
+                result = build_rag_context(
+                    {
+                        "query": args.query,
+                        "db_path": args.db_path,
+                        "limit": args.limit,
+                        "max_chars": args.max_context_chars,
+                    }
+                )
+                if not result.ok:
+                    print(f"RAG search failed: {result.error}")
+                    raise SystemExit(1)
+                print(result.data["context"] or "No matching RAG context.")
+            else:
+                result = search_rag({"query": args.query, "db_path": args.db_path, "limit": args.limit})
+                if not result.ok:
+                    print(f"RAG search failed: {result.error}")
+                    raise SystemExit(1)
+                for index, record in enumerate(result.data["records"], start=1):
+                    source = record.get("source_path") or record["title"]
+                    print(f"{index}. {record['title']} [{record['score']:.3f}] {source}")
+                    print(record["snippet"])
+        elif args.command == "prompt-terminal":
+            _run_prompt_terminal(
+                config_dir=Path(args.config_dir),
+                run_mode=args.run_mode,
+                model_alias=args.model_alias,
+                db_path=Path(args.db_path),
+                use_rag=not args.no_rag,
+                rag_limit=args.rag_limit,
+                max_context_chars=args.max_context_chars,
+                system_prompt=args.system,
+                temperature=args.temperature,
+                max_tokens=args.max_tokens,
+            )
         elif args.command == "mechanism-loop":
             state = run_mechanism_loop(
                 objective=args.objective,
