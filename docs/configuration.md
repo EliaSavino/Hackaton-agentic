@@ -119,6 +119,8 @@ OPENAI_API_KEY=
 ANTHROPIC_API_KEY=
 LITELLM_MODEL_DEFAULT=local_small
 HACKATHON_RUN_MODE=cheap
+HACKATHON_AGENT_LLM_MODE=auto
+HACKATHON_MODEL_CHECK_TIMEOUT=0.5
 OLLAMA_BIG_HOST=localhost
 OLLAMA_SMALL_HOST=localhost
 HOSTED_API_KEY=
@@ -132,6 +134,13 @@ OPENROUTER_MODEL=~openai/gpt-latest
 OPENROUTER_HTTP_REFERER=
 OPENROUTER_APP_TITLE=Hackathon Agents
 RAG_DB_PATH=data/rag.sqlite
+MECHANISM_LITERATURE_CORPUS_DIR=
 ```
 
 Do not put API keys in YAML or source code.
+
+`HACKATHON_AGENT_LLM_MODE` controls whether the planner, chemist, and critic use configured model calls:
+
+- `auto`: check selected model availability with `HACKATHON_MODEL_CHECK_TIMEOUT`, then fall back deterministically when unavailable.
+- `off`: skip agent model calls.
+- `always`: attempt the selected model and fall back only if the call or schema validation fails.

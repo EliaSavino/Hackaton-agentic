@@ -6,15 +6,15 @@ __pycache__/
 *.py[cod]
 
 /.env
-/runs/.gitkeep
+/runs/*
 !/runs/.gitkeep
 /data/*
 !/data/.gitkeep
 /notebooks/*
 !/notebooks/.gitkeep
 
+.DS_Store
 *.egg-info/
 dist/
 build/
 .idea/
-

@@ -55,6 +55,8 @@ Useful local model variables:
 OLLAMA_BIG_HOST=localhost
 OLLAMA_SMALL_HOST=localhost
 HACKATHON_RUN_MODE=cheap
+HACKATHON_AGENT_LLM_MODE=auto
+HACKATHON_MODEL_CHECK_TIMEOUT=0.5
 ```
 
 Useful OpenRouter variables:
@@ -73,6 +75,12 @@ The code supports four run modes:
 - `no_dft`: skip xTB and ORCA execution.
 - `cheap`: favor local Ollama models and reserve frontier calls for final criticism.
 - `offline`: only route to Ollama models and local tools.
+
+Agent model calls use `HACKATHON_AGENT_LLM_MODE`:
+
+- `auto`: check configured model availability with a short timeout, use model-backed planner/chemist/critic calls when reachable, otherwise fall back deterministically.
+- `off`: force deterministic planner/chemist/critic behavior.
+- `always`: attempt the selected model and fall back only if the call or JSON validation fails.
 
 ## Run the Demo
 
@@ -178,7 +186,9 @@ Run the mock loop:
 python -m hackathon_agents.cli mechanism-loop \
   --objective "Infer mechanism for photochemical reaction A + B -> P" \
   --rounds 3 \
-  --mode mock
+  --mode mock \
+  --literature-corpus-dir data/literature \
+  --dft-structure-file data/example.xyz
 ```
 
 Run one analysis pass on existing kinetic data:
@@ -201,6 +211,8 @@ Outputs are written to `runs/mechanism_<timestamp>/` or `runs/mechanism_once_<ti
 - `trace.log`
 
 Mock mode uses `MockRobotClient`, `MockHPCClient`, and local mock literature text. The robot mock generates synthetic time-resolved concentration data from a hidden toy mechanism, fits each hypothesis with SciPy `least_squares`, ranks hypotheses, recommends the next experiment, and writes JSON/DOCX reports.
+
+Passing `--literature-corpus-dir` replaces the mock literature prior with local lexical retrieval over `.txt`/`.md` files. Passing `--dft-structure-file` uses those XYZ-style coordinates in generated DFT jobs instead of the built-in toy structure.
 
 Dry-run mode avoids real robot and cluster submissions. It still uses mock kinetic data, but the HPC backend writes SLURM submission scripts under the run directory instead of calling `sbatch`.
 

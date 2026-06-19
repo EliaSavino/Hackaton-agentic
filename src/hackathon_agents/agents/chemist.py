@@ -2,6 +2,10 @@ from __future__ import annotations
 
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
+from pydantic import BaseModel, Field
+
+from hackathon_agents.agents.model_helpers import call_agent_model
+from hackathon_agents.config import AppConfig
 from hackathon_agents.schemas.molecules import MoleculeRecord
 from hackathon_agents.state import DiscoveryStatePayload
 
@@ -23,7 +27,46 @@ REFINEMENT_MOLECULES = [
 ]
 
 
-def run(state: DiscoveryStatePayload) -> DiscoveryStatePayload:
+class CandidateGenerationResponse(BaseModel):
+    candidates: list[MoleculeRecord] = Field(default_factory=list)
+    rationale_notes: list[str] = Field(default_factory=list)
+
+
+def run(state: DiscoveryStatePayload, config: AppConfig | None = None) -> DiscoveryStatePayload:
+    if not state.candidate_molecules or state.requested_next_actions:
+        model_response = call_agent_model(
+            state=state,
+            config=config,
+            agent_name="chemist",
+            task_type="chemist",
+            response_model=CandidateGenerationResponse,
+            expected_difficulty="medium",
+            user_payload={
+                "objective": state.original_user_request,
+                "requested_next_actions": state.requested_next_actions,
+                "existing_candidates": [
+                    candidate.model_dump(mode="json") for candidate in state.candidate_molecules[:20]
+                ],
+                "critic_notes": state.critic_notes[-8:],
+                "target_candidate_count": int(state.metadata.get("min_valid_candidates", 10)),
+                "max_new_candidates": 12,
+                "requirements": [
+                    "Return syntactically valid SMILES where possible.",
+                    "Use diverse, plausible chem/bio discovery candidates.",
+                    "Do not invent measured assay or experimental results.",
+                    "Include assumptions or risks in notes.",
+                ],
+            },
+        )
+        if model_response is not None and model_response.candidates:
+            added = _merge_model_candidates(state, model_response.candidates)
+            if added:
+                state.critic_notes.extend(model_response.rationale_notes[:4])
+                state.append_message(f"chemist: added {added} model-generated candidates")
+                state.needs_more_passes = False
+                return state
+            state.append_message("chemist: model generated no new unique candidates; using deterministic fallback")
+
     if not state.candidate_molecules:
         state.candidate_molecules = [candidate.model_copy(deep=True) for candidate in EXAMPLE_MOLECULES]
         state.append_message("chemist: loaded hardcoded example molecules")
@@ -90,3 +133,31 @@ def _add_refinement_candidates(state: DiscoveryStatePayload) -> int:
         existing_smiles.add(refined.smiles)
         added += 1
     return added
+
+
+def _merge_model_candidates(state: DiscoveryStatePayload, candidates: list[MoleculeRecord]) -> int:
+    existing_smiles = {candidate.smiles for candidate in state.candidate_molecules}
+    alias = _last_successful_model_alias(state)
+    added = 0
+    for candidate in candidates:
+        smiles = candidate.smiles.strip()
+        if not smiles or smiles in existing_smiles:
+            continue
+        generated = candidate.model_copy(deep=True)
+        generated.smiles = smiles
+        if generated.source == "generated":
+            generated.source = f"model:{alias or 'configured'}"
+        generated.metadata.setdefault("model_generated", True)
+        if alias:
+            generated.metadata.setdefault("model_alias", alias)
+        state.candidate_molecules.append(generated)
+        existing_smiles.add(smiles)
+        added += 1
+    return added
+
+
+def _last_successful_model_alias(state: DiscoveryStatePayload) -> str | None:
+    for record in reversed(state.metadata.get("model_calls", [])):
+        if record.get("agent") == "chemist" and record.get("ok"):
+            return record.get("alias")
+    return None

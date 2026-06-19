@@ -2,11 +2,23 @@ from __future__ import annotations
 
 from statistics import mean
 
+from pydantic import BaseModel, Field
+
+from hackathon_agents.agents.model_helpers import call_agent_model
+from hackathon_agents.config import AppConfig
 from hackathon_agents.schemas.tasks import CriticDecision
 from hackathon_agents.state import DiscoveryStatePayload
 
 
-def run(state: DiscoveryStatePayload) -> DiscoveryStatePayload:
+class CriticReviewResponse(BaseModel):
+    summary_notes: list[str] = Field(default_factory=list)
+    risk_flags: list[str] = Field(default_factory=list)
+    recommended_next_actions: list[str] = Field(default_factory=list)
+    should_continue: bool | None = None
+    reason: str | None = None
+
+
+def run(state: DiscoveryStatePayload, config: AppConfig | None = None) -> DiscoveryStatePayload:
     scored = []
     for molecule in state.candidate_molecules:
         descriptors = molecule.descriptors
@@ -41,14 +53,55 @@ def run(state: DiscoveryStatePayload) -> DiscoveryStatePayload:
     state.requested_next_actions = decision.requested_next_actions
     state.stop_reason = decision.stop_reason
     state.critic_decisions.append(decision)
-
-    history = state.metadata.setdefault("critic_history", [])
-    history.append(decision.model_dump(mode="json"))
     state.metadata["best_score"] = decision.best_score
     state.metadata["valid_candidate_count"] = decision.valid_candidate_count
 
+    model_review = call_agent_model(
+        state=state,
+        config=config,
+        agent_name="critic",
+        task_type="critic",
+        response_model=CriticReviewResponse,
+        expected_difficulty="medium",
+        user_payload={
+            "objective": state.original_user_request,
+            "iteration": state.iteration,
+            "max_iterations": state.max_iterations,
+            "deterministic_decision": decision.model_dump(mode="json"),
+            "candidate_summary": [
+                {
+                    "name": molecule.name,
+                    "smiles": molecule.smiles,
+                    "score": molecule.score,
+                    "descriptors": molecule.descriptors,
+                    "source": molecule.source,
+                    "notes": molecule.notes,
+                }
+                for molecule in state.candidate_molecules[:15]
+            ],
+            "tool_failures": [
+                record.model_dump(mode="json")
+                for record in state.tool_results
+                if not record.result.ok
+            ][-10:],
+            "instructions": [
+                "Check plausibility, uncertainty, missing controls, tool failures, and overclaiming.",
+                "Recommend another pass only when a bounded next action can improve the result.",
+                "Do not ask for another pass when max_iterations has been reached.",
+            ],
+        },
+    )
+    if model_review is not None:
+        _merge_model_review(state, model_review)
+
+    current_decision = state.critic_decisions[-1]
+    history = state.metadata.setdefault("critic_history", [])
+    history.append(current_decision.model_dump(mode="json"))
+    state.metadata["best_score"] = current_decision.best_score
+    state.metadata["valid_candidate_count"] = current_decision.valid_candidate_count
+
     state.append_message("critic: ranked candidates with a simple descriptor heuristic")
-    state.append_message(f"critic: {decision.reason}")
+    state.append_message(f"critic: {current_decision.reason}")
     return state
 
 
@@ -134,3 +187,50 @@ def _decide_next_pass(state: DiscoveryStatePayload) -> CriticDecision:
 
 def _deterministic_descriptor_unavailable(state: DiscoveryStatePayload) -> bool:
     return any("RDKit is not installed" in error for error in state.errors)
+
+
+def _merge_model_review(state: DiscoveryStatePayload, review: CriticReviewResponse) -> None:
+    for note in review.summary_notes[:5]:
+        if note:
+            state.critic_notes.append(f"Model critic: {note}")
+    for flag in review.risk_flags[:5]:
+        if flag:
+            state.critic_notes.append(f"Model risk flag: {flag}")
+
+    state.metadata["model_critic_review"] = review.model_dump(mode="json")
+    hard_stop = state.iteration >= state.max_iterations or state.stop_reason in {
+        "max_iterations_reached",
+        "descriptor_tools_unavailable",
+        "too_many_tool_errors",
+    }
+    if hard_stop:
+        return
+
+    actions = [action for action in review.recommended_next_actions if action]
+    if state.needs_more_passes:
+        state.requested_next_actions = _dedupe([*state.requested_next_actions, *actions])
+        if state.critic_decisions:
+            state.critic_decisions[-1].requested_next_actions = state.requested_next_actions
+        return
+
+    if review.should_continue:
+        state.needs_more_passes = True
+        state.stop_reason = None
+        state.requested_next_actions = actions or ["address_model_critic_concerns"]
+        reason = review.reason or "Model critic requested another bounded pass."
+        if state.critic_decisions:
+            state.critic_decisions[-1].needs_more_passes = True
+            state.critic_decisions[-1].reason = reason
+            state.critic_decisions[-1].requested_next_actions = state.requested_next_actions
+            state.critic_decisions[-1].stop_reason = None
+        state.append_message(f"critic: model review requested another pass: {reason}")
+
+
+def _dedupe(values: list[str]) -> list[str]:
+    seen: set[str] = set()
+    result: list[str] = []
+    for value in values:
+        if value and value not in seen:
+            seen.add(value)
+            result.append(value)
+    return result

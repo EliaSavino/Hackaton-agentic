@@ -271,6 +271,8 @@ try:
         allow_hpc_submit: bool = typer.Option(False, "--allow-hpc-submit"),
         robot_base_url: str | None = typer.Option(None, "--robot-base-url"),
         robot_api_key: str | None = typer.Option(None, "--robot-api-key"),
+        literature_corpus_dir: Path | None = typer.Option(None, "--literature-corpus-dir"),
+        dft_structure_file: Path | None = typer.Option(None, "--dft-structure-file"),
     ) -> None:
         """Run the bounded mechanism discovery loop."""
 
@@ -284,6 +286,8 @@ try:
             allow_hpc_submit=allow_hpc_submit,
             robot_base_url=robot_base_url,
             robot_api_key=robot_api_key,
+            literature_corpus_dir=literature_corpus_dir,
+            dft_structure_file=dft_structure_file,
         )
         typer.echo(f"Run directory: {state.run_dir}")
         typer.echo(f"Rounds: {state.round_index}/{state.max_rounds}")
@@ -298,6 +302,8 @@ try:
         objective: str = typer.Option(..., "--objective"),
         mode: str = typer.Option("mock", "--mode"),
         run_root: Path = typer.Option(Path("runs"), "--run-root"),
+        literature_corpus_dir: Path | None = typer.Option(None, "--literature-corpus-dir"),
+        dft_structure_file: Path | None = typer.Option(None, "--dft-structure-file"),
     ) -> None:
         """Run one mechanism analysis pass on existing kinetic data."""
 
@@ -307,6 +313,8 @@ try:
             data_path=data,
             mode=mode,  # type: ignore[arg-type]
             run_root=run_root,
+            literature_corpus_dir=literature_corpus_dir,
+            dft_structure_file=dft_structure_file,
         )
         typer.echo(f"Run directory: {state.run_dir}")
         if state.rankings:
@@ -441,12 +449,16 @@ except Exception:
         mechanism_loop_parser.add_argument("--allow-hpc-submit", action="store_true")
         mechanism_loop_parser.add_argument("--robot-base-url", default=None)
         mechanism_loop_parser.add_argument("--robot-api-key", default=None)
+        mechanism_loop_parser.add_argument("--literature-corpus-dir", default=None)
+        mechanism_loop_parser.add_argument("--dft-structure-file", default=None)
 
         mechanism_once_parser = subparsers.add_parser("mechanism-once")
         mechanism_once_parser.add_argument("--data", required=True)
         mechanism_once_parser.add_argument("--objective", required=True)
         mechanism_once_parser.add_argument("--mode", default="mock")
         mechanism_once_parser.add_argument("--run-root", default="runs")
+        mechanism_once_parser.add_argument("--literature-corpus-dir", default=None)
+        mechanism_once_parser.add_argument("--dft-structure-file", default=None)
 
         args = parser.parse_args()
         configure_logging()
@@ -574,6 +586,8 @@ except Exception:
                 allow_hpc_submit=args.allow_hpc_submit,
                 robot_base_url=args.robot_base_url,
                 robot_api_key=args.robot_api_key,
+                literature_corpus_dir=args.literature_corpus_dir,
+                dft_structure_file=args.dft_structure_file,
             )
             print(f"Run directory: {state.run_dir}")
             print(f"Rounds: {state.round_index}/{state.max_rounds}")
@@ -587,6 +601,8 @@ except Exception:
                 data_path=args.data,
                 mode=args.mode,
                 run_root=args.run_root,
+                literature_corpus_dir=args.literature_corpus_dir,
+                dft_structure_file=args.dft_structure_file,
             )
             print(f"Run directory: {state.run_dir}")
             if state.rankings:

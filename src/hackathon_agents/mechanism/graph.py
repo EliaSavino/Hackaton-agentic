@@ -77,6 +77,8 @@ class MechanismDiscoveryGraph:
         rounds: int,
         run_dir: str | Path,
         mode: MechanismRunMode = "mock",
+        literature_corpus_dir: str | Path | None = None,
+        dft_structure: str | None = None,
     ) -> MechanismDiscoveryState:
         """Run the bounded closed-loop mechanism workflow."""
 
@@ -88,6 +90,10 @@ class MechanismDiscoveryGraph:
             run_dir=str(run_dir),
             max_rounds=rounds,
         )
+        if literature_corpus_dir:
+            state.metadata["literature_corpus_dir"] = str(literature_corpus_dir)
+        if dft_structure:
+            state.metadata["dft_structure"] = dft_structure
         handler = _attach_trace_log(Path(run_dir))
         trace_logger = logging.getLogger("hackathon_agents.mechanism.trace")
         try:
@@ -120,6 +126,8 @@ class MechanismDiscoveryGraph:
         data_path: str | Path,
         run_dir: str | Path,
         mode: MechanismRunMode = "mock",
+        literature_corpus_dir: str | Path | None = None,
+        dft_structure: str | None = None,
     ) -> MechanismDiscoveryState:
         """Run one analysis pass on an existing kinetic dataset."""
 
@@ -130,6 +138,10 @@ class MechanismDiscoveryGraph:
             max_rounds=1,
             round_index=1,
         )
+        if literature_corpus_dir:
+            state.metadata["literature_corpus_dir"] = str(literature_corpus_dir)
+        if dft_structure:
+            state.metadata["dft_structure"] = dft_structure
         handler = _attach_trace_log(Path(run_dir))
         trace_logger = logging.getLogger("hackathon_agents.mechanism.trace")
         try:
@@ -150,7 +162,11 @@ class MechanismDiscoveryGraph:
             handler.close()
 
     def _literature_agent(self, state: MechanismDiscoveryState) -> None:
-        state.literature_prior = search_literature_prior(state.objective, mode=state.mode)
+        state.literature_prior = search_literature_prior(
+            state.objective,
+            mode=state.mode,
+            corpus_dir=state.metadata.get("literature_corpus_dir"),
+        )
 
     def _hypothesis_agent(self, state: MechanismDiscoveryState) -> None:
         raw_json = generate_hypothesis_json(state.objective, state.literature_prior)
@@ -209,7 +225,7 @@ class MechanismDiscoveryGraph:
             return
         job = DFTJob(
             id=f"dft-{top.hypothesis_id}-r{state.round_index:03d}",
-            molecule_or_structure="C 0.000 0.000 0.000\nH 0.000 0.000 1.089\nH 1.026 0.000 -0.363\nH -0.513 0.889 -0.363\nH -0.513 -0.889 -0.363",
+            molecule_or_structure=_dft_structure_for_state(state),
             charge=0,
             multiplicity=1,
             method="B3LYP",
@@ -287,6 +303,9 @@ def run_mechanism_loop(
     allow_hpc_submit: bool = False,
     robot_base_url: str | None = None,
     robot_api_key: str | None = None,
+    literature_corpus_dir: str | Path | None = None,
+    dft_structure: str | None = None,
+    dft_structure_file: str | Path | None = None,
 ) -> MechanismDiscoveryState:
     """Convenience entrypoint for the closed-loop CLI command."""
 
@@ -299,7 +318,15 @@ def run_mechanism_loop(
         robot_base_url=robot_base_url,
         robot_api_key=robot_api_key,
     )
-    return graph.run_loop(objective=objective, rounds=rounds, run_dir=run_dir, mode=mode)
+    structure = _load_dft_structure(dft_structure=dft_structure, dft_structure_file=dft_structure_file)
+    return graph.run_loop(
+        objective=objective,
+        rounds=rounds,
+        run_dir=run_dir,
+        mode=mode,
+        literature_corpus_dir=literature_corpus_dir,
+        dft_structure=structure,
+    )
 
 
 def run_mechanism_once(
@@ -308,12 +335,23 @@ def run_mechanism_once(
     data_path: str | Path,
     mode: Literal["mock", "dry-run", "real"] = "mock",
     run_root: str | Path = "runs",
+    literature_corpus_dir: str | Path | None = None,
+    dft_structure: str | None = None,
+    dft_structure_file: str | Path | None = None,
 ) -> MechanismDiscoveryState:
     """Convenience entrypoint for one-pass analysis of existing data."""
 
     run_dir = _new_run_dir(run_root, "mechanism_once")
     graph = MechanismDiscoveryGraph.from_mode(mode=mode, run_dir=run_dir)
-    return graph.run_once(objective=objective, data_path=data_path, run_dir=run_dir, mode=mode)
+    structure = _load_dft_structure(dft_structure=dft_structure, dft_structure_file=dft_structure_file)
+    return graph.run_once(
+        objective=objective,
+        data_path=data_path,
+        run_dir=run_dir,
+        mode=mode,
+        literature_corpus_dir=literature_corpus_dir,
+        dft_structure=structure,
+    )
 
 
 def _new_run_dir(run_root: str | Path, prefix: str) -> Path:
@@ -325,6 +363,33 @@ def _new_run_dir(run_root: str | Path, prefix: str) -> Path:
         run_dir = Path(run_root) / f"{prefix}_{timestamp}_{suffix}"
     run_dir.mkdir(parents=True, exist_ok=False)
     return run_dir
+
+
+def _dft_structure_for_state(state: MechanismDiscoveryState) -> str:
+    configured = state.metadata.get("dft_structure")
+    if configured:
+        return str(configured)
+    return "\n".join(
+        [
+            "C 0.000 0.000 0.000",
+            "H 0.000 0.000 1.089",
+            "H 1.026 0.000 -0.363",
+            "H -0.513 0.889 -0.363",
+            "H -0.513 -0.889 -0.363",
+        ]
+    )
+
+
+def _load_dft_structure(
+    *,
+    dft_structure: str | None = None,
+    dft_structure_file: str | Path | None = None,
+) -> str | None:
+    if dft_structure:
+        return dft_structure
+    if dft_structure_file:
+        return Path(dft_structure_file).read_text(encoding="utf-8").strip()
+    return None
 
 
 def _attach_trace_log(run_dir: Path) -> logging.Handler:

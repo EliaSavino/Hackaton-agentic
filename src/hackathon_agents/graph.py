@@ -99,13 +99,13 @@ class DiscoveryGraph:
 
     def _planner_node(self, state: DiscoveryStatePayload) -> DiscoveryStatePayload:
         logger.info("planner node")
-        return planner.run(state)
+        return planner.run(state, config=self.config)
 
     def _chemist_node(self, state: DiscoveryStatePayload) -> DiscoveryStatePayload:
         logger.info("chemist node")
         state.iteration += 1
         state.append_message(f"graph: starting pass {state.iteration}/{state.max_iterations}")
-        return chemist.run(state)
+        return chemist.run(state, config=self.config)
 
     def _tool_execution_node(self, state: DiscoveryStatePayload) -> DiscoveryStatePayload:
         logger.info("tool execution node")
@@ -190,7 +190,7 @@ class DiscoveryGraph:
 
     def _critic_node(self, state: DiscoveryStatePayload) -> DiscoveryStatePayload:
         logger.info("critic node")
-        return critic.run(state)
+        return critic.run(state, config=self.config)
 
     def _writer_node(self, state: DiscoveryStatePayload) -> DiscoveryStatePayload:
         logger.info("writer node")
