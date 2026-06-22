@@ -14,6 +14,10 @@ class ConfigTests(unittest.TestCase):
         self.assertIn("local_large", config.models)
         self.assertEqual(config.models["local_large"].provider, "ollama")
         self.assertIn("chemist", config.agents)
+        self.assertIn("latex_writer", config.tools)
+        self.assertIn("latex", config.models["local_small"].capabilities)
+        self.assertIn("memory_writer", config.tools)
+        self.assertEqual(config.tools["memory_writer"].jsonl_path, "data/memory/project_memory.jsonl")
 
     def test_router_offline_selects_ollama(self) -> None:
         config = load_config(Path("configs"), run_mode="offline")

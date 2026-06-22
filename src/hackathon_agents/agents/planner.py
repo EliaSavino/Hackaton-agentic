@@ -57,9 +57,15 @@ def run(state: DiscoveryStatePayload, config: AppConfig | None = None) -> Discov
             ),
             DiscoveryPlanStep(
                 name="Rank and write report",
-                description="Critique candidates and produce a DOCX report plus serialized state.",
+                description="Critique candidates and produce DOCX and LaTeX reports plus serialized state.",
                 agent="critic",
-                tool_names=["doc_writer"],
+                tool_names=["doc_writer", "latex_writer"],
+            ),
+            DiscoveryPlanStep(
+                name="Record shared memory",
+                description="Append compact progress notes for future users after each major workflow milestone.",
+                agent="graph",
+                tool_names=["memory_writer"],
             ),
         ],
     )

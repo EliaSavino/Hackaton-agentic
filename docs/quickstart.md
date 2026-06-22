@@ -57,6 +57,8 @@ Expected artifacts:
 
 - `state.json`: full structured run state.
 - `report.docx`: scientific report, if `python-docx` is installed.
+- `report.tex`: LaTeX report for paper drafting.
+- `data/memory/project_memory.md`: shared knowledge-transfer timeline across runs.
 - `descriptors.csv`: descriptor table, if RDKit is installed.
 - `qed_plot.png`: simple plot, if plotting succeeds.
 - ORCA input files when ORCA wrapper is enabled.

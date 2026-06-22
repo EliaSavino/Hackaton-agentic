@@ -10,6 +10,8 @@ from hackathon_agents.schemas.molecules import MoleculeFilterConstraints
 from hackathon_agents.state import DiscoveryStatePayload
 from hackathon_agents.tools.doc_writer import write_scientific_report
 from hackathon_agents.tools.file_io import write_csv
+from hackathon_agents.tools.latex_writer import write_latex_report
+from hackathon_agents.tools.memory_writer import append_project_memory
 from hackathon_agents.tools.orca import check_orca_availability, run_orca
 from hackathon_agents.tools.plotting import generate_plot
 from hackathon_agents.tools.rdkit_tools import compute_descriptors, filter_molecules, validate_smiles
@@ -45,6 +47,7 @@ class DiscoveryGraph:
 
     def invoke(self, state: DiscoveryStatePayload | dict[str, Any]) -> DiscoveryStatePayload:
         payload = state if isinstance(state, DiscoveryStatePayload) else DiscoveryStatePayload.model_validate(state)
+        self._write_memory(payload, "run_started", "Started a discovery agent run.", node="graph")
         if self._compiled is not None:
             result = self._compiled.invoke(payload.model_dump(mode="json"))
             return DiscoveryStatePayload.model_validate(result)
@@ -99,17 +102,28 @@ class DiscoveryGraph:
 
     def _planner_node(self, state: DiscoveryStatePayload) -> DiscoveryStatePayload:
         logger.info("planner node")
-        return planner.run(state, config=self.config)
+        state = planner.run(state, config=self.config)
+        step_count = len(state.plan.steps) if state.plan else 0
+        self._write_memory(state, "planner_completed", f"Created a discovery plan with {step_count} steps.", node="planner")
+        return state
 
     def _chemist_node(self, state: DiscoveryStatePayload) -> DiscoveryStatePayload:
         logger.info("chemist node")
         state.iteration += 1
         state.append_message(f"graph: starting pass {state.iteration}/{state.max_iterations}")
-        return chemist.run(state, config=self.config)
+        state = chemist.run(state, config=self.config)
+        self._write_memory(
+            state,
+            "chemist_completed",
+            f"Completed candidate-generation pass {state.iteration} with {len(state.candidate_molecules)} candidates.",
+            node="chemist",
+        )
+        return state
 
     def _tool_execution_node(self, state: DiscoveryStatePayload) -> DiscoveryStatePayload:
         logger.info("tool execution node")
         run_dir = _ensure_run_dir(state)
+        initial_tool_count = len(state.tool_results)
 
         descriptor_rows: list[dict[str, Any]] = []
         for molecule in state.candidate_molecules:
@@ -186,11 +200,22 @@ class DiscoveryGraph:
                     )
                     state.add_tool_result("orca.run_or_generate", generated)
 
+        executed_count = len(state.tool_results) - initial_tool_count
+        self._write_memory(
+            state,
+            "tools_completed",
+            f"Ran {executed_count} deterministic tool calls for pass {state.iteration}.",
+            node="tool_execution",
+        )
         return state
 
     def _critic_node(self, state: DiscoveryStatePayload) -> DiscoveryStatePayload:
         logger.info("critic node")
-        return critic.run(state, config=self.config)
+        state = critic.run(state, config=self.config)
+        decision = state.critic_decisions[-1] if state.critic_decisions else None
+        reason = decision.reason if decision else "Critic completed without a recorded decision."
+        self._write_memory(state, "critic_completed", reason, node="critic")
+        return state
 
     def _writer_node(self, state: DiscoveryStatePayload) -> DiscoveryStatePayload:
         logger.info("writer node")
@@ -211,7 +236,88 @@ class DiscoveryGraph:
         state.add_tool_result("doc_writer.write_scientific_report", result)
         if result.ok:
             state.final_report_path = result.data.get("path")
+        if self.config.tool_enabled("latex_writer"):
+            latex_path = run_dir / "report.tex"
+            latex_result = write_latex_report(
+                {
+                    "output_path": str(latex_path),
+                    "user_request": state.original_user_request,
+                    "plan": state.plan.model_dump(mode="json") if state.plan else None,
+                    "candidates": [molecule.model_dump(mode="json") for molecule in state.candidate_molecules],
+                    "tool_results": [record.model_dump(mode="json") for record in state.tool_results],
+                    "critic_notes": state.critic_notes,
+                    "errors": state.errors,
+                }
+            )
+            state.add_tool_result("latex_writer.write_latex_report", latex_result)
+            if latex_result.ok:
+                state.metadata["latex_report_path"] = latex_result.data.get("path")
+        artifacts = [path for path in [state.final_report_path, state.metadata.get("latex_report_path")] if path]
+        self._write_memory(
+            state,
+            "writer_completed",
+            "Wrote final report artifacts for the discovery run.",
+            node="writer",
+            extra_artifacts=artifacts,
+        )
         return state
+
+    def _write_memory(
+        self,
+        state: DiscoveryStatePayload,
+        event_type: str,
+        summary: str,
+        *,
+        node: str,
+        extra_artifacts: list[str] | None = None,
+    ) -> None:
+        if state.metadata.get("memory_writer_disabled"):
+            return
+        if not self.config.tool_enabled("memory_writer"):
+            return
+
+        tool_config = self.config.tools.get("memory_writer")
+        jsonl_path = (tool_config.jsonl_path if tool_config else None) or "data/memory/project_memory.jsonl"
+        markdown_path = (tool_config.markdown_path if tool_config else None) or "data/memory/project_memory.md"
+        max_markdown_entries = (tool_config.max_markdown_entries if tool_config else None) or 200
+        run_path = Path(state.run_dir) if state.run_dir else None
+        result = append_project_memory(
+            {
+                "event_type": event_type,
+                "summary": summary,
+                "jsonl_path": jsonl_path,
+                "markdown_path": markdown_path,
+                "run_id": run_path.name if run_path else None,
+                "run_dir": str(run_path) if run_path else None,
+                "user_request": state.original_user_request,
+                "node": node,
+                "iteration": state.iteration,
+                "run_mode": state.run_mode.value if hasattr(state.run_mode, "value") else str(state.run_mode),
+                "candidate_count": len(state.candidate_molecules),
+                "valid_candidate_count": state.metadata.get("valid_candidate_count"),
+                "best_score": state.metadata.get("best_score"),
+                "stop_reason": state.stop_reason,
+                "next_actions": state.requested_next_actions,
+                "artifact_paths": _artifact_paths(state, extra_artifacts),
+                "recent_messages": state.messages[-5:],
+                "metadata": {
+                    "critic_note_count": len(state.critic_notes),
+                    "error_count": len(state.errors),
+                    "tool_result_count": len(state.tool_results),
+                    "latest_tools": [record.tool_name for record in state.tool_results[-5:]],
+                },
+                "max_markdown_entries": max_markdown_entries,
+            }
+        )
+        if result.ok:
+            state.metadata["memory_jsonl_path"] = result.data.get("jsonl_path")
+            if result.data.get("markdown_path"):
+                state.metadata["memory_markdown_path"] = result.data.get("markdown_path")
+            state.metadata["memory_event_count"] = int(state.metadata.get("memory_event_count", 0)) + 1
+            return
+
+        state.metadata["memory_writer_disabled"] = True
+        state.add_error(f"memory_writer.append_project_memory: {result.error}")
 
     def _route_after_critic(self, raw_state: dict[str, Any]) -> str:
         return self._route_after_critic_state(DiscoveryStatePayload.model_validate(raw_state))
@@ -236,3 +342,17 @@ def _ensure_run_dir(state: DiscoveryStatePayload) -> Path:
     run_dir = Path(state.run_dir)
     run_dir.mkdir(parents=True, exist_ok=True)
     return run_dir
+
+
+def _artifact_paths(state: DiscoveryStatePayload, extra_artifacts: list[str] | None = None) -> list[str]:
+    paths: list[str] = []
+    for record in state.tool_results:
+        paths.extend(str(path) for path in record.result.artifacts)
+    if state.final_report_path:
+        paths.append(state.final_report_path)
+    latex_path = state.metadata.get("latex_report_path")
+    if latex_path:
+        paths.append(str(latex_path))
+    if extra_artifacts:
+        paths.extend(extra_artifacts)
+    return sorted(dict.fromkeys(paths))

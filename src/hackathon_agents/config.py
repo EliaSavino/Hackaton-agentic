@@ -82,6 +82,9 @@ class ToolConfig(BaseModel):
     timeout_seconds: int | None = None
     enabled_modes: list[RunMode] | None = None
     allow_imports: bool | None = None
+    jsonl_path: str | None = None
+    markdown_path: str | None = None
+    max_markdown_entries: int | None = None
 
     model_config = ConfigDict(extra="allow")
 

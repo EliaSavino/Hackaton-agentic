@@ -109,6 +109,7 @@ Fields:
 - `executable`: command name for external tools.
 - `timeout_seconds`: hard runtime cap.
 - `enabled_modes`: run modes where the tool is active.
+- `jsonl_path` / `markdown_path`: optional artifact paths for tools such as `memory_writer`.
 
 ## Environment Variables
 
@@ -128,12 +129,17 @@ HOSTED_API_BASE=
 SNELLIUS_VLLM_ENABLED=false
 SNELLIUS_VLLM_MODEL=
 SNELLIUS_VLLM_BASE_URL=
+SNELLIUS_GATEWAY_MASTER_KEY=
+SNELLIUS_HOSTED_API_KEY=
+SNELLIUS_HOSTED_ALIAS_ENABLED=true
 OPENROUTER_ENABLED=false
 OPENROUTER_API_KEY=
 OPENROUTER_MODEL=~openai/gpt-latest
 OPENROUTER_HTTP_REFERER=
 OPENROUTER_APP_TITLE=Hackathon Agents
 RAG_DB_PATH=data/rag.sqlite
+PROJECT_MEMORY_JSONL=data/memory/project_memory.jsonl
+PROJECT_MEMORY_MARKDOWN=data/memory/project_memory.md
 MECHANISM_LITERATURE_CORPUS_DIR=
 ```
 

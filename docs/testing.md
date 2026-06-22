@@ -15,6 +15,8 @@ python -m compileall -q src tests
 - `test_cli_smoke.py`: source-tree CLI help and exposed integration flags.
 - `test_critic_loop.py`: bounded critic loop decisions.
 - `test_doc_writer.py`: DOCX report generation when `python-docx` is installed.
+- `test_latex_writer.py`: dependency-free LaTeX report generation.
+- `test_memory_writer.py`: append-only JSONL and Markdown project memory.
 - `test_graph_smoke.py`: graph smoke path without DFT.
 - `test_model_backed_agents.py`: mocked model-backed planner, chemist, and critic paths.
 - `test_mechanism_graph_smoke.py`: closed-loop mechanism workflow artifacts.

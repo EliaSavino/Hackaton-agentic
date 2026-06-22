@@ -42,6 +42,8 @@ src/hackathon_agents/
     file_io.py           JSON/CSV IO
     plotting.py          Matplotlib plots
     doc_writer.py        DOCX report generation
+    latex_writer.py      LaTeX report generation
+    memory_writer.py     Shared append-only project memory
     xtb.py               xTB availability and execution wrapper
     orca.py              ORCA input and execution wrapper
 ```
@@ -82,6 +84,12 @@ Important fields:
 - `final_report_path`: report artifact path.
 - `messages`: run log trail.
 - `metadata`: small structured run settings and summaries.
+
+## Shared Memory
+
+The discovery graph writes compact memory entries through `memory_writer` after major milestones: run start, planning, each candidate-generation pass, tool execution, criticism, and final reporting. By default these entries are appended to `data/memory/project_memory.jsonl` and rendered into `data/memory/project_memory.md`.
+
+Memory entries are intentionally summaries, not raw transcripts. They include run IDs, node names, iteration counts, candidate/tool counts, stop reasons, artifact paths, and recent state messages so another user can quickly understand what has been done.
 
 ## Tool Contract
 

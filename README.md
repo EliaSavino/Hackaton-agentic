@@ -91,8 +91,11 @@ python -m hackathon_agents.cli demo "Find promising substrate candidates for rea
 Outputs are written to `runs/<timestamp>/`:
 
 - `report.docx`
+- `report.tex`
 - `state.json`
 - any generated plots or DFT input files
+
+Shared run memory is written to `data/memory/project_memory.jsonl` and regenerated as `data/memory/project_memory.md` so future users can see what has already been tried.
 
 ## Benchmark Models
 
@@ -156,6 +159,38 @@ python -m hackathon_agents.cli check-models
 ```
 
 When enabled and reachable, high-difficulty or large-context routing requests prefer `snellius_vllm` before falling back to local or hosted models. The repo does not submit Snellius jobs automatically; the generated script is dry-run-safe and contains no credentials.
+
+## Snellius Claude Code Gateway
+
+For shared Claude Code access, generate a SLURM script that starts vLLM behind a LiteLLM Anthropic-compatible gateway:
+
+```bash
+python -m hackathon_agents.cli snellius-gateway-script \
+  --model-checkpoint openai/gpt-oss-120b \
+  --output-dir runs/snellius_gateway \
+  --partition gpu_a100 \
+  --gpus-per-node 1 \
+  --vllm-port 8000 \
+  --gateway-port 4000
+```
+
+On Snellius, keep provider keys and the gateway token in a server-side `.env` next to the generated job, then lock it down:
+
+```bash
+chmod 600 .env
+sbatch run_snellius_gateway.job
+```
+
+After the job reports its compute node, print local Claude Code setup commands:
+
+```bash
+python -m hackathon_agents.cli snellius-client-env \
+  --snellius-user "$USER" \
+  --compute-node gcn31 \
+  --model-alias claude-snellius-local
+```
+
+The generated gateway uses `claude-snellius-local` for the vLLM-served model and `claude-snellius-hosted` for the server-key-backed hosted model. The hosted alias is disabled at job startup if the required key or outbound provider preflight is missing.
 
 ## Review A Paper
 

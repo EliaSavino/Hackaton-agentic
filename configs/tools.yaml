@@ -16,6 +16,15 @@ tools:
   doc_writer:
     enabled: true
 
+  latex_writer:
+    enabled: true
+
+  memory_writer:
+    enabled: true
+    jsonl_path: "${PROJECT_MEMORY_JSONL:-data/memory/project_memory.jsonl}"
+    markdown_path: "${PROJECT_MEMORY_MARKDOWN:-data/memory/project_memory.md}"
+    max_markdown_entries: 200
+
   paper_review:
     enabled: true
     max_chars: 250000

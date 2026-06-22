@@ -15,7 +15,11 @@ from hackathon_agents.mechanism.graph import run_mechanism_loop, run_mechanism_o
 from hackathon_agents.rag import DEFAULT_RAG_DB_PATH, RAGStore
 from hackathon_agents.tools.rag_tools import build_rag_context, ingest_rag_documents, search_rag
 from hackathon_agents.tools.paper_review import review_paper
-from hackathon_agents.tools.snellius_vllm import generate_snellius_vllm_job
+from hackathon_agents.tools.snellius_vllm import (
+    generate_snellius_gateway_job,
+    generate_snellius_vllm_job,
+    render_snellius_client_env,
+)
 
 
 def _run_prompt_terminal(
@@ -117,6 +121,10 @@ try:
         typer.echo(f"Run directory: {state.run_dir}")
         if state.final_report_path:
             typer.echo(f"Report: {state.final_report_path}")
+        if state.metadata.get("latex_report_path"):
+            typer.echo(f"LaTeX: {state.metadata['latex_report_path']}")
+        if state.metadata.get("memory_markdown_path"):
+            typer.echo(f"Memory: {state.metadata['memory_markdown_path']}")
         typer.echo(f"Iterations: {state.iteration}")
         if state.stop_reason:
             typer.echo(f"Stop reason: {state.stop_reason}")
@@ -364,6 +372,83 @@ try:
         typer.echo(f"Script: {result.data['script_path']}")
         typer.echo(f"Base URL after tunneling: {result.data['base_url']}")
 
+    @app.command("snellius-gateway-script")
+    def snellius_gateway_script_command(
+        model_checkpoint: str = typer.Option(..., "--model-checkpoint"),
+        output_dir: Path = typer.Option(Path("runs/snellius_gateway"), "--output-dir"),
+        served_model_name: str = typer.Option("claude-snellius-local", "--served-model-name"),
+        local_model_alias: str = typer.Option("claude-snellius-local", "--local-model-alias"),
+        hosted_model_alias: str = typer.Option("claude-snellius-hosted", "--hosted-model-alias"),
+        hosted_litellm_model: str = typer.Option(
+            "anthropic/claude-sonnet-4-20250514",
+            "--hosted-litellm-model",
+        ),
+        container_path: str = typer.Option("/projects/2/managed_datasets/containers/vllm/vllm.sif", "--container-path"),
+        partition: str = typer.Option("gpu_a100", "--partition"),
+        gpus_per_node: int = typer.Option(1, "--gpus-per-node", min=1, max=4),
+        time_limit: str = typer.Option("02:00:00", "--time-limit"),
+        vllm_port: int = typer.Option(8000, "--vllm-port", min=1024, max=65535),
+        gateway_port: int = typer.Option(4000, "--gateway-port", min=1024, max=65535),
+        project_space: str = typer.Option("", "--project-space"),
+        tool_call_parser: str = typer.Option("openai", "--tool-call-parser"),
+        litellm_command: str = typer.Option("litellm", "--litellm-command"),
+        env_file: str = typer.Option(".env", "--env-file"),
+    ) -> None:
+        """Generate a Snellius SLURM job for a Claude Code LiteLLM gateway."""
+
+        result = generate_snellius_gateway_job(
+            {
+                "output_dir": str(output_dir),
+                "model_checkpoint": model_checkpoint,
+                "served_model_name": served_model_name,
+                "local_model_alias": local_model_alias,
+                "hosted_model_alias": hosted_model_alias,
+                "hosted_litellm_model": hosted_litellm_model,
+                "container_path": container_path,
+                "partition": partition,
+                "gpus_per_node": gpus_per_node,
+                "time_limit": time_limit,
+                "vllm_port": vllm_port,
+                "gateway_port": gateway_port,
+                "local_client_port": gateway_port,
+                "project_space": project_space,
+                "tool_call_parser": tool_call_parser,
+                "litellm_command": litellm_command,
+                "env_file": env_file,
+            }
+        )
+        typer.echo(f"Script: {result.data['script_path']}")
+        typer.echo(f"LiteLLM config: {result.data['litellm_config_path']}")
+        typer.echo(f"Local-only config: {result.data['local_only_litellm_config_path']}")
+        typer.echo(f"Gateway after tunneling: {result.data['gateway_url']}")
+
+    @app.command("snellius-client-env")
+    def snellius_client_env_command(
+        snellius_user: str = typer.Option(..., "--snellius-user", "-u"),
+        compute_node: str = typer.Option(..., "--compute-node", "-n"),
+        local_port: int = typer.Option(4000, "--local-port", min=1024, max=65535),
+        gateway_port: int = typer.Option(4000, "--gateway-port", min=1024, max=65535),
+        model_alias: str = typer.Option("claude-snellius-local", "--model-alias", "-M"),
+        gateway_token_env: str = typer.Option("SNELLIUS_GATEWAY_TOKEN", "--gateway-token-env"),
+        login_host: str = typer.Option("snellius.surf.nl", "--login-host"),
+    ) -> None:
+        """Print local SSH tunnel and Claude Code environment commands."""
+
+        typer.echo(
+            render_snellius_client_env(
+                {
+                    "snellius_user": snellius_user,
+                    "compute_node": compute_node,
+                    "local_port": local_port,
+                    "gateway_port": gateway_port,
+                    "model_alias": model_alias,
+                    "gateway_token_env": gateway_token_env,
+                    "login_host": login_host,
+                }
+            ),
+            nl=False,
+        )
+
     def main() -> None:
         app()
 
@@ -401,6 +486,33 @@ except Exception:
         snellius_parser.add_argument("--time-limit", default="02:00:00")
         snellius_parser.add_argument("--port", type=int, default=8000)
         snellius_parser.add_argument("--project-space", default="")
+
+        snellius_gateway_parser = subparsers.add_parser("snellius-gateway-script")
+        snellius_gateway_parser.add_argument("--model-checkpoint", required=True)
+        snellius_gateway_parser.add_argument("--output-dir", default="runs/snellius_gateway")
+        snellius_gateway_parser.add_argument("--served-model-name", default="claude-snellius-local")
+        snellius_gateway_parser.add_argument("--local-model-alias", default="claude-snellius-local")
+        snellius_gateway_parser.add_argument("--hosted-model-alias", default="claude-snellius-hosted")
+        snellius_gateway_parser.add_argument("--hosted-litellm-model", default="anthropic/claude-sonnet-4-20250514")
+        snellius_gateway_parser.add_argument("--container-path", default="/projects/2/managed_datasets/containers/vllm/vllm.sif")
+        snellius_gateway_parser.add_argument("--partition", default="gpu_a100")
+        snellius_gateway_parser.add_argument("--gpus-per-node", type=int, default=1)
+        snellius_gateway_parser.add_argument("--time-limit", default="02:00:00")
+        snellius_gateway_parser.add_argument("--vllm-port", type=int, default=8000)
+        snellius_gateway_parser.add_argument("--gateway-port", type=int, default=4000)
+        snellius_gateway_parser.add_argument("--project-space", default="")
+        snellius_gateway_parser.add_argument("--tool-call-parser", default="openai")
+        snellius_gateway_parser.add_argument("--litellm-command", default="litellm")
+        snellius_gateway_parser.add_argument("--env-file", default=".env")
+
+        snellius_client_parser = subparsers.add_parser("snellius-client-env")
+        snellius_client_parser.add_argument("--snellius-user", "-u", required=True)
+        snellius_client_parser.add_argument("--compute-node", "-n", required=True)
+        snellius_client_parser.add_argument("--local-port", type=int, default=4000)
+        snellius_client_parser.add_argument("--gateway-port", type=int, default=4000)
+        snellius_client_parser.add_argument("--model-alias", "-M", default="claude-snellius-local")
+        snellius_client_parser.add_argument("--gateway-token-env", default="SNELLIUS_GATEWAY_TOKEN")
+        snellius_client_parser.add_argument("--login-host", default="snellius.surf.nl")
 
         review_parser = subparsers.add_parser("review-paper")
         review_parser.add_argument("path")
@@ -504,6 +616,47 @@ except Exception:
             )
             print(f"Script: {result.data['script_path']}")
             print(f"Base URL after tunneling: {result.data['base_url']}")
+        elif args.command == "snellius-gateway-script":
+            result = generate_snellius_gateway_job(
+                {
+                    "output_dir": args.output_dir,
+                    "model_checkpoint": args.model_checkpoint,
+                    "served_model_name": args.served_model_name,
+                    "local_model_alias": args.local_model_alias,
+                    "hosted_model_alias": args.hosted_model_alias,
+                    "hosted_litellm_model": args.hosted_litellm_model,
+                    "container_path": args.container_path,
+                    "partition": args.partition,
+                    "gpus_per_node": args.gpus_per_node,
+                    "time_limit": args.time_limit,
+                    "vllm_port": args.vllm_port,
+                    "gateway_port": args.gateway_port,
+                    "local_client_port": args.gateway_port,
+                    "project_space": args.project_space,
+                    "tool_call_parser": args.tool_call_parser,
+                    "litellm_command": args.litellm_command,
+                    "env_file": args.env_file,
+                }
+            )
+            print(f"Script: {result.data['script_path']}")
+            print(f"LiteLLM config: {result.data['litellm_config_path']}")
+            print(f"Local-only config: {result.data['local_only_litellm_config_path']}")
+            print(f"Gateway after tunneling: {result.data['gateway_url']}")
+        elif args.command == "snellius-client-env":
+            print(
+                render_snellius_client_env(
+                    {
+                        "snellius_user": args.snellius_user,
+                        "compute_node": args.compute_node,
+                        "local_port": args.local_port,
+                        "gateway_port": args.gateway_port,
+                        "model_alias": args.model_alias,
+                        "gateway_token_env": args.gateway_token_env,
+                        "login_host": args.login_host,
+                    }
+                ),
+                end="",
+            )
         elif args.command == "review-paper":
             output_path = args.output or str(Path("runs") / f"paper_review_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json")
             result = review_paper(

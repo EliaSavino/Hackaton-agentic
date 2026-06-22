@@ -10,6 +10,10 @@ __pycache__/
 !/runs/.gitkeep
 /data/*
 !/data/.gitkeep
+!/data/memory/
+!/data/memory/README.md
+!/data/memory/project_memory.jsonl
+!/data/memory/project_memory.md
 /notebooks/*
 !/notebooks/.gitkeep
 

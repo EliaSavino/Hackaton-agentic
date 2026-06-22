@@ -7,7 +7,7 @@ Agents are thin state transformers. They should not be autonomous scripts.
 - `planner`: creates a deterministic plan.
 - `chemist`: seeds and refines candidate molecules.
 - `critic`: ranks candidates and decides whether another pass is needed.
-- `writer`: delegates report generation.
+- `writer`: delegates DOCX and LaTeX report generation.
 - `dft`: placeholder for computational chemistry orchestration.
 - `coder`: placeholder for small code-generation tasks.
 - `paper_reviewer`: configured prompt for paper review workflows.
