@@ -92,3 +92,18 @@ tools:
     allow_run: false
     timeout_seconds: 1800
     enabled_modes: [full, cheap]
+
+  baybe:
+    # Bayesian Design of Experiments via emdgroup/baybe (Merck KGaA).
+    # Recommends the next most informative experiments (reaction conditions,
+    # formulations, process parameters, library choices) in the low-/no-data
+    # regime. Unlike Saturn (which generates molecules), BayBE selects optimal
+    # configurations from a search space you define.
+    #
+    # BayBE is a normal pip package (`pip install 'baybe[chem,simulation]'`) and
+    # imports in-process. Disabled by default and gated by allow_run: when off,
+    # unconfigured, or run=false, the tool returns deterministic, space-filling
+    # mock recommendations so the pipeline stays offline-safe.
+    enabled: ${BAYBE_ENABLED:-false}
+    allow_run: false
+    enabled_modes: [full, no_dft, cheap]

@@ -251,6 +251,59 @@ It supports three powerful execution settings:
 
 Configure it in `configs/tools.yaml` under `boltz_2` or via environment variables: `BOLTZ_ENABLED`, `BOLTZ_EXECUTABLE`, `BOLTZ_RUN_MODE` (`local` or `slurm`), `BOLTZ_DEVICE`.
 
+### BayBE (Bayesian Design of Experiments)
+
+Module: `src/hackathon_agents/tools/baybe_tools.py`
+
+Functions:
+
+- `check_baybe_availability()`
+- `recommend_experiments(input)`
+- `build_search_space(parameters)`
+- `build_objective(targets)`
+
+This wraps [`emdgroup/baybe`](https://github.com/emdgroup/baybe), Merck KGaA's open-source Bayesian optimization / Design-of-Experiments toolbox. It answers the question: **"Given the knobs I can turn, the property I want to optimize, and the experiments I've already run, which experiments should I run next?"**
+
+Where Saturn *invents* new molecules, BayBE *selects the most informative configurations* from a search space you define — reaction conditions, formulation ratios, process parameters, or which compound from a fixed library to test next. It is built for the low-/no-data regime, so it is useful from the very first experiment, and it pairs naturally with the expensive oracles in this workbench (xTB/ORCA energies, Boltz-2 affinities, RDKit descriptors): BayBE chooses *which* candidate to evaluate next to minimize oracle calls.
+
+The tool is deliberately **stateless**: each call rebuilds the campaign from the `parameters`, `targets`, and the full `measurements` history passed in. The agent simply keeps appending measured rows and asking for the next batch — which fits the JSON-serializable state model used throughout the workbench.
+
+Inputs (`BayBERecommendInput`) are written to be readable by chemists, not just agents:
+
+- `parameters`: the experimental knobs. Each is one of:
+  - `numerical_continuous` with `bounds: [low, high]` (e.g. temperature 25–80 °C),
+  - `numerical_discrete` with `values: [...]` (e.g. pressures `[1, 5, 10]`),
+  - `categorical` with `values: [...]` and optional `encoding` (`OHE`/`INT`),
+  - `substance` with `data: {label: SMILES}` and `encoding` (`MORDRED`/`ECFP`/…) so BayBE reasons about chemical similarity.
+- `targets`: one or more measured outcomes, each with `mode` (`MAX`, `MIN`, or `MATCH` + `match_value`) and a `weight`. Multiple targets automatically use a `DesirabilityObjective`; in that case each `MAX`/`MIN` target also needs `bounds: [low, high]` (its plausible value range) so it can be normalized onto a common scale before the targets are combined.
+- `measurements`: experiments already run, each a single row mapping parameter **and** target names to values, e.g. `{"Temperature_C": 60, "Base": "KOtBu", "Yield": 78.5}`.
+- `batch_size`: how many next experiments to recommend.
+
+When BayBE is installed and the run is enabled, the tool builds a real `Campaign`, ingests the measurements, and calls BayBE's Bayesian (Gaussian-process / BoTorch) recommender. Otherwise — by default, or when BayBE is not installed — it returns a deterministic, space-filling **mock** recommendation set (skipping already-measured configurations), so the pipeline stays offline-safe and demo-ready.
+
+Like xTB/ORCA/Saturn/Boltz, it is **disabled by default**. Configure it in `configs/tools.yaml` under `baybe` (`enabled`, `allow_run`, `enabled_modes`) or via the `BAYBE_ENABLED` env var. Install the optional dependency with `pip install 'baybe[chem,simulation]'` (or `pip install -e '.[baybe]'`).
+
+An agent (or chemist) opts in by setting `state.metadata["baybe"]`; the graph then config-gates the call exactly like the other tools and supplies `work_dir` plus the `allow_run` flag. Example:
+
+```python
+state.metadata["baybe"] = {
+    "parameters": [
+        {"name": "Temperature_C", "type": "numerical_continuous", "bounds": [25, 80]},
+        {"name": "Pressure_bar", "type": "numerical_discrete", "values": [1, 5, 10]},
+        {"name": "Solvent", "type": "substance",
+         "data": {"DMSO": "CS(=O)C", "Water": "O", "Methanol": "CO"},
+         "encoding": "MORDRED"},
+    ],
+    "targets": [{"name": "Yield", "mode": "MAX"}],
+    "measurements": [
+        {"Temperature_C": 60, "Pressure_bar": 5, "Solvent": "DMSO", "Yield": 78.5},
+    ],
+    "batch_size": 3,
+}
+```
+
+The recommended next experiments are written to `runs/<timestamp>/baybe/baybe_recommendations.csv` and stored in `state.metadata["baybe_recommendations"]`.
+
 ## Add A Tool
 
 1. Define Pydantic input schema if the input is more than one or two primitives.

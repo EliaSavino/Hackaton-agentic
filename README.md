@@ -46,6 +46,7 @@ Required environment variables:
 ```bash
 OPENAI_API_KEY=
 ANTHROPIC_API_KEY=
+GOOGLE_API_KEY=
 LITELLM_MODEL_DEFAULT=local_small
 ```
 
@@ -148,6 +149,25 @@ SATURN_PRIOR=/path/to/pretrained_prior.ckpt
 ```
 
 and set the Saturn input `run` flag to `true` (e.g. in the planner default or via `state.metadata["saturn"]`). See [Tools](docs/tools.md) for the oracle/RL settings schema.
+
+## Bayesian Experiment Design With BayBE
+
+The pipeline can recommend the **next most informative experiments** with [`emdgroup/baybe`](https://github.com/emdgroup/baybe), Merck KGaA's open-source Bayesian optimization / Design-of-Experiments toolbox. Where Saturn *invents* new molecules, BayBE *selects optimal configurations* from a search space you define — reaction conditions, formulations, process parameters, or which compound from a library to test next. It is built for the low-/no-data regime, so it is useful from the very first experiment and pairs naturally with the workbench's oracles (xTB/ORCA, Boltz-2, RDKit) by minimizing how many expensive evaluations you need.
+
+It follows the same opt-in, config-gated, mock-fallback pattern as the other heavy tools:
+
+- An agent (or chemist) sets `state.metadata["baybe"]` with the search space (`parameters`), what to optimize (`targets`: `MAX`/`MIN`/`MATCH`), the experiments run so far (`measurements`), and `batch_size`.
+- The discovery graph gates BayBE with `config.tool_enabled("baybe")`, exactly like xTB/ORCA/Saturn. The recommended experiments are written to `runs/<timestamp>/baybe/baybe_recommendations.csv` and stored in `state.metadata["baybe_recommendations"]`.
+- BayBE is a normal pip package and imports in-process. When it is not installed or the run is disabled, the tool returns deterministic, space-filling **mock** recommendations, so the pipeline stays offline-safe.
+
+Install the optional dependency and enable the real Bayesian recommender:
+
+```bash
+pip install 'baybe[chem,simulation]'   # or: pip install -e '.[baybe]'
+export BAYBE_ENABLED=true
+```
+
+See [Tools](docs/tools.md) for the full parameter/target schema and a worked example.
 
 ## Mechanism Discovery Workflow
 

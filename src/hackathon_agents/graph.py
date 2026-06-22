@@ -245,7 +245,51 @@ class DiscoveryGraph:
                     molecule.descriptors["boltz_iptm"] = boltz_result.data.get("iptm")
                     molecule.metadata["boltz_pdb"] = boltz_result.data.get("pdb_file")
 
+        self._maybe_recommend_experiments(state, run_dir)
+
         return state
+
+    def _maybe_recommend_experiments(self, state: DiscoveryStatePayload, run_dir: Path) -> None:
+        """Optionally recommend the next experiments via BayBE (Bayesian DoE).
+
+        Opt-in and config-gated, mirroring Saturn/Boltz. An agent (or chemist)
+        requests next-experiment recommendations by setting
+        ``state.metadata["baybe"]`` to a dict describing the search space
+        (``parameters``), what to optimize (``targets``), the experiments run so
+        far (``measurements``), and ``batch_size``. The graph enforces the same
+        config/run-mode gate used for the other tools and supplies ``work_dir``
+        plus the configured ``allow_run`` flag. When BayBE is disabled or not
+        installed, the tool returns deterministic mock recommendations, so this
+        is always safe to call.
+        """
+
+        settings = state.metadata.get("baybe")
+        if not settings:
+            return
+        if not self.config.tool_enabled("baybe"):
+            state.metadata["baybe_source"] = "disabled_by_config"
+            state.append_message("graph: BayBE disabled for this run mode; skipping experiment recommendation")
+            return
+
+        from hackathon_agents.tools.baybe_tools import recommend_experiments
+
+        baybe_tool = self.config.tools.get("baybe")
+        allow_run = baybe_tool.model_extra.get("allow_run", False) if baybe_tool else False
+
+        baybe_input: dict[str, Any] = dict(settings)
+        baybe_input.setdefault("objective", state.original_user_request)
+        baybe_input.setdefault("work_dir", str(run_dir / "baybe"))
+        # The config gate owns the real-vs-mock decision; agents need not know it.
+        baybe_input["run"] = bool(allow_run) and bool(settings.get("run", True))
+
+        result = recommend_experiments(baybe_input)
+        state.add_tool_result("baybe.recommend_experiments", result)
+        if result.ok:
+            state.metadata["baybe_recommendations"] = result.data.get("recommendations", [])
+            mode_note = "mock" if result.data.get("mock") else result.data.get("recommender")
+            state.append_message(
+                f"graph: BayBE recommended {len(result.data.get('recommendations', []))} experiments ({mode_note})"
+            )
 
     def _critic_node(self, state: DiscoveryStatePayload) -> DiscoveryStatePayload:
         logger.info("critic node")
