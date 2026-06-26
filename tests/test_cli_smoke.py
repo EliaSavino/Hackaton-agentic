@@ -62,6 +62,7 @@ def _run_cli(*args: str) -> subprocess.CompletedProcess[str]:
     env = dict(os.environ)
     src_path = str(Path(__file__).resolve().parents[1] / "src")
     env["PYTHONPATH"] = src_path if not env.get("PYTHONPATH") else f"{src_path}{os.pathsep}{env['PYTHONPATH']}"
+    env["COLUMNS"] = "120"
     return subprocess.run(
         [sys.executable, "-m", "hackathon_agents.cli", *args],
         check=False,
