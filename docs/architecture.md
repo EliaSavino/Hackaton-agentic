@@ -44,6 +44,7 @@ src/hackathon_agents/
     doc_writer.py        DOCX report generation
     latex_writer.py      LaTeX report generation
     memory_writer.py     Shared append-only project memory
+    robrains_bo.py       RoBrains Bayesian optimization wrapper
     xtb.py               xTB availability and execution wrapper
     orca.py              ORCA input and execution wrapper
 ```

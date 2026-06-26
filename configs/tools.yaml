@@ -52,6 +52,12 @@ tools:
     bootstrap_default_iterations: 1000
     enabled_modes: [full, no_dft, cheap, offline]
 
+  robrains_bo:
+    enabled: true
+    repo_path: "${ROBRAINS_REPO_PATH:-/Users/es/GitHub/RoBrains}"
+    backend: SingleBayesianOptiBackend
+    enabled_modes: [full, no_dft, cheap, offline]
+
   xtb:
     enabled: true
     executable: xtb

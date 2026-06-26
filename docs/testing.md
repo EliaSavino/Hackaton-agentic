@@ -24,6 +24,7 @@ python -m compileall -q src tests
 - `test_paper_review.py`: deterministic paper-review behavior.
 - `test_rag_store.py`: local SQLite RAG indexing and search.
 - `test_dft_tools.py`: DFT planning, rendering, parsing, and comparison helpers.
+- `test_robrains_bo.py`: RoBrains BO adapter validation and mocked suggestion decoding.
 - `test_statistics_tools.py`: deterministic statistics helpers.
 - `test_tools_rdkit.py`: RDKit tools when RDKit is installed.
 

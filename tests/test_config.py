@@ -18,6 +18,8 @@ class ConfigTests(unittest.TestCase):
         self.assertIn("latex", config.models["local_small"].capabilities)
         self.assertIn("memory_writer", config.tools)
         self.assertEqual(config.tools["memory_writer"].jsonl_path, "data/memory/project_memory.jsonl")
+        self.assertIn("robrains_bo", config.tools)
+        self.assertEqual(config.tools["robrains_bo"].repo_path, "/Users/es/GitHub/RoBrains")
 
     def test_router_offline_selects_ollama(self) -> None:
         config = load_config(Path("configs"), run_mode="offline")

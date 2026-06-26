@@ -222,6 +222,20 @@ Functions:
 
 These cover common hackathon analysis needs: summary statistics, simple least-squares regression, Welch-style group comparison statistics, effect size, deterministic bootstrap intervals, Pearson/Spearman correlation, outlier detection, one-way ANOVA summaries, and binary classification metrics.
 
+### RoBrains Bayesian Optimization
+
+Module: `src/hackathon_agents/tools/robrains_bo.py`
+
+Functions:
+
+- `check_robrains_availability(input)`
+- `list_robrains_capabilities(input)`
+- `suggest_robrains_experiments(input)`
+
+This tool wraps the local RoBrains checkout as a Bayesian optimization framework for the agent. By default it looks at `/Users/es/GitHub/RoBrains`; override with `ROBRAINS_REPO_PATH` or the per-call `repo_path` input.
+
+`suggest_robrains_experiments` accepts parameter specs, objective specs, optional finished observations, and BO settings. With no observations it returns an initial design from RoBrains. With observations it uses RoBrains `SingleBayesianOptiBackend` to suggest the next experiment batch. RoBrains and its heavier BO dependencies are imported lazily, so normal agent startup still works when that environment is not installed.
+
 ### Snellius vLLM
 
 Module: `src/hackathon_agents/tools/snellius_vllm.py`
