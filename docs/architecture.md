@@ -29,14 +29,16 @@ src/hackathon_agents/
     router.py            Capability-based model routing
     benchmark.py         Model benchmark tasks
   agents/
-    planner.py           Builds deterministic plan
-    chemist.py           Candidate molecule generation and refinements
+    planner.py           Builds deterministic plan and default Saturn oracle
+    chemist.py           Candidate molecule generation, refinements, Saturn hook
     critic.py            Scores candidates and controls loop decisions
     writer.py            Delegates report writing
     dft.py               DFT orchestration placeholder
     coder.py             Code-agent placeholder
   tools/
     rdkit_tools.py       SMILES validation and descriptors
+    saturn_tools.py      Saturn generative molecular design wrapper
+    boltz_tools.py       Boltz-2 molecular co-folding and docking wrapper
     paper_review.py      Structured deterministic paper review
     python_exec.py       Safe-ish Python snippets
     file_io.py           JSON/CSV IO

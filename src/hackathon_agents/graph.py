@@ -118,7 +118,25 @@ class DiscoveryGraph:
             f"Completed candidate-generation pass {state.iteration} with {len(state.candidate_molecules)} candidates.",
             node="chemist",
         )
-        return state
+        self._apply_saturn_gating(state)
+        return chemist.run(state)
+
+    def _apply_saturn_gating(self, state: DiscoveryStatePayload) -> None:
+        """Config-gate Saturn like xTB/ORCA: drop the oracle if Saturn is off.
+
+        The planner proposes a default Saturn oracle in ``state.metadata``. Here
+        the graph enforces the same config/run-mode gate used for other tools.
+        When Saturn is disabled for the current run mode, the chemist falls back
+        to its deterministic seed molecules instead of generating with Saturn.
+        """
+
+        if "saturn" not in state.metadata:
+            return
+        if self.config.tool_enabled("saturn"):
+            return
+        state.metadata.pop("saturn", None)
+        state.metadata["saturn_source"] = "disabled_by_config"
+        state.append_message("graph: Saturn disabled for this run mode; using seed molecules")
 
     def _tool_execution_node(self, state: DiscoveryStatePayload) -> DiscoveryStatePayload:
         logger.info("tool execution node")
@@ -200,6 +218,49 @@ class DiscoveryGraph:
                     )
                     state.add_tool_result("orca.run_or_generate", generated)
 
+        if self.config.tool_enabled("boltz_2"):
+            import hashlib
+            from hackathon_agents.tools.boltz_tools import run_boltz_2
+            boltz_tool = self.config.tools.get("boltz_2")
+            allow_run = boltz_tool.model_extra.get("allow_run", False) if boltz_tool else False
+            run_mode_val = boltz_tool.model_extra.get("run_mode", "local") if boltz_tool else "local"
+            device_val = boltz_tool.model_extra.get("device", "cpu") if boltz_tool else "cpu"
+
+            target_seq = state.metadata.get("target_protein_sequence") or "MTEYKLVVVGAGGVGKSALTIQLIQNHFVDEYDPTIEDSYRKQVVIDGETCLLDILDTAGQEEYSAMRDQYMRTGEGFLCVFAINNTKSFEDIHQYREQIKRVKDSDDVPMVLVGNKCDLAARTVESRQAQDLARSYGIPYIETSAKTRQGVEDAFYTLVREIRQHKLRKLNPPDESGPGCMSCKCVLS"
+
+            # Retrieve agent/metadata driven custom Boltz parameters if present
+            recycling_steps = state.metadata.get("boltz_recycling_steps", 3)
+            diffusion_steps = state.metadata.get("boltz_diffusion_steps", 200)
+            cofactors = state.metadata.get("boltz_cofactors", [])
+            pocket_residues = state.metadata.get("boltz_pocket_residues", [])
+
+            state.append_message("graph: running Boltz-2 co-folding on generated candidates")
+            for molecule in state.candidate_molecules:
+                boltz_result = run_boltz_2(
+                    {
+                        "id": f"boltz-{hashlib.md5(molecule.smiles.encode('utf-8')).hexdigest()[:8]}",
+                        "work_dir": str(run_dir / "boltz"),
+                        "target_protein_sequence": target_seq,
+                        "ligand_smiles": molecule.smiles,
+                        "run": bool(allow_run),
+                        "run_mode": run_mode_val,
+                        "device": device_val,
+                        "recycling_steps": recycling_steps,
+                        "diffusion_steps": diffusion_steps,
+                        "cofactors": cofactors,
+                        "pocket_residues": pocket_residues,
+                    }
+                )
+                state.add_tool_result("boltz_2.run_prediction", boltz_result)
+                if boltz_result.ok:
+                    molecule.descriptors["boltz_energy"] = boltz_result.data.get("binding_energy_kcal_mol")
+                    molecule.descriptors["boltz_kd_nm"] = boltz_result.data.get("binding_affinity_kd_nm")
+                    molecule.descriptors["boltz_plddt"] = boltz_result.data.get("plddt")
+                    molecule.descriptors["boltz_iptm"] = boltz_result.data.get("iptm")
+                    molecule.metadata["boltz_pdb"] = boltz_result.data.get("pdb_file")
+
+        self._maybe_recommend_experiments(state, run_dir)
+
         executed_count = len(state.tool_results) - initial_tool_count
         self._write_memory(
             state,
@@ -208,6 +269,48 @@ class DiscoveryGraph:
             node="tool_execution",
         )
         return state
+
+    def _maybe_recommend_experiments(self, state: DiscoveryStatePayload, run_dir: Path) -> None:
+        """Optionally recommend the next experiments via BayBE (Bayesian DoE).
+
+        Opt-in and config-gated, mirroring Saturn/Boltz. An agent (or chemist)
+        requests next-experiment recommendations by setting
+        ``state.metadata["baybe"]`` to a dict describing the search space
+        (``parameters``), what to optimize (``targets``), the experiments run so
+        far (``measurements``), and ``batch_size``. The graph enforces the same
+        config/run-mode gate used for the other tools and supplies ``work_dir``
+        plus the configured ``allow_run`` flag. When BayBE is disabled or not
+        installed, the tool returns deterministic mock recommendations, so this
+        is always safe to call.
+        """
+
+        settings = state.metadata.get("baybe")
+        if not settings:
+            return
+        if not self.config.tool_enabled("baybe"):
+            state.metadata["baybe_source"] = "disabled_by_config"
+            state.append_message("graph: BayBE disabled for this run mode; skipping experiment recommendation")
+            return
+
+        from hackathon_agents.tools.baybe_tools import recommend_experiments
+
+        baybe_tool = self.config.tools.get("baybe")
+        allow_run = baybe_tool.model_extra.get("allow_run", False) if baybe_tool else False
+
+        baybe_input: dict[str, Any] = dict(settings)
+        baybe_input.setdefault("objective", state.original_user_request)
+        baybe_input.setdefault("work_dir", str(run_dir / "baybe"))
+        # The config gate owns the real-vs-mock decision; agents need not know it.
+        baybe_input["run"] = bool(allow_run) and bool(settings.get("run", True))
+
+        result = recommend_experiments(baybe_input)
+        state.add_tool_result("baybe.recommend_experiments", result)
+        if result.ok:
+            state.metadata["baybe_recommendations"] = result.data.get("recommendations", [])
+            mode_note = "mock" if result.data.get("mock") else result.data.get("recommender")
+            state.append_message(
+                f"graph: BayBE recommended {len(result.data.get('recommendations', []))} experiments ({mode_note})"
+            )
 
     def _critic_node(self, state: DiscoveryStatePayload) -> DiscoveryStatePayload:
         logger.info("critic node")

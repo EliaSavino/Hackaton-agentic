@@ -141,6 +141,14 @@ RAG_DB_PATH=data/rag.sqlite
 PROJECT_MEMORY_JSONL=data/memory/project_memory.jsonl
 PROJECT_MEMORY_MARKDOWN=data/memory/project_memory.md
 MECHANISM_LITERATURE_CORPUS_DIR=
+SATURN_ENABLED=false
+SATURN_REPO=
+SATURN_PYTHON=python
+SATURN_PRIOR=
+BOLTZ_ENABLED=false
+BOLTZ_EXECUTABLE=boltz
+BOLTZ_RUN_MODE=local
+BOLTZ_DEVICE=cpu
 ```
 
 Do not put API keys in YAML or source code.
@@ -150,3 +158,55 @@ Do not put API keys in YAML or source code.
 - `auto`: check selected model availability with `HACKATHON_MODEL_CHECK_TIMEOUT`, then fall back deterministically when unavailable.
 - `off`: skip agent model calls.
 - `always`: attempt the selected model and fall back only if the call or schema validation fails.
+
+## Saturn Tool Config
+
+`configs/tools.yaml` includes a `saturn` block for generative molecular design
+(`schwallergroup/saturn`). It is disabled by default and reads its paths from the
+environment so no install paths are hardcoded:
+
+```yaml
+saturn:
+  enabled: ${SATURN_ENABLED:-false}
+  saturn_repo: ${SATURN_REPO:-}
+  saturn_python: ${SATURN_PYTHON:-python}
+  prior_checkpoint: ${SATURN_PRIOR:-}
+  timeout_seconds: 1800
+  allow_run: false
+  enabled_modes: [full, cheap]
+```
+
+Behavior:
+
+- The `planner` proposes a default oracle (`qed` + `sa`) with no human input.
+- The discovery graph gates Saturn with `config.tool_enabled("saturn")`, exactly
+  like xTB/ORCA. When disabled, the chemist falls back to deterministic seeds.
+- When Saturn is not installed (or the request uses `run=False`), the tool
+  returns a deterministic mock candidate set so the pipeline stays offline-safe.
+- Running the real Saturn model is opt-in: set `SATURN_ENABLED=true`, point
+  `SATURN_REPO`/`SATURN_PYTHON`/`SATURN_PRIOR` at a cloned Saturn checkout and its
+  conda environment, and set the Saturn input `run` flag to `true`.
+
+## Boltz-2 Tool Config
+
+`configs/tools.yaml` includes a `boltz_2` block for predicted protein-ligand structural co-folding and binding affinity:
+
+```yaml
+boltz_2:
+  enabled: ${BOLTZ_ENABLED:-false}
+  boltz_executable: ${BOLTZ_EXECUTABLE:-boltz}
+  run_mode: ${BOLTZ_RUN_MODE:-local}
+  device: ${BOLTZ_DEVICE:-cpu}
+  single_sequence: true
+  partition: gpu_a100
+  allow_submit: false
+  timeout_seconds: 1800
+  enabled_modes: [full, cheap]
+```
+
+Behavior:
+
+- Evaluates how generated ligands bind and co-fold with target proteins.
+- Yieldspredicted 3D complex structures (PDB), confidence values (pLDDT, ipTM), and quantitative binding affinity ($\Delta G$ and $K_d$).
+- Support zero-install mock fallback mode (used when `run=false` or local/HPC executable is absent).
+- Real-model execution (local or submitted to HPC via sbatch) can be enabled with `BOLTZ_ENABLED=true`, `BOLTZ_RUN_MODE=slurm`, and `allow_submit=true`.

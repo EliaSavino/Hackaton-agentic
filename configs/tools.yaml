@@ -85,3 +85,47 @@ tools:
     gpus_per_node: 1
     port: 8000
     allow_submit: false
+
+  saturn:
+    # Generative molecular design via schwallergroup/saturn.
+    # Disabled by default: Saturn is a separate cloned repo with its own conda
+    # env (Python 3.10, GPU recommended) and cannot be imported in-process.
+    # When disabled or unconfigured, the tool returns a deterministic mock set.
+    enabled: ${SATURN_ENABLED:-false}
+    saturn_repo: ${SATURN_REPO:-}
+    saturn_python: ${SATURN_PYTHON:-python}
+    prior_checkpoint: ${SATURN_PRIOR:-}
+    timeout_seconds: 1800
+    allow_run: false
+    enabled_modes: [full, cheap]
+
+  boltz_2:
+    # Co-folding, structural docking, and binding affinity via Boltz-2.
+    # Disabled by default: Boltz-2 is a heavy deep-learning model (GPU recommended).
+    # When disabled, unconfigured, or when run=false, the tool uses a
+    # high-fidelity deterministic mock co-folding simulation.
+    enabled: ${BOLTZ_ENABLED:-false}
+    boltz_executable: ${BOLTZ_EXECUTABLE:-boltz}
+    run_mode: ${BOLTZ_RUN_MODE:-local}
+    device: ${BOLTZ_DEVICE:-cpu}
+    single_sequence: true
+    partition: gpu_a100
+    allow_submit: false
+    allow_run: false
+    timeout_seconds: 1800
+    enabled_modes: [full, cheap]
+
+  baybe:
+    # Bayesian Design of Experiments via emdgroup/baybe (Merck KGaA).
+    # Recommends the next most informative experiments (reaction conditions,
+    # formulations, process parameters, library choices) in the low-/no-data
+    # regime. Unlike Saturn (which generates molecules), BayBE selects optimal
+    # configurations from a search space you define.
+    #
+    # BayBE is a normal pip package (`pip install 'baybe[chem,simulation]'`) and
+    # imports in-process. Disabled by default and gated by allow_run: when off,
+    # unconfigured, or run=false, the tool returns deterministic, space-filling
+    # mock recommendations so the pipeline stays offline-safe.
+    enabled: ${BAYBE_ENABLED:-false}
+    allow_run: false
+    enabled_modes: [full, no_dft, cheap]

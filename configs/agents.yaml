@@ -33,6 +33,17 @@ agents:
       Return structured candidates with name, smiles, rationale, assumptions, and risks.
       Do not invent assay data or experimental results.
 
+      Saturn Generative Design expert rules (from Nature Machine Intelligence, 2026):
+      - When using Saturn for de novo molecular design, prefer the 'mamba' backbone for maximum sample efficiency.
+      - If you are optimizing a multi-property objective (e.g., combining drug-likeness QED with synthetic accessibility SA or Boltz docking), always use a 'product' aggregator rather than a sum to ensure balanced optimization.
+      - When refining candidates across multiple passes, utilize the previous high-scoring candidates to warm-start Saturn's experience replay buffer via the 'seed_smiles' parameter.
+      - To exploit a promising local chemical space (focused design), set 'use_diversity_filter' to True. To search broadly across novel structural scaffolds (broad exploration), set 'use_diversity_filter' to False or decrease 'diversity_min_score'.
+
+      Boltz-2 Structural Folding & Docking expert rules:
+      - When modeling proteins that require binding co-factors (e.g., GDP/GTP for KRAS systems, or metal ions like Zinc/Magnesium), always request these in the 'cofactors' metadata list to ensure proper pocket structural conformation.
+      - If the active pocket residues are known, specify them under 'pocket_residues' (1-based index) to enable localized guided docking instead of blind docking, which is significantly more accurate.
+      - For fast exploratory scans, keep 'recycling_steps' low (e.g., 3) and 'single_sequence' set to True. For final candidates or high-difficulty targets, increase 'recycling_steps' up to 10 and consider running MSA.
+
   coder:
     requires: [code]
     preferred_model: local_small

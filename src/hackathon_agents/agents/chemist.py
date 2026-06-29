@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 from concurrent.futures import ThreadPoolExecutor, as_completed
+from pathlib import Path
+from typing import Any
 
 from pydantic import BaseModel, Field
 
@@ -68,13 +70,21 @@ def run(state: DiscoveryStatePayload, config: AppConfig | None = None) -> Discov
             state.append_message("chemist: model generated no new unique candidates; using deterministic fallback")
 
     if not state.candidate_molecules:
-        state.candidate_molecules = [candidate.model_copy(deep=True) for candidate in EXAMPLE_MOLECULES]
-        state.append_message("chemist: loaded hardcoded example molecules")
+        saturn_added = _maybe_generate_with_saturn(state)
+        if saturn_added:
+            state.append_message(f"chemist: seeded {saturn_added} candidates with Saturn")
+        else:
+            state.candidate_molecules = [candidate.model_copy(deep=True) for candidate in EXAMPLE_MOLECULES]
+            state.append_message("chemist: loaded hardcoded example molecules")
     elif state.requested_next_actions:
-        added = _add_refinement_candidates(state)
-        state.append_message(
-            f"chemist: added {added} refinement candidates for actions {state.requested_next_actions}"
-        )
+        saturn_added = _maybe_generate_with_saturn(state)
+        if saturn_added:
+            state.append_message(f"chemist: refined and generated {saturn_added} candidates using Saturn warm start")
+        else:
+            added = _add_refinement_candidates(state)
+            state.append_message(
+                f"chemist: added {added} refinement candidates for actions {state.requested_next_actions}"
+            )
     else:
         state.append_message("chemist: using candidate molecules already present in state")
     state.needs_more_passes = False
@@ -161,3 +171,45 @@ def _last_successful_model_alias(state: DiscoveryStatePayload) -> str | None:
         if record.get("agent") == "chemist" and record.get("ok"):
             return record.get("alias")
     return None
+
+
+def _maybe_generate_with_saturn(state: DiscoveryStatePayload) -> int:
+    """Optionally seed candidates via the Saturn generative tool.
+
+    The chemist opts in by setting ``state.metadata["saturn"]`` to a dict of
+    Saturn settings (oracle components, RL knobs, repo paths, ``run`` flag).
+    Without that key the chemist keeps its deterministic default behavior. The
+    Saturn tool itself falls back to a mock generator when Saturn is not
+    installed, so this is always safe to call.
+    """
+
+    settings = state.metadata.get("saturn")
+    if not settings:
+        return 0
+
+    # Imported lazily so the agent has no hard dependency on the tool module.
+    from hackathon_agents.tools.saturn_tools import generate_with_saturn, saturn_records
+
+    saturn_input: dict[str, Any] = dict(settings)
+    saturn_input.setdefault("objective", state.original_user_request)
+    if "work_dir" not in saturn_input:
+        run_dir = Path(state.run_dir) if state.run_dir else Path("runs") / "adhoc"
+        saturn_input["work_dir"] = str(run_dir / "saturn")
+
+    # Pass existing candidates as seed_smiles for warm starting experience replay
+    if state.candidate_molecules:
+        existing_smiles = [mol.smiles for mol in state.candidate_molecules if mol.smiles]
+        if existing_smiles:
+            saturn_input["seed_smiles"] = existing_smiles
+            state.append_message(f"chemist: warm-starting Saturn experience replay memory with {len(existing_smiles)} active candidates")
+
+    result = generate_with_saturn(saturn_input)
+    state.add_tool_result("saturn.generate", result)
+    if not result.ok:
+        return 0
+
+    molecules = saturn_records(result.data)
+    state.candidate_molecules = molecules
+    if result.data.get("mock"):
+        state.append_message("chemist: Saturn ran in mock mode (Saturn not installed or run disabled)")
+    return len(molecules)

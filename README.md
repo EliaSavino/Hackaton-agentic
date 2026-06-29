@@ -47,6 +47,7 @@ Required environment variables:
 ```bash
 OPENAI_API_KEY=
 ANTHROPIC_API_KEY=
+GOOGLE_API_KEY=
 LITELLM_MODEL_DEFAULT=local_small
 ```
 
@@ -202,6 +203,49 @@ python -m hackathon_agents.cli review-paper path/to/paper.txt \
 ```
 
 Supported inputs are `.txt`, `.md`, `.pdf`, and `.docx`. PDF extraction uses `pypdf`; DOCX extraction uses `python-docx`. The output is a structured JSON review with metadata, detected sections, claim-like statements, strengths, limitations, reproducibility checklist items, focus-question evidence, and a deterministic recommendation.
+
+## Generative Molecules With Saturn
+
+The discovery pipeline can generate candidate molecules with [`schwallergroup/saturn`](https://github.com/schwallergroup/saturn), a sample-efficient generative molecular design framework, against an oracle (reward function) and reinforcement-learning setting of the agent's choice.
+
+This works automatically, with no human input at runtime:
+
+- The `planner` proposes a deterministic default oracle (`qed` drug-likeness + `sa` synthetic accessibility) and RL setting.
+- The discovery graph gates Saturn with `config.tool_enabled("saturn")`, exactly like the xTB and ORCA wrappers. When Saturn is disabled for the run mode, the `chemist` falls back to deterministic seed molecules.
+- The generated SMILES become typed `MoleculeRecord` objects that flow through the normal RDKit -> critic -> writer pipeline.
+
+Saturn is not a pip package: it is a separate cloned repository with its own conda environment (Python 3.10, GPU recommended) driven by a single JSON config (`python saturn.py config.json`). Because it cannot be imported in-process, the tool follows the same opt-in pattern as xTB/ORCA/Snellius:
+
+- By default Saturn runs in **mock mode** and returns a deterministic candidate set, so the pipeline stays offline-safe and never crashes when Saturn or a GPU is unavailable.
+- To run the **real** Saturn model, clone the Saturn repo and create its conda env, then set:
+
+```bash
+SATURN_ENABLED=true
+SATURN_REPO=/path/to/saturn
+SATURN_PYTHON=/path/to/saturn/conda/env/python
+SATURN_PRIOR=/path/to/pretrained_prior.ckpt
+```
+
+and set the Saturn input `run` flag to `true` (e.g. in the planner default or via `state.metadata["saturn"]`). See [Tools](docs/tools.md) for the oracle/RL settings schema.
+
+## Bayesian Experiment Design With BayBE
+
+The pipeline can recommend the **next most informative experiments** with [`emdgroup/baybe`](https://github.com/emdgroup/baybe), Merck KGaA's open-source Bayesian optimization / Design-of-Experiments toolbox. Where Saturn *invents* new molecules, BayBE *selects optimal configurations* from a search space you define — reaction conditions, formulations, process parameters, or which compound from a library to test next. It is built for the low-/no-data regime, so it is useful from the very first experiment and pairs naturally with the workbench's oracles (xTB/ORCA, Boltz-2, RDKit) by minimizing how many expensive evaluations you need.
+
+It follows the same opt-in, config-gated, mock-fallback pattern as the other heavy tools:
+
+- An agent (or chemist) sets `state.metadata["baybe"]` with the search space (`parameters`), what to optimize (`targets`: `MAX`/`MIN`/`MATCH`), the experiments run so far (`measurements`), and `batch_size`.
+- The discovery graph gates BayBE with `config.tool_enabled("baybe")`, exactly like xTB/ORCA/Saturn. The recommended experiments are written to `runs/<timestamp>/baybe/baybe_recommendations.csv` and stored in `state.metadata["baybe_recommendations"]`.
+- BayBE is a normal pip package and imports in-process. When it is not installed or the run is disabled, the tool returns deterministic, space-filling **mock** recommendations, so the pipeline stays offline-safe.
+
+Install the optional dependency and enable the real Bayesian recommender:
+
+```bash
+pip install 'baybe[chem,simulation]'   # or: pip install -e '.[baybe]'
+export BAYBE_ENABLED=true
+```
+
+See [Tools](docs/tools.md) for the full parameter/target schema and a worked example.
 
 ## Mechanism Discovery Workflow
 
