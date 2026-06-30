@@ -4,6 +4,7 @@ import argparse
 from datetime import datetime
 from pathlib import Path
 
+from hackathon_agents.benchmarks.system import benchmark_system
 from hackathon_agents.config import RunMode, load_config
 from hackathon_agents.demos.discovery_demo import run_demo
 from hackathon_agents.llm.benchmark import benchmark_models
@@ -142,6 +143,16 @@ try:
         config = load_config(config_dir=config_dir, run_mode=run_mode)
         output_path = benchmark_models(config, run_root=run_root)
         typer.echo(f"Benchmark written to {output_path}")
+
+    @app.command("benchmark-system")
+    def benchmark_system_command(
+        run_root: Path = typer.Option(Path("runs"), "--run-root"),
+    ) -> None:
+        """Run deterministic end-to-end system benchmarks and save JSON results."""
+
+        configure_logging()
+        output_path = benchmark_system(run_root=run_root)
+        typer.echo(f"System benchmark written to {output_path}")
 
     @app.command("review-paper")
     def review_paper_command(
@@ -473,6 +484,9 @@ except Exception:
         bench_parser.add_argument("--config-dir", default="configs")
         bench_parser.add_argument("--run-root", default="runs")
 
+        system_bench_parser = subparsers.add_parser("benchmark-system")
+        system_bench_parser.add_argument("--run-root", default="runs")
+
         check_parser = subparsers.add_parser("check-models")
         check_parser.add_argument("--run-mode", default=RunMode.CHEAP.value)
         check_parser.add_argument("--config-dir", default="configs")
@@ -595,6 +609,9 @@ except Exception:
             config = load_config(config_dir=args.config_dir, run_mode=args.run_mode)
             output_path = benchmark_models(config, run_root=args.run_root)
             print(f"Benchmark written to {output_path}")
+        elif args.command == "benchmark-system":
+            output_path = benchmark_system(run_root=args.run_root)
+            print(f"System benchmark written to {output_path}")
         elif args.command == "check-models":
             config = load_config(config_dir=args.config_dir, run_mode=args.run_mode)
             router = ModelRouter(config)

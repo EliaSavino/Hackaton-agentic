@@ -10,6 +10,12 @@ from hackathon_agents.llm.client import CompletionRequest, LLMClient
 
 
 class _FakeResponse:
+    def __init__(self, payload: dict | None = None):
+        self.payload = payload or {
+            "choices": [{"message": {"content": "openrouter response"}}],
+            "usage": {"prompt_tokens": 3, "completion_tokens": 2},
+        }
+
     def __enter__(self):
         return self
 
@@ -17,12 +23,7 @@ class _FakeResponse:
         return None
 
     def read(self) -> bytes:
-        return json.dumps(
-            {
-                "choices": [{"message": {"content": "openrouter response"}}],
-                "usage": {"prompt_tokens": 3, "completion_tokens": 2},
-            }
-        ).encode("utf-8")
+        return json.dumps(self.payload).encode("utf-8")
 
 
 class OpenRouterClientTests(unittest.TestCase):
@@ -68,6 +69,38 @@ class OpenRouterClientTests(unittest.TestCase):
         self.assertEqual(captured["headers"]["Authorization"], "Bearer test-key")
         self.assertEqual(captured["headers"]["Http-referer"], "https://example.test")
         self.assertEqual(captured["headers"]["X-openrouter-title"], "Tests")
+
+    def test_direct_ollama_completion_disables_thinking(self) -> None:
+        captured = {}
+        config = load_config("configs", run_mode="cheap")
+        client = LLMClient(config)
+        model = ModelConfig(
+            provider="ollama",
+            model="qwen3.5:latest",
+            host="http://localhost:11434",
+        )
+
+        def fake_urlopen(request, timeout):
+            captured["url"] = request.full_url
+            captured["timeout"] = timeout
+            captured["body"] = json.loads(request.data.decode("utf-8"))
+            return _FakeResponse({"message": {"content": "{\"ok\": true}"}})
+
+        with patch("urllib.request.urlopen", side_effect=fake_urlopen):
+            result = client._direct_ollama_completion(
+                "local_test",
+                model,
+                CompletionRequest(
+                    messages=[{"role": "user", "content": "Return JSON."}],
+                    max_tokens=12,
+                ),
+            )
+
+        self.assertTrue(result.ok, result.error)
+        self.assertEqual(result.content, "{\"ok\": true}")
+        self.assertEqual(captured["url"], "http://localhost:11434/api/chat")
+        self.assertFalse(captured["body"]["think"])
+        self.assertEqual(captured["body"]["options"]["num_predict"], 12)
 
 
 if __name__ == "__main__":

@@ -2,11 +2,13 @@ from __future__ import annotations
 
 from hackathon_agents.agents.model_helpers import call_agent_model
 from hackathon_agents.config import AppConfig
-from hackathon_agents.schemas.tasks import DiscoveryPlan, DiscoveryPlanStep
+from hackathon_agents.schemas.tasks import DiscoveryPlan, DiscoveryPlanStep, PlannedTask, PlannerTaskGraph
 from hackathon_agents.state import DiscoveryStatePayload
+from hackathon_agents.tools.registry import build_tool_registry, summarize_tool_registry
 
 
 def run(state: DiscoveryStatePayload, config: AppConfig | None = None) -> DiscoveryStatePayload:
+    tool_registry = build_tool_registry(config) if config is not None else []
     model_plan = call_agent_model(
         state=state,
         config=config,
@@ -18,16 +20,20 @@ def run(state: DiscoveryStatePayload, config: AppConfig | None = None) -> Discov
             "objective": state.original_user_request,
             "run_mode": state.run_mode.value,
             "max_iterations": state.max_iterations,
-            "available_tools": sorted(config.tools) if config else [],
+            "available_tools": [entry["name"] for entry in tool_registry if entry["enabled"]],
+            "tool_registry_summary": summarize_tool_registry(tool_registry),
+            "tool_registry": tool_registry,
             "instructions": [
                 "Create a bounded scientific discovery plan.",
                 "Prefer deterministic tools before model-only reasoning.",
-                "Use only tool names that exist in available_tools.",
+                "Use only enabled tools from tool_registry unless explicitly explaining why a disabled tool is skipped.",
+                "Respect execution_risk, mock_behavior, and external_side_effects when choosing tools.",
             ],
         },
     )
     if model_plan is not None:
         state.plan = model_plan
+        _attach_planner_metadata(state, tool_registry)
         state.append_message("planner: created model-backed discovery plan")
         return state
 
@@ -69,9 +75,73 @@ def run(state: DiscoveryStatePayload, config: AppConfig | None = None) -> Discov
             ),
         ],
     )
+    _attach_planner_metadata(state, tool_registry)
     _set_default_saturn_oracle(state)
     state.append_message("planner: created deterministic discovery plan")
     return state
+
+
+def _attach_planner_metadata(state: DiscoveryStatePayload, tool_registry: list[dict] | None = None) -> None:
+    if tool_registry is not None:
+        state.metadata["tool_registry"] = tool_registry
+        state.metadata["tool_registry_summary"] = summarize_tool_registry(tool_registry)
+    state.metadata["planner_task_graph"] = _default_task_graph(state).model_dump(mode="json")
+
+
+def _default_task_graph(state: DiscoveryStatePayload) -> PlannerTaskGraph:
+    return PlannerTaskGraph(
+        objective=state.original_user_request,
+        tasks=[
+            PlannedTask(
+                id="plan",
+                title="Plan bounded scientific workflow",
+                task_type="planning",
+                agent="planner",
+                description="Create assumptions, task ordering, and tool choices.",
+                expected_artifacts=["planner_task_graph"],
+                status="completed" if state.plan else "planned",
+            ),
+            PlannedTask(
+                id="generate_candidates",
+                title="Generate candidate molecules",
+                task_type="hypothesis_generation",
+                agent="chemist",
+                description="Create or refine candidate molecules with explicit provenance.",
+                tool_names=["saturn"],
+                depends_on=["plan"],
+                expected_artifacts=["candidate_molecules"],
+            ),
+            PlannedTask(
+                id="run_deterministic_tools",
+                title="Run deterministic candidate tools",
+                task_type="tool_execution",
+                agent="tool_executor",
+                description="Validate molecules, compute descriptors, filter candidates, and render plots.",
+                tool_names=["rdkit", "plotting", "file_io"],
+                depends_on=["generate_candidates"],
+                expected_artifacts=["descriptors.csv", "qed_plot.png"],
+            ),
+            PlannedTask(
+                id="critique",
+                title="Critique and decide whether to iterate",
+                task_type="criticism",
+                agent="critic",
+                description="Rank candidates, identify uncertainty, and request bounded follow-up if needed.",
+                depends_on=["run_deterministic_tools"],
+                expected_artifacts=["critic_decisions"],
+            ),
+            PlannedTask(
+                id="write_reports",
+                title="Write run reports",
+                task_type="reporting",
+                agent="writer",
+                description="Write DOCX, LaTeX, state, memory, and artifact index outputs.",
+                tool_names=["doc_writer", "latex_writer", "memory_writer"],
+                depends_on=["critique"],
+                expected_artifacts=["report.docx", "report.tex", "artifact_index.json"],
+            ),
+        ],
+    )
 
 
 def _set_default_saturn_oracle(state: DiscoveryStatePayload) -> None:

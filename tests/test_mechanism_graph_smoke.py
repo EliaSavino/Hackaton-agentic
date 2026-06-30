@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import tempfile
 import unittest
 from pathlib import Path
@@ -27,6 +28,14 @@ class MechanismGraphSmokeTests(unittest.TestCase):
             self.assertTrue((run_dir / "trace.log").exists())
             self.assertTrue((run_dir / "report.json").exists())
             self.assertTrue((run_dir / "report.docx").exists())
+            self.assertTrue((run_dir / "artifact_index.json").exists())
+            self.assertEqual(state.metadata.get("artifact_index_path"), str(run_dir / "artifact_index.json"))
+            artifact_index = json.loads((run_dir / "artifact_index.json").read_text(encoding="utf-8"))
+            self.assertEqual(artifact_index["schema_version"], 2)
+            self.assertEqual(artifact_index["provenance"]["workflow"], "mechanism")
+            self.assertEqual(artifact_index["provenance"]["dataset_count"], len(state.datasets))
+            self.assertEqual(artifact_index["provenance"]["hypothesis_count"], len(state.hypotheses))
+            self.assertTrue(any(entry["relative_path"] == "state.json" for entry in artifact_index["artifacts"]))
             self.assertTrue(any((run_dir / "datasets").glob("*.csv")))
 
 

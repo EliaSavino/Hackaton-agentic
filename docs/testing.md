@@ -16,6 +16,8 @@ python -m compileall -q src tests
 - `test_critic_loop.py`: bounded critic loop decisions.
 - `test_doc_writer.py`: DOCX report generation when `python-docx` is installed.
 - `test_latex_writer.py`: dependency-free LaTeX report generation.
+- `test_llm_benchmark.py`: mocked model benchmark result shaping and JSON repair metadata.
+- `test_llm_validators.py`: JSON and LaTeX output normalization/validation.
 - `test_memory_writer.py`: append-only JSONL and Markdown project memory.
 - `test_graph_smoke.py`: graph smoke path without DFT.
 - `test_model_backed_agents.py`: mocked model-backed planner, chemist, and critic paths.

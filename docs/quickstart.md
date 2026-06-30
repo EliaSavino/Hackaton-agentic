@@ -96,6 +96,20 @@ hackathon-agents benchmark-models
 
 Benchmark results are saved to `runs/model_benchmark_<date>.json`.
 
+## Benchmark The System
+
+Run deterministic end-to-end benchmark cases that exercise CSV parsing,
+mechanism ranking, descriptor generation, paper review, numeric statistics,
+reporting, criteria checks, and artifact indexing:
+
+```bash
+hackathon-agents benchmark-system
+```
+
+Results are saved under `runs/system_benchmark_<date>/system_benchmark.json`.
+Each case records pass/fail criteria, metrics, duration, warnings, errors, and
+artifacts.
+
 ## Run Tests
 
 ```bash

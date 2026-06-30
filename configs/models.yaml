@@ -9,7 +9,7 @@ models:
 
   science_reasoning:
     provider: anthropic
-    model: claude-sonnet
+    model: anthropic/claude-sonnet-4-6
     capabilities: [reasoning, chemistry, science, final_review, long_context]
     api_key_env: ANTHROPIC_API_KEY
     cost_tier: high

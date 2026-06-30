@@ -13,6 +13,7 @@ from hackathon_agents.mechanism.reporting import write_mechanism_report
 from hackathon_agents.mechanism.state import MechanismDiscoveryState, MechanismRunMode
 from hackathon_agents.mechanism.uncertainty import build_critic_assessment, rank_hypotheses
 from hackathon_agents.tools.dft_job import DFTCalculationType, DFTJob, DFTResult
+from hackathon_agents.tools.artifact_index import mechanism_provenance, write_artifact_index
 from hackathon_agents.tools.hpc_client import HPCClient, MockHPCClient, SlurmHPCClient
 from hackathon_agents.tools.kinetics_io import parse_kinetics_file, write_kinetic_dataset
 from hackathon_agents.tools.literature_search import search_literature_prior
@@ -290,7 +291,21 @@ class MechanismDiscoveryGraph:
                 encoding="utf-8",
             )
         write_mechanism_report(state)
+        index_path = run_dir / "artifact_index.json"
+        state.metadata["artifact_index_path"] = str(index_path)
         state.save_json(run_dir / "state.json")
+        write_artifact_index(
+            run_dir=run_dir,
+            producer="mechanism_graph",
+            provenance=mechanism_provenance(state),
+            metadata={
+                "dataset_count": len(state.datasets),
+                "hypothesis_count": len(state.hypotheses),
+                "fit_result_count": len(state.fit_results),
+                "ranking_count": len(state.rankings),
+                "dft_job_count": len(state.dft_jobs),
+            },
+        )
 
 
 def run_mechanism_loop(

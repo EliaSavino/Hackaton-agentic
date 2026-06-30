@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import json
 import os
-import re
 from typing import Any, TypeVar
 
 from pydantic import BaseModel, ValidationError
@@ -10,12 +9,11 @@ from pydantic import BaseModel, ValidationError
 from hackathon_agents.config import AppConfig
 from hackathon_agents.llm.client import CompletionRequest, LLMClient
 from hackathon_agents.llm.router import ModelRouter
+from hackathon_agents.llm.validators import validate_json_output
 from hackathon_agents.state import DiscoveryStatePayload
 
 
 T = TypeVar("T", bound=BaseModel)
-
-_JSON_FENCE_RE = re.compile(r"```(?:json)?\s*(.*?)```", re.DOTALL | re.IGNORECASE)
 
 
 class AgentModelCall(BaseModel):
@@ -171,18 +169,11 @@ def _schema_prompt(system_prompt: str, response_model: type[BaseModel]) -> str:
 
 
 def _extract_json(content: str) -> Any:
-    text = content.strip()
-    fence = _JSON_FENCE_RE.search(text)
-    if fence:
-        text = fence.group(1).strip()
-    try:
-        return json.loads(text)
-    except json.JSONDecodeError:
-        start = text.find("{")
-        end = text.rfind("}")
-        if start < 0 or end <= start:
-            raise ValueError("model response did not contain a JSON object")
-        return json.loads(text[start : end + 1])
+    validation = validate_json_output(content)
+    if not validation.ok:
+        detail = "; ".join(validation.errors) or "unknown validation error"
+        raise ValueError(f"model response did not contain valid JSON: {detail}")
+    return validation.parsed
 
 
 def _llm_mode(state: DiscoveryStatePayload) -> str:

@@ -8,7 +8,9 @@ from hackathon_agents.config import AppConfig, RunMode
 from hackathon_agents.logging_config import get_logger
 from hackathon_agents.schemas.molecules import MoleculeFilterConstraints
 from hackathon_agents.state import DiscoveryStatePayload
+from hackathon_agents.task_graph import mark_task_completed, mark_task_started, task_graph_summary
 from hackathon_agents.tools.doc_writer import write_scientific_report
+from hackathon_agents.tools.artifact_index import discovery_provenance, tool_result_artifacts, write_artifact_index
 from hackathon_agents.tools.file_io import write_csv
 from hackathon_agents.tools.latex_writer import write_latex_report
 from hackathon_agents.tools.memory_writer import append_project_memory
@@ -103,23 +105,31 @@ class DiscoveryGraph:
     def _planner_node(self, state: DiscoveryStatePayload) -> DiscoveryStatePayload:
         logger.info("planner node")
         state = planner.run(state, config=self.config)
+        mark_task_completed(state, "plan", reason="planner node completed", artifacts=["planner_task_graph"])
         step_count = len(state.plan.steps) if state.plan else 0
         self._write_memory(state, "planner_completed", f"Created a discovery plan with {step_count} steps.", node="planner")
         return state
 
     def _chemist_node(self, state: DiscoveryStatePayload) -> DiscoveryStatePayload:
         logger.info("chemist node")
+        mark_task_started(state, "generate_candidates", reason=f"pass {state.iteration + 1}")
         state.iteration += 1
         state.append_message(f"graph: starting pass {state.iteration}/{state.max_iterations}")
+        self._apply_saturn_gating(state)
         state = chemist.run(state, config=self.config)
+        mark_task_completed(
+            state,
+            "generate_candidates",
+            reason=f"generated {len(state.candidate_molecules)} candidates on pass {state.iteration}",
+            artifacts=["candidate_molecules"],
+        )
         self._write_memory(
             state,
             "chemist_completed",
             f"Completed candidate-generation pass {state.iteration} with {len(state.candidate_molecules)} candidates.",
             node="chemist",
         )
-        self._apply_saturn_gating(state)
-        return chemist.run(state)
+        return state
 
     def _apply_saturn_gating(self, state: DiscoveryStatePayload) -> None:
         """Config-gate Saturn like xTB/ORCA: drop the oracle if Saturn is off.
@@ -140,6 +150,7 @@ class DiscoveryGraph:
 
     def _tool_execution_node(self, state: DiscoveryStatePayload) -> DiscoveryStatePayload:
         logger.info("tool execution node")
+        mark_task_started(state, "run_deterministic_tools", reason=f"pass {state.iteration}")
         run_dir = _ensure_run_dir(state)
         initial_tool_count = len(state.tool_results)
 
@@ -262,6 +273,16 @@ class DiscoveryGraph:
         self._maybe_recommend_experiments(state, run_dir)
 
         executed_count = len(state.tool_results) - initial_tool_count
+        produced_artifacts = [
+            str(run_dir / "descriptors.csv"),
+            str(run_dir / "qed_plot.png"),
+        ]
+        mark_task_completed(
+            state,
+            "run_deterministic_tools",
+            reason=f"ran {executed_count} tool calls on pass {state.iteration}",
+            artifacts=[path for path in produced_artifacts if Path(path).exists()],
+        )
         self._write_memory(
             state,
             "tools_completed",
@@ -314,14 +335,17 @@ class DiscoveryGraph:
 
     def _critic_node(self, state: DiscoveryStatePayload) -> DiscoveryStatePayload:
         logger.info("critic node")
+        mark_task_started(state, "critique", reason=f"pass {state.iteration}")
         state = critic.run(state, config=self.config)
         decision = state.critic_decisions[-1] if state.critic_decisions else None
         reason = decision.reason if decision else "Critic completed without a recorded decision."
+        mark_task_completed(state, "critique", reason=reason, artifacts=["critic_decisions"])
         self._write_memory(state, "critic_completed", reason, node="critic")
         return state
 
     def _writer_node(self, state: DiscoveryStatePayload) -> DiscoveryStatePayload:
         logger.info("writer node")
+        mark_task_started(state, "write_reports", reason="writer node started")
         state = writer.run(state)
         run_dir = _ensure_run_dir(state)
         report_path = run_dir / "report.docx"
@@ -362,6 +386,27 @@ class DiscoveryGraph:
             "Wrote final report artifacts for the discovery run.",
             node="writer",
             extra_artifacts=artifacts,
+        )
+        index_path = run_dir / "artifact_index.json"
+        state.metadata["artifact_index_path"] = str(index_path)
+        mark_task_completed(
+            state,
+            "write_reports",
+            reason="report and artifact index written",
+            artifacts=[*artifacts, str(index_path)],
+        )
+        write_artifact_index(
+            run_dir=run_dir,
+            producer="discovery_graph",
+            artifacts=tool_result_artifacts(state.tool_results),
+            provenance=discovery_provenance(state),
+            metadata={
+                "candidate_count": len(state.candidate_molecules),
+                "tool_result_count": len(state.tool_results),
+                "critic_decision_count": len(state.critic_decisions),
+                "planner_task_graph": state.metadata.get("planner_task_graph"),
+                "planner_task_summary": task_graph_summary(state),
+            },
         )
         return state
 

@@ -14,7 +14,7 @@ from hackathon_agents.config import AppConfig, ModelConfig
 class CompletionRequest(BaseModel):
     model_alias: str | None = None
     messages: list[dict[str, str]]
-    temperature: float = 0.1
+    temperature: float | None = 0.1
     max_tokens: int = 1200
     retries: int = 1
     fallback_aliases: list[str] = Field(default_factory=list)
@@ -91,11 +91,12 @@ class LLMClient:
         kwargs: dict[str, Any] = {
             "model": model_config.litellm_model,
             "messages": request.messages,
-            "temperature": request.temperature,
             "max_tokens": request.max_tokens,
             "metadata": {"model_alias": alias, **request.metadata},
             "drop_params": True,
         }
+        if request.temperature is not None:
+            kwargs["temperature"] = request.temperature
         if model_config.api_base:
             kwargs["api_base"] = model_config.api_base
         if model_config.api_key:
@@ -144,11 +145,15 @@ class LLMClient:
                 error=previous_error or "Ollama host is not configured.",
             )
 
+        options: dict[str, Any] = {"num_predict": request.max_tokens}
+        if request.temperature is not None:
+            options["temperature"] = request.temperature
         payload = {
             "model": model_config.model,
             "messages": request.messages,
             "stream": False,
-            "options": {"temperature": request.temperature, "num_predict": request.max_tokens},
+            "think": False,
+            "options": options,
         }
         try:
             req = urllib.request.Request(
@@ -192,10 +197,11 @@ class LLMClient:
         payload = {
             "model": model_config.model,
             "messages": request.messages,
-            "temperature": request.temperature,
             "max_tokens": request.max_tokens,
             "stream": False,
         }
+        if request.temperature is not None:
+            payload["temperature"] = request.temperature
         headers = {"Content-Type": "application/json"}
         if model_config.api_key:
             headers["Authorization"] = f"Bearer {model_config.api_key}"
@@ -245,10 +251,11 @@ class LLMClient:
         payload = {
             "model": model_config.model.removeprefix("openrouter/"),
             "messages": request.messages,
-            "temperature": request.temperature,
             "max_tokens": request.max_tokens,
             "stream": False,
         }
+        if request.temperature is not None:
+            payload["temperature"] = request.temperature
         headers = _openrouter_headers(model_config, api_key)
         try:
             req = urllib.request.Request(

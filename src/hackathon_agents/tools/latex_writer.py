@@ -5,6 +5,7 @@ from typing import Any
 
 from pydantic import BaseModel, Field
 
+from hackathon_agents.llm.validators import validate_latex_output
 from hackathon_agents.tools.base import error_result, ok_result
 
 
@@ -25,10 +26,22 @@ def write_latex_report(input_data: LatexReportInput | dict[str, Any]):
     try:
         output = Path(parsed.output_path)
         output.parent.mkdir(parents=True, exist_ok=True)
-        output.write_text(_render_latex(parsed), encoding="utf-8")
+        rendered = _render_latex(parsed)
+        validation = validate_latex_output(rendered)
+        validation_data = {
+            "ok": validation.ok,
+            "errors": validation.errors,
+            "warnings": validation.warnings or [],
+        }
+        if not validation.ok:
+            return error_result(
+                "LaTeX validation failed: " + "; ".join(validation.errors),
+                {"output_path": parsed.output_path, "latex_validation": validation_data},
+            )
+        output.write_text(validation.normalized, encoding="utf-8")
 
         artifacts = [str(output)]
-        data: dict[str, Any] = {"path": str(output)}
+        data: dict[str, Any] = {"path": str(output), "latex_validation": validation_data}
         if parsed.bibliography_path:
             bibliography = Path(parsed.bibliography_path)
             bibliography.parent.mkdir(parents=True, exist_ok=True)

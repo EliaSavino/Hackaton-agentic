@@ -8,6 +8,7 @@ from hackathon_agents.agents.model_helpers import call_agent_model
 from hackathon_agents.config import AppConfig
 from hackathon_agents.schemas.tasks import CriticDecision
 from hackathon_agents.state import DiscoveryStatePayload
+from hackathon_agents.tools.registry import build_tool_registry, summarize_tool_registry
 
 
 class CriticReviewResponse(BaseModel):
@@ -19,6 +20,7 @@ class CriticReviewResponse(BaseModel):
 
 
 def run(state: DiscoveryStatePayload, config: AppConfig | None = None) -> DiscoveryStatePayload:
+    tool_registry = build_tool_registry(config) if config is not None else []
     scored = []
     for molecule in state.candidate_molecules:
         descriptors = molecule.descriptors
@@ -81,6 +83,8 @@ def run(state: DiscoveryStatePayload, config: AppConfig | None = None) -> Discov
             "iteration": state.iteration,
             "max_iterations": state.max_iterations,
             "deterministic_decision": decision.model_dump(mode="json"),
+            "tool_registry_summary": summarize_tool_registry(tool_registry),
+            "tool_registry": tool_registry,
             "candidate_summary": [
                 {
                     "name": molecule.name,
@@ -99,6 +103,8 @@ def run(state: DiscoveryStatePayload, config: AppConfig | None = None) -> Discov
             ][-10:],
             "instructions": [
                 "Check plausibility, uncertainty, missing controls, tool failures, and overclaiming.",
+                "Use tool_registry to distinguish disabled tools from failed tools.",
+                "Do not recommend real execution for medium/high risk tools unless the registry says real_execution_allowed.",
                 "Recommend another pass only when a bounded next action can improve the result.",
                 "Do not ask for another pass when max_iterations has been reached.",
             ],

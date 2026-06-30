@@ -26,6 +26,8 @@ class LatexWriterTests(unittest.TestCase):
             )
 
             self.assertTrue(result.ok)
+            self.assertEqual(result.data["latex_validation"]["errors"], [])
+            self.assertTrue(result.data["latex_validation"]["ok"])
             self.assertTrue(output.exists())
             text = output.read_text(encoding="utf-8")
             self.assertIn(r"A\_B \& yield at 10\%", text)
@@ -45,6 +47,7 @@ class LatexWriterTests(unittest.TestCase):
             )
 
             self.assertTrue(result.ok)
+            self.assertTrue(result.data["latex_validation"]["ok"])
             self.assertTrue(bibliography.exists())
             self.assertIn(str(bibliography), result.artifacts)
 
