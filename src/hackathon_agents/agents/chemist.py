@@ -73,14 +73,20 @@ def run(state: DiscoveryStatePayload, config: AppConfig | None = None) -> Discov
         saturn_added = _maybe_generate_with_saturn(state)
         if saturn_added:
             state.append_message(f"chemist: seeded {saturn_added} candidates with Saturn")
-        else:
+        reinvent_added = _maybe_generate_with_reinvent(state)
+        if reinvent_added:
+            state.append_message(f"chemist: seeded {reinvent_added} candidates with REINVENT4")
+        if not saturn_added and not reinvent_added:
             state.candidate_molecules = [candidate.model_copy(deep=True) for candidate in EXAMPLE_MOLECULES]
             state.append_message("chemist: loaded hardcoded example molecules")
     elif state.requested_next_actions:
         saturn_added = _maybe_generate_with_saturn(state)
         if saturn_added:
             state.append_message(f"chemist: refined and generated {saturn_added} candidates using Saturn warm start")
-        else:
+        reinvent_added = _maybe_generate_with_reinvent(state)
+        if reinvent_added:
+            state.append_message(f"chemist: generated {reinvent_added} candidates with REINVENT4")
+        if not saturn_added and not reinvent_added:
             added = _add_refinement_candidates(state)
             state.append_message(
                 f"chemist: added {added} refinement candidates for actions {state.requested_next_actions}"
@@ -213,3 +219,47 @@ def _maybe_generate_with_saturn(state: DiscoveryStatePayload) -> int:
     if result.data.get("mock"):
         state.append_message("chemist: Saturn ran in mock mode (Saturn not installed or run disabled)")
     return len(molecules)
+
+
+def _maybe_generate_with_reinvent(state: DiscoveryStatePayload) -> int:
+    """Optionally add candidates via the REINVENT4 generative tool.
+
+    The chemist (or planner) opts in by setting ``state.metadata["reinvent"]`` to
+    a dict of REINVENT settings (generator_type, prior, run_type, scoring, ...).
+    Without that key the chemist keeps its default behavior. The REINVENT tool
+    falls back to a mock generator when REINVENT is not installed, so this is
+    always safe to call. Unlike the Saturn hook, this is *additive*: generated
+    molecules are appended to any existing candidates (deduplicated by SMILES),
+    so REINVENT composes with Saturn rather than replacing its output.
+    """
+
+    settings = state.metadata.get("reinvent")
+    if not settings:
+        return 0
+
+    # Imported lazily so the agent has no hard dependency on the tool module.
+    from hackathon_agents.tools.reinvent_tools import generate_with_reinvent, reinvent_records
+
+    reinvent_input: dict[str, Any] = dict(settings)
+    reinvent_input.setdefault("objective", state.original_user_request)
+    if "work_dir" not in reinvent_input:
+        run_dir = Path(state.run_dir) if state.run_dir else Path("runs") / "adhoc"
+        reinvent_input["work_dir"] = str(run_dir / "reinvent")
+
+    result = generate_with_reinvent(reinvent_input)
+    state.add_tool_result("reinvent.generate", result)
+    if not result.ok:
+        return 0
+
+    molecules = reinvent_records(result.data)
+    existing_smiles = {mol.smiles for mol in state.candidate_molecules}
+    added = 0
+    for molecule in molecules:
+        if molecule.smiles in existing_smiles:
+            continue
+        state.candidate_molecules.append(molecule)
+        existing_smiles.add(molecule.smiles)
+        added += 1
+    if result.data.get("mock"):
+        state.append_message("chemist: REINVENT ran in mock mode (REINVENT not installed or run disabled)")
+    return added

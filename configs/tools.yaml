@@ -117,6 +117,36 @@ tools:
     env_setup: ${SATURN_ENV_ACTIVATE:-}
     enabled_modes: [full, cheap]
 
+  reinvent:
+    # Generative molecular design via MolecularAI/REINVENT4.
+    # Disabled by default: REINVENT4 is a heavy, GPU-oriented framework installed
+    # into its own Python env (exposes a `reinvent` console script) and cannot be
+    # imported in-process. When disabled or unconfigured, the tool returns a
+    # deterministic mock set. Supports de novo sampling (also LibInvent /
+    # LinkInvent / Mol2Mol via prior + input SMILES) and staged_learning (RL).
+    enabled: ${REINVENT_ENABLED:-false}
+    reinvent_executable: ${REINVENT_EXECUTABLE:-reinvent}
+    reinvent_python: ${REINVENT_PYTHON:-python}
+    prior_base: ${REINVENT_PRIOR_BASE:-}
+    run_type: ${REINVENT_RUN_TYPE:-sampling}
+    device: ${REINVENT_DEVICE:-cpu}
+    timeout_seconds: ${REINVENT_TIMEOUT_SECONDS:-1800}
+    allow_run: false
+    # HPC (Snellius) remote submission. run_mode=slurm_remote stages the config
+    # over SSH, submits with sbatch, waits, and downloads the SMILES CSVs. A real
+    # submission requires allow_submit=true AND HPC_HOST/HPC_USER set; otherwise
+    # the tool only writes the config + SLURM script (dry run) and returns mocks.
+    run_mode: ${REINVENT_RUN_MODE:-local}
+    allow_submit: ${REINVENT_ALLOW_SUBMIT:-false}
+    partition: ${SLURM_PARTITION:-gpu_a100}
+    gpus_per_node: ${SLURM_GPUS:-1}
+    time_limit: ${SLURM_TIME:-02:00:00}
+    poll_interval_seconds: ${HPC_POLL_INTERVAL:-30}
+    remote_reinvent_executable: ${REINVENT_REMOTE_EXECUTABLE:-reinvent}
+    remote_prior_base: ${REINVENT_REMOTE_PRIOR_BASE:-}
+    env_setup: ${REINVENT_ENV_ACTIVATE:-}
+    enabled_modes: [full, cheap]
+
   boltz_2:
     # Co-folding, structural docking, and binding affinity via Boltz-2.
     # Disabled by default: Boltz-2 is a heavy deep-learning model (GPU recommended).

@@ -115,6 +115,19 @@ _TOOL_DESCRIPTIONS: dict[str, dict[str, Any]] = {
         "failure_modes": ["missing Saturn checkout", "timeout", "invalid Saturn config"],
         "mock_behavior": "Returns deterministic molecule candidates when disabled or run=false.",
     },
+    "reinvent": {
+        "category": "molecule_generation",
+        "summary": "Generate molecules with REINVENT4 (de novo/LibInvent/LinkInvent/Mol2Mol sampling and staged_learning RL) or deterministic mock output.",
+        "inputs": ["objective", "generator_type + prior", "input SMILES (scaffolds/warheads)", "sampling or RL/scoring settings"],
+        "outputs": ["reinvent_config.json", "generated molecule records"],
+        "failure_modes": ["missing REINVENT install", "missing prior_base", "timeout", "invalid REINVENT config"],
+        "planner_notes": [
+            "Prefer REINVENT for de novo sampling, scaffold decoration (LibInvent), and linker design (LinkInvent).",
+            "Use Saturn instead for sample-efficient goal-directed RL with a custom oracle.",
+            "Set state.metadata['reinvent'] with ReinventInput fields to opt in.",
+        ],
+        "mock_behavior": "Returns deterministic molecule candidates when disabled or run=false.",
+    },
     "xtb": {
         "category": "quantum_chemistry",
         "summary": "Check or run xTB calculations when enabled.",
@@ -243,7 +256,7 @@ def _external_side_effects(name: str, tool: ToolConfig) -> list[str]:
         effects.append("writes local files")
     if tool.executable:
         effects.append("may invoke local executable")
-    if name in {"xtb", "orca", "saturn", "boltz_2"}:
+    if name in {"xtb", "orca", "saturn", "boltz_2", "reinvent"}:
         effects.append("may run long scientific compute")
     if name in {"snellius_vllm"} or tool.model_extra.get("allow_submit"):
         effects.append("may submit or prepare HPC jobs")
@@ -255,7 +268,7 @@ def _external_side_effects(name: str, tool: ToolConfig) -> list[str]:
 def _execution_risk(name: str, tool: ToolConfig, real_execution_allowed: bool) -> str:
     if name in {"python_exec", "snellius_vllm"} or tool.model_extra.get("allow_submit"):
         return "high"
-    if name in {"xtb", "orca", "saturn", "boltz_2"} and real_execution_allowed:
+    if name in {"xtb", "orca", "saturn", "boltz_2", "reinvent"} and real_execution_allowed:
         return "medium"
     if tool.executable:
         return "medium"
