@@ -15,6 +15,7 @@ Start with:
 - [Agents](docs/agents.md)
 - [Graph And Iteration](docs/graph-iteration.md)
 - [Tools](docs/tools.md)
+- [ADC Linker Workflow](docs/adc-linker-workflow.md)
 - [Function Guide](docs/function-guide.md)
 - [Paper Review](docs/paper-review.md)
 - [Testing](docs/testing.md)

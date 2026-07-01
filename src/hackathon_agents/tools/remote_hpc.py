@@ -193,6 +193,27 @@ class RemoteHPCClient:
         self.config = config
         self._client: Any = None
         self._sftp: Any = None
+        self._home: str | None = None
+
+    # -- path resolution -------------------------------------------------- #
+    def resolve_home(self) -> str:
+        """Return the absolute remote ``$HOME`` (cached)."""
+        if self._home is None:
+            code, out, _ = self.run("echo $HOME")
+            self._home = out.strip() if code == 0 and out.strip() else "."
+        return self._home
+
+    def resolve_path(self, path: str) -> str:
+        """Expand a leading ``~`` to the absolute remote home.
+
+        SFTP (and Python ``open`` in remote jobs) does not expand ``~``, so any
+        remote path handed to SFTP or embedded in a config must be absolute.
+        """
+        if path == "~":
+            return self.resolve_home()
+        if path.startswith("~/"):
+            return posixpath.join(self.resolve_home(), path[2:])
+        return path
 
     # -- lifecycle -------------------------------------------------------- #
     def connect(self) -> "RemoteHPCClient":
@@ -215,7 +236,11 @@ class RemoteHPCClient:
             connect_kwargs["key_filename"] = os.path.expanduser(self.config.key_path)
         if self.config.password:
             connect_kwargs["password"] = self.config.password
-            connect_kwargs["look_for_keys"] = False
+            # Force password auth when no explicit key is configured, so we do
+            # not silently fall through to an SSH agent / discovered key.
+            if not self.config.key_path:
+                connect_kwargs["look_for_keys"] = False
+                connect_kwargs["allow_agent"] = False
         client.connect(**connect_kwargs)
         self._client = client
         self._sftp = client.open_sftp()
@@ -251,6 +276,7 @@ class RemoteHPCClient:
         return code, out, err
 
     def makedirs(self, remote_dir: str) -> None:
+        remote_dir = self.resolve_path(remote_dir)
         code, _, err = self.run(f"mkdir -p {_shquote(remote_dir)}")
         if code != 0:
             raise RuntimeError(f"Failed to create remote dir {remote_dir}: {err.strip()}")
@@ -258,16 +284,17 @@ class RemoteHPCClient:
     def upload(self, local_path: str | Path, remote_path: str) -> None:
         if self._sftp is None:
             self.connect()
-        self._sftp.put(str(local_path), remote_path)
+        self._sftp.put(str(local_path), self.resolve_path(remote_path))
 
     def download(self, remote_path: str, local_path: str | Path) -> None:
         if self._sftp is None:
             self.connect()
         Path(local_path).parent.mkdir(parents=True, exist_ok=True)
-        self._sftp.get(remote_path, str(local_path))
+        self._sftp.get(self.resolve_path(remote_path), str(local_path))
 
     def list_files(self, remote_dir: str) -> list[str]:
         """List all files under ``remote_dir`` as paths relative to it."""
+        remote_dir = self.resolve_path(remote_dir)
         code, out, _ = self.run(f"cd {_shquote(remote_dir)} && find . -type f")
         if code != 0:
             return []
@@ -307,7 +334,7 @@ class RemoteHPCClient:
     def submit(self, remote_script_path: str, remote_job_dir: str) -> str:
         """Submit a script with sbatch (from its job dir) and return the job id."""
         command = (
-            f"cd {_shquote(remote_job_dir)} && "
+            f"cd {_shquote(self.resolve_path(remote_job_dir))} && "
             f"{self.config.submit_command} {_shquote(posixpath.basename(remote_script_path))}"
         )
         code, out, err = self.run(command)

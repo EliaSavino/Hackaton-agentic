@@ -36,6 +36,7 @@ from __future__ import annotations
 import os
 import shutil
 import subprocess
+import time
 from pathlib import Path
 from typing import Any, Literal
 
@@ -389,8 +390,36 @@ def _write_smiles_file(parsed: ReinventInput, work_dir: Path) -> Path | None:
     return smiles_path
 
 
+def _stage_reinvent_job(parsed: ReinventInput, work_dir: Path, remote_job_dir: str, *, account, qos):
+    """Write the config JSON (with ``remote_job_dir`` paths), warhead .smi, and
+    SLURM script locally; return (config_path, script_path, input_files)."""
+
+    config = build_reinvent_config(parsed, remote_base=remote_job_dir)
+    config_path = work_dir / parsed.config_filename
+    write_result = write_json(config_path, config)
+    if not write_result.ok:
+        raise RuntimeError(f"Failed to write REINVENT config: {write_result.error}")
+
+    input_files: list[tuple[str | Path, str]] = [(config_path, parsed.config_filename)]
+    if parsed.generator_type in _NEEDS_SMILES_INPUT and parsed.input_smiles:
+        smiles_path = work_dir / "reinvent_inputs.smi"
+        smiles_path.write_text("\n".join(parsed.input_smiles) + "\n", encoding="utf-8")
+        input_files.append((smiles_path, "reinvent_inputs.smi"))
+
+    remote_config_path = f"{remote_job_dir}/{parsed.config_filename}"
+    script_path = work_dir / "reinvent_job.slurm"
+    script_path.write_text(
+        render_reinvent_slurm_script(parsed, remote_config_path, account=account, qos=qos),
+        encoding="utf-8",
+    )
+    input_files.append((script_path, "reinvent_job.slurm"))
+    return config_path, script_path, input_files
+
+
 def _generate_with_reinvent_remote(parsed: ReinventInput):
     """Stage a REINVENT config + script on the cluster, submit, wait, and parse."""
+    import posixpath
+
     from hackathon_agents.tools.remote_hpc import (
         RemoteHPCClient,
         RemoteHPCConfig,
@@ -403,36 +432,14 @@ def _generate_with_reinvent_remote(parsed: ReinventInput):
     work_dir.mkdir(parents=True, exist_ok=True)
     remote_cfg = RemoteHPCConfig.from_env()
 
-    remote_job_dir = make_remote_job_dir(remote_cfg, "reinvent", f"reinvent-{parsed.seed}")
-    config = build_reinvent_config(parsed, remote_base=remote_job_dir)
-    config_path = work_dir / parsed.config_filename
-    write_result = write_json(config_path, config)
-    if not write_result.ok:
-        return error_result(f"Failed to write REINVENT config: {write_result.error}")
-
-    # Input SMILES file (if any) must be staged too.
-    input_files: list[tuple[str | Path, str]] = [(config_path, parsed.config_filename)]
-    if parsed.generator_type in _NEEDS_SMILES_INPUT and parsed.input_smiles:
-        smiles_path = work_dir / "reinvent_inputs.smi"
-        smiles_path.write_text("\n".join(parsed.input_smiles) + "\n", encoding="utf-8")
-        input_files.append((smiles_path, "reinvent_inputs.smi"))
-
-    remote_config_path = f"{remote_job_dir}/{parsed.config_filename}"
-    script_path = work_dir / "reinvent_job.slurm"
-    script_path.write_text(
-        render_reinvent_slurm_script(
-            parsed,
-            remote_config_path,
-            account=remote_cfg.account,
-            qos=remote_cfg.qos,
-        ),
-        encoding="utf-8",
-    )
-    input_files.append((script_path, "reinvent_job.slurm"))
-
-    # Safe default: only write artifacts unless submission is explicitly enabled
-    # and credentials are present.
+    # Safe default: only submit when explicitly enabled and credentials present.
+    # The dry run does not connect, so it keeps ``~`` (the shell expands it in the
+    # SLURM script); no SFTP happens.
     if not parsed.allow_submit or not remote_cfg.is_configured:
+        remote_job_dir = make_remote_job_dir(remote_cfg, "reinvent", f"reinvent-{parsed.seed}")
+        config_path, script_path, _ = _stage_reinvent_job(
+            parsed, work_dir, remote_job_dir, account=remote_cfg.account, qos=remote_cfg.qos
+        )
         molecules = _mock_molecules(parsed, reason="remote_dry_run")
         result = _build_success(parsed, molecules, config_path, mock=True)
         result.artifacts.append(str(script_path))
@@ -444,17 +451,28 @@ def _generate_with_reinvent_remote(parsed: ReinventInput):
         }
         return result
 
-    spec = RemoteJobSpec(
-        tool="reinvent",
-        job_name=f"reinvent-{parsed.seed}",
-        input_files=input_files,
-        script_name="reinvent_job.slurm",
-        output_patterns=["*.csv", f"{parsed.summary_csv_prefix}*", "tb_logs/**", "*.chkpt", "sampling.csv"],
-        local_output_dir=work_dir,
-        remote_job_dir=remote_job_dir,
-    )
+    # Real submission: connect first so we can resolve ``~`` to the absolute
+    # cluster $HOME. The job dir must be absolute because it is embedded in the
+    # config (SFTP and REINVENT's Python file I/O do not expand ``~``).
     try:
         with RemoteHPCClient(remote_cfg) as client:
+            base = client.resolve_path(remote_cfg.base_dir)
+            stamp = time.strftime("%Y%m%d_%H%M%S")
+            remote_job_dir = posixpath.join(
+                base, "hackathon_agents", "reinvent", f"reinvent-{parsed.seed}_{stamp}_{os.getpid()}"
+            )
+            config_path, script_path, input_files = _stage_reinvent_job(
+                parsed, work_dir, remote_job_dir, account=remote_cfg.account, qos=remote_cfg.qos
+            )
+            spec = RemoteJobSpec(
+                tool="reinvent",
+                job_name=f"reinvent-{parsed.seed}",
+                input_files=input_files,
+                script_name="reinvent_job.slurm",
+                output_patterns=["*.csv", f"{parsed.summary_csv_prefix}*", "tb_logs/**", "*.chkpt", "sampling.csv"],
+                local_output_dir=work_dir,
+                remote_job_dir=remote_job_dir,
+            )
             run = submit_and_wait(
                 client,
                 spec,
@@ -462,7 +480,7 @@ def _generate_with_reinvent_remote(parsed: ReinventInput):
                 poll_interval=parsed.poll_interval_seconds,
             )
     except Exception as exc:
-        return error_result(f"Remote REINVENT submission failed: {exc}", {"script_path": str(script_path)})
+        return error_result(f"Remote REINVENT submission failed: {exc}", {"work_dir": str(work_dir)})
 
     if run.state != "completed":
         return error_result(

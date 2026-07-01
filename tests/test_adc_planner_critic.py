@@ -67,6 +67,22 @@ class ADCCompositeScoringTests(unittest.TestCase):
         self.assertIsNone(composite)
         self.assertEqual(sub, {})
 
+    def test_nested_rdkit_descriptors_survive_state_round_trip(self) -> None:
+        # Regression: rdkit compute_descriptors emits nested values
+        # (element_counts dict, elements list, reactive_alert_hits dict). The
+        # LangGraph node round-trip (model_dump -> model_validate) must not reject
+        # them, so MoleculeRecord.descriptors stays permissive.
+        from hackathon_agents.tools.rdkit_tools import compute_descriptors
+
+        desc = compute_descriptors("O=C(O)c1ccccc1")
+        self.assertTrue(desc.ok)
+        self.assertIsInstance(desc.data.get("element_counts"), dict)
+        record = MoleculeRecord(smiles="O=C(O)c1ccccc1", descriptors=desc.data)
+        state = DiscoveryStatePayload(original_user_request="x", candidate_molecules=[record])
+        restored = DiscoveryStatePayload.model_validate(state.model_dump(mode="json"))
+        self.assertEqual(len(restored.candidate_molecules), 1)
+        self.assertEqual(restored.candidate_molecules[0].descriptors["element_counts"], desc.data["element_counts"])
+
     def test_critic_scores_candidates_with_adc_objective(self) -> None:
         state = DiscoveryStatePayload(
             original_user_request="Design an ADC linker",

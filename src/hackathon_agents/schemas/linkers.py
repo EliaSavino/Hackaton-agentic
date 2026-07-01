@@ -115,7 +115,10 @@ class LinkerCandidate(BaseModel):
     assumptions: list[str] = Field(default_factory=list)
     risks: list[str] = Field(default_factory=list)
     reference_control: bool = False
-    descriptors: dict[str, float | int | str | bool | None] = Field(default_factory=dict)
+    # Permissive like MoleculeRecord.descriptors: RDKit descriptors carry nested
+    # values (element_counts, elements, reactive_alert_hits) that must survive
+    # model_dump/model_validate round-trips.
+    descriptors: dict[str, Any] = Field(default_factory=dict)
     proof_points: list[LinkerProofPoint] = Field(default_factory=list)
     scorecard: LinkerScorecard | None = None
     metadata: dict[str, Any] = Field(default_factory=dict)
