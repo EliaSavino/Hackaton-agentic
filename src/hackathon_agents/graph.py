@@ -462,7 +462,32 @@ class DiscoveryGraph:
             state.add_tool_result("latex_writer.write_latex_report", latex_result)
             if latex_result.ok:
                 state.metadata["latex_report_path"] = latex_result.data.get("path")
-        artifacts = [path for path in [state.final_report_path, state.metadata.get("latex_report_path")] if path]
+        if self.config.tool_enabled("paper_writer") and state.metadata.get("adc_goal_profile") is not None:
+            from hackathon_agents.tools.paper_writer import write_adc_paper
+
+            reinvent_meta = state.metadata.get("reinvent") or {}
+            paper_result = write_adc_paper(
+                {
+                    "output_path": str(run_dir / "adc_paper.tex"),
+                    "user_request": state.original_user_request,
+                    "goal_profile": state.metadata.get("adc_goal_profile"),
+                    "candidates": [molecule.model_dump(mode="json") for molecule in state.candidate_molecules],
+                    "decision_trail": state.metadata.get("adc_decision_trail", []),
+                    "warhead_pair": (reinvent_meta.get("input_smiles") or [None])[0],
+                }
+            )
+            state.add_tool_result("paper_writer.write_adc_paper", paper_result)
+            if paper_result.ok:
+                state.metadata["adc_paper_path"] = paper_result.data.get("path")
+        artifacts = [
+            path
+            for path in [
+                state.final_report_path,
+                state.metadata.get("latex_report_path"),
+                state.metadata.get("adc_paper_path"),
+            ]
+            if path
+        ]
         self._write_memory(
             state,
             "writer_completed",

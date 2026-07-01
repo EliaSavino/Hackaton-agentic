@@ -19,6 +19,11 @@ tools:
   latex_writer:
     enabled: true
 
+  paper_writer:
+    # ~5-page publication-style LaTeX paper for the ADC linker workflow. Only
+    # runs when an ADC goal profile is active in state.
+    enabled: true
+
   memory_writer:
     enabled: true
     jsonl_path: "${PROJECT_MEMORY_JSONL:-data/memory/project_memory.jsonl}"

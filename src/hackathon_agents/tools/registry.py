@@ -57,6 +57,14 @@ _TOOL_DESCRIPTIONS: dict[str, dict[str, Any]] = {
         "outputs": ["report.tex"],
         "failure_modes": ["unwritable output path"],
     },
+    "paper_writer": {
+        "category": "reporting",
+        "summary": "Write a ~5-page publication-style LaTeX paper for the ADC linker-design workflow.",
+        "inputs": ["user request", "goal profile", "linker candidates", "autonomous decision trail", "reference corpus"],
+        "outputs": ["adc_paper.tex", "candidate score figure"],
+        "failure_modes": ["unwritable output path", "LaTeX validation failure"],
+        "planner_notes": ["Runs only when an ADC goal profile is active."],
+    },
     "paper_review": {
         "category": "literature_review",
         "summary": "Extract sections, claims, limitations, and reproducibility notes from papers.",

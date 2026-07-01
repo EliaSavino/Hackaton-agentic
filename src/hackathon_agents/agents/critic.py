@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from statistics import mean
+from typing import Any
 
 from pydantic import BaseModel, Field
 
@@ -17,12 +18,23 @@ class CriticReviewResponse(BaseModel):
     recommended_next_actions: list[str] = Field(default_factory=list)
     should_continue: bool | None = None
     reason: str | None = None
+    # Autonomous steering of the ADC linker objective (Phase 3). A partial dict
+    # of ADCGoalProfile fields — e.g. {"weights": {"solubility": 0.6}, ...}. The
+    # critic reweights components / toggles constraints; warheads and compute
+    # budget are NOT part of this action space and are ignored if present.
+    goal_profile_overrides: dict[str, Any] | None = None
 
 
 def run(state: DiscoveryStatePayload, config: AppConfig | None = None) -> DiscoveryStatePayload:
     tool_registry = build_tool_registry(config) if config is not None else []
+    adc_profile = state.metadata.get("adc_goal_profile")
     scored = []
     for molecule in state.candidate_molecules:
+        if adc_profile is not None:
+            molecule.score = _score_adc_candidate(molecule, adc_profile)
+            scored.append(molecule)
+            continue
+
         descriptors = molecule.descriptors
         qed = _float_or_none(descriptors.get("qed"))
         logp = _float_or_none(descriptors.get("logp"))
@@ -122,6 +134,24 @@ def run(state: DiscoveryStatePayload, config: AppConfig | None = None) -> Discov
     state.append_message("critic: ranked candidates with a simple descriptor heuristic")
     state.append_message(f"critic: {current_decision.reason}")
     return state
+
+
+def _score_adc_candidate(molecule, adc_profile) -> float | None:
+    """Score a linker candidate with the ADC composite objective.
+
+    Stores the per-goal subscores on the molecule's ``descriptors`` so they are
+    visible in the report and the decision trail. Returns the composite (or
+    ``None`` for an unscoreable SMILES).
+    """
+
+    from hackathon_agents.tools.adc_linker_objective import score_adc_linker
+
+    composite, subscores = score_adc_linker(molecule.smiles, adc_profile)
+    for key, value in subscores.items():
+        molecule.descriptors[f"adc_{key}"] = value
+    if composite is not None:
+        molecule.descriptors["adc_composite"] = composite
+    return composite
 
 
 def _float_or_none(value: object) -> float | None:
@@ -225,6 +255,25 @@ def _merge_model_review(state: DiscoveryStatePayload, review: CriticReviewRespon
     if hard_stop:
         return
 
+    # Autonomy: apply the critic's edits to the ADC goal profile, re-render the
+    # REINVENT scoring function, and request another pass to try it.
+    if state.metadata.get("adc_goal_profile") is not None and review.goal_profile_overrides:
+        if _apply_goal_profile_overrides(state, review.goal_profile_overrides, review.reason):
+            actions = [action for action in review.recommended_next_actions if action]
+            state.needs_more_passes = True
+            state.stop_reason = None
+            state.requested_next_actions = _dedupe(
+                [*state.requested_next_actions, *actions] or ["regenerate_with_updated_objective"]
+            )
+            reason = review.reason or "Model critic reweighted the ADC objective and requested another pass."
+            if state.critic_decisions:
+                state.critic_decisions[-1].needs_more_passes = True
+                state.critic_decisions[-1].reason = reason
+                state.critic_decisions[-1].requested_next_actions = state.requested_next_actions
+                state.critic_decisions[-1].stop_reason = None
+            state.append_message(f"critic: reweighted ADC objective and requested another pass: {reason}")
+            return
+
     actions = [action for action in review.recommended_next_actions if action]
     if state.needs_more_passes:
         state.requested_next_actions = _dedupe([*state.requested_next_actions, *actions])
@@ -243,6 +292,74 @@ def _merge_model_review(state: DiscoveryStatePayload, review: CriticReviewRespon
             state.critic_decisions[-1].requested_next_actions = state.requested_next_actions
             state.critic_decisions[-1].stop_reason = None
         state.append_message(f"critic: model review requested another pass: {reason}")
+
+
+def _apply_goal_profile_overrides(
+    state: DiscoveryStatePayload,
+    overrides: dict[str, Any],
+    rationale: str | None,
+) -> bool:
+    """Validate + apply the critic's ADC goal-profile edits, re-render scoring.
+
+    Weights are merged (partial edits keep unspecified dimensions), everything is
+    clamped by ``ADCGoalProfile`` validation, and unknown/forbidden keys (e.g.
+    warhead or budget fields) are dropped. Records a decision-trail entry for the
+    paper. Returns ``True`` when an edit was applied.
+    """
+
+    from hackathon_agents.schemas.linkers import ADCGoalProfile
+    from hackathon_agents.tools.adc_linker_objective import build_adc_linkinvent_objective
+
+    try:
+        current = ADCGoalProfile.model_validate(state.metadata["adc_goal_profile"])
+    except Exception:
+        return False
+
+    allowed = set(ADCGoalProfile.model_fields)
+    merged = current.model_dump()
+    changed = False
+    for key, value in overrides.items():
+        if key not in allowed:
+            continue  # ignore warheads/budget/unknown keys
+        if key == "weights" and isinstance(value, dict):
+            new_weights = {**merged["weights"], **{k: v for k, v in value.items()}}
+            if new_weights != merged["weights"]:
+                merged["weights"] = new_weights
+                changed = True
+        elif merged.get(key) != value:
+            merged[key] = value
+            changed = True
+
+    if not changed:
+        return False
+
+    try:
+        new_profile = ADCGoalProfile.model_validate(merged)
+    except Exception:
+        return False
+
+    weights_before = dict(current.weights)
+    state.metadata["adc_goal_profile"] = new_profile.model_dump(mode="json")
+
+    # Re-render the REINVENT scoring function, preserving execution settings
+    # (run/device/budget) already present in state.metadata["reinvent"].
+    reinvent = state.metadata.get("reinvent")
+    if isinstance(reinvent, dict):
+        rebuilt = build_adc_linkinvent_objective(new_profile, run=bool(reinvent.get("run", False)))
+        reinvent["scoring"] = rebuilt["scoring"]
+        reinvent["scoring_aggregator"] = rebuilt["scoring_aggregator"]
+
+    trail = state.metadata.setdefault("adc_decision_trail", [])
+    trail.append(
+        {
+            "iteration": state.iteration,
+            "overrides": {k: v for k, v in overrides.items() if k in allowed},
+            "rationale": rationale,
+            "weights_before": weights_before,
+            "weights_after": dict(new_profile.weights),
+        }
+    )
+    return True
 
 
 def _dedupe(values: list[str]) -> list[str]:
