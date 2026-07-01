@@ -94,6 +94,31 @@ def _run_prompt_terminal(
         history.extend([{"role": "user", "content": prompt}, {"role": "assistant", "content": result.content}])
 
 
+def _hpc_check() -> int:
+    """Verify SSH connectivity + SLURM availability on the configured cluster."""
+    from hackathon_agents.tools.remote_hpc import RemoteHPCClient, RemoteHPCConfig
+
+    cfg = RemoteHPCConfig.from_env()
+    if not cfg.is_configured:
+        print("HPC not configured: set HPC_HOST and HPC_USER in your .env (see .env.example).")
+        return 1
+    print(f"Connecting to {cfg.user}@{cfg.host}:{cfg.port} ...")
+    try:
+        with RemoteHPCClient(cfg) as client:
+            code, out, err = client.run(
+                "hostname && (squeue --version 2>/dev/null || sbatch --version)"
+            )
+    except Exception as exc:  # noqa: BLE001 - surface any connection error to the user
+        print(f"Connection or command failed: {exc}")
+        return 1
+    print(out.strip() or "(no output)")
+    if err.strip():
+        print(f"stderr: {err.strip()}")
+    print(f"Job staging base: {cfg.base_dir}/hackathon_agents/<tool>/")
+    print(f"Partition: {cfg.partition}   Account: {cfg.account or '(none set — set SLURM_ACCOUNT)'}")
+    return 0 if code == 0 else code
+
+
 try:
     import typer
 
@@ -410,6 +435,11 @@ try:
             status = "available" if availability.available else "unavailable"
             typer.echo(f"{alias}: {status} ({availability.reason})")
 
+    @app.command("hpc-check")
+    def hpc_check_command() -> None:
+        """Verify SSH + SLURM connectivity to the configured HPC cluster (Snellius)."""
+        raise typer.Exit(_hpc_check())
+
     @app.command("snellius-vllm-script")
     def snellius_vllm_script_command(
         model_checkpoint: str = typer.Option(..., "--model-checkpoint"),
@@ -559,6 +589,8 @@ except Exception:
         check_parser = subparsers.add_parser("check-models")
         check_parser.add_argument("--run-mode", default=RunMode.CHEAP.value)
         check_parser.add_argument("--config-dir", default="configs")
+
+        subparsers.add_parser("hpc-check")
 
         snellius_parser = subparsers.add_parser("snellius-vllm-script")
         snellius_parser.add_argument("--model-checkpoint", required=True)
@@ -714,6 +746,8 @@ except Exception:
             for alias, availability in router.check_model_availability().items():
                 status = "available" if availability.available else "unavailable"
                 print(f"{alias}: {status} ({availability.reason})")
+        elif args.command == "hpc-check":
+            raise SystemExit(_hpc_check())
         elif args.command == "snellius-vllm-script":
             result = generate_snellius_vllm_job(
                 {

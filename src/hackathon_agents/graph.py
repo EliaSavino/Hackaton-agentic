@@ -142,11 +142,36 @@ class DiscoveryGraph:
 
         if "saturn" not in state.metadata:
             return
-        if self.config.tool_enabled("saturn"):
+        if not self.config.tool_enabled("saturn"):
+            state.metadata.pop("saturn", None)
+            state.metadata["saturn_source"] = "disabled_by_config"
+            state.append_message("graph: Saturn disabled for this run mode; using seed molecules")
             return
-        state.metadata.pop("saturn", None)
-        state.metadata["saturn_source"] = "disabled_by_config"
-        state.append_message("graph: Saturn disabled for this run mode; using seed molecules")
+
+        # Saturn is enabled: inject config-derived HPC settings so the chemist can
+        # run it as a remote SLURM job on Snellius when configured. Values already
+        # present in state.metadata["saturn"] (e.g. set by the planner) win.
+        saturn_tool = self.config.tools.get("saturn")
+        extra = saturn_tool.model_extra if saturn_tool else {}
+        hpc_defaults = {
+            "run_mode": extra.get("run_mode", "local"),
+            "allow_submit": bool(extra.get("allow_submit", False)),
+            "partition": extra.get("partition", "gpu_a100"),
+            "gpus_per_node": extra.get("gpus_per_node", 1),
+            "time_limit": extra.get("time_limit", "02:00:00"),
+            "poll_interval_seconds": extra.get("poll_interval_seconds", 30),
+            "saturn_repo": extra.get("saturn_repo") or None,
+            "saturn_python": extra.get("saturn_python", "python"),
+            "prior_checkpoint": extra.get("prior_checkpoint") or None,
+            "remote_saturn_repo": extra.get("remote_saturn_repo") or None,
+            "remote_saturn_python": extra.get("remote_saturn_python", "python"),
+            "remote_prior_checkpoint": extra.get("remote_prior_checkpoint") or None,
+            "env_setup": extra.get("env_setup") or None,
+            "timeout_seconds": saturn_tool.timeout_seconds if saturn_tool and saturn_tool.timeout_seconds else 1800,
+        }
+        settings = state.metadata["saturn"]
+        for key, value in hpc_defaults.items():
+            settings.setdefault(key, value)
 
     def _tool_execution_node(self, state: DiscoveryStatePayload) -> DiscoveryStatePayload:
         logger.info("tool execution node")
@@ -233,9 +258,17 @@ class DiscoveryGraph:
             import hashlib
             from hackathon_agents.tools.boltz_tools import run_boltz_2
             boltz_tool = self.config.tools.get("boltz_2")
-            allow_run = boltz_tool.model_extra.get("allow_run", False) if boltz_tool else False
-            run_mode_val = boltz_tool.model_extra.get("run_mode", "local") if boltz_tool else "local"
-            device_val = boltz_tool.model_extra.get("device", "cpu") if boltz_tool else "cpu"
+            boltz_extra = boltz_tool.model_extra if boltz_tool else {}
+            allow_run = boltz_extra.get("allow_run", False)
+            run_mode_val = boltz_extra.get("run_mode", "local")
+            device_val = boltz_extra.get("device", "cpu")
+            allow_submit_val = bool(boltz_extra.get("allow_submit", False))
+            env_setup_val = boltz_extra.get("env_setup") or None
+            poll_interval_val = boltz_extra.get("poll_interval_seconds", 30)
+            partition_val = boltz_extra.get("partition", "gpu_a100")
+            gpus_val = boltz_extra.get("gpus_per_node", 1)
+            time_limit_val = boltz_extra.get("time_limit", "01:00:00")
+            timeout_val = boltz_tool.timeout_seconds if boltz_tool and boltz_tool.timeout_seconds else 1800
 
             target_seq = state.metadata.get("target_protein_sequence") or "MTEYKLVVVGAGGVGKSALTIQLIQNHFVDEYDPTIEDSYRKQVVIDGETCLLDILDTAGQEEYSAMRDQYMRTGEGFLCVFAINNTKSFEDIHQYREQIKRVKDSDDVPMVLVGNKCDLAARTVESRQAQDLARSYGIPYIETSAKTRQGVEDAFYTLVREIRQHKLRKLNPPDESGPGCMSCKCVLS"
 
@@ -256,6 +289,13 @@ class DiscoveryGraph:
                         "run": bool(allow_run),
                         "run_mode": run_mode_val,
                         "device": device_val,
+                        "allow_submit": allow_submit_val,
+                        "env_setup": env_setup_val,
+                        "poll_interval_seconds": poll_interval_val,
+                        "partition": partition_val,
+                        "gpus_per_node": gpus_val,
+                        "time_limit": time_limit_val,
+                        "timeout_seconds": timeout_val,
                         "recycling_steps": recycling_steps,
                         "diffusion_steps": diffusion_steps,
                         "cofactors": cofactors,

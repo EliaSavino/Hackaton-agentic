@@ -124,6 +124,79 @@ PYTHONPATH=src python -m hackathon_agents.cli snellius-client-env \
 
 Run the printed SSH tunnel command and exports in your local shell.
 
+## Run Boltz-2 / Saturn As Remote SLURM Jobs
+
+Use this mode to run the heavy `boltz_2` and `saturn` tools **on Snellius from
+your laptop**. The tools stage inputs over SSH/SFTP, submit with `sbatch`, poll
+until the job finishes, download the outputs, and parse real results back into
+the discovery graph. This is implemented in
+`src/hackathon_agents/tools/remote_hpc.py` (a self-contained Paramiko layer).
+
+### 1. Install the optional dependency
+
+```bash
+pip install -e '.[hpc]'   # pulls in paramiko
+```
+
+Without it, the tools stay in mock/dry-run mode (no crash).
+
+### 2. Configure `.env`
+
+```bash
+HPC_HOST=snellius.surf.nl
+HPC_USER=<your-snellius-user>
+HPC_KEY_PATH=~/.ssh/id_ed25519      # SSH key (preferred); or set HPC_PASSWORD
+HPC_HOME=/home/<your-snellius-user>
+HPC_SCRATCH_PATH=/scratch-shared/<your-user>   # optional; job dirs go here if set
+SLURM_ACCOUNT=<your-project-account>           # required on Snellius (sbatch -A)
+SLURM_PARTITION=gpu_a100
+SLURM_TIME=02:00:00
+HPC_POLL_INTERVAL=30
+```
+
+Jobs are staged into `${HPC_SCRATCH_PATH or HPC_HOME}/hackathon_agents/<tool>/<job>/`
+(one isolated directory per run).
+
+### 3. Verify connectivity
+
+```bash
+PYTHONPATH=src python -m hackathon_agents.cli hpc-check
+```
+
+Expect the login node hostname plus a SLURM version string.
+
+### 4. Enable a real submission
+
+Both tools are **gated**: they only submit when their `allow_submit` flag is
+true *and* `HPC_HOST`/`HPC_USER` are set. Otherwise they only write the SLURM
+script (dry run) and return deterministic placeholders.
+
+Boltz-2:
+
+```bash
+BOLTZ_ENABLED=true
+BOLTZ_RUN_MODE=slurm_remote
+BOLTZ_ALLOW_SUBMIT=true
+BOLTZ_DEVICE=cuda
+BOLTZ_ENV_ACTIVATE="module load 2023; source activate boltz"   # match your cluster
+```
+
+Saturn (needs the repo cloned on the cluster):
+
+```bash
+SATURN_ENABLED=true
+SATURN_RUN_MODE=slurm_remote
+SATURN_ALLOW_SUBMIT=true
+SATURN_REMOTE_REPO=/home/<user>/saturn
+SATURN_REMOTE_PYTHON=/home/<user>/.conda/envs/saturn/bin/python
+SATURN_REMOTE_PRIOR=/home/<user>/saturn/priors/zinc.prior
+SATURN_ENV_ACTIVATE="module load 2023; source activate saturn"
+```
+
+Then run the discovery graph as usual (e.g. `demo` / `mechanism-once`). Confirm
+the job with `squeue -u $USER`; outputs download under the run's `boltz/` or
+`saturn/` directory, and results report `status: completed` (not `mock`).
+
 ## Operational Notes
 
 - Keep API keys in a protected `.env` on the machine that uses them.

@@ -153,6 +153,41 @@ class BoltzToolTests(unittest.TestCase):
             self.assertIn("job-slurm.slurm", res.data["output_files"][0])
             self.assertTrue(Path(res.data["output_files"][0]).exists())
 
+    def test_run_boltz_slurm_remote_dryrun_without_submit(self) -> None:
+        # slurm_remote with allow_submit=False must only write the script and
+        # never touch the network.
+        with tempfile.TemporaryDirectory() as tmp:
+            res = run_boltz_2(
+                {
+                    "id": "job-remote",
+                    "work_dir": tmp,
+                    "run_mode": "slurm_remote",
+                    "allow_submit": False,
+                }
+            )
+            self.assertTrue(res.ok)
+            self.assertEqual(res.data["status"], "script_written")
+            script = Path(tmp) / "job-remote.slurm"
+            self.assertTrue(script.exists())
+
+    def test_parse_boltz_outputs_reads_confidence(self) -> None:
+        import json
+
+        from hackathon_agents.tools.boltz_tools import _parse_boltz_outputs
+
+        with tempfile.TemporaryDirectory() as tmp:
+            out_dir = Path(tmp) / "output"
+            out_dir.mkdir()
+            (out_dir / "confidence_x_model_0.json").write_text(
+                json.dumps({"complex_plddt": 0.9, "iptm": 0.77, "ptm": 0.8}),
+                encoding="utf-8",
+            )
+            (out_dir / "model_0.pdb").write_text("ATOM\nEND\n", encoding="utf-8")
+            metrics = _parse_boltz_outputs(out_dir)
+            self.assertEqual(metrics["plddt"], 90.0)
+            self.assertEqual(metrics["iptm"], 0.77)
+            self.assertIsNotNone(metrics["pdb_file"])
+
 
 if __name__ == "__main__":
     unittest.main()

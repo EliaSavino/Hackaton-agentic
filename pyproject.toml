@@ -33,6 +33,11 @@ dev = [
 baybe = [
   "baybe[chem,simulation]>=0.12.0"
 ]
+# Remote HPC (Snellius) job submission over SSH/SFTP for the Boltz-2 and Saturn
+# tools. Imported lazily; without it those tools stay in mock/dry-run mode.
+hpc = [
+  "paramiko>=3.4.0"
+]
 
 [project.scripts]
 hackathon-agents = "hackathon_agents.cli:main"

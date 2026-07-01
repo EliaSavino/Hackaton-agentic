@@ -99,8 +99,22 @@ tools:
     saturn_repo: ${SATURN_REPO:-}
     saturn_python: ${SATURN_PYTHON:-python}
     prior_checkpoint: ${SATURN_PRIOR:-}
-    timeout_seconds: 1800
+    timeout_seconds: ${SATURN_TIMEOUT_SECONDS:-1800}
     allow_run: false
+    # HPC (Snellius) remote submission. run_mode=slurm_remote stages the config
+    # over SSH, submits with sbatch, waits, and downloads the SMILES logs. A real
+    # submission requires allow_submit=true AND HPC_HOST/HPC_USER set; otherwise
+    # the tool only writes the config + SLURM script (dry run) and returns mocks.
+    run_mode: ${SATURN_RUN_MODE:-local}
+    allow_submit: ${SATURN_ALLOW_SUBMIT:-false}
+    partition: ${SLURM_PARTITION:-gpu_a100}
+    gpus_per_node: ${SLURM_GPUS:-1}
+    time_limit: ${SLURM_TIME:-02:00:00}
+    poll_interval_seconds: ${HPC_POLL_INTERVAL:-30}
+    remote_saturn_repo: ${SATURN_REMOTE_REPO:-}
+    remote_saturn_python: ${SATURN_REMOTE_PYTHON:-python}
+    remote_prior_checkpoint: ${SATURN_REMOTE_PRIOR:-}
+    env_setup: ${SATURN_ENV_ACTIVATE:-}
     enabled_modes: [full, cheap]
 
   boltz_2:
@@ -112,11 +126,19 @@ tools:
     boltz_executable: ${BOLTZ_EXECUTABLE:-boltz}
     run_mode: ${BOLTZ_RUN_MODE:-local}
     device: ${BOLTZ_DEVICE:-cpu}
-    single_sequence: true
-    partition: gpu_a100
-    allow_submit: false
+    single_sequence: ${BOLTZ_SINGLE_SEQUENCE:-true}
+    partition: ${SLURM_PARTITION:-gpu_a100}
+    gpus_per_node: ${SLURM_GPUS:-1}
+    time_limit: ${SLURM_TIME:-01:00:00}
+    submit_command: ${SLURM_SUBMIT_COMMAND:-sbatch}
+    # run_mode=slurm_remote stages inputs over SSH, submits, waits, and downloads
+    # the predicted structures/metrics. Requires allow_submit=true AND
+    # HPC_HOST/HPC_USER set; otherwise only the SLURM script is written (dry run).
+    allow_submit: ${BOLTZ_ALLOW_SUBMIT:-false}
     allow_run: false
-    timeout_seconds: 1800
+    poll_interval_seconds: ${HPC_POLL_INTERVAL:-30}
+    env_setup: ${BOLTZ_ENV_ACTIVATE:-}
+    timeout_seconds: ${BOLTZ_TIMEOUT_SECONDS:-1800}
     enabled_modes: [full, cheap]
 
   baybe:

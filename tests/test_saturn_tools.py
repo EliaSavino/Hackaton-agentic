@@ -78,6 +78,44 @@ class SaturnToolTests(unittest.TestCase):
             scores = [m.score for m in molecules]
             self.assertEqual(scores, sorted(scores, reverse=True))
 
+    def test_remote_dry_run_writes_script_without_submitting(self) -> None:
+        # slurm_remote with allow_submit=False must write the SLURM script and
+        # return mock molecules without any network access.
+        with tempfile.TemporaryDirectory() as tmp:
+            result = generate_with_saturn(
+                {
+                    "work_dir": tmp,
+                    "objective": "Generate binders.",
+                    "run_mode": "slurm_remote",
+                    "allow_submit": False,
+                }
+            )
+            self.assertTrue(result.ok)
+            self.assertTrue(result.data["mock"])
+            self.assertTrue((Path(tmp) / "saturn_job.slurm").exists())
+            self.assertIn("remote_dry_run", result.metadata)
+
+    def test_build_config_remote_base_uses_absolute_paths(self) -> None:
+        config = build_saturn_config(
+            SaturnGenerationInput(work_dir="unused", remote_prior_checkpoint="/home/u/prior.ckpt"),
+            remote_base="/scratch/u/hackathon_agents/saturn/job",
+        )
+        self.assertEqual(config["logging"]["logging_path"], "/scratch/u/hackathon_agents/saturn/job/saturn_log")
+        rl = config["goal_directed_generation"]["reinforcement_learning"]
+        self.assertEqual(rl["prior"], "/home/u/prior.ckpt")
+
+    def test_render_saturn_slurm_script(self) -> None:
+        from hackathon_agents.tools.saturn_tools import render_saturn_slurm_script
+
+        parsed = SaturnGenerationInput(work_dir="unused", partition="gpu_h100", remote_saturn_python="/opt/py")
+        script = render_saturn_slurm_script(
+            parsed, "/scratch/u/job/saturn_config.json", "/home/u/saturn", account="proj1"
+        )
+        self.assertIn("#SBATCH --partition=gpu_h100", script)
+        self.assertIn("#SBATCH --account=proj1", script)
+        self.assertIn("cd /home/u/saturn", script)
+        self.assertIn("/opt/py saturn.py /scratch/u/job/saturn_config.json", script)
+
     def test_check_availability_reports_missing_repo(self) -> None:
         result = check_saturn_availability(saturn_repo="/nonexistent/saturn", saturn_python="python")
         self.assertTrue(result.ok)

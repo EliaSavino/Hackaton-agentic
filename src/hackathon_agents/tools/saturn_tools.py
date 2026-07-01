@@ -120,6 +120,7 @@ class SaturnGenerationInput(BaseModel):
     device: Literal["cuda", "cpu"] = "cpu"
 
     # --- Execution / environment -------------------------------------------
+    run_mode: Literal["local", "slurm_remote"] = "local"
     saturn_repo: str | None = None  # path to a cloned schwallergroup/saturn repo
     saturn_python: str = "python"  # interpreter from the saturn conda env
     prior_checkpoint: str | None = None  # path to the pretrained Saturn prior
@@ -127,6 +128,19 @@ class SaturnGenerationInput(BaseModel):
     run: bool = False  # opt-in real execution; False => config + mock only
     max_return: int = Field(default=25, ge=1, le=5000)
     config_filename: str = "saturn_config.json"
+
+    # --- HPC / SLURM settings (only used if run_mode=slurm_remote) -----------
+    allow_submit: bool = False  # opt-in remote submission gate
+    partition: str = "gpu_a100"
+    gpus_per_node: int = 1
+    time_limit: str = "02:00:00"
+    poll_interval_seconds: int = 30
+    # Paths *on the cluster* (the local saturn_repo/python are for local runs).
+    remote_saturn_repo: str | None = None
+    remote_saturn_python: str = "python"
+    remote_prior_checkpoint: str | None = None
+    # Shell lines that activate the Saturn conda env inside the SLURM job.
+    env_setup: str | None = None
 
     model_config = ConfigDict(extra="forbid")
 
@@ -156,13 +170,28 @@ def check_saturn_availability(
     )
 
 
-def build_saturn_config(input_data: SaturnGenerationInput | dict[str, Any]) -> dict[str, Any]:
-    """Render a Saturn-compatible JSON config from the typed input."""
+def build_saturn_config(
+    input_data: SaturnGenerationInput | dict[str, Any],
+    *,
+    remote_base: str | None = None,
+) -> dict[str, Any]:
+    """Render a Saturn-compatible JSON config from the typed input.
+
+    When ``remote_base`` is given (a POSIX path on the cluster), logging and
+    checkpoint paths are placed under it and the prior/agent use the remote
+    checkpoint, so the config is valid for a job that runs on the cluster.
+    """
 
     parsed = _coerce(input_data)
-    work_dir = Path(parsed.work_dir)
-    logging_path = str(work_dir / "saturn_log")
-    checkpoints_dir = str(work_dir / "checkpoints")
+    if remote_base is not None:
+        logging_path = f"{remote_base}/saturn_log"
+        checkpoints_dir = f"{remote_base}/checkpoints"
+        prior = parsed.remote_prior_checkpoint or parsed.prior_checkpoint or ""
+    else:
+        work_dir = Path(parsed.work_dir)
+        logging_path = str(work_dir / "saturn_log")
+        checkpoints_dir = str(work_dir / "checkpoints")
+        prior = parsed.prior_checkpoint or ""
 
     return {
         "running_mode": parsed.running_mode,
@@ -180,8 +209,8 @@ def build_saturn_config(input_data: SaturnGenerationInput | dict[str, Any]) -> d
         },
         "goal_directed_generation": {
             "reinforcement_learning": {
-                "prior": parsed.prior_checkpoint or "",
-                "agent": parsed.prior_checkpoint or "",
+                "prior": prior,
+                "agent": prior,
                 "batch_size": parsed.batch_size,
                 "n_steps": parsed.n_steps,
                 "sigma": parsed.sigma,
@@ -203,6 +232,164 @@ def build_saturn_config(input_data: SaturnGenerationInput | dict[str, Any]) -> d
     }
 
 
+_DEFAULT_SATURN_ENV_SETUP = "\n".join(
+    [
+        "# Activate the Saturn conda env (override via SATURN_ENV_ACTIVATE / env_setup).",
+        "module load 2023 2>/dev/null || true",
+        "module load Miniconda3 2>/dev/null || true",
+        "source activate saturn 2>/dev/null || conda activate saturn 2>/dev/null || true",
+    ]
+)
+
+
+def render_saturn_slurm_script(
+    parsed: SaturnGenerationInput,
+    remote_config_path: str,
+    remote_saturn_repo: str,
+    *,
+    account: str | None = None,
+    qos: str | None = None,
+) -> str:
+    """Render a SLURM script that runs Saturn on the cluster.
+
+    ``remote_config_path`` and ``remote_saturn_repo`` are absolute POSIX paths on
+    the cluster. The script activates the environment, ``cd``s into the Saturn
+    checkout, and runs ``python saturn.py <config.json>``.
+    """
+    env_setup = parsed.env_setup if parsed.env_setup else _DEFAULT_SATURN_ENV_SETUP
+    directives = [
+        f"#SBATCH --job-name=saturn-{parsed.seed}",
+        f"#SBATCH --partition={parsed.partition}",
+        f"#SBATCH --gpus-per-node={parsed.gpus_per_node}",
+        f"#SBATCH --time={parsed.time_limit}",
+        "#SBATCH --nodes=1",
+        "#SBATCH --ntasks=1",
+        "#SBATCH --cpus-per-task=4",
+        "#SBATCH --mem=32G",
+        "#SBATCH --output=slurm-%j.out",
+        "#SBATCH --error=slurm-%j.err",
+    ]
+    if account:
+        directives.append(f"#SBATCH --account={account}")
+    if qos:
+        directives.append(f"#SBATCH --qos={qos}")
+    return "\n".join(
+        [
+            "#!/bin/bash",
+            *directives,
+            "",
+            "set -euo pipefail",
+            "",
+            "echo '=== Saturn HPC Job ==='",
+            env_setup,
+            "",
+            f"cd {remote_saturn_repo}",
+            f"{parsed.remote_saturn_python} saturn.py {remote_config_path}",
+            "",
+            "echo 'Saturn generation completed.'",
+            "",
+        ]
+    )
+
+
+def _generate_with_saturn_remote(parsed: SaturnGenerationInput):
+    """Stage a Saturn config + script on the cluster, submit, wait, and parse."""
+    from hackathon_agents.tools.remote_hpc import (
+        RemoteHPCClient,
+        RemoteHPCConfig,
+        RemoteJobSpec,
+        make_remote_job_dir,
+        submit_and_wait,
+    )
+
+    work_dir = Path(parsed.work_dir)
+    work_dir.mkdir(parents=True, exist_ok=True)
+    oracle_names = [component.name for component in parsed.oracle]
+    remote_cfg = RemoteHPCConfig.from_env()
+
+    # Compute the remote job dir up front so the config can reference absolute
+    # logging paths on the cluster.
+    remote_job_dir = make_remote_job_dir(remote_cfg, "saturn", f"saturn-{parsed.seed}")
+    config = build_saturn_config(parsed, remote_base=remote_job_dir)
+    config_path = work_dir / parsed.config_filename
+    write_result = write_json(config_path, config)
+    if not write_result.ok:
+        return error_result(f"Failed to write Saturn config: {write_result.error}")
+
+    remote_config_path = f"{remote_job_dir}/{parsed.config_filename}"
+    remote_repo = parsed.remote_saturn_repo or parsed.saturn_repo
+    script_path = work_dir / "saturn_job.slurm"
+    script_path.write_text(
+        render_saturn_slurm_script(
+            parsed,
+            remote_config_path,
+            remote_repo or "$HOME/saturn",
+            account=remote_cfg.account,
+            qos=remote_cfg.qos,
+        ),
+        encoding="utf-8",
+    )
+
+    # Safe default: only write artifacts unless submission is explicitly enabled
+    # and credentials are present.
+    if not parsed.allow_submit or not remote_cfg.is_configured or not remote_repo:
+        molecules = _mock_molecules(parsed, oracle_names, reason="remote_dry_run")
+        result = _build_success(parsed, molecules, config_path, mock=True, oracle_names=oracle_names)
+        result.artifacts.append(str(script_path))
+        result.metadata["remote_dry_run"] = {
+            "script_path": str(script_path),
+            "remote_job_dir": remote_job_dir,
+            "configured": remote_cfg.is_configured,
+            "remote_repo_set": bool(remote_repo),
+            "allow_submit": parsed.allow_submit,
+        }
+        return result
+
+    spec = RemoteJobSpec(
+        tool="saturn",
+        job_name=f"saturn-{parsed.seed}",
+        input_files=[(config_path, parsed.config_filename), (script_path, "saturn_job.slurm")],
+        script_name="saturn_job.slurm",
+        output_patterns=["saturn_log/**", "checkpoints/**", "*.csv"],
+        local_output_dir=work_dir,
+        remote_job_dir=remote_job_dir,
+    )
+    try:
+        with RemoteHPCClient(remote_cfg) as client:
+            run = submit_and_wait(
+                client,
+                spec,
+                timeout=parsed.timeout_seconds,
+                poll_interval=parsed.poll_interval_seconds,
+            )
+    except Exception as exc:
+        return error_result(f"Remote Saturn submission failed: {exc}", {"script_path": str(script_path)})
+
+    if run.state != "completed":
+        return error_result(
+            f"Remote Saturn job {run.job_id} ended in state '{run.state}'.",
+            {
+                "job_id": run.job_id,
+                "remote_job_dir": run.remote_job_dir,
+                "stdout_tail": run.stdout_tail,
+                "stderr_tail": run.stderr_tail,
+            },
+        )
+
+    molecules = _parse_generated_molecules(parsed, work_dir, oracle_names)
+    if not molecules:
+        molecules = _mock_molecules(parsed, oracle_names, reason="no_output_parsed")
+        result = _build_success(parsed, molecules, config_path, mock=True, oracle_names=oracle_names)
+        result.metadata["saturn_job_id"] = run.job_id
+        result.metadata["saturn_stdout_tail"] = run.stdout_tail
+        return result
+
+    result = _build_success(parsed, molecules, config_path, mock=False, oracle_names=oracle_names)
+    result.metadata["saturn_job_id"] = run.job_id
+    result.metadata["downloaded_files"] = run.downloaded_files
+    return result
+
+
 def generate_with_saturn(input_data: SaturnGenerationInput | dict[str, Any]):
     """Build a Saturn config, optionally run Saturn, and return molecules.
 
@@ -212,6 +399,11 @@ def generate_with_saturn(input_data: SaturnGenerationInput | dict[str, Any]):
     """
 
     parsed = _coerce(input_data)
+    if parsed.run_mode == "slurm_remote":
+        try:
+            return _generate_with_saturn_remote(parsed)
+        except Exception as exc:
+            return error_result(str(exc), {"work_dir": parsed.work_dir})
     try:
         work_dir = Path(parsed.work_dir)
         work_dir.mkdir(parents=True, exist_ok=True)
