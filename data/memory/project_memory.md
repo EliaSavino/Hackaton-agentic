@@ -3,6 +3,543 @@
 Shared agent memory for knowledge transfer across runs and users.
 The JSONL file is the append-only source of truth; this Markdown file is regenerated for reading.
 
+## 2026-07-01T19:56:59Z - critic_completed - critic
+
+Requesting another pass: best score 0.573 below target 0.750.
+
+- Run: `20260701_215222`
+- Run directory: `runs/20260701_215222`
+- Run mode: `cheap`
+- Iteration: `2`
+- Candidates: `50`
+- Valid candidates: `50`
+- Best score: `0.5732`
+- Next actions: improve_candidates
+
+Artifacts:
+- `runs/20260701_215222/descriptors.csv`
+- `runs/20260701_215222/qed_plot.png`
+- `runs/20260701_215222/reinvent/reinvent_config.json`
+
+Recent messages:
+- critic: Sampling produced valid linkers; escalating to staged-learning (RL) to optimize.
+- graph: starting pass 2/3
+- chemist: generated 25 candidates with REINVENT4
+- critic: ranked candidates with a simple descriptor heuristic
+- critic: Requesting another pass: best score 0.573 below target 0.750.
+
+## 2026-07-01T19:56:58Z - tools_completed - tool_execution
+
+Ran 54 deterministic tool calls for pass 2.
+
+- Run: `20260701_215222`
+- Run directory: `runs/20260701_215222`
+- Run mode: `cheap`
+- Iteration: `2`
+- Candidates: `50`
+- Valid candidates: `25`
+- Best score: `0.5228`
+- Next actions: improve_candidates, optimize_linkers_with_rl
+
+Artifacts:
+- `runs/20260701_215222/descriptors.csv`
+- `runs/20260701_215222/qed_plot.png`
+- `runs/20260701_215222/reinvent/reinvent_config.json`
+
+Recent messages:
+- critic: Sampling produced valid linkers; escalating to staged-learning (RL) to optimize.
+- critic: ranked candidates with a simple descriptor heuristic
+- critic: Sampling produced valid linkers; escalating to staged-learning (RL) to optimize.
+- graph: starting pass 2/3
+- chemist: generated 25 candidates with REINVENT4
+
+## 2026-07-01T19:56:57Z - chemist_completed - chemist
+
+Completed candidate-generation pass 2 with 50 candidates.
+
+- Run: `20260701_215222`
+- Run directory: `runs/20260701_215222`
+- Run mode: `cheap`
+- Iteration: `2`
+- Candidates: `50`
+- Valid candidates: `25`
+- Best score: `0.5228`
+- Next actions: improve_candidates, optimize_linkers_with_rl
+
+Artifacts:
+- `runs/20260701_215222/descriptors.csv`
+- `runs/20260701_215222/qed_plot.png`
+- `runs/20260701_215222/reinvent/reinvent_config.json`
+
+Recent messages:
+- critic: Sampling produced valid linkers; escalating to staged-learning (RL) to optimize.
+- critic: ranked candidates with a simple descriptor heuristic
+- critic: Sampling produced valid linkers; escalating to staged-learning (RL) to optimize.
+- graph: starting pass 2/3
+- chemist: generated 25 candidates with REINVENT4
+
+## 2026-07-01T19:52:32Z - critic_completed - critic
+
+Sampling produced valid linkers; escalating to staged-learning (RL) to optimize.
+
+- Run: `20260701_215222`
+- Run directory: `runs/20260701_215222`
+- Run mode: `cheap`
+- Iteration: `1`
+- Candidates: `25`
+- Valid candidates: `25`
+- Best score: `0.5228`
+- Next actions: improve_candidates, optimize_linkers_with_rl
+
+Artifacts:
+- `runs/20260701_215222/descriptors.csv`
+- `runs/20260701_215222/qed_plot.png`
+- `runs/20260701_215222/reinvent/reinvent_config.json`
+
+Recent messages:
+- graph: starting pass 1/3
+- chemist: seeded 25 candidates with REINVENT4
+- critic: Sampling produced valid linkers; escalating to staged-learning (RL) to optimize.
+- critic: ranked candidates with a simple descriptor heuristic
+- critic: Sampling produced valid linkers; escalating to staged-learning (RL) to optimize.
+
+## 2026-07-01T19:52:32Z - tools_completed - tool_execution
+
+Ran 54 deterministic tool calls for pass 1.
+
+- Run: `20260701_215222`
+- Run directory: `runs/20260701_215222`
+- Run mode: `cheap`
+- Iteration: `1`
+- Candidates: `25`
+
+Artifacts:
+- `runs/20260701_215222/descriptors.csv`
+- `runs/20260701_215222/qed_plot.png`
+- `runs/20260701_215222/reinvent/reinvent_config.json`
+
+Recent messages:
+- planner: created deterministic discovery plan
+- graph: starting pass 1/3
+- chemist: seeded 25 candidates with REINVENT4
+
+## 2026-07-01T19:52:32Z - chemist_completed - chemist
+
+Completed candidate-generation pass 1 with 25 candidates.
+
+- Run: `20260701_215222`
+- Run directory: `runs/20260701_215222`
+- Run mode: `cheap`
+- Iteration: `1`
+- Candidates: `25`
+
+Artifacts:
+- `runs/20260701_215222/reinvent/reinvent_config.json`
+
+Recent messages:
+- planner: created deterministic discovery plan
+- graph: starting pass 1/3
+- chemist: seeded 25 candidates with REINVENT4
+
+## 2026-07-01T19:52:22Z - planner_completed - planner
+
+Created a discovery plan with 5 steps.
+
+- Run: `20260701_215222`
+- Run directory: `runs/20260701_215222`
+- Run mode: `cheap`
+- Iteration: `0`
+- Candidates: `0`
+
+Recent messages:
+- planner: created deterministic discovery plan
+
+## 2026-07-01T19:52:22Z - run_started - graph
+
+Started a discovery agent run.
+
+- Run: `20260701_215222`
+- Run directory: `runs/20260701_215222`
+- Run mode: `cheap`
+- Iteration: `0`
+- Candidates: `0`
+
+## 2026-07-01T19:52:22Z - writer_completed - writer
+
+Wrote final report artifacts for the discovery run.
+
+- Run: `20260701_214434`
+- Run directory: `runs/20260701_214434`
+- Run mode: `cheap`
+- Iteration: `3`
+- Candidates: `55`
+- Valid candidates: `55`
+- Best score: `0.6829`
+- Stop reason: `max_iterations_reached`
+
+Artifacts:
+- `runs/20260701_214434/adc_paper.tex`
+- `runs/20260701_214434/descriptors.csv`
+- `runs/20260701_214434/figures/candidate_scores.png`
+- `runs/20260701_214434/qed_plot.png`
+- `runs/20260701_214434/reinvent/reinvent_config.json`
+- `runs/20260701_214434/report.docx`
+- `runs/20260701_214434/report.tex`
+
+Recent messages:
+- graph: starting pass 3/3
+- chemist: added 5 refinement candidates for actions ['improve_candidates']
+- critic: ranked candidates with a simple descriptor heuristic
+- critic: Stopping after reaching max_iterations=3.
+- writer: report generation delegated to doc_writer and latex_writer tools
+
+## 2026-07-01T19:52:21Z - critic_completed - critic
+
+Stopping after reaching max_iterations=3.
+
+- Run: `20260701_214434`
+- Run directory: `runs/20260701_214434`
+- Run mode: `cheap`
+- Iteration: `3`
+- Candidates: `55`
+- Valid candidates: `55`
+- Best score: `0.6829`
+- Stop reason: `max_iterations_reached`
+
+Artifacts:
+- `runs/20260701_214434/descriptors.csv`
+- `runs/20260701_214434/qed_plot.png`
+- `runs/20260701_214434/reinvent/reinvent_config.json`
+
+Recent messages:
+- critic: Requesting another pass: best score 0.672 below target 0.750.
+- graph: starting pass 3/3
+- chemist: added 5 refinement candidates for actions ['improve_candidates']
+- critic: ranked candidates with a simple descriptor heuristic
+- critic: Stopping after reaching max_iterations=3.
+
+## 2026-07-01T19:52:20Z - tools_completed - tool_execution
+
+Ran 14 deterministic tool calls for pass 3.
+
+- Run: `20260701_214434`
+- Run directory: `runs/20260701_214434`
+- Run mode: `cheap`
+- Iteration: `3`
+- Candidates: `55`
+- Valid candidates: `50`
+- Best score: `0.6725`
+- Next actions: improve_candidates
+
+Artifacts:
+- `runs/20260701_214434/descriptors.csv`
+- `runs/20260701_214434/qed_plot.png`
+- `runs/20260701_214434/reinvent/reinvent_config.json`
+
+Recent messages:
+- chemist: generated 25 candidates with REINVENT4
+- critic: ranked candidates with a simple descriptor heuristic
+- critic: Requesting another pass: best score 0.672 below target 0.750.
+- graph: starting pass 3/3
+- chemist: added 5 refinement candidates for actions ['improve_candidates']
+
+## 2026-07-01T19:52:20Z - chemist_completed - chemist
+
+Completed candidate-generation pass 3 with 55 candidates.
+
+- Run: `20260701_214434`
+- Run directory: `runs/20260701_214434`
+- Run mode: `cheap`
+- Iteration: `3`
+- Candidates: `55`
+- Valid candidates: `50`
+- Best score: `0.6725`
+- Next actions: improve_candidates
+
+Artifacts:
+- `runs/20260701_214434/descriptors.csv`
+- `runs/20260701_214434/qed_plot.png`
+- `runs/20260701_214434/reinvent/reinvent_config.json`
+
+Recent messages:
+- chemist: generated 25 candidates with REINVENT4
+- critic: ranked candidates with a simple descriptor heuristic
+- critic: Requesting another pass: best score 0.672 below target 0.750.
+- graph: starting pass 3/3
+- chemist: added 5 refinement candidates for actions ['improve_candidates']
+
+## 2026-07-01T19:48:40Z - critic_completed - critic
+
+Requesting another pass: best score 0.672 below target 0.750.
+
+- Run: `20260701_214434`
+- Run directory: `runs/20260701_214434`
+- Run mode: `cheap`
+- Iteration: `2`
+- Candidates: `50`
+- Valid candidates: `50`
+- Best score: `0.6725`
+- Next actions: improve_candidates
+
+Artifacts:
+- `runs/20260701_214434/descriptors.csv`
+- `runs/20260701_214434/qed_plot.png`
+- `runs/20260701_214434/reinvent/reinvent_config.json`
+
+Recent messages:
+- critic: Sampling produced valid linkers; escalating to staged-learning (RL) to optimize.
+- graph: starting pass 2/3
+- chemist: generated 25 candidates with REINVENT4
+- critic: ranked candidates with a simple descriptor heuristic
+- critic: Requesting another pass: best score 0.672 below target 0.750.
+
+## 2026-07-01T19:48:39Z - tools_completed - tool_execution
+
+Ran 54 deterministic tool calls for pass 2.
+
+- Run: `20260701_214434`
+- Run directory: `runs/20260701_214434`
+- Run mode: `cheap`
+- Iteration: `2`
+- Candidates: `50`
+- Valid candidates: `25`
+- Best score: `0.5661`
+- Next actions: improve_candidates, optimize_linkers_with_rl
+
+Artifacts:
+- `runs/20260701_214434/descriptors.csv`
+- `runs/20260701_214434/qed_plot.png`
+- `runs/20260701_214434/reinvent/reinvent_config.json`
+
+Recent messages:
+- critic: Sampling produced valid linkers; escalating to staged-learning (RL) to optimize.
+- critic: ranked candidates with a simple descriptor heuristic
+- critic: Sampling produced valid linkers; escalating to staged-learning (RL) to optimize.
+- graph: starting pass 2/3
+- chemist: generated 25 candidates with REINVENT4
+
+## 2026-07-01T19:48:38Z - chemist_completed - chemist
+
+Completed candidate-generation pass 2 with 50 candidates.
+
+- Run: `20260701_214434`
+- Run directory: `runs/20260701_214434`
+- Run mode: `cheap`
+- Iteration: `2`
+- Candidates: `50`
+- Valid candidates: `25`
+- Best score: `0.5661`
+- Next actions: improve_candidates, optimize_linkers_with_rl
+
+Artifacts:
+- `runs/20260701_214434/descriptors.csv`
+- `runs/20260701_214434/qed_plot.png`
+- `runs/20260701_214434/reinvent/reinvent_config.json`
+
+Recent messages:
+- critic: Sampling produced valid linkers; escalating to staged-learning (RL) to optimize.
+- critic: ranked candidates with a simple descriptor heuristic
+- critic: Sampling produced valid linkers; escalating to staged-learning (RL) to optimize.
+- graph: starting pass 2/3
+- chemist: generated 25 candidates with REINVENT4
+
+## 2026-07-01T19:44:50Z - critic_completed - critic
+
+Sampling produced valid linkers; escalating to staged-learning (RL) to optimize.
+
+- Run: `20260701_214434`
+- Run directory: `runs/20260701_214434`
+- Run mode: `cheap`
+- Iteration: `1`
+- Candidates: `25`
+- Valid candidates: `25`
+- Best score: `0.5661`
+- Next actions: improve_candidates, optimize_linkers_with_rl
+
+Artifacts:
+- `runs/20260701_214434/descriptors.csv`
+- `runs/20260701_214434/qed_plot.png`
+- `runs/20260701_214434/reinvent/reinvent_config.json`
+
+Recent messages:
+- graph: starting pass 1/3
+- chemist: seeded 25 candidates with REINVENT4
+- critic: Sampling produced valid linkers; escalating to staged-learning (RL) to optimize.
+- critic: ranked candidates with a simple descriptor heuristic
+- critic: Sampling produced valid linkers; escalating to staged-learning (RL) to optimize.
+
+## 2026-07-01T19:44:49Z - tools_completed - tool_execution
+
+Ran 54 deterministic tool calls for pass 1.
+
+- Run: `20260701_214434`
+- Run directory: `runs/20260701_214434`
+- Run mode: `cheap`
+- Iteration: `1`
+- Candidates: `25`
+
+Artifacts:
+- `runs/20260701_214434/descriptors.csv`
+- `runs/20260701_214434/qed_plot.png`
+- `runs/20260701_214434/reinvent/reinvent_config.json`
+
+Recent messages:
+- planner: created deterministic discovery plan
+- graph: starting pass 1/3
+- chemist: seeded 25 candidates with REINVENT4
+
+## 2026-07-01T19:44:48Z - chemist_completed - chemist
+
+Completed candidate-generation pass 1 with 25 candidates.
+
+- Run: `20260701_214434`
+- Run directory: `runs/20260701_214434`
+- Run mode: `cheap`
+- Iteration: `1`
+- Candidates: `25`
+
+Artifacts:
+- `runs/20260701_214434/reinvent/reinvent_config.json`
+
+Recent messages:
+- planner: created deterministic discovery plan
+- graph: starting pass 1/3
+- chemist: seeded 25 candidates with REINVENT4
+
+## 2026-07-01T19:44:37Z - planner_completed - planner
+
+Created a discovery plan with 5 steps.
+
+- Run: `20260701_214434`
+- Run directory: `runs/20260701_214434`
+- Run mode: `cheap`
+- Iteration: `0`
+- Candidates: `0`
+
+Recent messages:
+- planner: created deterministic discovery plan
+
+## 2026-07-01T19:44:34Z - run_started - graph
+
+Started a discovery agent run.
+
+- Run: `20260701_214434`
+- Run directory: `runs/20260701_214434`
+- Run mode: `cheap`
+- Iteration: `0`
+- Candidates: `0`
+
+## 2026-07-01T19:43:54Z - writer_completed - writer
+
+Wrote final report artifacts for the discovery run.
+
+- Run: `20260701_214341`
+- Run directory: `/Users/es/.claude/jobs/068cc82a/tmp/runs/20260701_214341`
+- Run mode: `cheap`
+- Iteration: `1`
+- Candidates: `5`
+- Valid candidates: `5`
+- Best score: `0.6877`
+- Stop reason: `max_iterations_reached`
+
+Artifacts:
+- `/Users/es/.claude/jobs/068cc82a/tmp/runs/20260701_214341/adc_paper.tex`
+- `/Users/es/.claude/jobs/068cc82a/tmp/runs/20260701_214341/descriptors.csv`
+- `/Users/es/.claude/jobs/068cc82a/tmp/runs/20260701_214341/figures/candidate_scores.png`
+- `/Users/es/.claude/jobs/068cc82a/tmp/runs/20260701_214341/qed_plot.png`
+- `/Users/es/.claude/jobs/068cc82a/tmp/runs/20260701_214341/report.docx`
+- `/Users/es/.claude/jobs/068cc82a/tmp/runs/20260701_214341/report.tex`
+
+Recent messages:
+- graph: REINVENT disabled for this run mode; skipping
+- chemist: loaded hardcoded example molecules
+- critic: ranked candidates with a simple descriptor heuristic
+- critic: Stopping after reaching max_iterations=1.
+- writer: report generation delegated to doc_writer and latex_writer tools
+
+## 2026-07-01T19:43:54Z - critic_completed - critic
+
+Stopping after reaching max_iterations=1.
+
+- Run: `20260701_214341`
+- Run directory: `/Users/es/.claude/jobs/068cc82a/tmp/runs/20260701_214341`
+- Run mode: `cheap`
+- Iteration: `1`
+- Candidates: `5`
+- Valid candidates: `5`
+- Best score: `0.6877`
+- Stop reason: `max_iterations_reached`
+
+Artifacts:
+- `/Users/es/.claude/jobs/068cc82a/tmp/runs/20260701_214341/descriptors.csv`
+- `/Users/es/.claude/jobs/068cc82a/tmp/runs/20260701_214341/qed_plot.png`
+
+Recent messages:
+- graph: starting pass 1/1
+- graph: REINVENT disabled for this run mode; skipping
+- chemist: loaded hardcoded example molecules
+- critic: ranked candidates with a simple descriptor heuristic
+- critic: Stopping after reaching max_iterations=1.
+
+## 2026-07-01T19:43:52Z - tools_completed - tool_execution
+
+Ran 14 deterministic tool calls for pass 1.
+
+- Run: `20260701_214341`
+- Run directory: `/Users/es/.claude/jobs/068cc82a/tmp/runs/20260701_214341`
+- Run mode: `cheap`
+- Iteration: `1`
+- Candidates: `5`
+
+Artifacts:
+- `/Users/es/.claude/jobs/068cc82a/tmp/runs/20260701_214341/descriptors.csv`
+- `/Users/es/.claude/jobs/068cc82a/tmp/runs/20260701_214341/qed_plot.png`
+
+Recent messages:
+- planner: created deterministic discovery plan
+- graph: starting pass 1/1
+- graph: REINVENT disabled for this run mode; skipping
+- chemist: loaded hardcoded example molecules
+
+## 2026-07-01T19:43:49Z - chemist_completed - chemist
+
+Completed candidate-generation pass 1 with 5 candidates.
+
+- Run: `20260701_214341`
+- Run directory: `/Users/es/.claude/jobs/068cc82a/tmp/runs/20260701_214341`
+- Run mode: `cheap`
+- Iteration: `1`
+- Candidates: `5`
+
+Recent messages:
+- planner: created deterministic discovery plan
+- graph: starting pass 1/1
+- graph: REINVENT disabled for this run mode; skipping
+- chemist: loaded hardcoded example molecules
+
+## 2026-07-01T19:43:47Z - planner_completed - planner
+
+Created a discovery plan with 5 steps.
+
+- Run: `20260701_214341`
+- Run directory: `/Users/es/.claude/jobs/068cc82a/tmp/runs/20260701_214341`
+- Run mode: `cheap`
+- Iteration: `0`
+- Candidates: `0`
+
+Recent messages:
+- planner: created deterministic discovery plan
+
+## 2026-07-01T19:43:42Z - run_started - graph
+
+Started a discovery agent run.
+
+- Run: `20260701_214341`
+- Run directory: `/Users/es/.claude/jobs/068cc82a/tmp/runs/20260701_214341`
+- Run mode: `cheap`
+- Iteration: `0`
+- Candidates: `0`
+
 ## 2026-07-01T19:19:53Z - writer_completed - writer
 
 Wrote final report artifacts for the discovery run.

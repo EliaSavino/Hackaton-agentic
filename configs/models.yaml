@@ -1,7 +1,7 @@
 models:
   frontier_reasoning:
     provider: anthropic
-    model: anthropic/claude-sonnet-4-6
+    model: anthropic/claude-opus-4.6
     capabilities: [reasoning, chemistry, science, frontier, final_review, long_context, code, json, formatting, latex, reporting]
     api_key_env: ANTHROPIC_API_KEY
     cost_tier: high
@@ -9,7 +9,7 @@ models:
 
   science_reasoning:
     provider: anthropic
-    model: anthropic/claude-sonnet-4-6
+    model: anthropic/claude-opus-4.6
     capabilities: [reasoning, chemistry, science, final_review, long_context, code, json, formatting, latex, reporting, routing, summarization, fast, cheap, bulk, heavy, mechanism, literature, tool_use, data_parsing, active_learning, experimental_design, computational_chemistry]
     api_key_env: ANTHROPIC_API_KEY
     cost_tier: high
@@ -47,7 +47,7 @@ models:
 
   local_large:
     provider: anthropic
-    model: anthropic/claude-sonnet-4-6
+    model: anthropic/claude-opus-4.6
     capabilities: [reasoning, chemistry, science, final_review, long_context, code, json, formatting, latex, reporting, routing, summarization, fast, cheap, bulk, heavy, mechanism, literature, tool_use, data_parsing, active_learning, experimental_design, computational_chemistry]
     api_key_env: ANTHROPIC_API_KEY
     cost_tier: high
@@ -55,7 +55,7 @@ models:
 
   local_small:
     provider: anthropic
-    model: anthropic/claude-sonnet-4-6
+    model: anthropic/claude-opus-4.6
     capabilities: [reasoning, chemistry, science, final_review, long_context, code, json, formatting, latex, reporting, routing, summarization, fast, cheap, bulk, heavy, mechanism, literature, tool_use, data_parsing, active_learning, experimental_design, computational_chemistry]
     api_key_env: ANTHROPIC_API_KEY
     cost_tier: high

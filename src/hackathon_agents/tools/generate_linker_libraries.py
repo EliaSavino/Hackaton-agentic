@@ -4,8 +4,8 @@ from rdkit.Chem import AllChem
 import os
 
 # Define paths
-csv_path = "/home/miquelaperez/Hackaton-agentic/data/linkers/linkers.csv"
-output_dir = "/home/miquelaperez/Hackaton-agentic/data/linkers"
+csv_path = "data/linkers.csv"
+output_dir = "data/linkers"
 
 print("Loading linkers dataset...")
 df = pd.read_csv(csv_path, encoding="latin-1")

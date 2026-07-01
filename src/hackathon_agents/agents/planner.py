@@ -200,9 +200,11 @@ def _set_default_adc_linker_objective(state: DiscoveryStatePayload) -> bool:
         "adc_strategy_caps", {"max_steps": strategy.max_steps, "batch_size": strategy.batch_size}
     )
 
-    state.metadata["reinvent"] = render_reinvent_objective(
-        profile, strategy, objective=state.original_user_request
-    )
+    warhead_pair = state.metadata.get("adc_warhead_pair")
+    render_kwargs = {"objective": state.original_user_request}
+    if warhead_pair:
+        render_kwargs["warhead_pair"] = warhead_pair
+    state.metadata["reinvent"] = render_reinvent_objective(profile, strategy, **render_kwargs)
     state.metadata["reinvent_source"] = "planner_adc_default"
     return True
 

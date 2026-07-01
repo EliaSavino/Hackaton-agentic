@@ -410,9 +410,11 @@ def _rerender_reinvent(state: DiscoveryStatePayload) -> None:
     strategy = state.metadata.get("adc_strategy")
     if profile is None or strategy is None:
         return
-    state.metadata["reinvent"] = render_reinvent_objective(
-        profile, strategy, objective=state.original_user_request
-    )
+    warhead_pair = state.metadata.get("adc_warhead_pair")
+    render_kwargs = {"objective": state.original_user_request}
+    if warhead_pair:
+        render_kwargs["warhead_pair"] = warhead_pair
+    state.metadata["reinvent"] = render_reinvent_objective(profile, strategy, **render_kwargs)
 
 
 def _record_decision_trail(

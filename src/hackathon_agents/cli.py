@@ -170,6 +170,7 @@ try:
         device: str = typer.Option("cpu", "--device", help="Torch device for REINVENT: cpu (rome/genoa) or cuda:0 (GPU)."),
         reinvent_steps: int = typer.Option(100, "--reinvent-steps", min=1, help="RL steps per stage. Lower (e.g. 20) for CPU runs."),
         reinvent_batch: int = typer.Option(64, "--reinvent-batch", min=1, max=1024, help="RL batch size. Lower (e.g. 32) for CPU runs."),
+        warhead_pair: str = typer.Option("", "--warhead-pair", help="LinkInvent warhead pair 'w1(*)|w2(*)'. Empty uses the canonical maleimidocaproyl|aniline pair."),
     ) -> None:
         """Autonomously design ADC linkers with REINVENT LinkInvent and write a paper.
 
@@ -200,6 +201,7 @@ try:
                 "adc_goal_profile": profile.model_dump(mode="json"),
                 "adc_strategy": strategy.model_dump(mode="json"),
                 "adc_strategy_caps": {"max_steps": reinvent_steps, "batch_size": reinvent_batch},
+                **({"adc_warhead_pair": warhead_pair} if warhead_pair else {}),
             },
         )
         typer.echo(f"Run directory: {state.run_dir}")
