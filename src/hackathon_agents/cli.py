@@ -167,6 +167,7 @@ try:
         run_root: Path = typer.Option(Path("runs"), "--run-root"),
         max_iterations: int = typer.Option(3, "--max-iterations", min=1, max=20),
         run_reinvent: bool = typer.Option(False, "--run/--mock", help="Actually run REINVENT (needs priors/HPC) vs mock."),
+        device: str = typer.Option("cpu", "--device", help="Torch device for REINVENT, e.g. cpu or cuda:0 (use cuda:0 on the GPU cluster)."),
     ) -> None:
         """Autonomously design ADC linkers with REINVENT LinkInvent and write a paper."""
 
@@ -174,7 +175,7 @@ try:
         from hackathon_agents.tools.adc_linker_objective import build_adc_linkinvent_objective
 
         profile = ADCGoalProfile()
-        reinvent = build_adc_linkinvent_objective(profile, run=run_reinvent)
+        reinvent = build_adc_linkinvent_objective(profile, run=run_reinvent, device=device)
         reinvent["objective"] = request
         state = run_demo(
             request,
