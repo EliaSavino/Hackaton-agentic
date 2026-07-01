@@ -37,6 +37,7 @@ import os
 import shutil
 import subprocess
 import time
+import uuid
 from pathlib import Path
 from typing import Any, Literal
 
@@ -472,7 +473,11 @@ def _generate_with_reinvent_ssh(parsed: ReinventInput):
     with RemoteHPCClient(cfg) as client:
         base = client.resolve_path(parsed.remote_workdir)
         stamp = time.strftime("%Y%m%d_%H%M%S")
-        remote_job_dir = posixpath.join(base, f"reinvent-{parsed.seed}_{stamp}_{os.getpid()}")
+        # A uuid suffix keeps the remote dir unique when many jobs run concurrently
+        # (ThreadPoolExecutor shares pid, and stamp is only per-second, so matched
+        # seeds across contexts would otherwise collide and clobber each other).
+        uniq = uuid.uuid4().hex[:8]
+        remote_job_dir = posixpath.join(base, f"reinvent-{parsed.seed}_{stamp}_{os.getpid()}_{uniq}")
         client.makedirs(remote_job_dir)
 
         config_path, smiles_path = _stage_reinvent_config(parsed, work_dir, remote_job_dir)

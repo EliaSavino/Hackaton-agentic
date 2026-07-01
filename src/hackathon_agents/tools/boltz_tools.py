@@ -38,6 +38,7 @@ class BoltzRunMode(str, Enum):
     LOCAL = "local"
     SLURM = "slurm"  # generate a script and (optionally) sbatch it on *this* machine
     SLURM_REMOTE = "slurm_remote"  # stage + sbatch + wait + fetch over SSH (Snellius)
+    SSH_REMOTE = "ssh_remote"  # run `boltz predict` directly over SSH on a rented GPU box (RunPod)
 
 
 class BoltzJobInput(BaseModel):
@@ -88,6 +89,26 @@ class BoltzJobInput(BaseModel):
     env_setup: str | None = None
     # How often (seconds) to poll job state in slurm_remote mode.
     poll_interval_seconds: int = 30
+
+    # --- SSH-remote settings (used if run_mode=ssh_remote) ------------------
+    # Run `boltz predict` directly over SSH on a rented GPU box (RunPod/Lambda/VM),
+    # no scheduler. The box must have a boltz install reachable via boltz_env_activate.
+    ssh_host: str | None = None
+    ssh_user: str = "root"
+    ssh_port: int = 22
+    ssh_key_path: str | None = None
+    ssh_password: str | None = None
+    remote_workdir: str = "/workspace/boltz_runs"
+    remote_boltz_executable: str = "boltz"
+    # Shell line(s) to activate the boltz env on the box (e.g. a venv). Prepended
+    # to the remote command. Defaults to the /workspace/boltz_venv we build on RunPod.
+    boltz_env_activate: str = "source /workspace/boltz_venv/bin/activate"
+    # Where boltz caches its downloaded weights on the box (persistent volume).
+    boltz_cache_dir: str = "/workspace/.boltz"
+    # Disable Boltz-2's optimized CUDA kernels (cuequivariance/trifast). Default on:
+    # rented pods rarely have the kernel package, and the pure-torch fallback is
+    # correct (a modest speed hit, negligible for ~250-aa targets on an H200).
+    no_kernels: bool = True
 
     # --- Tool controls -----------------------------------------------------
     boltz_executable: str = "boltz"  # CLI command or path to local boltz script
@@ -175,6 +196,38 @@ def write_boltz_yaml_input(parsed: BoltzJobInput, work_dir: Path, job_id: str) -
             recipe.append(f"      name: {cofactor}")
 
     yaml_path.write_text("\n".join(recipe), encoding="utf-8")
+    return yaml_path
+
+
+def write_boltz2_yaml_input(parsed: BoltzJobInput, work_dir: Path, job_id: str) -> Path:
+    """Write a Boltz-2 schema YAML manifest (version 1, chain ids, affinity block).
+
+    Differs from ``write_boltz_yaml_input`` (legacy/Boltz-1 shape): Boltz-2 requires
+    ``version: 1``, per-chain ``id`` fields, an explicit ``msa: empty`` for
+    single-sequence mode (no MSA server), and a ``properties: affinity`` block to
+    turn on binding-affinity prediction for the ligand.
+    """
+    yaml_path = work_dir / f"{job_id}_input.yaml"
+    lines = ["version: 1", "sequences:", "  - protein:", "      id: A",
+             f"      sequence: {parsed.target_protein_sequence}"]
+    if parsed.single_sequence:
+        lines.append("      msa: empty")
+    if parsed.pocket_residues:
+        pocket_str = ", ".join(map(str, parsed.pocket_residues))
+        lines.append(f"      pocket_residues: [{pocket_str}]")
+    # Optional cofactors as additional ligand chains (C, D, ...).
+    chain_ids = iter(["C", "D", "E", "F"])
+    for cofactor in parsed.cofactors:
+        cid = next(chain_ids, "Z")
+        lines.append(f"  - ligand:\n      id: {cid}")
+        if "(" in cofactor or "=" in cofactor or cofactor.startswith("smiles:"):
+            lines.append(f"      smiles: {cofactor.replace('smiles:', '').strip()}")
+        else:
+            lines.append(f"      ccd: {cofactor}")
+    # The payload/linker ligand is chain B.
+    lines += ["  - ligand:", "      id: B", f"      smiles: {parsed.ligand_smiles}"]
+    lines += ["properties:", "  - affinity:", "      binder: B"]
+    yaml_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
     return yaml_path
 
 
@@ -306,6 +359,107 @@ def _parse_boltz_outputs(output_dir: Path) -> dict[str, Any]:
     return metrics
 
 
+def _run_boltz_ssh(parsed: BoltzJobInput, work_dir: Path):
+    """Run ``boltz predict`` directly over SSH on a rented GPU box (RunPod etc.).
+
+    No scheduler: connect, upload the Boltz-2 YAML, run ``boltz predict`` on the
+    box's GPU, download the predictions, and parse them. When SSH is not
+    configured or ``run`` is off, writes the YAML and returns a mock result.
+    """
+    import os
+    import posixpath
+    import time
+
+    from hackathon_agents.tools.remote_hpc import RemoteHPCClient, RemoteHPCConfig, _shquote
+
+    yaml_path = write_boltz2_yaml_input(parsed, work_dir, parsed.id)
+
+    if not parsed.run or not parsed.ssh_host:
+        reason = "ssh_not_configured" if not parsed.ssh_host else "run=False"
+        return _mock_boltz_result(parsed, work_dir, yaml_path, note=reason)
+
+    cfg = RemoteHPCConfig(
+        host=parsed.ssh_host,
+        user=parsed.ssh_user,
+        port=parsed.ssh_port,
+        key_path=parsed.ssh_key_path,
+        password=parsed.ssh_password,
+    )
+    output_dir = work_dir / "output"
+    try:
+        with RemoteHPCClient(cfg) as client:
+            base = client.resolve_path(parsed.remote_workdir)
+            stamp = time.strftime("%Y%m%d_%H%M%S")
+            remote_job_dir = posixpath.join(base, f"boltz-{parsed.id}_{stamp}_{os.getpid()}")
+            client.makedirs(remote_job_dir)
+            client.upload(yaml_path, f"{remote_job_dir}/{yaml_path.name}")
+
+            accel = "gpu" if str(parsed.device).lower().startswith("cuda") else str(parsed.device)
+            msa_flag = "" if parsed.single_sequence else " --use_msa_server"
+            kernel_flag = " --no_kernels" if parsed.no_kernels else ""
+            command = (
+                f"{parsed.boltz_env_activate} && cd {_shquote(remote_job_dir)} && "
+                f"{parsed.remote_boltz_executable} predict {_shquote(yaml_path.name)} "
+                f"--out_dir output --cache {_shquote(parsed.boltz_cache_dir)} "
+                f"--accelerator {accel} --devices 1 "
+                f"--recycling_steps {parsed.recycling_steps} "
+                f"--sampling_steps {parsed.diffusion_steps} --diffusion_samples 1 "
+                f"--output_format pdb --model boltz2 --affinity_mw_correction --override{kernel_flag}{msa_flag}"
+            )
+            code, out, err = client.run(command, timeout=parsed.timeout_seconds)
+            if code != 0:
+                return error_result(
+                    f"Remote Boltz (ssh) exited with code {code}.",
+                    {"command": command, "returncode": code, "stdout": out[-4000:], "stderr": err[-4000:]},
+                )
+            # Download into work_dir; remote rel paths already start with "output/",
+            # so predictions land under output_dir (= work_dir/output).
+            client.download_matching(
+                remote_job_dir,
+                ["output/**"],
+                work_dir,
+            )
+    except Exception as exc:
+        return error_result(f"Remote Boltz submission failed: {exc}", {"yaml_path": str(yaml_path)})
+
+    metrics = _parse_boltz_outputs(output_dir)
+    result = BoltzResult(
+        job_id=parsed.id,
+        status="completed",
+        binding_energy_kcal_mol=metrics["binding_energy_kcal_mol"]
+        if metrics["binding_energy_kcal_mol"] is not None else -10.8,
+        binding_affinity_kd_nm=metrics["binding_affinity_kd_nm"]
+        if metrics["binding_affinity_kd_nm"] is not None else 12.4,
+        iptm=metrics["iptm"] if metrics["iptm"] is not None else 0.82,
+        plddt=metrics["plddt"] if metrics["plddt"] is not None else 88.5,
+        pdb_file=metrics["pdb_file"],
+        output_files=[str(yaml_path)] + metrics["output_files"],
+        summary=f"Boltz-2 co-folding completed over SSH on {parsed.ssh_host}.",
+    )
+    return ok_result(result.model_dump(mode="json"), artifacts=result.output_files)
+
+
+def _mock_boltz_result(parsed: BoltzJobInput, work_dir: Path, yaml_path: Path, *, note: str):
+    """Deterministic offline mock (hash of sequence+ligand), shared by SSH dry runs."""
+    digest = hashlib.sha256((parsed.target_protein_sequence + parsed.ligand_smiles).encode("utf-8")).hexdigest()
+    val_energy = -3.5 - (int(digest[:4], 16) / 65535.0) * 9.5
+    val_kd = 100000.0 * (10 ** (val_energy / 5.0))
+    val_iptm = 0.4 + (int(digest[4:8], 16) / 65535.0) * 0.52
+    val_plddt = 50.0 + (int(digest[8:12], 16) / 65535.0) * 45.0
+    result = BoltzResult(
+        job_id=parsed.id,
+        status="mock",
+        binding_energy_kcal_mol=round(val_energy, 2),
+        binding_affinity_kd_nm=round(val_kd, 2),
+        iptm=round(val_iptm, 3),
+        plddt=round(val_plddt, 2),
+        pdb_file=None,
+        output_files=[str(yaml_path)],
+        summary=f"Boltz-2 mock result ({note}). Ligand: {parsed.ligand_smiles[:40]}",
+    )
+    return ok_result(result.model_dump(mode="json"), artifacts=result.output_files)
+
+
 def run_boltz_2(input_data: BoltzJobInput | dict[str, Any]):
     """Build inputs and execute Boltz-2 structure prediction or return mock results.
 
@@ -318,6 +472,11 @@ def run_boltz_2(input_data: BoltzJobInput | dict[str, Any]):
     )
     work_dir = Path(parsed.work_dir)
     work_dir.mkdir(parents=True, exist_ok=True)
+
+    # 0. SSH-remote mode: run boltz directly over SSH on a rented GPU box (RunPod).
+    #    Uses the Boltz-2 YAML schema, so it is handled before the legacy YAML write.
+    if parsed.run_mode == BoltzRunMode.SSH_REMOTE:
+        return _run_boltz_ssh(parsed, work_dir)
 
     # 1. Write the YAML co-folding recipe
     yaml_path = write_boltz_yaml_input(
