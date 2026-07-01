@@ -47,15 +47,53 @@ def task_graph_summary(state: DiscoveryStatePayload) -> dict[str, Any]:
     graph = get_task_graph(state)
     if graph is None:
         return {}
+    return _summarize_graph(graph)
+
+
+def _summarize_graph(graph: PlannerTaskGraph) -> dict[str, Any]:
     counts: dict[str, int] = {}
+    status_by_id = {task.id: task.status for task in graph.tasks}
+    blocked_tasks: list[dict[str, Any]] = []
+    ready_task_ids: list[str] = []
+
     for task in graph.tasks:
         counts[task.status] = counts.get(task.status, 0) + 1
+        if task.status != "planned":
+            continue
+        blockers = [
+            dependency
+            for dependency in task.depends_on
+            if status_by_id.get(dependency) != "completed"
+        ]
+        if blockers:
+            blocked_tasks.append({"id": task.id, "blocked_by": blockers})
+        else:
+            ready_task_ids.append(task.id)
+
     return {
+        "objective": graph.objective,
         "task_count": len(graph.tasks),
         "status_counts": counts,
+        "planned_task_ids": [task.id for task in graph.tasks if task.status == "planned"],
+        "running_task_ids": [task.id for task in graph.tasks if task.status == "running"],
         "completed_task_ids": [task.id for task in graph.tasks if task.status == "completed"],
         "failed_task_ids": [task.id for task in graph.tasks if task.status == "failed"],
         "skipped_task_ids": [task.id for task in graph.tasks if task.status == "skipped"],
+        "ready_task_ids": ready_task_ids,
+        "blocked_tasks": blocked_tasks,
+        "tasks": [
+            {
+                "id": task.id,
+                "title": task.title,
+                "task_type": task.task_type,
+                "agent": task.agent,
+                "status": task.status,
+                "depends_on": task.depends_on,
+                "attempts": task.attempts,
+                "produced_artifacts": task.produced_artifacts,
+            }
+            for task in graph.tasks
+        ],
     }
 
 
@@ -96,6 +134,7 @@ def _update_task(
         state.add_error(f"planner_task_graph: unknown task id {task_id!r}")
         return
     state.metadata["planner_task_graph"] = graph.model_dump(mode="json")
+    state.metadata["planner_task_summary"] = _summarize_graph(graph)
 
 
 def _dedupe(values: list[str]) -> list[str]:

@@ -43,6 +43,7 @@ class GraphSmokeTests(unittest.TestCase):
             self.assertGreaterEqual(len(memory_lines), 5)
             self.assertEqual(final_state.metadata.get("memory_jsonl_path"), str(memory_dir / "project_memory.jsonl"))
             self.assertIn("planner_task_graph", final_state.metadata)
+            self.assertIn("planner_task_summary", final_state.metadata)
             self.assertIn("tool_registry", final_state.metadata)
             task_graph = PlannerTaskGraph.model_validate(final_state.metadata["planner_task_graph"])
             task_by_id = {task.id: task for task in task_graph.tasks}
@@ -53,6 +54,12 @@ class GraphSmokeTests(unittest.TestCase):
             self.assertEqual(task_by_id["write_reports"].status, "completed")
             self.assertGreaterEqual(task_by_id["generate_candidates"].attempts, 1)
             self.assertTrue(task_by_id["write_reports"].produced_artifacts)
+            self.assertEqual(final_state.metadata["planner_task_summary"]["ready_task_ids"], [])
+            self.assertEqual(final_state.metadata["planner_task_summary"]["blocked_tasks"], [])
+            self.assertEqual(
+                set(final_state.metadata["planner_task_summary"]["completed_task_ids"]),
+                {"plan", "generate_candidates", "run_deterministic_tools", "critique", "write_reports"},
+            )
             self.assertTrue(Path(tmp, "artifact_index.json").exists())
             self.assertEqual(final_state.metadata.get("artifact_index_path"), str(Path(tmp, "artifact_index.json")))
             artifact_index = json.loads(Path(tmp, "artifact_index.json").read_text(encoding="utf-8"))
@@ -62,6 +69,7 @@ class GraphSmokeTests(unittest.TestCase):
             self.assertIn("tool_calls", artifact_index["provenance"])
             self.assertIn("model_calls", artifact_index["provenance"])
             self.assertIn("planner_task_summary", artifact_index["provenance"])
+            self.assertEqual(artifact_index["provenance"]["planner_task_summary"]["blocked_tasks"], [])
             report_entry = next(
                 entry for entry in artifact_index["artifacts"] if entry["relative_path"] == "report.tex"
             )

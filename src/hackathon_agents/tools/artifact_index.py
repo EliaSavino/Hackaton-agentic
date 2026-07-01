@@ -234,23 +234,66 @@ def _model_call_summary(model_calls: list[dict[str, Any]]) -> dict[str, Any]:
 
 
 def _planner_task_summary(metadata: dict[str, Any]) -> dict[str, Any]:
+    stored = metadata.get("planner_task_summary")
+    if isinstance(stored, dict):
+        return stored
+
     graph = metadata.get("planner_task_graph") or {}
     tasks = graph.get("tasks", []) if isinstance(graph, dict) else []
     counts: dict[str, int] = {}
+    status_by_id = {task.get("id"): task.get("status") for task in tasks if isinstance(task, dict)}
+    ready_task_ids: list[str] = []
+    blocked_tasks: list[dict[str, Any]] = []
     for task in tasks:
+        if not isinstance(task, dict):
+            continue
         status = str(task.get("status", "unknown"))
         counts[status] = counts.get(status, 0) + 1
+        if status != "planned":
+            continue
+        blockers = [
+            dependency
+            for dependency in task.get("depends_on", [])
+            if status_by_id.get(dependency) != "completed"
+        ]
+        if blockers:
+            blocked_tasks.append({"id": task.get("id"), "blocked_by": blockers})
+        else:
+            ready_task_ids.append(task.get("id"))
     return {
+        "objective": graph.get("objective") if isinstance(graph, dict) else None,
         "task_count": len(tasks),
         "status_counts": counts,
+        "planned_task_ids": [
+            task.get("id") for task in tasks if isinstance(task, dict) and task.get("status") == "planned"
+        ],
+        "running_task_ids": [
+            task.get("id") for task in tasks if isinstance(task, dict) and task.get("status") == "running"
+        ],
+        "completed_task_ids": [
+            task.get("id") for task in tasks if isinstance(task, dict) and task.get("status") == "completed"
+        ],
+        "failed_task_ids": [
+            task.get("id") for task in tasks if isinstance(task, dict) and task.get("status") == "failed"
+        ],
+        "skipped_task_ids": [
+            task.get("id") for task in tasks if isinstance(task, dict) and task.get("status") == "skipped"
+        ],
+        "ready_task_ids": ready_task_ids,
+        "blocked_tasks": blocked_tasks,
         "tasks": [
             {
                 "id": task.get("id"),
+                "title": task.get("title"),
+                "task_type": task.get("task_type"),
+                "agent": task.get("agent"),
                 "status": task.get("status"),
+                "depends_on": task.get("depends_on", []),
                 "attempts": task.get("attempts"),
                 "produced_artifacts": task.get("produced_artifacts", []),
             }
             for task in tasks
+            if isinstance(task, dict)
         ],
     }
 

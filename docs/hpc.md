@@ -10,45 +10,33 @@ This guide covers two different HPC patterns:
 Use this mode when the repo itself should run on the cluster, for example to
 analyze kinetic data, run a mechanism loop, or prepare reports.
 
-Create a Slurm script such as `run_mechanism_once.job`:
+Start from the checked-in template:
 
 ```bash
-#!/usr/bin/env bash
-#SBATCH --job-name=hackathon-mechanism
-#SBATCH --output=runs/hpc_%j.out
-#SBATCH --error=runs/hpc_%j.err
-#SBATCH --time=00:30:00
-#SBATCH --cpus-per-task=4
-#SBATCH --mem=8G
-
-set -euo pipefail
-
-cd "$HOME/Hackaton-agentic"
-
-# Choose the environment style that matches your cluster setup.
-# source "$HOME/miniconda3/etc/profile.d/conda.sh"
-# conda activate hackathon-agents
-
-export PYTHONPATH=src
-
-python -m hackathon_agents.cli mechanism-once \
-  --data data/ad_hoc/photochem_trace.csv \
-  --objective "Infer the mechanism for a photochemical A + B to P reaction and recommend the next experiment." \
-  --mode mock \
-  --run-root runs
+less docs/examples/run_mechanism_once.slurm
 ```
 
-Submit it:
+Submit it as-is for a mock-safe mechanism run, or override inputs with
+environment variables:
 
 ```bash
-sbatch run_mechanism_once.job
+sbatch docs/examples/run_mechanism_once.slurm
+```
+
+For a custom dataset/objective:
+
+```bash
+MECHANISM_DATA=data/my_trace.csv \
+MECHANISM_OBJECTIVE="Infer the rate law and propose the next experiment." \
+RUN_ROOT=runs \
+sbatch docs/examples/run_mechanism_once.slurm
 ```
 
 Watch it:
 
 ```bash
 squeue -u "$USER"
-tail -f runs/hpc_<jobid>.out
+tail -f hackathon_mechanism_<jobid>.out
 ```
 
 The run artifacts will be under `runs/mechanism_once_<timestamp>/`, including
@@ -131,4 +119,3 @@ Run the printed SSH tunnel command and exports in your local shell.
 - Prefer `mock` or `dry-run` modes until robot/HPC submission is explicitly
   approved.
 - Check each run's `artifact_index.json` first when collecting outputs.
-

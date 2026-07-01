@@ -7,6 +7,12 @@ work, execute tools, validate outputs, and write useful artifacts.
 
 ## 1. Typed Planner Task Graph
 
+Status: implemented and integrated into discovery runs. Planner metadata now
+contains a typed task graph and a compact summary with status counts, ready
+tasks, blocked tasks, dependencies, attempts, and produced artifacts. Graph
+nodes update task lifecycle state as they run, and artifact indexes preserve the
+summary for handoff/debugging.
+
 ### Why
 
 The current discovery graph is mostly linear: planner, chemist, tools, critic,
@@ -115,6 +121,12 @@ and repair simple formatting problems before downstream code rejects them.
 
 ## 6. Remote And HPC Execution Polish
 
+Status: implemented for batch workflow jobs, Snellius vLLM serving, and
+Claude-compatible gateway workflows. The guide links to a reusable Slurm
+template at `docs/examples/run_mechanism_once.slurm`, documents SSH tunneling,
+and points users to the existing CLI helpers for vLLM, LiteLLM gateway, and
+local terminal environment setup.
+
 ### Why
 
 The repo can generate Snellius scripts, but users need an obvious path for both
@@ -130,6 +142,10 @@ batch workflows and remote model-serving workflows.
 4. Link the guide from the main docs index.
 
 ## Work Order
+
+Status: complete. The implementation landed in the conversational order used in
+this repo session, but all six roadmap capabilities are now represented in code,
+docs, and tests.
 
 1. Implement output validators first because they improve benchmarks with small
    risk.

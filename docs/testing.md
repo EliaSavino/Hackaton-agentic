@@ -20,6 +20,7 @@ python -m compileall -q src tests
 - `test_llm_validators.py`: JSON and LaTeX output normalization/validation.
 - `test_memory_writer.py`: append-only JSONL and Markdown project memory.
 - `test_graph_smoke.py`: graph smoke path without DFT.
+- `test_hpc_docs.py`: HPC guide references the checked-in Slurm template.
 - `test_model_backed_agents.py`: mocked model-backed planner, chemist, and critic paths.
 - `test_mechanism_graph_smoke.py`: closed-loop mechanism workflow artifacts.
 - `test_mechanism_integrations.py`: local literature prior and configurable DFT structure hooks.

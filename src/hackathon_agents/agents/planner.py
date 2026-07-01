@@ -4,6 +4,7 @@ from hackathon_agents.agents.model_helpers import call_agent_model
 from hackathon_agents.config import AppConfig
 from hackathon_agents.schemas.tasks import DiscoveryPlan, DiscoveryPlanStep, PlannedTask, PlannerTaskGraph
 from hackathon_agents.state import DiscoveryStatePayload
+from hackathon_agents.task_graph import task_graph_summary
 from hackathon_agents.tools.registry import build_tool_registry, summarize_tool_registry
 
 
@@ -86,6 +87,7 @@ def _attach_planner_metadata(state: DiscoveryStatePayload, tool_registry: list[d
         state.metadata["tool_registry"] = tool_registry
         state.metadata["tool_registry_summary"] = summarize_tool_registry(tool_registry)
     state.metadata["planner_task_graph"] = _default_task_graph(state).model_dump(mode="json")
+    state.metadata["planner_task_summary"] = task_graph_summary(state)
 
 
 def _default_task_graph(state: DiscoveryStatePayload) -> PlannerTaskGraph:
