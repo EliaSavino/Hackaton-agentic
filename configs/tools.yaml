@@ -36,6 +36,10 @@ tools:
     allow_external_api: false
     supported_extensions: [.txt, .md]
 
+  linker_design:
+    enabled: true
+    enabled_modes: [full, no_dft, cheap, offline]
+
   rag:
     enabled: true
     db_path: "${RAG_DB_PATH:-data/rag.sqlite}"

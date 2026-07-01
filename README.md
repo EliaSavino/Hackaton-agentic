@@ -204,6 +204,22 @@ python -m hackathon_agents.cli review-paper path/to/paper.txt \
 
 Supported inputs are `.txt`, `.md`, `.pdf`, and `.docx`. PDF extraction uses `pypdf`; DOCX extraction uses `python-docx`. The output is a structured JSON review with metadata, detected sections, claim-like statements, strengths, limitations, reproducibility checklist items, focus-question evidence, and a deterministic recommendation.
 
+## Design ADC Linkers
+
+Generate a deterministic linker-design dossier for ADC challenge prompts:
+
+```bash
+python -m hackathon_agents.cli design-linkers \
+  --objective "Design a novel ADC linker with plasma stability and tunable tumor release" \
+  --output-dir runs/adc_linker_demo
+```
+
+The workflow ranks linker concepts with ADC-specific proof points: plasma
+stability, tumor or lysosomal release, aqueous solubility, aggregation risk,
+payload compatibility, manufacturability, and novelty versus reference linker
+classes. Artifacts include `linker_candidates.json`, `linker_rankings.csv`,
+`linker_design_report.md`, and `artifact_index.json`.
+
 ## Generative Molecules With Saturn
 
 The discovery pipeline can generate candidate molecules with [`schwallergroup/saturn`](https://github.com/schwallergroup/saturn), a sample-efficient generative molecular design framework, against an oracle (reward function) and reinforcement-learning setting of the agent's choice.

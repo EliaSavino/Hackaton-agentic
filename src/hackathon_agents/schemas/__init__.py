@@ -1,4 +1,11 @@
 from hackathon_agents.schemas.molecules import MoleculeFilterConstraints, MoleculeRecord
+from hackathon_agents.schemas.linkers import (
+    LinkerCandidate,
+    LinkerDesignRequest,
+    LinkerProofPoint,
+    LinkerScorecard,
+    ReferenceLinkerClass,
+)
 from hackathon_agents.schemas.papers import (
     EvidenceSpan,
     PaperClaim,
@@ -16,6 +23,10 @@ __all__ = [
     "DiscoveryPlanStep",
     "CriticDecision",
     "EvidenceSpan",
+    "LinkerCandidate",
+    "LinkerDesignRequest",
+    "LinkerProofPoint",
+    "LinkerScorecard",
     "MoleculeFilterConstraints",
     "MoleculeRecord",
     "PaperClaim",
@@ -24,6 +35,7 @@ __all__ = [
     "PaperSection",
     "ReproducibilityChecklistItem",
     "ReviewFinding",
+    "ReferenceLinkerClass",
     "ToolExecutionRecord",
     "ToolResult",
 ]

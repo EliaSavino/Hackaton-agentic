@@ -70,7 +70,17 @@ class CLISmokeTests(unittest.TestCase):
             self.assertTrue(index_path.exists())
             artifact_index = json.loads(index_path.read_text(encoding="utf-8"))
             self.assertEqual(artifact_index["provenance"]["workflow"], "system_benchmark")
-            self.assertEqual(artifact_index["provenance"]["case_count"], 4)
+            self.assertEqual(artifact_index["provenance"]["case_count"], 5)
+
+    def test_design_linkers_cli_writes_dossier(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            result = _run_cli("design-linkers", "--output-dir", tmp, "--max-candidates", "5")
+
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertIn("Top linker:", result.stdout)
+            self.assertTrue((Path(tmp) / "linker_candidates.json").exists())
+            self.assertTrue((Path(tmp) / "linker_rankings.csv").exists())
+            self.assertTrue((Path(tmp) / "linker_design_report.md").exists())
 
 
 def _run_cli(*args: str) -> subprocess.CompletedProcess[str]:

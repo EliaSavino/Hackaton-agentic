@@ -10,6 +10,7 @@ __pycache__/
 !/runs/.gitkeep
 /data/*
 !/data/.gitkeep
+!/data/adc_linker_reference_corpus.json
 !/data/memory/
 !/data/memory/README.md
 !/data/memory/project_memory.jsonl

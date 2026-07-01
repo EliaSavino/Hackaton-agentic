@@ -16,13 +16,14 @@ class SystemBenchmarkTests(unittest.TestCase):
             index = json.loads((output_path.parent / "artifact_index.json").read_text(encoding="utf-8"))
 
         self.assertTrue(payload["ok"])
-        self.assertEqual(payload["case_count"], 4)
-        self.assertEqual(payload["passed_count"], 4)
+        self.assertEqual(payload["case_count"], 5)
+        self.assertEqual(payload["passed_count"], 5)
         self.assertEqual(payload["failed_count"], 0)
         case_names = {case["name"] for case in payload["cases"]}
         self.assertEqual(
             case_names,
             {
+                "adc_linker_design_dossier",
                 "kinetics_to_mechanism_report",
                 "smiles_to_descriptor_table",
                 "paper_snippet_to_review",
@@ -33,7 +34,7 @@ class SystemBenchmarkTests(unittest.TestCase):
             self.assertTrue(case["criteria"])
             self.assertGreaterEqual(case["duration_seconds"], 0.0)
         self.assertEqual(index["provenance"]["workflow"], "system_benchmark")
-        self.assertEqual(index["provenance"]["case_count"], 4)
+        self.assertEqual(index["provenance"]["case_count"], 5)
 
 
 if __name__ == "__main__":

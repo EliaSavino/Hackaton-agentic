@@ -69,6 +69,32 @@ Functions:
 
 These tools provide offline/local literature support: rank text or markdown documents by query relevance, screen structured literature records, map claims to snippets, deduplicate by DOI/title, extract key terms, and format compact or BibTeX-style citations. They do not make external API calls.
 
+### ADC Linker Design
+
+Module: `src/hackathon_agents/tools/linker_design.py`
+
+Functions:
+
+- `load_reference_linker_corpus(path)`
+- `generate_linker_candidates(input)`
+- `score_linker_candidate(candidate, input, references)`
+- `design_adc_linkers(input)`
+
+This tool is a deterministic workflow for ADC linker challenge prompts. It
+generates modular linker concepts, scores plasma stability, tumor or lysosomal
+release, aqueous solubility, low aggregation risk, payload compatibility,
+manufacturability, and novelty, then writes a JSON/CSV/Markdown linker dossier.
+It uses capped model-fragment SMILES for descriptor attempts and falls back to
+heuristic descriptor estimates when RDKit is unavailable.
+
+CLI example:
+
+```bash
+PYTHONPATH=src python -m hackathon_agents.cli design-linkers \
+  --objective "Design a tunable ADC linker for heterogeneous tumors" \
+  --output-dir runs/adc_linker_demo
+```
+
 ### RAG Tools
 
 Module: `src/hackathon_agents/tools/rag_tools.py`

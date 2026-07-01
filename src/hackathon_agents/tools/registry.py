@@ -71,6 +71,14 @@ _TOOL_DESCRIPTIONS: dict[str, dict[str, Any]] = {
         "outputs": ["literature snippets", "source metadata"],
         "failure_modes": ["missing corpus", "unsupported file extension"],
     },
+    "linker_design": {
+        "category": "adc_linker_design",
+        "summary": "Generate, score, and report ADC linker concepts with deterministic in-silico proof points.",
+        "inputs": ["ADC linker objective", "payload classes", "desired triggers", "conjugation handles"],
+        "outputs": ["ranked linker candidates", "scorecards", "proof points", "JSON/CSV/Markdown dossier"],
+        "failure_modes": ["invalid custom reference corpus", "unwritable output directory"],
+        "planner_notes": ["Use for ADC/linker challenge prompts before generic molecule generation."],
+    },
     "rag": {
         "category": "retrieval",
         "summary": "Index and search local documents through SQLite-backed RAG.",

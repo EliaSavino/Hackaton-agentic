@@ -15,6 +15,7 @@ from hackathon_agents.logging_config import configure_logging
 from hackathon_agents.mechanism.graph import run_mechanism_loop, run_mechanism_once
 from hackathon_agents.rag import DEFAULT_RAG_DB_PATH, RAGStore
 from hackathon_agents.tools.rag_tools import build_rag_context, ingest_rag_documents, search_rag
+from hackathon_agents.tools.linker_design import design_adc_linkers
 from hackathon_agents.tools.paper_review import review_paper
 from hackathon_agents.tools.snellius_vllm import (
     generate_snellius_gateway_job,
@@ -153,6 +154,60 @@ try:
         configure_logging()
         output_path = benchmark_system(run_root=run_root)
         typer.echo(f"System benchmark written to {output_path}")
+
+    @app.command("design-linkers")
+    def design_linkers_command(
+        objective: str = typer.Option(
+            "Design a next-generation ADC linker with improved stability, tunable release, and broad payload compatibility.",
+            "--objective",
+            "-o",
+        ),
+        output_dir: Path | None = typer.Option(None, "--output-dir"),
+        payload_class: list[str] = typer.Option(
+            ["cytotoxin", "oligonucleotide", "immunomodulator"],
+            "--payload-class",
+            "-p",
+        ),
+        trigger: list[str] = typer.Option(
+            ["lysosomal protease", "acidic pH", "reducing environment", "tumor enzyme"],
+            "--trigger",
+            "-t",
+        ),
+        conjugation_handle: list[str] = typer.Option(
+            ["maleimide", "strain-promoted azide"],
+            "--conjugation-handle",
+            "-c",
+        ),
+        max_candidates: int = typer.Option(8, "--max-candidates", min=1, max=50),
+        reference_corpus: Path | None = typer.Option(None, "--reference-corpus"),
+        include_reference_controls: bool = typer.Option(True, "--reference-controls/--no-reference-controls"),
+    ) -> None:
+        """Design and rank ADC linker concepts with deterministic in-silico proof points."""
+
+        configure_logging()
+        result = design_adc_linkers(
+            {
+                "objective": objective,
+                "output_dir": str(output_dir) if output_dir else None,
+                "payload_classes": payload_class,
+                "desired_triggers": trigger,
+                "conjugation_handles": conjugation_handle,
+                "max_candidates": max_candidates,
+                "reference_corpus_path": str(reference_corpus) if reference_corpus else None,
+                "include_reference_controls": include_reference_controls,
+            }
+        )
+        if not result.ok:
+            typer.echo(f"Linker design failed: {result.error}")
+            raise typer.Exit(code=1)
+        top = result.data.get("top_candidate") or {}
+        score = ((top.get("scorecard") or {}).get("overall")) if isinstance(top, dict) else None
+        typer.echo(f"Run directory: {result.data['output_dir']}")
+        typer.echo(f"Candidates: {result.data['candidate_count']}")
+        if top:
+            typer.echo(f"Top linker: {top.get('name')} ({score:.3f})")
+        for artifact in result.artifacts:
+            typer.echo(f"Artifact: {artifact}")
 
     @app.command("review-paper")
     def review_paper_command(
@@ -487,6 +542,20 @@ except Exception:
         system_bench_parser = subparsers.add_parser("benchmark-system")
         system_bench_parser.add_argument("--run-root", default="runs")
 
+        linker_parser = subparsers.add_parser("design-linkers")
+        linker_parser.add_argument(
+            "--objective",
+            "-o",
+            default="Design a next-generation ADC linker with improved stability, tunable release, and broad payload compatibility.",
+        )
+        linker_parser.add_argument("--output-dir", default=None)
+        linker_parser.add_argument("--payload-class", "-p", action="append", default=None)
+        linker_parser.add_argument("--trigger", "-t", action="append", default=None)
+        linker_parser.add_argument("--conjugation-handle", "-c", action="append", default=None)
+        linker_parser.add_argument("--max-candidates", type=int, default=8)
+        linker_parser.add_argument("--reference-corpus", default=None)
+        linker_parser.add_argument("--no-reference-controls", action="store_true")
+
         check_parser = subparsers.add_parser("check-models")
         check_parser.add_argument("--run-mode", default=RunMode.CHEAP.value)
         check_parser.add_argument("--config-dir", default="configs")
@@ -612,6 +681,33 @@ except Exception:
         elif args.command == "benchmark-system":
             output_path = benchmark_system(run_root=args.run_root)
             print(f"System benchmark written to {output_path}")
+        elif args.command == "design-linkers":
+            result = design_adc_linkers(
+                {
+                    "objective": args.objective,
+                    "output_dir": args.output_dir,
+                    "payload_classes": args.payload_class
+                    or ["cytotoxin", "oligonucleotide", "immunomodulator"],
+                    "desired_triggers": args.trigger
+                    or ["lysosomal protease", "acidic pH", "reducing environment", "tumor enzyme"],
+                    "conjugation_handles": args.conjugation_handle
+                    or ["maleimide", "strain-promoted azide"],
+                    "max_candidates": args.max_candidates,
+                    "reference_corpus_path": args.reference_corpus,
+                    "include_reference_controls": not args.no_reference_controls,
+                }
+            )
+            if not result.ok:
+                print(f"Linker design failed: {result.error}")
+                raise SystemExit(1)
+            top = result.data.get("top_candidate") or {}
+            score = ((top.get("scorecard") or {}).get("overall")) if isinstance(top, dict) else None
+            print(f"Run directory: {result.data['output_dir']}")
+            print(f"Candidates: {result.data['candidate_count']}")
+            if top:
+                print(f"Top linker: {top.get('name')} ({score:.3f})")
+            for artifact in result.artifacts:
+                print(f"Artifact: {artifact}")
         elif args.command == "check-models":
             config = load_config(config_dir=args.config_dir, run_mode=args.run_mode)
             router = ModelRouter(config)

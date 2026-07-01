@@ -9,6 +9,8 @@ jobs:
   test:
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    env:
+      COLUMNS: "120"
 
     steps:
       - name: Checkout

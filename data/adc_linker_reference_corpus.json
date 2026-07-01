@@ -1,0 +1,59 @@
+{
+  "linker_classes": [
+    {
+      "name": "Hydrazone linker",
+      "linker_class": "acid-labile cleavable",
+      "triggers": ["acidic pH"],
+      "conjugation_handles": ["lysine", "hydrazide"],
+      "payload_handles": ["aldehyde", "ketone"],
+      "release_logic": "Hydrazone hydrolysis accelerates in acidic endosomes and lysosomes.",
+      "strengths": ["simple chemistry", "pH responsive"],
+      "limitations": ["can hydrolyze in circulation", "limited tunability"],
+      "example_adcs": ["gemtuzumab ozogamicin"]
+    },
+    {
+      "name": "Disulfide linker",
+      "linker_class": "redox cleavable",
+      "triggers": ["reducing environment"],
+      "conjugation_handles": ["thiol"],
+      "payload_handles": ["thiol", "amine"],
+      "release_logic": "Disulfide exchange or reduction releases payload in high-GSH intracellular compartments.",
+      "strengths": ["intracellular reducing trigger", "tunable steric shielding"],
+      "limitations": ["plasma thiol exchange risk", "bystander release can be hard to tune"],
+      "example_adcs": ["maytansinoid ADC linker class"]
+    },
+    {
+      "name": "Val-Cit-PABC linker",
+      "linker_class": "protease cleavable self-immolative",
+      "triggers": ["lysosomal protease"],
+      "conjugation_handles": ["maleimide"],
+      "payload_handles": ["amine", "alcohol"],
+      "release_logic": "Cathepsin cleavage at Val-Cit exposes PABC, then self-immolation releases payload.",
+      "strengths": ["clinically precedented", "efficient lysosomal release"],
+      "limitations": ["protease heterogeneity", "hydrophobic payload aggregation without solubilizers"],
+      "example_adcs": ["brentuximab vedotin", "enfortumab vedotin"]
+    },
+    {
+      "name": "Thioether maleimidocaproyl linker",
+      "linker_class": "non-cleavable",
+      "triggers": ["antibody degradation"],
+      "conjugation_handles": ["maleimide"],
+      "payload_handles": ["amine"],
+      "release_logic": "Payload exposure depends on antibody degradation and payload-linker catabolite activity.",
+      "strengths": ["high plasma stability", "simple manufacturing"],
+      "limitations": ["limited bystander effect", "payload must tolerate residual linker adduct"],
+      "example_adcs": ["ado-trastuzumab emtansine"]
+    },
+    {
+      "name": "Beta-glucuronide linker",
+      "linker_class": "tumor-enzyme cleavable self-immolative",
+      "triggers": ["tumor beta-glucuronidase"],
+      "conjugation_handles": ["maleimide", "click"],
+      "payload_handles": ["amine", "alcohol"],
+      "release_logic": "Beta-glucuronidase removes a hydrophilic glucuronide cap, enabling self-immolation.",
+      "strengths": ["high hydrophilicity", "tumor enzyme selectivity"],
+      "limitations": ["glycoside synthesis complexity", "enzyme expression heterogeneity"],
+      "example_adcs": ["glucuronide linker platform examples"]
+    }
+  ]
+}
