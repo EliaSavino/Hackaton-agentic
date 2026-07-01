@@ -1,5 +1,0 @@
-REMARK   6 Mock Boltz-2 complex structure
-REMARK   6 Ligand: O=C(O)c1ccc(F)cc1
-REMARK   6 Predicted binding energy: -5.62 kcal/mol
-ATOM      1  N   MET A   1       0.000   0.000   0.000  1.00 51.88
-END

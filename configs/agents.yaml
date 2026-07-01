@@ -79,6 +79,14 @@ agents:
       field — those are fixed and will be ignored. Give a short reason for each
       adjustment. Returning overrides implies you want another bounded pass.
 
+      You also choose the generation STRATEGY via reinvent_strategy_overrides: a
+      partial dict of {run_type ("sampling" or "staged_learning"), num_smiles,
+      max_steps, min_steps, batch_size}. Typically start from a cheap "sampling"
+      pass to get a baseline, then escalate to "staged_learning" (RL) to optimize;
+      shrink max_steps/batch_size if a pass is too slow (they are capped for the
+      CPU budget) or raise them (up to the cap) if progress is promising. Do NOT
+      set device, warheads, or the run flag — those are fixed.
+
   paper_reviewer:
     requires: [reasoning, science, final_review]
     preferred_model: science_reasoning

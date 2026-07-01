@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
@@ -62,6 +62,27 @@ class ADCGoalProfile(BaseModel):
                 except (TypeError, ValueError):
                     cleaned[key] = 0.0
         return cleaned
+
+
+class ADCStrategy(BaseModel):
+    """How the agent runs REINVENT this pass — its generation *strategy*.
+
+    Distinct from the goal profile (what to optimize). The planner seeds an
+    initial strategy (a cheap sampling pass) and the critic may escalate it
+    (sampling -> staged_learning) or adjust the RL budget between passes. Device
+    and the ``run`` toggle are execution settings carried here so a single
+    renderer can produce the REINVENT input.
+    """
+
+    run_type: Literal["sampling", "staged_learning"] = "sampling"
+    num_smiles: int = Field(default=64, ge=1, le=100000)
+    max_steps: int = Field(default=100, ge=1, le=100000)
+    min_steps: int = Field(default=25, ge=0, le=100000)
+    batch_size: int = Field(default=64, ge=1, le=1024)
+    device: str = "cpu"
+    run: bool = False
+
+    model_config = ConfigDict(extra="forbid")
 
 
 class ReferenceLinkerClass(BaseModel):

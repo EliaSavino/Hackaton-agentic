@@ -120,15 +120,22 @@ class RemoteHPCConfig(BaseModel):
             except ValueError:
                 return default
 
+        user = _get("HPC_USER", "") or ""
+        # SLURM account is a *project code* (e.g. "eucl123"), not the login name.
+        # Setting it to the username produces "Invalid account or account/partition
+        # combination"; drop it so SLURM uses the default project association.
+        account = _get("SLURM_ACCOUNT")
+        if account and user and account.strip().lower() == user.strip().lower():
+            account = None
         return cls(
             host=_get("HPC_HOST", "") or "",
-            user=_get("HPC_USER", "") or "",
+            user=user,
             port=_int("HPC_PORT", 22),
             key_path=_get("HPC_KEY_PATH"),
             password=_get("HPC_PASSWORD"),
             home=_get("HPC_HOME", "~") or "~",
             scratch_path=_get("HPC_SCRATCH_PATH"),
-            account=_get("SLURM_ACCOUNT"),
+            account=account,
             partition=_get("SLURM_PARTITION", "gpu_a100") or "gpu_a100",
             qos=_get("SLURM_QOS"),
             time_limit=_get("SLURM_TIME", "02:00:00") or "02:00:00",

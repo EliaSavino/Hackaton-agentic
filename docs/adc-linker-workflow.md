@@ -7,8 +7,17 @@ multi-objective ADC profile, and — as an autonomous critic — reweights that
 objective between rounds. It finishes by writing a ~5-page LaTeX paper.
 
 - Scientific engine: REINVENT4 LinkInvent (generates the linker between two warheads).
-- Autonomy: the critic edits a compact goal profile (weights + constraint toggles) each pass.
+- Autonomy: the agent chooses **what to optimize** (goal-profile weights + constraints) *and* **how to generate** (the strategy: sampling vs RL and the budget) each pass.
 - Output: candidates, an auditable decision trail, and `adc_paper.tex`.
+
+### The agent decides the generation strategy
+You do not pick sampling vs RL. The planner starts with a cheap **sampling** pass
+(fast, CPU-safe, yields a baseline); the critic then decides each pass whether to
+escalate to **staged-learning (RL)**, resize the RL budget (steps/batch, within
+the caps), reweight the objective, or stop. With an LLM this is model-driven
+(`reinvent_strategy_overrides`); offline it uses a deterministic sample→RL ladder.
+`--reinvent-steps` / `--reinvent-batch` set the *budget caps* the agent stays
+within — not a fixed plan.
 
 ## How it fits together
 
@@ -117,12 +126,40 @@ REINVENT_REMOTE_PRIOR_BASE=<folder holding linkinvent.prior>
 REINVENT_ENV_ACTIVATE=module load 2023; module load Miniconda3; source activate reinvent4
 ```
 
-### Run
+### Run (GPU)
 ```bash
 python -m hackathon_agents.cli design-adc-linkers \
   "Design a soluble, protease-cleavable ADC linker for maleimide conjugation with high plasma stability" \
   --run-mode full --run --device cuda:0
 ```
+
+### Run (CPU-only: rome / genoa, no GPU budget)
+Set the CPU partition and **zero GPUs** in `.env` so no GPU is requested:
+```bash
+SLURM_PARTITION=rome        # or genoa
+SLURM_GPUS=0
+SLURM_CPUS_PER_TASK=8       # rome has 128 cores/node, genoa 192
+SLURM_MEM=14G               # keep mem <= cpus * 1792 MiB to avoid extra charge
+SLURM_TIME=04:00:00         # CPU RL is slower; give it room
+SLURM_ACCOUNT=              # leave EMPTY (a project code, not your username)
+```
+**Budget note:** on shared nodes SLURM charges `max(cpus, mem_MiB / 1792)` CPU-cores.
+`SLURM_MEM=128G` with `SLURM_CPUS_PER_TASK=32` is charged for ~73 cores — expensive.
+`8 cpus + 14G` is charged for 8 cores and is plenty for LinkInvent on CPU.
+Leave `SLURM_ACCOUNT` empty unless you have a real project code; the username is
+**not** a valid account and will be dropped automatically (and rejected by SLURM
+if forced).
+Then run on CPU, with a smaller RL budget so it finishes in reasonable time:
+```bash
+python -m hackathon_agents.cli design-adc-linkers \
+  "Design a soluble, protease-cleavable ADC linker for maleimide conjugation" \
+  --run-mode full --run --device cpu \
+  --reinvent-steps 20 --reinvent-batch 32
+```
+When `SLURM_GPUS=0`, the generated SLURM script omits `--gpus-per-node` entirely
+(a GPU directive would get the job rejected on a CPU partition) **and the torch
+device is forced to `cpu`** — so even `--device cuda:0` can't leak onto a
+CPU-only node. Start small (`--reinvent-steps 20`) to confirm timing, then scale up.
 
 The agent connects over SSH, uploads the config + a SLURM script, submits with
 `sbatch`, polls every `HPC_POLL_INTERVAL` seconds until the job finishes,
@@ -133,6 +170,73 @@ writes the paper.
 Before spending GPU hours, confirm the SSH + staging works without submitting:
 set `REINVENT_ALLOW_SUBMIT=false` and run the same command. It connects, writes
 the SLURM script locally, and returns mock molecules.
+
+## Run on a rented GPU (RunPod or any single SSH GPU box)
+
+RunPod is **not** a SLURM cluster — it is one GPU machine you SSH into. There is
+no `sbatch`, no account, no budget partitions. Do **not** use `slurm_remote`.
+Instead run the whole agent **on the pod** in plain `local` mode with a CUDA
+device; REINVENT runs as a normal subprocess on the pod's GPU.
+
+1. Create a GPU pod (a PyTorch/CUDA template), add your SSH key in the RunPod
+   account settings, and copy the SSH command from the dashboard. Put long-lived
+   files under the persistent volume (`/workspace`).
+2. On the pod, install REINVENT + the prior (once):
+   ```bash
+   cd /workspace
+   python -m venv reinvent-venv && source reinvent-venv/bin/activate
+   pip install reinvent4
+   which reinvent                     # -> REINVENT_EXECUTABLE
+   mkdir -p /workspace/reinvent_priors && cd /workspace/reinvent_priors
+   wget <linkinvent.prior URL from Zenodo> -O linkinvent.prior
+   ```
+3. Put the agent on the pod and configure it for a **local GPU** run:
+   ```bash
+   cd /workspace && git clone <this repo> && cd Hackaton-Agentic
+   pip install -e .
+   cp .env.example .env               # add your ANTHROPIC/OPENAI keys
+   # in .env:
+   #   REINVENT_ENABLED=true
+   #   REINVENT_RUN_MODE=local
+   #   REINVENT_EXECUTABLE=/workspace/reinvent-venv/bin/reinvent
+   #   REINVENT_PRIOR_BASE=/workspace/reinvent_priors
+   ```
+4. Run it on the GPU:
+   ```bash
+   python -m hackathon_agents.cli design-adc-linkers \
+     "Design a soluble, protease-cleavable ADC linker for maleimide conjugation" \
+     --run-mode full --run --device cuda:0
+   ```
+5. Copy results back to your laptop: `scp -r -P <port> root@<ip>:/workspace/Hackaton-Agentic/runs ./`.
+
+No SSH/SLURM env vars (`HPC_*`, `SLURM_*`) are needed for this path — those are
+only for the Snellius `slurm_remote` mode.
+
+### Alternative: drive from your laptop with `ssh_remote`
+If you'd rather keep the agent on your laptop and only offload REINVENT to the
+pod, use `run_mode=ssh_remote`. The agent SSHes into the pod, uploads the config,
+runs `reinvent` as a command (no scheduler), and downloads the results. Steps
+1–2 above (install REINVENT + prior on the pod, note the paths) still apply, then
+on your **laptop** set in `.env`:
+```bash
+REINVENT_ENABLED=true
+REINVENT_RUN_MODE=ssh_remote
+REINVENT_SSH_HOST=<pod ip>           # from the RunPod dashboard
+REINVENT_SSH_PORT=<pod ssh port>
+REINVENT_SSH_KEY=~/.ssh/id_ed25519   # the key registered with RunPod
+REINVENT_SSH_USER=root
+REINVENT_REMOTE_EXECUTABLE=/workspace/reinvent-venv/bin/reinvent
+REINVENT_REMOTE_PRIOR_BASE=/workspace/reinvent_priors   # ABSOLUTE path on the pod
+REINVENT_REMOTE_WORKDIR=/workspace/reinvent_runs
+```
+and run locally with the pod's GPU:
+```bash
+python -m hackathon_agents.cli design-adc-linkers \
+  "Design a soluble, protease-cleavable ADC linker for maleimide conjugation" \
+  --run-mode full --run --device cuda:0
+```
+Password auth works too (set `REINVENT_SSH_PASSWORD`, leave `REINVENT_SSH_KEY`
+empty). Results land in `runs/<timestamp>/` on your laptop.
 
 ## CLI flags
 
@@ -157,6 +261,9 @@ the SLURM script locally, and returns mock molecules.
 | `No module named paramiko` | `pip install -e '.[hpc]'` |
 | `RemoteHPCConfig is not configured` | `HPC_HOST`/`HPC_USER` not loaded from `.env`. |
 | Auth fails with password | Ensure `HPC_KEY_PATH` is **empty** so password auth is forced. |
+| `submission failed: [Errno 2] No such file` | A `~` in a remote path reaching SFTP. The client now expands `~` to the cluster `$HOME` and embeds absolute paths in the config; if you still hit this, set `HPC_HOME`/`HPC_SCRATCH_PATH` to absolute paths (e.g. `/home/<you>`). |
+| `Invalid account or account/partition combination` | `SLURM_ACCOUNT` is wrong. It must be a **project code**, not your username. Leave it empty to use your default project (a username is auto-dropped). |
+| `Your budget is running low` / `charged for N CPUs` | Lower `SLURM_CPUS_PER_TASK` and `SLURM_MEM` (charge = `max(cpus, mem/1792 MiB)`). `8` cpus + `14G` is cheap and enough. |
 | Job ends `FAILED` (see printed `stderr_tail`) | Usually `REINVENT_REMOTE_PRIOR_BASE` wrong or the prior not named `linkinvent.prior`, or `REINVENT_ENV_ACTIVATE` doesn't match cluster modules. |
 | Only mock molecules returned | `--mock`, `--run-mode offline`, or `REINVENT_ALLOW_SUBMIT` not `true`. |
 | Job pending forever | Wrong `SLURM_ACCOUNT`/partition or no GPU allocation. |

@@ -155,7 +155,7 @@ class ReinventInput(BaseModel):
     summary_csv_prefix: str = "rl_output"
 
     # --- Execution / environment -------------------------------------------
-    run_mode: Literal["local", "slurm_remote"] = "local"
+    run_mode: Literal["local", "slurm_remote", "ssh_remote"] = "local"
     reinvent_executable: str = "reinvent"  # console script from the REINVENT env
     reinvent_python: str = "python"  # interpreter from the REINVENT env (fallback probe)
     prior_base: str | None = None  # REINVENT_PRIOR_BASE for the subprocess
@@ -165,13 +165,24 @@ class ReinventInput(BaseModel):
     # --- HPC / SLURM settings (only used if run_mode=slurm_remote) -----------
     allow_submit: bool = False  # opt-in remote submission gate
     partition: str = "gpu_a100"
-    gpus_per_node: int = 1
+    gpus_per_node: int = 1  # set to 0 for CPU-only partitions (rome/genoa)
+    cpus_per_task: int = 4
+    mem: str = "32G"
     time_limit: str = "02:00:00"
     poll_interval_seconds: int = 30
     remote_reinvent_executable: str = "reinvent"
     remote_prior_base: str | None = None
     # Shell lines that activate the REINVENT env inside the SLURM job.
     env_setup: str | None = None
+
+    # --- Direct SSH execution (run_mode="ssh_remote"): a rented GPU box (RunPod,
+    # Lambda, a bare VM) with no scheduler. reinvent runs as a command over SSH.
+    ssh_host: str | None = None
+    ssh_user: str = "root"
+    ssh_port: int = 22
+    ssh_key_path: str | None = None
+    ssh_password: str | None = None
+    remote_workdir: str = "~/reinvent_runs"
 
     model_config = ConfigDict(extra="forbid")
 
@@ -270,7 +281,6 @@ def build_reinvent_config(
         "agent_file": prior,
         "summary_csv_prefix": join(parsed.summary_csv_prefix),
         "batch_size": parsed.batch_size,
-        "unique_sequences": True,
         "randomize_smiles": parsed.randomize_smiles,
         "use_checkpoint": False,
         "purge_memories": False,
@@ -342,15 +352,18 @@ def render_reinvent_slurm_script(
     directives = [
         f"#SBATCH --job-name=reinvent-{parsed.seed}",
         f"#SBATCH --partition={parsed.partition}",
-        f"#SBATCH --gpus-per-node={parsed.gpus_per_node}",
         f"#SBATCH --time={parsed.time_limit}",
         "#SBATCH --nodes=1",
         "#SBATCH --ntasks=1",
-        "#SBATCH --cpus-per-task=4",
-        "#SBATCH --mem=32G",
+        f"#SBATCH --cpus-per-task={parsed.cpus_per_task}",
+        f"#SBATCH --mem={parsed.mem}",
         "#SBATCH --output=slurm-%j.out",
         "#SBATCH --error=slurm-%j.err",
     ]
+    # Only request a GPU when one is asked for. CPU partitions (rome/genoa)
+    # reject jobs that carry a --gpus-per-node directive.
+    if parsed.gpus_per_node and parsed.gpus_per_node > 0:
+        directives.insert(3, f"#SBATCH --gpus-per-node={parsed.gpus_per_node}")
     if account:
         directives.append(f"#SBATCH --account={account}")
     if qos:
@@ -390,9 +403,9 @@ def _write_smiles_file(parsed: ReinventInput, work_dir: Path) -> Path | None:
     return smiles_path
 
 
-def _stage_reinvent_job(parsed: ReinventInput, work_dir: Path, remote_job_dir: str, *, account, qos):
-    """Write the config JSON (with ``remote_job_dir`` paths), warhead .smi, and
-    SLURM script locally; return (config_path, script_path, input_files)."""
+def _stage_reinvent_config(parsed: ReinventInput, work_dir: Path, remote_job_dir: str):
+    """Write the config JSON (with ``remote_job_dir`` paths) and the warhead .smi
+    locally. Returns ``(config_path, smiles_path | None)``."""
 
     config = build_reinvent_config(parsed, remote_base=remote_job_dir)
     config_path = work_dir / parsed.config_filename
@@ -400,10 +413,20 @@ def _stage_reinvent_job(parsed: ReinventInput, work_dir: Path, remote_job_dir: s
     if not write_result.ok:
         raise RuntimeError(f"Failed to write REINVENT config: {write_result.error}")
 
-    input_files: list[tuple[str | Path, str]] = [(config_path, parsed.config_filename)]
+    smiles_path: Path | None = None
     if parsed.generator_type in _NEEDS_SMILES_INPUT and parsed.input_smiles:
         smiles_path = work_dir / "reinvent_inputs.smi"
         smiles_path.write_text("\n".join(parsed.input_smiles) + "\n", encoding="utf-8")
+    return config_path, smiles_path
+
+
+def _stage_reinvent_job(parsed: ReinventInput, work_dir: Path, remote_job_dir: str, *, account, qos):
+    """Write the config JSON (with ``remote_job_dir`` paths), warhead .smi, and
+    SLURM script locally; return (config_path, script_path, input_files)."""
+
+    config_path, smiles_path = _stage_reinvent_config(parsed, work_dir, remote_job_dir)
+    input_files: list[tuple[str | Path, str]] = [(config_path, parsed.config_filename)]
+    if smiles_path is not None:
         input_files.append((smiles_path, "reinvent_inputs.smi"))
 
     remote_config_path = f"{remote_job_dir}/{parsed.config_filename}"
@@ -414,6 +437,97 @@ def _stage_reinvent_job(parsed: ReinventInput, work_dir: Path, remote_job_dir: s
     )
     input_files.append((script_path, "reinvent_job.slurm"))
     return config_path, script_path, input_files
+
+
+def _generate_with_reinvent_ssh(parsed: ReinventInput):
+    """Run REINVENT directly over SSH on a rented GPU box (RunPod etc.).
+
+    No scheduler: connect, upload the config (+ warhead file), run ``reinvent``
+    as a command, then download the outputs and parse them. When SSH is not
+    configured or ``run`` is off, writes the config and returns mock molecules.
+    """
+    import posixpath
+
+    from hackathon_agents.tools.remote_hpc import RemoteHPCClient, RemoteHPCConfig, _shquote
+
+    work_dir = Path(parsed.work_dir)
+    work_dir.mkdir(parents=True, exist_ok=True)
+
+    if not parsed.run or not parsed.ssh_host:
+        remote_job_dir = f"{parsed.remote_workdir}/reinvent-{parsed.seed}"
+        config_path, _ = _stage_reinvent_config(parsed, work_dir, remote_job_dir)
+        reason = "ssh_not_configured" if not parsed.ssh_host else "run=False"
+        molecules = _mock_molecules(parsed, reason=reason)
+        result = _build_success(parsed, molecules, config_path, mock=True)
+        result.metadata["ssh_dry_run"] = {"remote_job_dir": remote_job_dir, "ssh_host": parsed.ssh_host}
+        return result
+
+    cfg = RemoteHPCConfig(
+        host=parsed.ssh_host,
+        user=parsed.ssh_user,
+        port=parsed.ssh_port,
+        key_path=parsed.ssh_key_path,
+        password=parsed.ssh_password,
+    )
+    with RemoteHPCClient(cfg) as client:
+        base = client.resolve_path(parsed.remote_workdir)
+        stamp = time.strftime("%Y%m%d_%H%M%S")
+        remote_job_dir = posixpath.join(base, f"reinvent-{parsed.seed}_{stamp}_{os.getpid()}")
+        client.makedirs(remote_job_dir)
+
+        config_path, smiles_path = _stage_reinvent_config(parsed, work_dir, remote_job_dir)
+        client.upload(config_path, f"{remote_job_dir}/{parsed.config_filename}")
+        if smiles_path is not None:
+            client.upload(smiles_path, f"{remote_job_dir}/reinvent_inputs.smi")
+
+        remote_config = f"{remote_job_dir}/{parsed.config_filename}"
+        prior_base = parsed.remote_prior_base or parsed.prior_base
+        prefix = f"export REINVENT_PRIOR_BASE={_shquote(prior_base)} && " if prior_base else ""
+        # On a CPU device, hide CUDA so torch never probes the GPU. Without this,
+        # torch's optimizer (staged learning) runs an accelerator health check
+        # that calls into CUDA even for CPU tensors and crashes when the box's
+        # NVIDIA driver is older than the torch CUDA build (common on rented pods).
+        # Also cap the thread count: on a many-core box (e.g. a 192-core pod)
+        # torch spawns one thread per core and thrashes on the small LinkInvent
+        # transformer batch — capping to ~16 makes CPU staged learning ~4x faster
+        # (measured 297s -> 74s for 60 RL steps). Override via REINVENT_CPU_THREADS.
+        if str(parsed.device).lower().startswith("cpu"):
+            prefix += (
+                "export CUDA_VISIBLE_DEVICES='' && "
+                'T=${REINVENT_CPU_THREADS:-$(c=$(nproc 2>/dev/null || echo 8); '
+                '[ "$c" -lt 16 ] && echo "$c" || echo 16)} && '
+                "export OMP_NUM_THREADS=$T MKL_NUM_THREADS=$T && "
+            )
+        command = (
+            f"cd {_shquote(remote_job_dir)} && {prefix}"
+            f"{parsed.remote_reinvent_executable} -f json -d {parsed.device} "
+            f"-l reinvent.log {_shquote(remote_config)}"
+        )
+        code, out, err = client.run(command, timeout=parsed.timeout_seconds)
+        if code != 0:
+            return error_result(
+                f"Remote REINVENT (ssh) exited with code {code}.",
+                {"command": command, "returncode": code, "stdout": out[-4000:], "stderr": err[-4000:]},
+            )
+        # Only the CSVs (parsed) and the log (diagnostics) are needed. The
+        # ``*.chkpt`` is ~90 MB of model weights we never read; skipping it makes
+        # each CPU pass noticeably faster over SSH.
+        client.download_matching(
+            remote_job_dir,
+            ["*.csv", f"{parsed.summary_csv_prefix}*", "sampling.csv", "reinvent.log"],
+            work_dir,
+        )
+
+    molecules = _parse_generated_molecules(parsed, work_dir)
+    if not molecules:
+        molecules = _mock_molecules(parsed, reason="no_output_parsed")
+        result = _build_success(parsed, molecules, config_path, mock=True)
+        result.metadata["reinvent_stdout_tail"] = out[-2000:]
+        return result
+    result = _build_success(parsed, molecules, config_path, mock=False)
+    result.metadata["reinvent_returncode"] = code
+    result.metadata["ssh_host"] = parsed.ssh_host
+    return result
 
 
 def _generate_with_reinvent_remote(parsed: ReinventInput):
@@ -519,6 +633,11 @@ def generate_with_reinvent(input_data: ReinventInput | dict[str, Any]):
     if parsed.run_mode == "slurm_remote":
         try:
             return _generate_with_reinvent_remote(parsed)
+        except Exception as exc:
+            return error_result(str(exc), {"work_dir": parsed.work_dir})
+    if parsed.run_mode == "ssh_remote":
+        try:
+            return _generate_with_reinvent_ssh(parsed)
         except Exception as exc:
             return error_result(str(exc), {"work_dir": parsed.work_dir})
     try:

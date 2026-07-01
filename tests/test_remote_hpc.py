@@ -129,6 +129,15 @@ class RemoteHPCConfigTests(unittest.TestCase):
     def test_not_configured_without_host_user(self) -> None:
         self.assertFalse(RemoteHPCConfig.from_env({}).is_configured)
 
+    def test_account_equal_to_username_is_dropped(self) -> None:
+        # A username in SLURM_ACCOUNT is invalid on Snellius; it must be dropped
+        # so no --account directive is emitted (SLURM uses the default project).
+        cfg = RemoteHPCConfig.from_env({"HPC_HOST": "h", "HPC_USER": "asavino", "SLURM_ACCOUNT": "asavino"})
+        self.assertIsNone(cfg.account)
+        # A real project code is kept.
+        cfg2 = RemoteHPCConfig.from_env({"HPC_HOST": "h", "HPC_USER": "asavino", "SLURM_ACCOUNT": "eucl123"})
+        self.assertEqual(cfg2.account, "eucl123")
+
 
 class SubmitAndWaitTests(unittest.TestCase):
     def _client(self, handler, monkeypatch_target) -> RemoteHPCClient:
@@ -184,6 +193,61 @@ class SubmitAndWaitTests(unittest.TestCase):
             with RemoteHPCClient(cfg):
                 pass
             self.assertIn("key_filename", holder["client"].connect_kwargs)
+        finally:
+            remote_hpc._import_paramiko = original
+
+    def test_password_only_auth_disables_key_lookup(self) -> None:
+        ns, holder = _fake_paramiko(_default_handler)
+        original = remote_hpc._import_paramiko
+        remote_hpc._import_paramiko = lambda: ns
+        try:
+            cfg = RemoteHPCConfig(host="h", user="u", password="secret")  # no key_path
+            with RemoteHPCClient(cfg):
+                pass
+            kw = holder["client"].connect_kwargs
+            self.assertEqual(kw["password"], "secret")
+            self.assertFalse(kw["look_for_keys"])
+            self.assertFalse(kw["allow_agent"])
+        finally:
+            remote_hpc._import_paramiko = original
+
+
+class TildeExpansionTests(unittest.TestCase):
+    """Regression: SFTP/config paths must be absolute; ``~`` is expanded to $HOME."""
+
+    def _handler(self, command: str):
+        if command.strip() == "echo $HOME":
+            return 0, "/home/alice\n", ""
+        return _default_handler(command)
+
+    def test_resolve_path_expands_home(self) -> None:
+        ns, _ = _fake_paramiko(self._handler)
+        original = remote_hpc._import_paramiko
+        remote_hpc._import_paramiko = lambda: ns
+        try:
+            with RemoteHPCClient(RemoteHPCConfig(host="h", user="u")) as client:
+                self.assertEqual(client.resolve_path("~"), "/home/alice")
+                self.assertEqual(client.resolve_path("~/reinvent/x"), "/home/alice/reinvent/x")
+                self.assertEqual(client.resolve_path("/abs/path"), "/abs/path")
+        finally:
+            remote_hpc._import_paramiko = original
+
+    def test_upload_and_mkdir_never_use_tilde(self) -> None:
+        ns, holder = _fake_paramiko(self._handler)
+        original = remote_hpc._import_paramiko
+        remote_hpc._import_paramiko = lambda: ns
+        try:
+            with tempfile.TemporaryDirectory() as tmp:
+                local = Path(tmp) / "f.txt"
+                local.write_text("x", encoding="utf-8")
+                with RemoteHPCClient(RemoteHPCConfig(host="h", user="u")) as client:
+                    client.makedirs("~/hackathon_agents/reinvent/job")
+                    client.upload(local, "~/hackathon_agents/reinvent/job/f.txt")
+                fake = holder["client"]
+                # No SFTP put used a literal '~'.
+                self.assertTrue(all("~" not in remote for _, remote in fake.sftp.puts))
+                mkdir_cmds = [c for c in fake.commands if "mkdir" in c]
+                self.assertTrue(mkdir_cmds and all("/home/alice/" in c and "~" not in c for c in mkdir_cmds))
         finally:
             remote_hpc._import_paramiko = original
 

@@ -2,22 +2,30 @@ from __future__ import annotations
 
 import unittest
 
-from hackathon_agents.agents.critic import CriticReviewResponse, _merge_model_review
-from hackathon_agents.schemas.linkers import ADCGoalProfile
+from hackathon_agents.agents.critic import (
+    CriticReviewResponse,
+    _maybe_autoescalate_strategy,
+    _merge_model_review,
+)
+from hackathon_agents.schemas.linkers import ADCGoalProfile, ADCStrategy
+from hackathon_agents.schemas.molecules import MoleculeRecord
 from hackathon_agents.schemas.tasks import CriticDecision
 from hackathon_agents.state import DiscoveryStatePayload
-from hackathon_agents.tools.adc_linker_objective import build_adc_linkinvent_objective
+from hackathon_agents.tools.adc_linker_objective import render_reinvent_objective
 
 
-def _adc_state() -> DiscoveryStatePayload:
+def _adc_state(run_type: str = "staged_learning") -> DiscoveryStatePayload:
     profile = ADCGoalProfile()
-    reinvent = build_adc_linkinvent_objective(profile, run=False)
+    strategy = ADCStrategy(run_type=run_type)
+    reinvent = render_reinvent_objective(profile, strategy, objective="Design an ADC linker")
     state = DiscoveryStatePayload(
         original_user_request="Design an ADC linker",
         max_iterations=3,
         iteration=1,
         metadata={
             "adc_goal_profile": profile.model_dump(mode="json"),
+            "adc_strategy": strategy.model_dump(mode="json"),
+            "adc_strategy_caps": {"max_steps": 100, "batch_size": 64},
             "reinvent": reinvent,
         },
     )
@@ -85,6 +93,54 @@ class AutonomyTests(unittest.TestCase):
         _merge_model_review(state, review)
         self.assertNotIn("adc_decision_trail", state.metadata)
         self.assertEqual(state.metadata["adc_goal_profile"]["weights"]["solubility"], 1.0)  # unchanged
+
+
+class StrategyAutonomyTests(unittest.TestCase):
+    def test_llm_escalates_sampling_to_rl(self) -> None:
+        state = _adc_state("sampling")
+        self.assertNotIn("scoring", state.metadata["reinvent"])  # sampling has no scoring
+        review = CriticReviewResponse(
+            reinvent_strategy_overrides={"run_type": "staged_learning"},
+            reason="baseline captured; optimize with RL",
+        )
+        _merge_model_review(state, review)
+        self.assertEqual(state.metadata["adc_strategy"]["run_type"], "staged_learning")
+        self.assertIn("scoring", state.metadata["reinvent"])  # re-rendered as RL
+        self.assertTrue(state.needs_more_passes)
+        self.assertEqual(len(state.metadata["adc_decision_trail"]), 1)
+
+    def test_budget_clamped_to_caps_and_device_run_fixed(self) -> None:
+        state = _adc_state("staged_learning")
+        review = CriticReviewResponse(
+            reinvent_strategy_overrides={"max_steps": 99999, "batch_size": 9999, "device": "cuda:0", "run": True}
+        )
+        _merge_model_review(state, review)
+        strat = state.metadata["adc_strategy"]
+        self.assertEqual(strat["max_steps"], 100)  # clamped to cap
+        self.assertEqual(strat["batch_size"], 64)  # clamped to cap
+        self.assertEqual(strat["device"], "cpu")  # not editable
+        self.assertFalse(strat["run"])  # not editable
+
+    def test_deterministic_escalation_without_llm(self) -> None:
+        state = _adc_state("sampling")
+        state.stop_reason = None
+        state.needs_more_passes = False
+        state.candidate_molecules = [
+            MoleculeRecord(smiles="O=C(NCC(=O)NCCO)CCO", name="s1", source="reinvent", score=0.6)
+        ]
+        _maybe_autoescalate_strategy(state)
+        self.assertEqual(state.metadata["adc_strategy"]["run_type"], "staged_learning")
+        self.assertTrue(state.needs_more_passes)
+        self.assertIn("optimize_linkers_with_rl", state.requested_next_actions)
+
+    def test_no_escalation_when_sampling_quality_met(self) -> None:
+        state = _adc_state("sampling")
+        state.stop_reason = "quality_threshold_met"
+        state.candidate_molecules = [
+            MoleculeRecord(smiles="O=C(NCC(=O)NCCO)CCO", name="s1", source="reinvent", score=0.9)
+        ]
+        _maybe_autoescalate_strategy(state)
+        self.assertEqual(state.metadata["adc_strategy"]["run_type"], "sampling")  # left as-is
 
 
 if __name__ == "__main__":

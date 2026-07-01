@@ -173,27 +173,37 @@ def _set_default_adc_linker_objective(state: DiscoveryStatePayload) -> bool:
     ``state.metadata["adc_goal_profile"]`` to score and steer.
     """
 
-    from hackathon_agents.schemas.linkers import ADCGoalProfile
-    from hackathon_agents.tools.adc_linker_objective import build_adc_linkinvent_objective
+    from hackathon_agents.schemas.linkers import ADCGoalProfile, ADCStrategy
+    from hackathon_agents.tools.adc_linker_objective import render_reinvent_objective
 
-    already_active = "adc_goal_profile" in state.metadata or "reinvent" in state.metadata
+    already_active = (
+        "adc_goal_profile" in state.metadata
+        or "adc_strategy" in state.metadata
+        or "reinvent" in state.metadata
+    )
     request = (state.original_user_request or "").lower()
     inferred = any(keyword in request for keyword in _ADC_INTENT_KEYWORDS)
     if not (already_active or inferred):
         return False
 
     profile = state.metadata.get("adc_goal_profile")
-    if profile is None:
-        profile = ADCGoalProfile()
-        state.metadata["adc_goal_profile"] = profile.model_dump(mode="json")
-    else:
-        profile = ADCGoalProfile.model_validate(profile)
+    profile = ADCGoalProfile.model_validate(profile) if profile is not None else ADCGoalProfile()
+    state.metadata["adc_goal_profile"] = profile.model_dump(mode="json")
 
-    if "reinvent" not in state.metadata:
-        objective = build_adc_linkinvent_objective(profile, run=False)
-        objective["objective"] = state.original_user_request
-        state.metadata["reinvent"] = objective
-        state.metadata["reinvent_source"] = "planner_adc_default"
+    # Initial strategy: a cheap sampling pass first (the agent escalates to RL in
+    # the critic). Any pre-seeded strategy (e.g. from the CLI) is respected.
+    strategy = state.metadata.get("adc_strategy")
+    strategy = ADCStrategy.model_validate(strategy) if strategy is not None else ADCStrategy()
+    state.metadata["adc_strategy"] = strategy.model_dump(mode="json")
+    # Budget caps the critic must stay within (protects the CPU allocation).
+    state.metadata.setdefault(
+        "adc_strategy_caps", {"max_steps": strategy.max_steps, "batch_size": strategy.batch_size}
+    )
+
+    state.metadata["reinvent"] = render_reinvent_objective(
+        profile, strategy, objective=state.original_user_request
+    )
+    state.metadata["reinvent_source"] = "planner_adc_default"
     return True
 
 

@@ -351,19 +351,28 @@ def _decision_trail_table(lines: list[str], trail: list[dict[str, Any]]) -> None
         return
     lines.extend(
         [
-            "\\begin{longtable}{rp{0.35\\linewidth}p{0.45\\linewidth}}",
-            "Iter. & Weight changes & Rationale \\\\",
+            "\\begin{longtable}{rp{0.38\\linewidth}p{0.42\\linewidth}}",
+            "Iter. & Change & Rationale \\\\",
             "\\hline",
         ]
     )
     for entry in trail:
         iteration = entry.get("iteration", "")
-        before = entry.get("weights_before") or {}
-        after = entry.get("weights_after") or {}
-        changes = "; ".join(
-            f"{k}: {before.get(k)} -> {after.get(k)}" for k in sorted(after) if before.get(k) != after.get(k)
-        )
-        change_text = _latex_escape(changes) or "(constraints/targets only)"
+        w_before = entry.get("weights_before") or {}
+        w_after = entry.get("weights_after") or {}
+        s_before = entry.get("strategy_before") or {}
+        s_after = entry.get("strategy_after") or {}
+        parts = [
+            f"{k}: {w_before.get(k)} -> {w_after.get(k)}"
+            for k in sorted(w_after)
+            if w_before.get(k) != w_after.get(k)
+        ]
+        parts += [
+            f"{k}: {s_before.get(k)} -> {s_after.get(k)}"
+            for k in ("run_type", "max_steps", "batch_size", "num_smiles")
+            if k in s_after and s_before.get(k) != s_after.get(k)
+        ]
+        change_text = _latex_escape("; ".join(parts)) or "(constraints/targets only)"
         rationale = _latex_escape(entry.get("rationale") or "")
         lines.append(f"{_format_value(iteration)} & {change_text} & {rationale} \\\\")
     lines.append("\\end{longtable}")

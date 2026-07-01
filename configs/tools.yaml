@@ -143,13 +143,27 @@ tools:
     # the tool only writes the config + SLURM script (dry run) and returns mocks.
     run_mode: ${REINVENT_RUN_MODE:-local}
     allow_submit: ${REINVENT_ALLOW_SUBMIT:-false}
+    # For CPU-only partitions (rome/genoa) set SLURM_PARTITION=rome and SLURM_GPUS=0;
+    # gpus_per_node=0 omits the GPU directive so the job is accepted.
     partition: ${SLURM_PARTITION:-gpu_a100}
     gpus_per_node: ${SLURM_GPUS:-1}
+    cpus_per_task: ${SLURM_CPUS_PER_TASK:-4}
+    mem: ${SLURM_MEM:-32G}
     time_limit: ${SLURM_TIME:-02:00:00}
     poll_interval_seconds: ${HPC_POLL_INTERVAL:-30}
     remote_reinvent_executable: ${REINVENT_REMOTE_EXECUTABLE:-reinvent}
     remote_prior_base: ${REINVENT_REMOTE_PRIOR_BASE:-}
     env_setup: ${REINVENT_ENV_ACTIVATE:-}
+    # Direct SSH to a rented GPU box (RunPod/Lambda/VM) — no scheduler. Set
+    # REINVENT_RUN_MODE=ssh_remote and the REINVENT_SSH_* vars; reinvent runs as a
+    # command over SSH and outputs are downloaded back. Reuses remote_reinvent_executable
+    # and remote_prior_base for the pod's reinvent path and prior directory.
+    ssh_host: ${REINVENT_SSH_HOST:-}
+    ssh_user: ${REINVENT_SSH_USER:-root}
+    ssh_port: ${REINVENT_SSH_PORT:-22}
+    ssh_key_path: ${REINVENT_SSH_KEY:-}
+    ssh_password: ${REINVENT_SSH_PASSWORD:-}
+    remote_workdir: ${REINVENT_REMOTE_WORKDIR:-~/reinvent_runs}
     enabled_modes: [full, cheap]
 
   boltz_2:

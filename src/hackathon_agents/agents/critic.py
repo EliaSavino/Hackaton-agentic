@@ -18,11 +18,16 @@ class CriticReviewResponse(BaseModel):
     recommended_next_actions: list[str] = Field(default_factory=list)
     should_continue: bool | None = None
     reason: str | None = None
-    # Autonomous steering of the ADC linker objective (Phase 3). A partial dict
-    # of ADCGoalProfile fields — e.g. {"weights": {"solubility": 0.6}, ...}. The
+    # Autonomous steering of the ADC linker objective. A partial dict of
+    # ADCGoalProfile fields — e.g. {"weights": {"solubility": 0.6}, ...}. The
     # critic reweights components / toggles constraints; warheads and compute
     # budget are NOT part of this action space and are ignored if present.
     goal_profile_overrides: dict[str, Any] | None = None
+    # Autonomous steering of the generation strategy. A partial dict of
+    # {run_type ("sampling"|"staged_learning"), num_smiles, max_steps, min_steps,
+    # batch_size}. Lets the critic escalate sampling -> RL or resize the budget.
+    # max_steps/batch_size are clamped to the CPU caps; device/run are fixed.
+    reinvent_strategy_overrides: dict[str, Any] | None = None
 
 
 def run(state: DiscoveryStatePayload, config: AppConfig | None = None) -> DiscoveryStatePayload:
@@ -124,6 +129,10 @@ def run(state: DiscoveryStatePayload, config: AppConfig | None = None) -> Discov
     )
     if model_review is not None:
         _merge_model_review(state, model_review)
+    else:
+        # No LLM available: keep the agent autonomous with a deterministic ladder
+        # (a cheap sampling pass first, then escalate to RL to optimize).
+        _maybe_autoescalate_strategy(state)
 
     current_decision = state.critic_decisions[-1]
     history = state.metadata.setdefault("critic_history", [])
@@ -255,23 +264,29 @@ def _merge_model_review(state: DiscoveryStatePayload, review: CriticReviewRespon
     if hard_stop:
         return
 
-    # Autonomy: apply the critic's edits to the ADC goal profile, re-render the
-    # REINVENT scoring function, and request another pass to try it.
-    if state.metadata.get("adc_goal_profile") is not None and review.goal_profile_overrides:
-        if _apply_goal_profile_overrides(state, review.goal_profile_overrides, review.reason):
+    # Autonomy: apply the critic's edits to the ADC goal profile and/or the
+    # generation strategy (sampling vs RL, budget), re-render the REINVENT input
+    # from the single renderer, and request another pass to try it.
+    if state.metadata.get("adc_goal_profile") is not None:
+        prof_changed, w_before, w_after = _merge_profile_overrides(state, review.goal_profile_overrides or {})
+        strat_changed, s_before, s_after = _merge_strategy_overrides(state, review.reinvent_strategy_overrides or {})
+        if prof_changed or strat_changed:
+            _rerender_reinvent(state)
+            combined = {**(review.goal_profile_overrides or {}), **(review.reinvent_strategy_overrides or {})}
+            _record_decision_trail(state, review.reason, w_before, w_after, s_before, s_after, combined)
             actions = [action for action in review.recommended_next_actions if action]
             state.needs_more_passes = True
             state.stop_reason = None
             state.requested_next_actions = _dedupe(
                 [*state.requested_next_actions, *actions] or ["regenerate_with_updated_objective"]
             )
-            reason = review.reason or "Model critic reweighted the ADC objective and requested another pass."
+            reason = review.reason or "Model critic adjusted the ADC objective/strategy and requested another pass."
             if state.critic_decisions:
                 state.critic_decisions[-1].needs_more_passes = True
                 state.critic_decisions[-1].reason = reason
                 state.critic_decisions[-1].requested_next_actions = state.requested_next_actions
                 state.critic_decisions[-1].stop_reason = None
-            state.append_message(f"critic: reweighted ADC objective and requested another pass: {reason}")
+            state.append_message(f"critic: adjusted ADC objective/strategy and requested another pass: {reason}")
             return
 
     actions = [action for action in review.recommended_next_actions if action]
@@ -294,72 +309,175 @@ def _merge_model_review(state: DiscoveryStatePayload, review: CriticReviewRespon
         state.append_message(f"critic: model review requested another pass: {reason}")
 
 
-def _apply_goal_profile_overrides(
-    state: DiscoveryStatePayload,
-    overrides: dict[str, Any],
-    rationale: str | None,
-) -> bool:
-    """Validate + apply the critic's ADC goal-profile edits, re-render scoring.
+def _merge_profile_overrides(state: DiscoveryStatePayload, overrides: dict[str, Any]) -> tuple[bool, dict, dict]:
+    """Merge the critic's goal-profile edits into ``state.metadata``.
 
-    Weights are merged (partial edits keep unspecified dimensions), everything is
-    clamped by ``ADCGoalProfile`` validation, and unknown/forbidden keys (e.g.
-    warhead or budget fields) are dropped. Records a decision-trail entry for the
-    paper. Returns ``True`` when an edit was applied.
+    Weights are merged (partial edits keep unspecified dimensions); everything is
+    clamped by ``ADCGoalProfile`` validation and unknown keys (warheads/budget)
+    are dropped. Returns ``(changed, weights_before, weights_after)``.
     """
 
     from hackathon_agents.schemas.linkers import ADCGoalProfile
-    from hackathon_agents.tools.adc_linker_objective import build_adc_linkinvent_objective
 
     try:
         current = ADCGoalProfile.model_validate(state.metadata["adc_goal_profile"])
     except Exception:
-        return False
+        return False, {}, {}
+    before = dict(current.weights)
+    if not overrides:
+        return False, before, before
 
     allowed = set(ADCGoalProfile.model_fields)
     merged = current.model_dump()
     changed = False
     for key, value in overrides.items():
         if key not in allowed:
-            continue  # ignore warheads/budget/unknown keys
+            continue  # ignore warheads/strategy/unknown keys
         if key == "weights" and isinstance(value, dict):
-            new_weights = {**merged["weights"], **{k: v for k, v in value.items()}}
+            new_weights = {**merged["weights"], **value}
             if new_weights != merged["weights"]:
                 merged["weights"] = new_weights
                 changed = True
         elif merged.get(key) != value:
             merged[key] = value
             changed = True
-
     if not changed:
-        return False
-
+        return False, before, before
     try:
         new_profile = ADCGoalProfile.model_validate(merged)
     except Exception:
-        return False
-
-    weights_before = dict(current.weights)
+        return False, before, before
     state.metadata["adc_goal_profile"] = new_profile.model_dump(mode="json")
+    return True, before, dict(new_profile.weights)
 
-    # Re-render the REINVENT scoring function, preserving execution settings
-    # (run/device/budget) already present in state.metadata["reinvent"].
-    reinvent = state.metadata.get("reinvent")
-    if isinstance(reinvent, dict):
-        rebuilt = build_adc_linkinvent_objective(new_profile, run=bool(reinvent.get("run", False)))
-        reinvent["scoring"] = rebuilt["scoring"]
-        reinvent["scoring_aggregator"] = rebuilt["scoring_aggregator"]
 
+# The agent's strategy action space. Warheads, prior, device, and the run/HPC
+# execution settings are fixed and never editable by the critic.
+_STRATEGY_ACTION_FIELDS = {"run_type", "num_smiles", "max_steps", "min_steps", "batch_size"}
+
+
+def _merge_strategy_overrides(state: DiscoveryStatePayload, overrides: dict[str, Any]) -> tuple[bool, dict, dict]:
+    """Merge the critic's generation-strategy edits (bounded to caps)."""
+
+    from hackathon_agents.schemas.linkers import ADCStrategy
+
+    raw = state.metadata.get("adc_strategy")
+    if raw is None:
+        return False, {}, {}
+    try:
+        current = ADCStrategy.model_validate(raw)
+    except Exception:
+        return False, {}, {}
+    before = current.model_dump()
+    if not overrides:
+        return False, before, before
+
+    caps = state.metadata.get("adc_strategy_caps") or {}
+    merged = current.model_dump()
+    changed = False
+    for key, value in overrides.items():
+        if key not in _STRATEGY_ACTION_FIELDS:
+            continue  # ignore device/run/warhead/unknown keys
+        if key in ("max_steps", "batch_size") and key in caps:
+            try:
+                value = min(int(value), int(caps[key]))  # never exceed the CPU budget cap
+            except (TypeError, ValueError):
+                continue
+        if merged.get(key) != value:
+            merged[key] = value
+            changed = True
+    if not changed:
+        return False, before, before
+    try:
+        new_strat = ADCStrategy.model_validate(merged)
+    except Exception:
+        return False, before, before
+    state.metadata["adc_strategy"] = new_strat.model_dump(mode="json")
+    return True, before, new_strat.model_dump()
+
+
+def _rerender_reinvent(state: DiscoveryStatePayload) -> None:
+    """Rebuild ``state.metadata['reinvent']`` from the current profile+strategy.
+
+    Execution/HPC fields (run_mode, executable, prior_base, partition, ...) are
+    re-injected by the graph's REINVENT gating on the next chemist pass, so a
+    fresh render here is safe.
+    """
+
+    from hackathon_agents.tools.adc_linker_objective import render_reinvent_objective
+
+    profile = state.metadata.get("adc_goal_profile")
+    strategy = state.metadata.get("adc_strategy")
+    if profile is None or strategy is None:
+        return
+    state.metadata["reinvent"] = render_reinvent_objective(
+        profile, strategy, objective=state.original_user_request
+    )
+
+
+def _record_decision_trail(
+    state: DiscoveryStatePayload,
+    rationale: str | None,
+    w_before: dict,
+    w_after: dict,
+    s_before: dict,
+    s_after: dict,
+    overrides: dict,
+) -> None:
     trail = state.metadata.setdefault("adc_decision_trail", [])
     trail.append(
         {
             "iteration": state.iteration,
-            "overrides": {k: v for k, v in overrides.items() if k in allowed},
+            "overrides": overrides,
             "rationale": rationale,
-            "weights_before": weights_before,
-            "weights_after": dict(new_profile.weights),
+            "weights_before": w_before,
+            "weights_after": w_after,
+            "strategy_before": s_before,
+            "strategy_after": s_after,
         }
     )
-    return True
+
+
+def _maybe_autoescalate_strategy(state: DiscoveryStatePayload) -> None:
+    """Deterministic autonomy (no LLM): after a productive sampling pass, escalate
+    to staged-learning (RL) to optimize. Respects hard stops and a good-enough
+    sampling result."""
+
+    from hackathon_agents.schemas.linkers import ADCStrategy
+
+    if state.metadata.get("adc_strategy") is None:
+        return
+    if state.iteration >= state.max_iterations or state.stop_reason in {
+        "max_iterations_reached",
+        "descriptor_tools_unavailable",
+        "too_many_tool_errors",
+        "quality_threshold_met",  # sampling already good enough
+    }:
+        return
+    try:
+        strat = ADCStrategy.model_validate(state.metadata["adc_strategy"])
+    except Exception:
+        return
+    if strat.run_type != "sampling":
+        return
+    if not any(molecule.score is not None for molecule in state.candidate_molecules):
+        return  # nothing generated yet; let the normal loop handle it
+
+    s_before = strat.model_dump()
+    strat.run_type = "staged_learning"
+    state.metadata["adc_strategy"] = strat.model_dump(mode="json")
+    _rerender_reinvent(state)
+    state.needs_more_passes = True
+    state.stop_reason = None
+    state.requested_next_actions = _dedupe([*state.requested_next_actions, "optimize_linkers_with_rl"])
+    reason = "Sampling produced valid linkers; escalating to staged-learning (RL) to optimize."
+    if state.critic_decisions:
+        state.critic_decisions[-1].needs_more_passes = True
+        state.critic_decisions[-1].reason = reason
+        state.critic_decisions[-1].requested_next_actions = state.requested_next_actions
+        state.critic_decisions[-1].stop_reason = None
+    _record_decision_trail(state, reason, {}, {}, s_before, strat.model_dump(), {"run_type": "staged_learning"})
+    state.append_message("critic: " + reason)
 
 
 def _dedupe(values: list[str]) -> list[str]:

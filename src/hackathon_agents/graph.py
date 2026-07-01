@@ -205,16 +205,35 @@ class DiscoveryGraph:
             "allow_submit": bool(extra.get("allow_submit", False)),
             "partition": extra.get("partition", "gpu_a100"),
             "gpus_per_node": extra.get("gpus_per_node", 1),
+            "cpus_per_task": extra.get("cpus_per_task", 4),
+            "mem": extra.get("mem", "32G"),
             "time_limit": extra.get("time_limit", "02:00:00"),
             "poll_interval_seconds": extra.get("poll_interval_seconds", 30),
             "remote_reinvent_executable": extra.get("remote_reinvent_executable", "reinvent"),
             "remote_prior_base": extra.get("remote_prior_base") or None,
             "env_setup": extra.get("env_setup") or None,
             "timeout_seconds": reinvent_tool.timeout_seconds if reinvent_tool and reinvent_tool.timeout_seconds else 1800,
+            # Direct-SSH (e.g. RunPod): run reinvent as a command on a rented GPU box.
+            "ssh_host": extra.get("ssh_host") or None,
+            "ssh_user": extra.get("ssh_user", "root"),
+            "ssh_port": extra.get("ssh_port", 22),
+            "ssh_key_path": extra.get("ssh_key_path") or None,
+            "ssh_password": extra.get("ssh_password") or None,
+            "remote_workdir": extra.get("remote_workdir") or "~/reinvent_runs",
         }
         settings = state.metadata["reinvent"]
         for key, value in config_defaults.items():
             settings.setdefault(key, value)
+
+        # On a CPU-only SLURM allocation (no GPU requested), force a CPU torch
+        # device so REINVENT does not try (and fail) to use CUDA on rome/genoa.
+        if settings.get("run_mode") == "slurm_remote":
+            try:
+                gpus = int(settings.get("gpus_per_node", 0) or 0)
+            except (TypeError, ValueError):
+                gpus = 0
+            if gpus <= 0:
+                settings["device"] = "cpu"
 
     def _tool_execution_node(self, state: DiscoveryStatePayload) -> DiscoveryStatePayload:
         logger.info("tool execution node")

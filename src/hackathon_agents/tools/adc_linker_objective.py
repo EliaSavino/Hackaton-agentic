@@ -22,7 +22,7 @@ from __future__ import annotations
 import math
 from typing import Any
 
-from hackathon_agents.schemas.linkers import ADC_GOAL_KEYS, ADCGoalProfile
+from hackathon_agents.schemas.linkers import ADC_GOAL_KEYS, ADCGoalProfile, ADCStrategy
 
 
 # Single canonical warhead pair for the first demo (LinkInvent format:
@@ -52,26 +52,73 @@ LABILE_ALERT_SMARTS = [
 DEFAULT_ADC_GOAL_PROFILE = ADCGoalProfile()
 
 
+def render_reinvent_objective(
+    profile: ADCGoalProfile | dict[str, Any] | None,
+    strategy: ADCStrategy | dict[str, Any] | None,
+    *,
+    warhead_pair: str = CANONICAL_WARHEAD_PAIR,
+    objective: str | None = None,
+) -> dict[str, Any]:
+    """Single source of truth: (goal profile + strategy) -> REINVENT input dict.
+
+    Used by both the planner (initial render) and the critic (re-render after an
+    autonomous strategy or goal-profile edit), so the two never drift.
+    """
+
+    strat = strategy if isinstance(strategy, ADCStrategy) else ADCStrategy.model_validate(strategy or {})
+    result = build_adc_linkinvent_objective(
+        profile,
+        warhead_pair=warhead_pair,
+        run_type=strat.run_type,
+        run=strat.run,
+        device=strat.device,
+        num_smiles=strat.num_smiles,
+        max_steps=strat.max_steps,
+        min_steps=strat.min_steps,
+        batch_size=strat.batch_size,
+    )
+    if objective is not None:
+        result["objective"] = objective
+    return result
+
+
 def build_adc_linkinvent_objective(
     profile: ADCGoalProfile | dict[str, Any] | None = None,
     *,
     warhead_pair: str = CANONICAL_WARHEAD_PAIR,
+    run_type: str = "staged_learning",
     run: bool = False,
     device: str = "cpu",
+    num_smiles: int = 64,
     max_steps: int = 100,
     min_steps: int = 25,
     batch_size: int = 64,
     max_return: int = 25,
 ) -> dict[str, Any]:
-    """Render a REINVENT LinkInvent staged-learning objective from a profile.
+    """Render a REINVENT LinkInvent objective from a goal profile.
 
-    Returns a dict of :class:`ReinventInput` fields. Only components with a
-    positive weight are included (plus the optional constraint filters); the
-    aggregator is ``geometric_mean`` so any objective scoring ~0 strongly
-    penalises the whole linker (standard REINVENT RL behaviour).
+    ``run_type="sampling"`` produces a cheap de-novo-style linker sampling run
+    (fast, CPU-friendly, no RL). ``run_type="staged_learning"`` produces the RL
+    objective whose scoring is built from the profile weights (geometric_mean, so
+    any objective scoring ~0 strongly penalises the linker).
     """
 
     profile = _coerce_profile(profile)
+
+    if run_type == "sampling":
+        # Sampling ignores the scoring function (REINVENT just generates + NLL);
+        # the agent's critic scores the linkers afterward with the ADC composite.
+        return {
+            "generator_type": "linkinvent",
+            "run_type": "sampling",
+            "prior": ".linkinvent",
+            "input_smiles": [warhead_pair],
+            "num_smiles": num_smiles,
+            "device": device,
+            "max_return": max_return,
+            "run": run,
+        }
+
     weights = profile.weights
     scoring: list[dict[str, Any]] = []
 
@@ -134,7 +181,7 @@ def build_adc_linkinvent_objective(
                 "MatchingSubstructure",
                 name="cleavable motif present",
                 weight=weights["cleavability"],
-                params={"smarts": list(CLEAVABLE_MOTIF_SMARTS)},
+                params={"smarts": list(CLEAVABLE_MOTIF_SMARTS), "use_chirality": False},
             )
         )
 
@@ -158,9 +205,11 @@ def build_adc_linkinvent_objective(
         "input_smiles": [warhead_pair],
         "scoring_aggregator": "geometric_mean",
         "scoring": scoring,
+        "num_smiles": num_smiles,
         "device": device,
         "max_steps": max_steps,
-        "min_steps": min_steps,
+        # min_steps must not exceed max_steps (matters for short CPU runs).
+        "min_steps": min(min_steps, max_steps),
         "batch_size": batch_size,
         "max_return": max_return,
         "run": run,

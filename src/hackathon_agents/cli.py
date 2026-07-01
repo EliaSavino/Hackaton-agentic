@@ -167,16 +167,29 @@ try:
         run_root: Path = typer.Option(Path("runs"), "--run-root"),
         max_iterations: int = typer.Option(3, "--max-iterations", min=1, max=20),
         run_reinvent: bool = typer.Option(False, "--run/--mock", help="Actually run REINVENT (needs priors/HPC) vs mock."),
-        device: str = typer.Option("cpu", "--device", help="Torch device for REINVENT, e.g. cpu or cuda:0 (use cuda:0 on the GPU cluster)."),
+        device: str = typer.Option("cpu", "--device", help="Torch device for REINVENT: cpu (rome/genoa) or cuda:0 (GPU)."),
+        reinvent_steps: int = typer.Option(100, "--reinvent-steps", min=1, help="RL steps per stage. Lower (e.g. 20) for CPU runs."),
+        reinvent_batch: int = typer.Option(64, "--reinvent-batch", min=1, max=1024, help="RL batch size. Lower (e.g. 32) for CPU runs."),
     ) -> None:
-        """Autonomously design ADC linkers with REINVENT LinkInvent and write a paper."""
+        """Autonomously design ADC linkers with REINVENT LinkInvent and write a paper.
 
-        from hackathon_agents.schemas.linkers import ADCGoalProfile
-        from hackathon_agents.tools.adc_linker_objective import build_adc_linkinvent_objective
+        The agent chooses the generation strategy itself: it starts with a cheap
+        sampling pass, then escalates to staged-learning (RL) and reweights the
+        objective across passes. --reinvent-steps/--reinvent-batch are the budget
+        caps it works within (important on CPU).
+        """
+
+        from hackathon_agents.schemas.linkers import ADCGoalProfile, ADCStrategy
 
         profile = ADCGoalProfile()
-        reinvent = build_adc_linkinvent_objective(profile, run=run_reinvent, device=device)
-        reinvent["objective"] = request
+        strategy = ADCStrategy(
+            run_type="sampling",  # agent escalates to RL in the critic
+            device=device,
+            run=run_reinvent,
+            max_steps=reinvent_steps,
+            batch_size=reinvent_batch,
+            min_steps=min(25, reinvent_steps),
+        )
         state = run_demo(
             request,
             run_mode=run_mode,
@@ -185,7 +198,8 @@ try:
             max_iterations=max_iterations,
             initial_metadata={
                 "adc_goal_profile": profile.model_dump(mode="json"),
-                "reinvent": reinvent,
+                "adc_strategy": strategy.model_dump(mode="json"),
+                "adc_strategy_caps": {"max_steps": reinvent_steps, "batch_size": reinvent_batch},
             },
         )
         typer.echo(f"Run directory: {state.run_dir}")
