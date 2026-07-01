@@ -264,7 +264,7 @@ class ModelRouter:
             return False
         if model.provider == "vllm" and not (model.api_base or model.host):
             return False
-        if request.budget_mode == RunMode.OFFLINE and model.provider != "ollama":
+        if request.budget_mode == RunMode.OFFLINE and model.provider != self.config.model_routing.offline_required_provider:
             return False
         if request.privacy_required and model.provider != "ollama" and "private" not in model.capabilities:
             return False

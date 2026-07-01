@@ -1,8 +1,8 @@
 agents:
   literature_agent:
     requires: [literature, summarization]
-    preferred_model: local_small
-    fallback: [local_large]
+    preferred_model: science_reasoning
+    fallback: [frontier_reasoning]
     temperature: 0.0
     max_tokens: 1200
     system_prompt: |
@@ -11,8 +11,8 @@ agents:
 
   hypothesis_agent:
     requires: [chemistry, json]
-    preferred_model: local_large
-    fallback: [snellius_vllm, frontier_reasoning]
+    preferred_model: science_reasoning
+    fallback: [frontier_reasoning]
     temperature: 0.2
     max_tokens: 2000
     system_prompt: |
@@ -21,8 +21,8 @@ agents:
 
   kinetic_model_agent:
     requires: [numerics, chemistry]
-    preferred_model: local_small
-    fallback: [local_large]
+    preferred_model: science_reasoning
+    fallback: [frontier_reasoning]
     temperature: 0.0
     max_tokens: 1000
     system_prompt: |
@@ -30,8 +30,8 @@ agents:
 
   rl_experiment_designer:
     requires: [active_learning, experimental_design]
-    preferred_model: local_large
-    fallback: [snellius_vllm, frontier_reasoning]
+    preferred_model: science_reasoning
+    fallback: [frontier_reasoning]
     temperature: 0.1
     max_tokens: 1200
     system_prompt: |
@@ -39,7 +39,8 @@ agents:
 
   robot_agent:
     requires: [tool_use]
-    preferred_model: local_small
+    preferred_model: science_reasoning
+    fallback: [frontier_reasoning]
     temperature: 0.0
     max_tokens: 512
     system_prompt: |
@@ -47,7 +48,8 @@ agents:
 
   data_ingestion_agent:
     requires: [data_parsing]
-    preferred_model: local_small
+    preferred_model: science_reasoning
+    fallback: [frontier_reasoning]
     temperature: 0.0
     max_tokens: 512
     system_prompt: |
@@ -55,8 +57,8 @@ agents:
 
   dft_agent:
     requires: [computational_chemistry]
-    preferred_model: local_large
-    fallback: [snellius_vllm, frontier_reasoning]
+    preferred_model: science_reasoning
+    fallback: [frontier_reasoning]
     temperature: 0.0
     max_tokens: 1200
     system_prompt: |
@@ -65,8 +67,8 @@ agents:
 
   critic_agent:
     requires: [reasoning, final_review]
-    preferred_model: frontier_reasoning
-    fallback: [snellius_vllm, local_large]
+    preferred_model: science_reasoning
+    fallback: [frontier_reasoning]
     temperature: 0.0
     max_tokens: 1600
     system_prompt: |
@@ -74,7 +76,8 @@ agents:
 
   report_agent:
     requires: [reporting]
-    preferred_model: local_small
+    preferred_model: science_reasoning
+    fallback: [frontier_reasoning]
     temperature: 0.0
     max_tokens: 1200
     system_prompt: |

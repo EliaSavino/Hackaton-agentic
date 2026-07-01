@@ -12,7 +12,8 @@ class ConfigTests(unittest.TestCase):
         config = load_config(Path("configs"), run_mode="cheap")
         self.assertEqual(config.run_mode, RunMode.CHEAP)
         self.assertIn("local_large", config.models)
-        self.assertEqual(config.models["local_large"].provider, "ollama")
+        self.assertEqual(config.models["local_large"].provider, "anthropic")
+        self.assertEqual(config.models["local_large"].model, "anthropic/claude-sonnet-4-6")
         self.assertIn("chemist", config.agents)
         self.assertIn("latex_writer", config.tools)
         self.assertIn("latex", config.models["local_small"].capabilities)
@@ -21,11 +22,12 @@ class ConfigTests(unittest.TestCase):
         self.assertIn("robrains_bo", config.tools)
         self.assertEqual(config.tools["robrains_bo"].repo_path, "/Users/es/GitHub/RoBrains")
 
-    def test_router_offline_selects_ollama(self) -> None:
+    def test_router_offline_uses_configured_provider(self) -> None:
         config = load_config(Path("configs"), run_mode="offline")
         router = ModelRouter(config)
         selection = router.select_for_agent("chemist")
-        self.assertEqual(selection.provider, "ollama")
+        self.assertEqual(selection.provider, config.model_routing.offline_required_provider)
+        self.assertEqual(selection.model, "anthropic/claude-sonnet-4-6")
 
 
 if __name__ == "__main__":

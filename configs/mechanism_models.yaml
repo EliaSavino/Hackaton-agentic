@@ -1,9 +1,41 @@
 model_routing:
-  default_alias: local_small
-  mechanism_reasoning_alias: local_large
-  mechanism_critic_alias: frontier_reasoning
+  default_alias: science_reasoning
+  mechanism_reasoning_alias: science_reasoning
+  mechanism_critic_alias: science_reasoning
 
 models:
+  science_reasoning:
+    provider: anthropic
+    model: anthropic/claude-sonnet-4-6
+    capabilities: [reasoning, chemistry, science, mechanism, final_review, long_context, json, active_learning, experimental_design, computational_chemistry, literature, summarization, reporting, data_parsing, tool_use]
+    api_key_env: ANTHROPIC_API_KEY
+    cost_tier: high
+    enabled: true
+
+  frontier_reasoning:
+    provider: anthropic
+    model: anthropic/claude-sonnet-4-6
+    capabilities: [reasoning, chemistry, science, mechanism, final_review, long_context, json, active_learning, experimental_design, computational_chemistry, literature, summarization, reporting, data_parsing, tool_use]
+    api_key_env: ANTHROPIC_API_KEY
+    cost_tier: high
+    enabled: true
+
+  local_large:
+    provider: anthropic
+    model: anthropic/claude-sonnet-4-6
+    capabilities: [reasoning, chemistry, science, mechanism, final_review, long_context, json, active_learning, experimental_design, computational_chemistry, literature, summarization, reporting, data_parsing, tool_use]
+    api_key_env: ANTHROPIC_API_KEY
+    cost_tier: high
+    enabled: true
+
+  local_small:
+    provider: anthropic
+    model: anthropic/claude-sonnet-4-6
+    capabilities: [reasoning, chemistry, science, mechanism, final_review, long_context, json, active_learning, experimental_design, computational_chemistry, literature, summarization, reporting, data_parsing, tool_use, fast, cheap]
+    api_key_env: ANTHROPIC_API_KEY
+    cost_tier: high
+    enabled: true
+
   kinetic_first_order:
     provider: other
     model: deterministic-first-order
