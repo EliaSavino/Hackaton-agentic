@@ -1,0 +1,1088 @@
+{
+  "original_user_request": "Find promising substrate candidates for reaction X",
+  "plan": {
+    "objective": "Find promising substrate candidates for reaction X",
+    "assumptions": [
+      "Use deterministic tools first, then summarize uncertainty.",
+      "Prefer local models for bulk ideation and hosted models for final checks when allowed."
+    ],
+    "steps": [
+      {
+        "name": "Generate initial candidates",
+        "description": "Seed plausible substrate candidates and keep provenance explicit.",
+        "agent": "chemist",
+        "tool_names": []
+      },
+      {
+        "name": "Run deterministic tools",
+        "description": "Validate SMILES, compute descriptors, and create simple plots.",
+        "agent": "tool_executor",
+        "tool_names": [
+          "rdkit",
+          "plotting"
+        ]
+      },
+      {
+        "name": "Optional DFT wrappers",
+        "description": "Check xTB and ORCA availability and run only when configured and installed.",
+        "agent": "dft",
+        "tool_names": [
+          "xtb",
+          "orca"
+        ]
+      },
+      {
+        "name": "Rank and write report",
+        "description": "Critique candidates and produce a DOCX report plus serialized state.",
+        "agent": "critic",
+        "tool_names": [
+          "doc_writer"
+        ]
+      }
+    ]
+  },
+  "candidate_molecules": [
+    {
+      "smiles": "CCOC(=O)c1ccc(F)cc1",
+      "name": "ethyl 4-fluorobenzoate",
+      "source": "refinement_pass_2",
+      "descriptors": {
+        "smiles": "CCOC(=O)c1ccc(F)cc1",
+        "canonical_smiles": "CCOC(=O)c1ccc(F)cc1",
+        "mol_wt": 168.16699999999997,
+        "logp": 2.0024,
+        "hbd": 0,
+        "hba": 2,
+        "tpsa": 26.3,
+        "rotatable_bonds": 2,
+        "heavy_atoms": 12,
+        "ring_count": 1,
+        "qed": 0.6311347811432081
+      },
+      "score": 0.8223562603810693,
+      "notes": [
+        "generate_more_candidates"
+      ],
+      "metadata": {}
+    },
+    {
+      "smiles": "CCOC(=O)c1ccccc1",
+      "name": "ethyl benzoate",
+      "source": "example_seed",
+      "descriptors": {
+        "smiles": "CCOC(=O)c1ccccc1",
+        "canonical_smiles": "CCOC(=O)c1ccccc1",
+        "mol_wt": 150.177,
+        "logp": 1.8633,
+        "hbd": 0,
+        "hba": 2,
+        "tpsa": 26.3,
+        "rotatable_bonds": 2,
+        "heavy_atoms": 11,
+        "ring_count": 1,
+        "qed": 0.601336802799046
+      },
+      "score": 0.7929691564885709,
+      "notes": [],
+      "metadata": {}
+    },
+    {
+      "smiles": "O=C(O)c1ccc(F)cc1",
+      "name": "4-fluorobenzoic acid",
+      "source": "refinement_pass_2",
+      "descriptors": {
+        "smiles": "O=C(O)c1ccc(F)cc1",
+        "canonical_smiles": "O=C(O)c1ccc(F)cc1",
+        "mol_wt": 140.113,
+        "logp": 1.5239,
+        "hbd": 1,
+        "hba": 1,
+        "tpsa": 37.3,
+        "rotatable_bonds": 1,
+        "heavy_atoms": 10,
+        "ring_count": 1,
+        "qed": 0.6416857728396073
+      },
+      "score": 0.7808539242798691,
+      "notes": [
+        "generate_more_candidates"
+      ],
+      "metadata": {}
+    },
+    {
+      "smiles": "CC(=O)c1ccc(Cl)cc1",
+      "name": "4-chloroacetophenone",
+      "source": "refinement_pass_2",
+      "descriptors": {
+        "smiles": "CC(=O)c1ccc(Cl)cc1",
+        "canonical_smiles": "CC(=O)c1ccc(Cl)cc1",
+        "mol_wt": 154.596,
+        "logp": 2.542600000000001,
+        "hbd": 0,
+        "hba": 1,
+        "tpsa": 17.07,
+        "rotatable_bonds": 1,
+        "heavy_atoms": 10,
+        "ring_count": 1,
+        "qed": 0.5685292666854166
+      },
+      "score": 0.762429311117361,
+      "notes": [
+        "generate_more_candidates"
+      ],
+      "metadata": {}
+    },
+    {
+      "smiles": "COc1ccc(C#N)cc1",
+      "name": "4-methoxybenzonitrile",
+      "source": "refinement_pass_2",
+      "descriptors": {
+        "smiles": "COc1ccc(C#N)cc1",
+        "canonical_smiles": "COc1ccc(C#N)cc1",
+        "mol_wt": 133.15,
+        "logp": 1.5668799999999998,
+        "hbd": 0,
+        "hba": 2,
+        "tpsa": 33.019999999999996,
+        "rotatable_bonds": 1,
+        "heavy_atoms": 10,
+        "ring_count": 1,
+        "qed": 0.5820968638734555
+      },
+      "score": 0.7587367324022629,
+      "notes": [
+        "generate_more_candidates"
+      ],
+      "metadata": {}
+    },
+    {
+      "smiles": "COc1ccc(C=O)cc1",
+      "name": "p-anisaldehyde",
+      "source": "example_seed",
+      "descriptors": {
+        "smiles": "COc1ccc(C=O)cc1",
+        "canonical_smiles": "COc1ccc(C=O)cc1",
+        "mol_wt": 136.14999999999998,
+        "logp": 1.5076999999999998,
+        "hbd": 0,
+        "hba": 2,
+        "tpsa": 26.3,
+        "rotatable_bonds": 2,
+        "heavy_atoms": 10,
+        "ring_count": 1,
+        "qed": 0.575816465118545
+      },
+      "score": 0.7553554883728483,
+      "notes": [],
+      "metadata": {}
+    },
+    {
+      "smiles": "O=C(O)c1ccccc1",
+      "name": "benzoic acid",
+      "source": "example_seed",
+      "descriptors": {
+        "smiles": "O=C(O)c1ccccc1",
+        "canonical_smiles": "O=C(O)c1ccccc1",
+        "mol_wt": 122.12299999999996,
+        "logp": 1.3848,
+        "hbd": 1,
+        "hba": 1,
+        "tpsa": 37.3,
+        "rotatable_bonds": 1,
+        "heavy_atoms": 9,
+        "ring_count": 1,
+        "qed": 0.6106035394285075
+      },
+      "score": 0.7507720686983914,
+      "notes": [],
+      "metadata": {}
+    },
+    {
+      "smiles": "CN(C)c1ccccc1",
+      "name": "N,N-dimethylaniline",
+      "source": "refinement_pass_2",
+      "descriptors": {
+        "smiles": "CN(C)c1ccccc1",
+        "canonical_smiles": "CN(C)c1ccccc1",
+        "mol_wt": 121.18299999999995,
+        "logp": 1.7526,
+        "hbd": 0,
+        "hba": 1,
+        "tpsa": 3.24,
+        "rotatable_bonds": 1,
+        "heavy_atoms": 9,
+        "ring_count": 1,
+        "qed": 0.5468274487440188
+      },
+      "score": 0.7493200384702284,
+      "notes": [
+        "generate_more_candidates"
+      ],
+      "metadata": {}
+    },
+    {
+      "smiles": "CC(=O)c1ccccc1",
+      "name": "acetophenone",
+      "source": "example_seed",
+      "descriptors": {
+        "smiles": "CC(=O)c1ccccc1",
+        "canonical_smiles": "CC(=O)c1ccccc1",
+        "mol_wt": 120.15099999999995,
+        "logp": 1.8892,
+        "hbd": 0,
+        "hba": 1,
+        "tpsa": 17.07,
+        "rotatable_bonds": 1,
+        "heavy_atoms": 9,
+        "ring_count": 1,
+        "qed": 0.5170467542625542
+      },
+      "score": 0.7462940291986292,
+      "notes": [],
+      "metadata": {}
+    },
+    {
+      "smiles": "CCN(CC)CC",
+      "name": "triethylamine",
+      "source": "example_seed",
+      "descriptors": {
+        "smiles": "CCN(CC)CC",
+        "canonical_smiles": "CCN(CC)CC",
+        "mol_wt": 101.193,
+        "logp": 1.3481,
+        "hbd": 0,
+        "hba": 1,
+        "tpsa": 3.24,
+        "rotatable_bonds": 3,
+        "heavy_atoms": 7,
+        "ring_count": 0,
+        "qed": 0.5183748699715436
+      },
+      "score": 0.7040369566571811,
+      "notes": [],
+      "metadata": {}
+    }
+  ],
+  "tool_results": [
+    {
+      "tool_name": "rdkit.validate_smiles",
+      "result": {
+        "ok": true,
+        "data": {
+          "smiles": "CCOC(=O)c1ccccc1",
+          "valid": true,
+          "canonical_smiles": "CCOC(=O)c1ccccc1"
+        },
+        "error": null,
+        "artifacts": [],
+        "metadata": {}
+      }
+    },
+    {
+      "tool_name": "rdkit.compute_descriptors",
+      "result": {
+        "ok": true,
+        "data": {
+          "smiles": "CCOC(=O)c1ccccc1",
+          "canonical_smiles": "CCOC(=O)c1ccccc1",
+          "mol_wt": 150.177,
+          "logp": 1.8633,
+          "hbd": 0,
+          "hba": 2,
+          "tpsa": 26.3,
+          "rotatable_bonds": 2,
+          "heavy_atoms": 11,
+          "ring_count": 1,
+          "qed": 0.601336802799046
+        },
+        "error": null,
+        "artifacts": [],
+        "metadata": {}
+      }
+    },
+    {
+      "tool_name": "rdkit.validate_smiles",
+      "result": {
+        "ok": true,
+        "data": {
+          "smiles": "COc1ccc(C=O)cc1",
+          "valid": true,
+          "canonical_smiles": "COc1ccc(C=O)cc1"
+        },
+        "error": null,
+        "artifacts": [],
+        "metadata": {}
+      }
+    },
+    {
+      "tool_name": "rdkit.compute_descriptors",
+      "result": {
+        "ok": true,
+        "data": {
+          "smiles": "COc1ccc(C=O)cc1",
+          "canonical_smiles": "COc1ccc(C=O)cc1",
+          "mol_wt": 136.14999999999998,
+          "logp": 1.5076999999999998,
+          "hbd": 0,
+          "hba": 2,
+          "tpsa": 26.3,
+          "rotatable_bonds": 2,
+          "heavy_atoms": 10,
+          "ring_count": 1,
+          "qed": 0.575816465118545
+        },
+        "error": null,
+        "artifacts": [],
+        "metadata": {}
+      }
+    },
+    {
+      "tool_name": "rdkit.validate_smiles",
+      "result": {
+        "ok": true,
+        "data": {
+          "smiles": "CC(=O)c1ccccc1",
+          "valid": true,
+          "canonical_smiles": "CC(=O)c1ccccc1"
+        },
+        "error": null,
+        "artifacts": [],
+        "metadata": {}
+      }
+    },
+    {
+      "tool_name": "rdkit.compute_descriptors",
+      "result": {
+        "ok": true,
+        "data": {
+          "smiles": "CC(=O)c1ccccc1",
+          "canonical_smiles": "CC(=O)c1ccccc1",
+          "mol_wt": 120.15099999999995,
+          "logp": 1.8892,
+          "hbd": 0,
+          "hba": 1,
+          "tpsa": 17.07,
+          "rotatable_bonds": 1,
+          "heavy_atoms": 9,
+          "ring_count": 1,
+          "qed": 0.5170467542625542
+        },
+        "error": null,
+        "artifacts": [],
+        "metadata": {}
+      }
+    },
+    {
+      "tool_name": "rdkit.validate_smiles",
+      "result": {
+        "ok": true,
+        "data": {
+          "smiles": "O=C(O)c1ccccc1",
+          "valid": true,
+          "canonical_smiles": "O=C(O)c1ccccc1"
+        },
+        "error": null,
+        "artifacts": [],
+        "metadata": {}
+      }
+    },
+    {
+      "tool_name": "rdkit.compute_descriptors",
+      "result": {
+        "ok": true,
+        "data": {
+          "smiles": "O=C(O)c1ccccc1",
+          "canonical_smiles": "O=C(O)c1ccccc1",
+          "mol_wt": 122.12299999999996,
+          "logp": 1.3848,
+          "hbd": 1,
+          "hba": 1,
+          "tpsa": 37.3,
+          "rotatable_bonds": 1,
+          "heavy_atoms": 9,
+          "ring_count": 1,
+          "qed": 0.6106035394285075
+        },
+        "error": null,
+        "artifacts": [],
+        "metadata": {}
+      }
+    },
+    {
+      "tool_name": "rdkit.validate_smiles",
+      "result": {
+        "ok": true,
+        "data": {
+          "smiles": "CCN(CC)CC",
+          "valid": true,
+          "canonical_smiles": "CCN(CC)CC"
+        },
+        "error": null,
+        "artifacts": [],
+        "metadata": {}
+      }
+    },
+    {
+      "tool_name": "rdkit.compute_descriptors",
+      "result": {
+        "ok": true,
+        "data": {
+          "smiles": "CCN(CC)CC",
+          "canonical_smiles": "CCN(CC)CC",
+          "mol_wt": 101.193,
+          "logp": 1.3481,
+          "hbd": 0,
+          "hba": 1,
+          "tpsa": 3.24,
+          "rotatable_bonds": 3,
+          "heavy_atoms": 7,
+          "ring_count": 0,
+          "qed": 0.5183748699715436
+        },
+        "error": null,
+        "artifacts": [],
+        "metadata": {}
+      }
+    },
+    {
+      "tool_name": "file_io.write_csv",
+      "result": {
+        "ok": true,
+        "data": {
+          "path": "runs/20260610_005145/descriptors.csv",
+          "row_count": 5
+        },
+        "error": null,
+        "artifacts": [
+          "runs/20260610_005145/descriptors.csv"
+        ],
+        "metadata": {}
+      }
+    },
+    {
+      "tool_name": "plotting.generate_plot",
+      "result": {
+        "ok": true,
+        "data": {
+          "path": "runs/20260610_005145/qed_plot.png",
+          "points": 5
+        },
+        "error": null,
+        "artifacts": [
+          "runs/20260610_005145/qed_plot.png"
+        ],
+        "metadata": {}
+      }
+    },
+    {
+      "tool_name": "rdkit.filter_molecules",
+      "result": {
+        "ok": true,
+        "data": {
+          "kept": [
+            {
+              "smiles": "CCOC(=O)c1ccccc1",
+              "descriptors": {
+                "smiles": "CCOC(=O)c1ccccc1",
+                "canonical_smiles": "CCOC(=O)c1ccccc1",
+                "mol_wt": 150.177,
+                "logp": 1.8633,
+                "hbd": 0,
+                "hba": 2,
+                "tpsa": 26.3,
+                "rotatable_bonds": 2,
+                "heavy_atoms": 11,
+                "ring_count": 1,
+                "qed": 0.601336802799046
+              }
+            },
+            {
+              "smiles": "COc1ccc(C=O)cc1",
+              "descriptors": {
+                "smiles": "COc1ccc(C=O)cc1",
+                "canonical_smiles": "COc1ccc(C=O)cc1",
+                "mol_wt": 136.14999999999998,
+                "logp": 1.5076999999999998,
+                "hbd": 0,
+                "hba": 2,
+                "tpsa": 26.3,
+                "rotatable_bonds": 2,
+                "heavy_atoms": 10,
+                "ring_count": 1,
+                "qed": 0.575816465118545
+              }
+            },
+            {
+              "smiles": "CC(=O)c1ccccc1",
+              "descriptors": {
+                "smiles": "CC(=O)c1ccccc1",
+                "canonical_smiles": "CC(=O)c1ccccc1",
+                "mol_wt": 120.15099999999995,
+                "logp": 1.8892,
+                "hbd": 0,
+                "hba": 1,
+                "tpsa": 17.07,
+                "rotatable_bonds": 1,
+                "heavy_atoms": 9,
+                "ring_count": 1,
+                "qed": 0.5170467542625542
+              }
+            },
+            {
+              "smiles": "O=C(O)c1ccccc1",
+              "descriptors": {
+                "smiles": "O=C(O)c1ccccc1",
+                "canonical_smiles": "O=C(O)c1ccccc1",
+                "mol_wt": 122.12299999999996,
+                "logp": 1.3848,
+                "hbd": 1,
+                "hba": 1,
+                "tpsa": 37.3,
+                "rotatable_bonds": 1,
+                "heavy_atoms": 9,
+                "ring_count": 1,
+                "qed": 0.6106035394285075
+              }
+            },
+            {
+              "smiles": "CCN(CC)CC",
+              "descriptors": {
+                "smiles": "CCN(CC)CC",
+                "canonical_smiles": "CCN(CC)CC",
+                "mol_wt": 101.193,
+                "logp": 1.3481,
+                "hbd": 0,
+                "hba": 1,
+                "tpsa": 3.24,
+                "rotatable_bonds": 3,
+                "heavy_atoms": 7,
+                "ring_count": 0,
+                "qed": 0.5183748699715436
+              }
+            }
+          ],
+          "rejected": [],
+          "constraints": {
+            "min_mol_wt": null,
+            "max_mol_wt": 500.0,
+            "min_qed": null,
+            "max_logp": 5.0,
+            "max_tpsa": null,
+            "allowed_elements": null
+          },
+          "errors": []
+        },
+        "error": null,
+        "artifacts": [],
+        "metadata": {}
+      }
+    },
+    {
+      "tool_name": "xtb.check_availability",
+      "result": {
+        "ok": true,
+        "data": {
+          "available": false,
+          "executable": "xtb",
+          "path": null
+        },
+        "error": null,
+        "artifacts": [],
+        "metadata": {}
+      }
+    },
+    {
+      "tool_name": "rdkit.validate_smiles",
+      "result": {
+        "ok": true,
+        "data": {
+          "smiles": "CCOC(=O)c1ccc(F)cc1",
+          "valid": true,
+          "canonical_smiles": "CCOC(=O)c1ccc(F)cc1"
+        },
+        "error": null,
+        "artifacts": [],
+        "metadata": {}
+      }
+    },
+    {
+      "tool_name": "rdkit.compute_descriptors",
+      "result": {
+        "ok": true,
+        "data": {
+          "smiles": "CCOC(=O)c1ccc(F)cc1",
+          "canonical_smiles": "CCOC(=O)c1ccc(F)cc1",
+          "mol_wt": 168.16699999999997,
+          "logp": 2.0024,
+          "hbd": 0,
+          "hba": 2,
+          "tpsa": 26.3,
+          "rotatable_bonds": 2,
+          "heavy_atoms": 12,
+          "ring_count": 1,
+          "qed": 0.6311347811432081
+        },
+        "error": null,
+        "artifacts": [],
+        "metadata": {}
+      }
+    },
+    {
+      "tool_name": "rdkit.validate_smiles",
+      "result": {
+        "ok": true,
+        "data": {
+          "smiles": "COc1ccc(C#N)cc1",
+          "valid": true,
+          "canonical_smiles": "COc1ccc(C#N)cc1"
+        },
+        "error": null,
+        "artifacts": [],
+        "metadata": {}
+      }
+    },
+    {
+      "tool_name": "rdkit.compute_descriptors",
+      "result": {
+        "ok": true,
+        "data": {
+          "smiles": "COc1ccc(C#N)cc1",
+          "canonical_smiles": "COc1ccc(C#N)cc1",
+          "mol_wt": 133.15,
+          "logp": 1.5668799999999998,
+          "hbd": 0,
+          "hba": 2,
+          "tpsa": 33.019999999999996,
+          "rotatable_bonds": 1,
+          "heavy_atoms": 10,
+          "ring_count": 1,
+          "qed": 0.5820968638734555
+        },
+        "error": null,
+        "artifacts": [],
+        "metadata": {}
+      }
+    },
+    {
+      "tool_name": "rdkit.validate_smiles",
+      "result": {
+        "ok": true,
+        "data": {
+          "smiles": "CC(=O)c1ccc(Cl)cc1",
+          "valid": true,
+          "canonical_smiles": "CC(=O)c1ccc(Cl)cc1"
+        },
+        "error": null,
+        "artifacts": [],
+        "metadata": {}
+      }
+    },
+    {
+      "tool_name": "rdkit.compute_descriptors",
+      "result": {
+        "ok": true,
+        "data": {
+          "smiles": "CC(=O)c1ccc(Cl)cc1",
+          "canonical_smiles": "CC(=O)c1ccc(Cl)cc1",
+          "mol_wt": 154.596,
+          "logp": 2.542600000000001,
+          "hbd": 0,
+          "hba": 1,
+          "tpsa": 17.07,
+          "rotatable_bonds": 1,
+          "heavy_atoms": 10,
+          "ring_count": 1,
+          "qed": 0.5685292666854166
+        },
+        "error": null,
+        "artifacts": [],
+        "metadata": {}
+      }
+    },
+    {
+      "tool_name": "rdkit.validate_smiles",
+      "result": {
+        "ok": true,
+        "data": {
+          "smiles": "O=C(O)c1ccc(F)cc1",
+          "valid": true,
+          "canonical_smiles": "O=C(O)c1ccc(F)cc1"
+        },
+        "error": null,
+        "artifacts": [],
+        "metadata": {}
+      }
+    },
+    {
+      "tool_name": "rdkit.compute_descriptors",
+      "result": {
+        "ok": true,
+        "data": {
+          "smiles": "O=C(O)c1ccc(F)cc1",
+          "canonical_smiles": "O=C(O)c1ccc(F)cc1",
+          "mol_wt": 140.113,
+          "logp": 1.5239,
+          "hbd": 1,
+          "hba": 1,
+          "tpsa": 37.3,
+          "rotatable_bonds": 1,
+          "heavy_atoms": 10,
+          "ring_count": 1,
+          "qed": 0.6416857728396073
+        },
+        "error": null,
+        "artifacts": [],
+        "metadata": {}
+      }
+    },
+    {
+      "tool_name": "rdkit.validate_smiles",
+      "result": {
+        "ok": true,
+        "data": {
+          "smiles": "CN(C)c1ccccc1",
+          "valid": true,
+          "canonical_smiles": "CN(C)c1ccccc1"
+        },
+        "error": null,
+        "artifacts": [],
+        "metadata": {}
+      }
+    },
+    {
+      "tool_name": "rdkit.compute_descriptors",
+      "result": {
+        "ok": true,
+        "data": {
+          "smiles": "CN(C)c1ccccc1",
+          "canonical_smiles": "CN(C)c1ccccc1",
+          "mol_wt": 121.18299999999995,
+          "logp": 1.7526,
+          "hbd": 0,
+          "hba": 1,
+          "tpsa": 3.24,
+          "rotatable_bonds": 1,
+          "heavy_atoms": 9,
+          "ring_count": 1,
+          "qed": 0.5468274487440188
+        },
+        "error": null,
+        "artifacts": [],
+        "metadata": {}
+      }
+    },
+    {
+      "tool_name": "file_io.write_csv",
+      "result": {
+        "ok": true,
+        "data": {
+          "path": "runs/20260610_005145/descriptors.csv",
+          "row_count": 10
+        },
+        "error": null,
+        "artifacts": [
+          "runs/20260610_005145/descriptors.csv"
+        ],
+        "metadata": {}
+      }
+    },
+    {
+      "tool_name": "plotting.generate_plot",
+      "result": {
+        "ok": true,
+        "data": {
+          "path": "runs/20260610_005145/qed_plot.png",
+          "points": 10
+        },
+        "error": null,
+        "artifacts": [
+          "runs/20260610_005145/qed_plot.png"
+        ],
+        "metadata": {}
+      }
+    },
+    {
+      "tool_name": "rdkit.filter_molecules",
+      "result": {
+        "ok": true,
+        "data": {
+          "kept": [
+            {
+              "smiles": "CCOC(=O)c1ccccc1",
+              "descriptors": {
+                "smiles": "CCOC(=O)c1ccccc1",
+                "canonical_smiles": "CCOC(=O)c1ccccc1",
+                "mol_wt": 150.177,
+                "logp": 1.8633,
+                "hbd": 0,
+                "hba": 2,
+                "tpsa": 26.3,
+                "rotatable_bonds": 2,
+                "heavy_atoms": 11,
+                "ring_count": 1,
+                "qed": 0.601336802799046
+              }
+            },
+            {
+              "smiles": "COc1ccc(C=O)cc1",
+              "descriptors": {
+                "smiles": "COc1ccc(C=O)cc1",
+                "canonical_smiles": "COc1ccc(C=O)cc1",
+                "mol_wt": 136.14999999999998,
+                "logp": 1.5076999999999998,
+                "hbd": 0,
+                "hba": 2,
+                "tpsa": 26.3,
+                "rotatable_bonds": 2,
+                "heavy_atoms": 10,
+                "ring_count": 1,
+                "qed": 0.575816465118545
+              }
+            },
+            {
+              "smiles": "O=C(O)c1ccccc1",
+              "descriptors": {
+                "smiles": "O=C(O)c1ccccc1",
+                "canonical_smiles": "O=C(O)c1ccccc1",
+                "mol_wt": 122.12299999999996,
+                "logp": 1.3848,
+                "hbd": 1,
+                "hba": 1,
+                "tpsa": 37.3,
+                "rotatable_bonds": 1,
+                "heavy_atoms": 9,
+                "ring_count": 1,
+                "qed": 0.6106035394285075
+              }
+            },
+            {
+              "smiles": "CC(=O)c1ccccc1",
+              "descriptors": {
+                "smiles": "CC(=O)c1ccccc1",
+                "canonical_smiles": "CC(=O)c1ccccc1",
+                "mol_wt": 120.15099999999995,
+                "logp": 1.8892,
+                "hbd": 0,
+                "hba": 1,
+                "tpsa": 17.07,
+                "rotatable_bonds": 1,
+                "heavy_atoms": 9,
+                "ring_count": 1,
+                "qed": 0.5170467542625542
+              }
+            },
+            {
+              "smiles": "CCN(CC)CC",
+              "descriptors": {
+                "smiles": "CCN(CC)CC",
+                "canonical_smiles": "CCN(CC)CC",
+                "mol_wt": 101.193,
+                "logp": 1.3481,
+                "hbd": 0,
+                "hba": 1,
+                "tpsa": 3.24,
+                "rotatable_bonds": 3,
+                "heavy_atoms": 7,
+                "ring_count": 0,
+                "qed": 0.5183748699715436
+              }
+            },
+            {
+              "smiles": "CCOC(=O)c1ccc(F)cc1",
+              "descriptors": {
+                "smiles": "CCOC(=O)c1ccc(F)cc1",
+                "canonical_smiles": "CCOC(=O)c1ccc(F)cc1",
+                "mol_wt": 168.16699999999997,
+                "logp": 2.0024,
+                "hbd": 0,
+                "hba": 2,
+                "tpsa": 26.3,
+                "rotatable_bonds": 2,
+                "heavy_atoms": 12,
+                "ring_count": 1,
+                "qed": 0.6311347811432081
+              }
+            },
+            {
+              "smiles": "COc1ccc(C#N)cc1",
+              "descriptors": {
+                "smiles": "COc1ccc(C#N)cc1",
+                "canonical_smiles": "COc1ccc(C#N)cc1",
+                "mol_wt": 133.15,
+                "logp": 1.5668799999999998,
+                "hbd": 0,
+                "hba": 2,
+                "tpsa": 33.019999999999996,
+                "rotatable_bonds": 1,
+                "heavy_atoms": 10,
+                "ring_count": 1,
+                "qed": 0.5820968638734555
+              }
+            },
+            {
+              "smiles": "CC(=O)c1ccc(Cl)cc1",
+              "descriptors": {
+                "smiles": "CC(=O)c1ccc(Cl)cc1",
+                "canonical_smiles": "CC(=O)c1ccc(Cl)cc1",
+                "mol_wt": 154.596,
+                "logp": 2.542600000000001,
+                "hbd": 0,
+                "hba": 1,
+                "tpsa": 17.07,
+                "rotatable_bonds": 1,
+                "heavy_atoms": 10,
+                "ring_count": 1,
+                "qed": 0.5685292666854166
+              }
+            },
+            {
+              "smiles": "O=C(O)c1ccc(F)cc1",
+              "descriptors": {
+                "smiles": "O=C(O)c1ccc(F)cc1",
+                "canonical_smiles": "O=C(O)c1ccc(F)cc1",
+                "mol_wt": 140.113,
+                "logp": 1.5239,
+                "hbd": 1,
+                "hba": 1,
+                "tpsa": 37.3,
+                "rotatable_bonds": 1,
+                "heavy_atoms": 10,
+                "ring_count": 1,
+                "qed": 0.6416857728396073
+              }
+            },
+            {
+              "smiles": "CN(C)c1ccccc1",
+              "descriptors": {
+                "smiles": "CN(C)c1ccccc1",
+                "canonical_smiles": "CN(C)c1ccccc1",
+                "mol_wt": 121.18299999999995,
+                "logp": 1.7526,
+                "hbd": 0,
+                "hba": 1,
+                "tpsa": 3.24,
+                "rotatable_bonds": 1,
+                "heavy_atoms": 9,
+                "ring_count": 1,
+                "qed": 0.5468274487440188
+              }
+            }
+          ],
+          "rejected": [],
+          "constraints": {
+            "min_mol_wt": null,
+            "max_mol_wt": 500.0,
+            "min_qed": null,
+            "max_logp": 5.0,
+            "max_tpsa": null,
+            "allowed_elements": null
+          },
+          "errors": []
+        },
+        "error": null,
+        "artifacts": [],
+        "metadata": {}
+      }
+    },
+    {
+      "tool_name": "xtb.check_availability",
+      "result": {
+        "ok": true,
+        "data": {
+          "available": false,
+          "executable": "xtb",
+          "path": null
+        },
+        "error": null,
+        "artifacts": [],
+        "metadata": {}
+      }
+    },
+    {
+      "tool_name": "doc_writer.write_scientific_report",
+      "result": {
+        "ok": true,
+        "data": {
+          "path": "runs/20260610_005145/report.docx"
+        },
+        "error": null,
+        "artifacts": [
+          "runs/20260610_005145/report.docx"
+        ],
+        "metadata": {}
+      }
+    }
+  ],
+  "errors": [],
+  "critic_notes": [
+    "Top deterministic candidate by descriptor heuristic: ethyl benzoate (score=0.793).",
+    "Top deterministic candidate by descriptor heuristic: ethyl 4-fluorobenzoate (score=0.822)."
+  ],
+  "critic_decisions": [
+    {
+      "needs_more_passes": true,
+      "reason": "Requesting another pass: 5 valid candidates below target 10.",
+      "requested_next_actions": [
+        "generate_more_candidates"
+      ],
+      "stop_reason": null,
+      "valid_candidate_count": 5,
+      "best_score": 0.7929691564885709
+    },
+    {
+      "needs_more_passes": false,
+      "reason": "Stopping because candidate set meets deterministic quality criteria.",
+      "requested_next_actions": [],
+      "stop_reason": "quality_threshold_met",
+      "valid_candidate_count": 10,
+      "best_score": 0.8223562603810693
+    }
+  ],
+  "final_report_path": "runs/20260610_005145/report.docx",
+  "messages": [
+    "planner: created deterministic discovery plan",
+    "graph: starting pass 1/3",
+    "chemist: loaded hardcoded example molecules",
+    "critic: ranked candidates with a simple descriptor heuristic",
+    "critic: Requesting another pass: 5 valid candidates below target 10.",
+    "graph: starting pass 2/3",
+    "chemist: added 5 refinement candidates for actions ['generate_more_candidates']",
+    "critic: ranked candidates with a simple descriptor heuristic",
+    "critic: Stopping because candidate set meets deterministic quality criteria.",
+    "writer: report generation delegated to doc_writer tool",
+    "demo: wrote state to runs/20260610_005145/state.json"
+  ],
+  "run_dir": "runs/20260610_005145",
+  "run_mode": "cheap",
+  "iteration": 2,
+  "max_iterations": 3,
+  "needs_more_passes": false,
+  "stop_reason": "quality_threshold_met",
+  "requested_next_actions": [],
+  "metadata": {
+    "min_valid_candidates": 10,
+    "score_threshold": 0.75,
+    "critic_history": [
+      {
+        "needs_more_passes": true,
+        "reason": "Requesting another pass: 5 valid candidates below target 10.",
+        "requested_next_actions": [
+          "generate_more_candidates"
+        ],
+        "stop_reason": null,
+        "valid_candidate_count": 5,
+        "best_score": 0.7929691564885709
+      },
+      {
+        "needs_more_passes": false,
+        "reason": "Stopping because candidate set meets deterministic quality criteria.",
+        "requested_next_actions": [],
+        "stop_reason": "quality_threshold_met",
+        "valid_candidate_count": 10,
+        "best_score": 0.8223562603810693
+      }
+    ],
+    "best_score": 0.8223562603810693,
+    "valid_candidate_count": 10
+  }
+}

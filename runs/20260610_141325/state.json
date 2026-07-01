@@ -1,0 +1,1864 @@
+{
+  "original_user_request": "We are targeting the cancer protein KRAS G12D (Sequence: MTEYKLVVVGAGGVGKSALTIQLIQNHFVDEYDPTIEDSYRKQVVIDGETCLLDILDTAGQEEYSAMRDQYMRTGEGFLCVFAINNTKSFEDIHQYREQIKRVKDSDDVPMVLVGNKCDLAARTVESRQAQDLARSYGIPYIETSAKTRQGVEDAFYTLVREIRQHKLRKLNPPDESGPGCMSCKCVLS). Our starting lead benchmark molecule is Acetophenone (CC(=O)c1ccccc1) which has a weak binding energy of around -4.5 kcal/mol. Use Saturn to generate 5 optimized candidates with improved binding affinity and co-fold them using Boltz-2 to predict their new Kd and binding energy.",
+  "plan": {
+    "objective": "We are targeting the cancer protein KRAS G12D (Sequence: MTEYKLVVVGAGGVGKSALTIQLIQNHFVDEYDPTIEDSYRKQVVIDGETCLLDILDTAGQEEYSAMRDQYMRTGEGFLCVFAINNTKSFEDIHQYREQIKRVKDSDDVPMVLVGNKCDLAARTVESRQAQDLARSYGIPYIETSAKTRQGVEDAFYTLVREIRQHKLRKLNPPDESGPGCMSCKCVLS). Our starting lead benchmark molecule is Acetophenone (CC(=O)c1ccccc1) which has a weak binding energy of around -4.5 kcal/mol. Use Saturn to generate 5 optimized candidates with improved binding affinity and co-fold them using Boltz-2 to predict their new Kd and binding energy.",
+    "assumptions": [
+      "Use deterministic tools first, then summarize uncertainty.",
+      "Prefer local models for bulk ideation and hosted models for final checks when allowed."
+    ],
+    "steps": [
+      {
+        "name": "Generate initial candidates",
+        "description": "Seed plausible substrate candidates and keep provenance explicit.",
+        "agent": "chemist",
+        "tool_names": []
+      },
+      {
+        "name": "Run deterministic tools",
+        "description": "Validate SMILES, compute descriptors, and create simple plots.",
+        "agent": "tool_executor",
+        "tool_names": [
+          "rdkit",
+          "plotting"
+        ]
+      },
+      {
+        "name": "Optional DFT wrappers",
+        "description": "Check xTB and ORCA availability and run only when configured and installed.",
+        "agent": "dft",
+        "tool_names": [
+          "xtb",
+          "orca"
+        ]
+      },
+      {
+        "name": "Rank and write report",
+        "description": "Critique candidates and produce a DOCX report plus serialized state.",
+        "agent": "critic",
+        "tool_names": [
+          "doc_writer"
+        ]
+      }
+    ]
+  },
+  "candidate_molecules": [
+    {
+      "smiles": "Clc1ccccc1Nc1ncccn1",
+      "name": "saturn mock candidate 8",
+      "source": "saturn_mock",
+      "descriptors": {
+        "smiles": "Clc1ccccc1Nc1ncccn1",
+        "canonical_smiles": "Clc1ccccc1Nc1ncccn1",
+        "mol_wt": 205.648,
+        "logp": 2.8735999999999997,
+        "hbd": 1,
+        "hba": 3,
+        "tpsa": 37.81,
+        "rotatable_bonds": 2,
+        "heavy_atoms": 14,
+        "ring_count": 2,
+        "qed": 0.8194565822935654,
+        "boltz_energy": -10.54,
+        "boltz_kd_nm": 779.2,
+        "boltz_plddt": 63.0,
+        "boltz_iptm": 0.43
+      },
+      "score": 0.8105189148041606,
+      "notes": [
+        "objective: We are targeting the cancer protein KRAS G12D (Sequence: MTEYKLVVVGAGGVGKSALTIQLIQNHFVDEYDPTIEDSYRKQVVIDGETCLLDILDTAGQEEYSAMRDQYMRTGEGFLCVFAINNTKSFEDIHQYREQIKRV",
+        "mock_reason: run=False"
+      ],
+      "metadata": {
+        "oracle_components": [
+          "qed",
+          "sa"
+        ],
+        "aggregator": "product",
+        "mock_reason": "run=False",
+        "boltz_pdb": "runs/20260610_141325/boltz/boltz-e025e42e_predicted.pdb"
+      }
+    },
+    {
+      "smiles": "OC(=O)c1ccc(Cl)c(Cl)c1",
+      "name": "saturn mock candidate 6",
+      "source": "saturn_mock",
+      "descriptors": {
+        "smiles": "OC(=O)c1ccc(Cl)c(Cl)c1",
+        "canonical_smiles": "O=C(O)c1ccc(Cl)c(Cl)c1",
+        "mol_wt": 191.01299999999998,
+        "logp": 2.6916,
+        "hbd": 1,
+        "hba": 1,
+        "tpsa": 37.3,
+        "rotatable_bonds": 1,
+        "heavy_atoms": 11,
+        "ring_count": 1,
+        "qed": 0.7401842714593464,
+        "boltz_energy": -11.5,
+        "boltz_kd_nm": 500.26,
+        "boltz_plddt": 62.13,
+        "boltz_iptm": 0.749
+      },
+      "score": 0.8094282088904776,
+      "notes": [
+        "objective: We are targeting the cancer protein KRAS G12D (Sequence: MTEYKLVVVGAGGVGKSALTIQLIQNHFVDEYDPTIEDSYRKQVVIDGETCLLDILDTAGQEEYSAMRDQYMRTGEGFLCVFAINNTKSFEDIHQYREQIKRV",
+        "mock_reason: run=False"
+      ],
+      "metadata": {
+        "oracle_components": [
+          "qed",
+          "sa"
+        ],
+        "aggregator": "product",
+        "mock_reason": "run=False",
+        "boltz_pdb": "runs/20260610_141325/boltz/boltz-80ed2258_predicted.pdb"
+      }
+    },
+    {
+      "smiles": "O=C1CCCN1c1ccccc1",
+      "name": "saturn mock candidate 12",
+      "source": "saturn_mock",
+      "descriptors": {
+        "smiles": "O=C1CCCN1c1ccccc1",
+        "canonical_smiles": "O=C1CCCN1c1ccccc1",
+        "mol_wt": 161.204,
+        "logp": 1.8134000000000001,
+        "hbd": 0,
+        "hba": 1,
+        "tpsa": 20.310000000000002,
+        "rotatable_bonds": 1,
+        "heavy_atoms": 12,
+        "ring_count": 2,
+        "qed": 0.6147906334184668,
+        "boltz_energy": -12.3,
+        "boltz_kd_nm": 346.88,
+        "boltz_plddt": 62.15,
+        "boltz_iptm": 0.736
+      },
+      "score": 0.7996015814315398,
+      "notes": [
+        "objective: We are targeting the cancer protein KRAS G12D (Sequence: MTEYKLVVVGAGGVGKSALTIQLIQNHFVDEYDPTIEDSYRKQVVIDGETCLLDILDTAGQEEYSAMRDQYMRTGEGFLCVFAINNTKSFEDIHQYREQIKRV",
+        "mock_reason: run=False"
+      ],
+      "metadata": {
+        "oracle_components": [
+          "qed",
+          "sa"
+        ],
+        "aggregator": "product",
+        "mock_reason": "run=False",
+        "boltz_pdb": "runs/20260610_141325/boltz/boltz-9c7e0a16_predicted.pdb"
+      }
+    },
+    {
+      "smiles": "CCOC(=O)c1ccc(N)cc1",
+      "name": "saturn mock candidate 1",
+      "source": "saturn_mock",
+      "descriptors": {
+        "smiles": "CCOC(=O)c1ccc(N)cc1",
+        "canonical_smiles": "CCOC(=O)c1ccc(N)cc1",
+        "mol_wt": 165.19199999999998,
+        "logp": 1.4455,
+        "hbd": 1,
+        "hba": 3,
+        "tpsa": 52.32,
+        "rotatable_bonds": 2,
+        "heavy_atoms": 12,
+        "ring_count": 1,
+        "qed": 0.5326180793674542,
+        "boltz_energy": -12.84,
+        "boltz_kd_nm": 270.85,
+        "boltz_plddt": 63.65,
+        "boltz_iptm": 0.885
+      },
+      "score": 0.7761078916367353,
+      "notes": [
+        "objective: We are targeting the cancer protein KRAS G12D (Sequence: MTEYKLVVVGAGGVGKSALTIQLIQNHFVDEYDPTIEDSYRKQVVIDGETCLLDILDTAGQEEYSAMRDQYMRTGEGFLCVFAINNTKSFEDIHQYREQIKRV",
+        "mock_reason: run=False"
+      ],
+      "metadata": {
+        "oracle_components": [
+          "qed",
+          "sa"
+        ],
+        "aggregator": "product",
+        "mock_reason": "run=False",
+        "boltz_pdb": "runs/20260610_141325/boltz/boltz-f9767c6f_predicted.pdb"
+      }
+    },
+    {
+      "smiles": "O=C(Nc1ccccc1)c1ccccc1",
+      "name": "saturn mock candidate 3",
+      "source": "saturn_mock",
+      "descriptors": {
+        "smiles": "O=C(Nc1ccccc1)c1ccccc1",
+        "canonical_smiles": "O=C(Nc1ccccc1)c1ccccc1",
+        "mol_wt": 197.237,
+        "logp": 2.938900000000001,
+        "hbd": 1,
+        "hba": 1,
+        "tpsa": 29.1,
+        "rotatable_bonds": 2,
+        "heavy_atoms": 15,
+        "ring_count": 2,
+        "qed": 0.7874913866928777,
+        "boltz_energy": -9.22,
+        "boltz_kd_nm": 1430.66,
+        "boltz_plddt": 91.97,
+        "boltz_iptm": 0.669
+      },
+      "score": 0.7702166671860399,
+      "notes": [
+        "objective: We are targeting the cancer protein KRAS G12D (Sequence: MTEYKLVVVGAGGVGKSALTIQLIQNHFVDEYDPTIEDSYRKQVVIDGETCLLDILDTAGQEEYSAMRDQYMRTGEGFLCVFAINNTKSFEDIHQYREQIKRV",
+        "mock_reason: run=False"
+      ],
+      "metadata": {
+        "oracle_components": [
+          "qed",
+          "sa"
+        ],
+        "aggregator": "product",
+        "mock_reason": "run=False",
+        "boltz_pdb": "runs/20260610_141325/boltz/boltz-071397bc_predicted.pdb"
+      }
+    },
+    {
+      "smiles": "COc1ccc(CCN)cc1",
+      "name": "saturn mock candidate 2",
+      "source": "saturn_mock",
+      "descriptors": {
+        "smiles": "COc1ccc(CCN)cc1",
+        "canonical_smiles": "COc1ccc(CCN)cc1",
+        "mol_wt": 151.20900000000003,
+        "logp": 1.1964000000000001,
+        "hbd": 1,
+        "hba": 2,
+        "tpsa": 35.25,
+        "rotatable_bonds": 3,
+        "heavy_atoms": 11,
+        "ring_count": 1,
+        "qed": 0.7040409817749098,
+        "boltz_energy": -10.68,
+        "boltz_kd_nm": 732.15,
+        "boltz_plddt": 51.02,
+        "boltz_iptm": 0.733
+      },
+      "score": 0.7600544890334711,
+      "notes": [
+        "objective: We are targeting the cancer protein KRAS G12D (Sequence: MTEYKLVVVGAGGVGKSALTIQLIQNHFVDEYDPTIEDSYRKQVVIDGETCLLDILDTAGQEEYSAMRDQYMRTGEGFLCVFAINNTKSFEDIHQYREQIKRV",
+        "mock_reason: run=False"
+      ],
+      "metadata": {
+        "oracle_components": [
+          "qed",
+          "sa"
+        ],
+        "aggregator": "product",
+        "mock_reason": "run=False",
+        "boltz_pdb": "runs/20260610_141325/boltz/boltz-54fe81f7_predicted.pdb"
+      }
+    },
+    {
+      "smiles": "CC(C)Cc1ccc(C(C)C(=O)O)cc1",
+      "name": "saturn mock candidate 11",
+      "source": "saturn_mock",
+      "descriptors": {
+        "smiles": "CC(C)Cc1ccc(C(C)C(=O)O)cc1",
+        "canonical_smiles": "CC(C)Cc1ccc(C(C)C(=O)O)cc1",
+        "mol_wt": 206.28499999999997,
+        "logp": 3.073200000000001,
+        "hbd": 1,
+        "hba": 1,
+        "tpsa": 37.3,
+        "rotatable_bonds": 4,
+        "heavy_atoms": 15,
+        "ring_count": 1,
+        "qed": 0.8215995486924976,
+        "boltz_energy": -7.33,
+        "boltz_kd_nm": 3416.36,
+        "boltz_plddt": 64.95,
+        "boltz_iptm": 0.567
+      },
+      "score": 0.7413257205064576,
+      "notes": [
+        "objective: We are targeting the cancer protein KRAS G12D (Sequence: MTEYKLVVVGAGGVGKSALTIQLIQNHFVDEYDPTIEDSYRKQVVIDGETCLLDILDTAGQEEYSAMRDQYMRTGEGFLCVFAINNTKSFEDIHQYREQIKRV",
+        "mock_reason: run=False"
+      ],
+      "metadata": {
+        "oracle_components": [
+          "qed",
+          "sa"
+        ],
+        "aggregator": "product",
+        "mock_reason": "run=False",
+        "boltz_pdb": "runs/20260610_141325/boltz/boltz-7b8c8bc9_predicted.pdb"
+      }
+    },
+    {
+      "smiles": "COc1cc(CC(N)C(=O)O)ccc1O",
+      "name": "saturn mock candidate 10",
+      "source": "saturn_mock",
+      "descriptors": {
+        "smiles": "COc1cc(CC(N)C(=O)O)ccc1O",
+        "canonical_smiles": "COc1cc(CC(N)C(=O)O)ccc1O",
+        "mol_wt": 211.217,
+        "logp": 0.3551999999999998,
+        "hbd": 3,
+        "hba": 4,
+        "tpsa": 92.78,
+        "rotatable_bonds": 4,
+        "heavy_atoms": 15,
+        "ring_count": 1,
+        "qed": 0.6680555259056565,
+        "boltz_energy": -10.08,
+        "boltz_kd_nm": 963.48,
+        "boltz_plddt": 89.41,
+        "boltz_iptm": 0.623
+      },
+      "score": 0.7344736635276962,
+      "notes": [
+        "objective: We are targeting the cancer protein KRAS G12D (Sequence: MTEYKLVVVGAGGVGKSALTIQLIQNHFVDEYDPTIEDSYRKQVVIDGETCLLDILDTAGQEEYSAMRDQYMRTGEGFLCVFAINNTKSFEDIHQYREQIKRV",
+        "mock_reason: run=False"
+      ],
+      "metadata": {
+        "oracle_components": [
+          "qed",
+          "sa"
+        ],
+        "aggregator": "product",
+        "mock_reason": "run=False",
+        "boltz_pdb": "runs/20260610_141325/boltz/boltz-9fe234e3_predicted.pdb"
+      }
+    },
+    {
+      "smiles": "CC(=O)Nc1ccc(O)cc1",
+      "name": "saturn mock candidate 4",
+      "source": "saturn_mock",
+      "descriptors": {
+        "smiles": "CC(=O)Nc1ccc(O)cc1",
+        "canonical_smiles": "CC(=O)Nc1ccc(O)cc1",
+        "mol_wt": 151.165,
+        "logp": 1.3505999999999998,
+        "hbd": 2,
+        "hba": 2,
+        "tpsa": 49.33,
+        "rotatable_bonds": 1,
+        "heavy_atoms": 11,
+        "ring_count": 1,
+        "qed": 0.5950261967780849,
+        "boltz_energy": -7.43,
+        "boltz_kd_nm": 3265.4,
+        "boltz_plddt": 84.21,
+        "boltz_iptm": 0.674
+      },
+      "score": 0.6767037927842647,
+      "notes": [
+        "objective: We are targeting the cancer protein KRAS G12D (Sequence: MTEYKLVVVGAGGVGKSALTIQLIQNHFVDEYDPTIEDSYRKQVVIDGETCLLDILDTAGQEEYSAMRDQYMRTGEGFLCVFAINNTKSFEDIHQYREQIKRV",
+        "mock_reason: run=False"
+      ],
+      "metadata": {
+        "oracle_components": [
+          "qed",
+          "sa"
+        ],
+        "aggregator": "product",
+        "mock_reason": "run=False",
+        "boltz_pdb": "runs/20260610_141325/boltz/boltz-8a12881f_predicted.pdb"
+      }
+    },
+    {
+      "smiles": "Cc1ccc(S(=O)(=O)N)cc1",
+      "name": "saturn mock candidate 7",
+      "source": "saturn_mock",
+      "descriptors": {
+        "smiles": "Cc1ccc(S(=O)(=O)N)cc1",
+        "canonical_smiles": "Cc1ccc(S(N)(=O)=O)cc1",
+        "mol_wt": 171.221,
+        "logp": 0.6424200000000002,
+        "hbd": 1,
+        "hba": 2,
+        "tpsa": 60.16,
+        "rotatable_bonds": 1,
+        "heavy_atoms": 11,
+        "ring_count": 1,
+        "qed": 0.6737401345200019,
+        "boltz_energy": -7.17,
+        "boltz_kd_nm": 3677.41,
+        "boltz_plddt": 68.82,
+        "boltz_iptm": 0.642
+      },
+      "score": 0.6719027772197441,
+      "notes": [
+        "objective: We are targeting the cancer protein KRAS G12D (Sequence: MTEYKLVVVGAGGVGKSALTIQLIQNHFVDEYDPTIEDSYRKQVVIDGETCLLDILDTAGQEEYSAMRDQYMRTGEGFLCVFAINNTKSFEDIHQYREQIKRV",
+        "mock_reason: run=False"
+      ],
+      "metadata": {
+        "oracle_components": [
+          "qed",
+          "sa"
+        ],
+        "aggregator": "product",
+        "mock_reason": "run=False",
+        "boltz_pdb": "runs/20260610_141325/boltz/boltz-de688313_predicted.pdb"
+      }
+    },
+    {
+      "smiles": "NC(=O)c1cccnc1",
+      "name": "saturn mock candidate 9",
+      "source": "saturn_mock",
+      "descriptors": {
+        "smiles": "NC(=O)c1cccnc1",
+        "canonical_smiles": "NC(=O)c1cccnc1",
+        "mol_wt": 122.12699999999997,
+        "logp": 0.18050000000000016,
+        "hbd": 1,
+        "hba": 2,
+        "tpsa": 55.980000000000004,
+        "rotatable_bonds": 1,
+        "heavy_atoms": 9,
+        "ring_count": 1,
+        "qed": 0.5772627921564857,
+        "boltz_energy": -8.59,
+        "boltz_kd_nm": 1913.1,
+        "boltz_plddt": 94.31,
+        "boltz_iptm": 0.904
+      },
+      "score": 0.6312974672698907,
+      "notes": [
+        "objective: We are targeting the cancer protein KRAS G12D (Sequence: MTEYKLVVVGAGGVGKSALTIQLIQNHFVDEYDPTIEDSYRKQVVIDGETCLLDILDTAGQEEYSAMRDQYMRTGEGFLCVFAINNTKSFEDIHQYREQIKRV",
+        "mock_reason: run=False"
+      ],
+      "metadata": {
+        "oracle_components": [
+          "qed",
+          "sa"
+        ],
+        "aggregator": "product",
+        "mock_reason": "run=False",
+        "boltz_pdb": "runs/20260610_141325/boltz/boltz-18710391_predicted.pdb"
+      }
+    },
+    {
+      "smiles": "Cn1cnc2c1c(=O)n(C)c(=O)n2C",
+      "name": "saturn mock candidate 5",
+      "source": "saturn_mock",
+      "descriptors": {
+        "smiles": "Cn1cnc2c1c(=O)n(C)c(=O)n2C",
+        "canonical_smiles": "Cn1c(=O)c2c(ncn2C)n(C)c1=O",
+        "mol_wt": 194.194,
+        "logp": -1.0293,
+        "hbd": 0,
+        "hba": 3,
+        "tpsa": 61.82,
+        "rotatable_bonds": 0,
+        "heavy_atoms": 14,
+        "ring_count": 2,
+        "qed": 0.5384628262372215,
+        "boltz_energy": -6.19,
+        "boltz_kd_nm": 5775.08,
+        "boltz_plddt": 88.25,
+        "boltz_iptm": 0.505
+      },
+      "score": 0.5610687963028951,
+      "notes": [
+        "objective: We are targeting the cancer protein KRAS G12D (Sequence: MTEYKLVVVGAGGVGKSALTIQLIQNHFVDEYDPTIEDSYRKQVVIDGETCLLDILDTAGQEEYSAMRDQYMRTGEGFLCVFAINNTKSFEDIHQYREQIKRV",
+        "mock_reason: run=False"
+      ],
+      "metadata": {
+        "oracle_components": [
+          "qed",
+          "sa"
+        ],
+        "aggregator": "product",
+        "mock_reason": "run=False",
+        "boltz_pdb": "runs/20260610_141325/boltz/boltz-5d6dcd35_predicted.pdb"
+      }
+    }
+  ],
+  "tool_results": [
+    {
+      "tool_name": "saturn.generate",
+      "result": {
+        "ok": true,
+        "data": {
+          "molecules": [
+            {
+              "smiles": "CCOC(=O)c1ccc(N)cc1",
+              "name": "saturn mock candidate 1",
+              "source": "saturn_mock",
+              "descriptors": {},
+              "score": 1.0,
+              "notes": [
+                "objective: We are targeting the cancer protein KRAS G12D (Sequence: MTEYKLVVVGAGGVGKSALTIQLIQNHFVDEYDPTIEDSYRKQVVIDGETCLLDILDTAGQEEYSAMRDQYMRTGEGFLCVFAINNTKSFEDIHQYREQIKRV",
+                "mock_reason: run=False"
+              ],
+              "metadata": {
+                "oracle_components": [
+                  "qed",
+                  "sa"
+                ],
+                "aggregator": "product",
+                "mock_reason": "run=False"
+              }
+            },
+            {
+              "smiles": "COc1ccc(CCN)cc1",
+              "name": "saturn mock candidate 2",
+              "source": "saturn_mock",
+              "descriptors": {},
+              "score": 0.9167,
+              "notes": [
+                "objective: We are targeting the cancer protein KRAS G12D (Sequence: MTEYKLVVVGAGGVGKSALTIQLIQNHFVDEYDPTIEDSYRKQVVIDGETCLLDILDTAGQEEYSAMRDQYMRTGEGFLCVFAINNTKSFEDIHQYREQIKRV",
+                "mock_reason: run=False"
+              ],
+              "metadata": {
+                "oracle_components": [
+                  "qed",
+                  "sa"
+                ],
+                "aggregator": "product",
+                "mock_reason": "run=False"
+              }
+            },
+            {
+              "smiles": "O=C(Nc1ccccc1)c1ccccc1",
+              "name": "saturn mock candidate 3",
+              "source": "saturn_mock",
+              "descriptors": {},
+              "score": 0.8333,
+              "notes": [
+                "objective: We are targeting the cancer protein KRAS G12D (Sequence: MTEYKLVVVGAGGVGKSALTIQLIQNHFVDEYDPTIEDSYRKQVVIDGETCLLDILDTAGQEEYSAMRDQYMRTGEGFLCVFAINNTKSFEDIHQYREQIKRV",
+                "mock_reason: run=False"
+              ],
+              "metadata": {
+                "oracle_components": [
+                  "qed",
+                  "sa"
+                ],
+                "aggregator": "product",
+                "mock_reason": "run=False"
+              }
+            },
+            {
+              "smiles": "CC(=O)Nc1ccc(O)cc1",
+              "name": "saturn mock candidate 4",
+              "source": "saturn_mock",
+              "descriptors": {},
+              "score": 0.75,
+              "notes": [
+                "objective: We are targeting the cancer protein KRAS G12D (Sequence: MTEYKLVVVGAGGVGKSALTIQLIQNHFVDEYDPTIEDSYRKQVVIDGETCLLDILDTAGQEEYSAMRDQYMRTGEGFLCVFAINNTKSFEDIHQYREQIKRV",
+                "mock_reason: run=False"
+              ],
+              "metadata": {
+                "oracle_components": [
+                  "qed",
+                  "sa"
+                ],
+                "aggregator": "product",
+                "mock_reason": "run=False"
+              }
+            },
+            {
+              "smiles": "Cn1cnc2c1c(=O)n(C)c(=O)n2C",
+              "name": "saturn mock candidate 5",
+              "source": "saturn_mock",
+              "descriptors": {},
+              "score": 0.6667,
+              "notes": [
+                "objective: We are targeting the cancer protein KRAS G12D (Sequence: MTEYKLVVVGAGGVGKSALTIQLIQNHFVDEYDPTIEDSYRKQVVIDGETCLLDILDTAGQEEYSAMRDQYMRTGEGFLCVFAINNTKSFEDIHQYREQIKRV",
+                "mock_reason: run=False"
+              ],
+              "metadata": {
+                "oracle_components": [
+                  "qed",
+                  "sa"
+                ],
+                "aggregator": "product",
+                "mock_reason": "run=False"
+              }
+            },
+            {
+              "smiles": "OC(=O)c1ccc(Cl)c(Cl)c1",
+              "name": "saturn mock candidate 6",
+              "source": "saturn_mock",
+              "descriptors": {},
+              "score": 0.5833,
+              "notes": [
+                "objective: We are targeting the cancer protein KRAS G12D (Sequence: MTEYKLVVVGAGGVGKSALTIQLIQNHFVDEYDPTIEDSYRKQVVIDGETCLLDILDTAGQEEYSAMRDQYMRTGEGFLCVFAINNTKSFEDIHQYREQIKRV",
+                "mock_reason: run=False"
+              ],
+              "metadata": {
+                "oracle_components": [
+                  "qed",
+                  "sa"
+                ],
+                "aggregator": "product",
+                "mock_reason": "run=False"
+              }
+            },
+            {
+              "smiles": "Cc1ccc(S(=O)(=O)N)cc1",
+              "name": "saturn mock candidate 7",
+              "source": "saturn_mock",
+              "descriptors": {},
+              "score": 0.5,
+              "notes": [
+                "objective: We are targeting the cancer protein KRAS G12D (Sequence: MTEYKLVVVGAGGVGKSALTIQLIQNHFVDEYDPTIEDSYRKQVVIDGETCLLDILDTAGQEEYSAMRDQYMRTGEGFLCVFAINNTKSFEDIHQYREQIKRV",
+                "mock_reason: run=False"
+              ],
+              "metadata": {
+                "oracle_components": [
+                  "qed",
+                  "sa"
+                ],
+                "aggregator": "product",
+                "mock_reason": "run=False"
+              }
+            },
+            {
+              "smiles": "Clc1ccccc1Nc1ncccn1",
+              "name": "saturn mock candidate 8",
+              "source": "saturn_mock",
+              "descriptors": {},
+              "score": 0.4167,
+              "notes": [
+                "objective: We are targeting the cancer protein KRAS G12D (Sequence: MTEYKLVVVGAGGVGKSALTIQLIQNHFVDEYDPTIEDSYRKQVVIDGETCLLDILDTAGQEEYSAMRDQYMRTGEGFLCVFAINNTKSFEDIHQYREQIKRV",
+                "mock_reason: run=False"
+              ],
+              "metadata": {
+                "oracle_components": [
+                  "qed",
+                  "sa"
+                ],
+                "aggregator": "product",
+                "mock_reason": "run=False"
+              }
+            },
+            {
+              "smiles": "NC(=O)c1cccnc1",
+              "name": "saturn mock candidate 9",
+              "source": "saturn_mock",
+              "descriptors": {},
+              "score": 0.3333,
+              "notes": [
+                "objective: We are targeting the cancer protein KRAS G12D (Sequence: MTEYKLVVVGAGGVGKSALTIQLIQNHFVDEYDPTIEDSYRKQVVIDGETCLLDILDTAGQEEYSAMRDQYMRTGEGFLCVFAINNTKSFEDIHQYREQIKRV",
+                "mock_reason: run=False"
+              ],
+              "metadata": {
+                "oracle_components": [
+                  "qed",
+                  "sa"
+                ],
+                "aggregator": "product",
+                "mock_reason": "run=False"
+              }
+            },
+            {
+              "smiles": "COc1cc(CC(N)C(=O)O)ccc1O",
+              "name": "saturn mock candidate 10",
+              "source": "saturn_mock",
+              "descriptors": {},
+              "score": 0.25,
+              "notes": [
+                "objective: We are targeting the cancer protein KRAS G12D (Sequence: MTEYKLVVVGAGGVGKSALTIQLIQNHFVDEYDPTIEDSYRKQVVIDGETCLLDILDTAGQEEYSAMRDQYMRTGEGFLCVFAINNTKSFEDIHQYREQIKRV",
+                "mock_reason: run=False"
+              ],
+              "metadata": {
+                "oracle_components": [
+                  "qed",
+                  "sa"
+                ],
+                "aggregator": "product",
+                "mock_reason": "run=False"
+              }
+            },
+            {
+              "smiles": "CC(C)Cc1ccc(C(C)C(=O)O)cc1",
+              "name": "saturn mock candidate 11",
+              "source": "saturn_mock",
+              "descriptors": {},
+              "score": 0.1667,
+              "notes": [
+                "objective: We are targeting the cancer protein KRAS G12D (Sequence: MTEYKLVVVGAGGVGKSALTIQLIQNHFVDEYDPTIEDSYRKQVVIDGETCLLDILDTAGQEEYSAMRDQYMRTGEGFLCVFAINNTKSFEDIHQYREQIKRV",
+                "mock_reason: run=False"
+              ],
+              "metadata": {
+                "oracle_components": [
+                  "qed",
+                  "sa"
+                ],
+                "aggregator": "product",
+                "mock_reason": "run=False"
+              }
+            },
+            {
+              "smiles": "O=C1CCCN1c1ccccc1",
+              "name": "saturn mock candidate 12",
+              "source": "saturn_mock",
+              "descriptors": {},
+              "score": 0.0833,
+              "notes": [
+                "objective: We are targeting the cancer protein KRAS G12D (Sequence: MTEYKLVVVGAGGVGKSALTIQLIQNHFVDEYDPTIEDSYRKQVVIDGETCLLDILDTAGQEEYSAMRDQYMRTGEGFLCVFAINNTKSFEDIHQYREQIKRV",
+                "mock_reason: run=False"
+              ],
+              "metadata": {
+                "oracle_components": [
+                  "qed",
+                  "sa"
+                ],
+                "aggregator": "product",
+                "mock_reason": "run=False"
+              }
+            }
+          ],
+          "molecule_count": 12,
+          "config_path": "runs/20260610_141325/saturn/saturn_config.json",
+          "mock": true,
+          "oracle_components": [
+            "qed",
+            "sa"
+          ],
+          "running_mode": "goal_directed_generation"
+        },
+        "error": null,
+        "artifacts": [
+          "runs/20260610_141325/saturn/saturn_config.json"
+        ],
+        "metadata": {}
+      }
+    },
+    {
+      "tool_name": "rdkit.validate_smiles",
+      "result": {
+        "ok": true,
+        "data": {
+          "smiles": "CCOC(=O)c1ccc(N)cc1",
+          "valid": true,
+          "canonical_smiles": "CCOC(=O)c1ccc(N)cc1"
+        },
+        "error": null,
+        "artifacts": [],
+        "metadata": {}
+      }
+    },
+    {
+      "tool_name": "rdkit.compute_descriptors",
+      "result": {
+        "ok": true,
+        "data": {
+          "smiles": "CCOC(=O)c1ccc(N)cc1",
+          "canonical_smiles": "CCOC(=O)c1ccc(N)cc1",
+          "mol_wt": 165.19199999999998,
+          "logp": 1.4455,
+          "hbd": 1,
+          "hba": 3,
+          "tpsa": 52.32,
+          "rotatable_bonds": 2,
+          "heavy_atoms": 12,
+          "ring_count": 1,
+          "qed": 0.5326180793674542,
+          "boltz_energy": -12.84,
+          "boltz_kd_nm": 270.85,
+          "boltz_plddt": 63.65,
+          "boltz_iptm": 0.885
+        },
+        "error": null,
+        "artifacts": [],
+        "metadata": {}
+      }
+    },
+    {
+      "tool_name": "rdkit.validate_smiles",
+      "result": {
+        "ok": true,
+        "data": {
+          "smiles": "COc1ccc(CCN)cc1",
+          "valid": true,
+          "canonical_smiles": "COc1ccc(CCN)cc1"
+        },
+        "error": null,
+        "artifacts": [],
+        "metadata": {}
+      }
+    },
+    {
+      "tool_name": "rdkit.compute_descriptors",
+      "result": {
+        "ok": true,
+        "data": {
+          "smiles": "COc1ccc(CCN)cc1",
+          "canonical_smiles": "COc1ccc(CCN)cc1",
+          "mol_wt": 151.20900000000003,
+          "logp": 1.1964000000000001,
+          "hbd": 1,
+          "hba": 2,
+          "tpsa": 35.25,
+          "rotatable_bonds": 3,
+          "heavy_atoms": 11,
+          "ring_count": 1,
+          "qed": 0.7040409817749098,
+          "boltz_energy": -10.68,
+          "boltz_kd_nm": 732.15,
+          "boltz_plddt": 51.02,
+          "boltz_iptm": 0.733
+        },
+        "error": null,
+        "artifacts": [],
+        "metadata": {}
+      }
+    },
+    {
+      "tool_name": "rdkit.validate_smiles",
+      "result": {
+        "ok": true,
+        "data": {
+          "smiles": "O=C(Nc1ccccc1)c1ccccc1",
+          "valid": true,
+          "canonical_smiles": "O=C(Nc1ccccc1)c1ccccc1"
+        },
+        "error": null,
+        "artifacts": [],
+        "metadata": {}
+      }
+    },
+    {
+      "tool_name": "rdkit.compute_descriptors",
+      "result": {
+        "ok": true,
+        "data": {
+          "smiles": "O=C(Nc1ccccc1)c1ccccc1",
+          "canonical_smiles": "O=C(Nc1ccccc1)c1ccccc1",
+          "mol_wt": 197.237,
+          "logp": 2.938900000000001,
+          "hbd": 1,
+          "hba": 1,
+          "tpsa": 29.1,
+          "rotatable_bonds": 2,
+          "heavy_atoms": 15,
+          "ring_count": 2,
+          "qed": 0.7874913866928777,
+          "boltz_energy": -9.22,
+          "boltz_kd_nm": 1430.66,
+          "boltz_plddt": 91.97,
+          "boltz_iptm": 0.669
+        },
+        "error": null,
+        "artifacts": [],
+        "metadata": {}
+      }
+    },
+    {
+      "tool_name": "rdkit.validate_smiles",
+      "result": {
+        "ok": true,
+        "data": {
+          "smiles": "CC(=O)Nc1ccc(O)cc1",
+          "valid": true,
+          "canonical_smiles": "CC(=O)Nc1ccc(O)cc1"
+        },
+        "error": null,
+        "artifacts": [],
+        "metadata": {}
+      }
+    },
+    {
+      "tool_name": "rdkit.compute_descriptors",
+      "result": {
+        "ok": true,
+        "data": {
+          "smiles": "CC(=O)Nc1ccc(O)cc1",
+          "canonical_smiles": "CC(=O)Nc1ccc(O)cc1",
+          "mol_wt": 151.165,
+          "logp": 1.3505999999999998,
+          "hbd": 2,
+          "hba": 2,
+          "tpsa": 49.33,
+          "rotatable_bonds": 1,
+          "heavy_atoms": 11,
+          "ring_count": 1,
+          "qed": 0.5950261967780849,
+          "boltz_energy": -7.43,
+          "boltz_kd_nm": 3265.4,
+          "boltz_plddt": 84.21,
+          "boltz_iptm": 0.674
+        },
+        "error": null,
+        "artifacts": [],
+        "metadata": {}
+      }
+    },
+    {
+      "tool_name": "rdkit.validate_smiles",
+      "result": {
+        "ok": true,
+        "data": {
+          "smiles": "Cn1cnc2c1c(=O)n(C)c(=O)n2C",
+          "valid": true,
+          "canonical_smiles": "Cn1c(=O)c2c(ncn2C)n(C)c1=O"
+        },
+        "error": null,
+        "artifacts": [],
+        "metadata": {}
+      }
+    },
+    {
+      "tool_name": "rdkit.compute_descriptors",
+      "result": {
+        "ok": true,
+        "data": {
+          "smiles": "Cn1cnc2c1c(=O)n(C)c(=O)n2C",
+          "canonical_smiles": "Cn1c(=O)c2c(ncn2C)n(C)c1=O",
+          "mol_wt": 194.194,
+          "logp": -1.0293,
+          "hbd": 0,
+          "hba": 3,
+          "tpsa": 61.82,
+          "rotatable_bonds": 0,
+          "heavy_atoms": 14,
+          "ring_count": 2,
+          "qed": 0.5384628262372215,
+          "boltz_energy": -6.19,
+          "boltz_kd_nm": 5775.08,
+          "boltz_plddt": 88.25,
+          "boltz_iptm": 0.505
+        },
+        "error": null,
+        "artifacts": [],
+        "metadata": {}
+      }
+    },
+    {
+      "tool_name": "rdkit.validate_smiles",
+      "result": {
+        "ok": true,
+        "data": {
+          "smiles": "OC(=O)c1ccc(Cl)c(Cl)c1",
+          "valid": true,
+          "canonical_smiles": "O=C(O)c1ccc(Cl)c(Cl)c1"
+        },
+        "error": null,
+        "artifacts": [],
+        "metadata": {}
+      }
+    },
+    {
+      "tool_name": "rdkit.compute_descriptors",
+      "result": {
+        "ok": true,
+        "data": {
+          "smiles": "OC(=O)c1ccc(Cl)c(Cl)c1",
+          "canonical_smiles": "O=C(O)c1ccc(Cl)c(Cl)c1",
+          "mol_wt": 191.01299999999998,
+          "logp": 2.6916,
+          "hbd": 1,
+          "hba": 1,
+          "tpsa": 37.3,
+          "rotatable_bonds": 1,
+          "heavy_atoms": 11,
+          "ring_count": 1,
+          "qed": 0.7401842714593464,
+          "boltz_energy": -11.5,
+          "boltz_kd_nm": 500.26,
+          "boltz_plddt": 62.13,
+          "boltz_iptm": 0.749
+        },
+        "error": null,
+        "artifacts": [],
+        "metadata": {}
+      }
+    },
+    {
+      "tool_name": "rdkit.validate_smiles",
+      "result": {
+        "ok": true,
+        "data": {
+          "smiles": "Cc1ccc(S(=O)(=O)N)cc1",
+          "valid": true,
+          "canonical_smiles": "Cc1ccc(S(N)(=O)=O)cc1"
+        },
+        "error": null,
+        "artifacts": [],
+        "metadata": {}
+      }
+    },
+    {
+      "tool_name": "rdkit.compute_descriptors",
+      "result": {
+        "ok": true,
+        "data": {
+          "smiles": "Cc1ccc(S(=O)(=O)N)cc1",
+          "canonical_smiles": "Cc1ccc(S(N)(=O)=O)cc1",
+          "mol_wt": 171.221,
+          "logp": 0.6424200000000002,
+          "hbd": 1,
+          "hba": 2,
+          "tpsa": 60.16,
+          "rotatable_bonds": 1,
+          "heavy_atoms": 11,
+          "ring_count": 1,
+          "qed": 0.6737401345200019,
+          "boltz_energy": -7.17,
+          "boltz_kd_nm": 3677.41,
+          "boltz_plddt": 68.82,
+          "boltz_iptm": 0.642
+        },
+        "error": null,
+        "artifacts": [],
+        "metadata": {}
+      }
+    },
+    {
+      "tool_name": "rdkit.validate_smiles",
+      "result": {
+        "ok": true,
+        "data": {
+          "smiles": "Clc1ccccc1Nc1ncccn1",
+          "valid": true,
+          "canonical_smiles": "Clc1ccccc1Nc1ncccn1"
+        },
+        "error": null,
+        "artifacts": [],
+        "metadata": {}
+      }
+    },
+    {
+      "tool_name": "rdkit.compute_descriptors",
+      "result": {
+        "ok": true,
+        "data": {
+          "smiles": "Clc1ccccc1Nc1ncccn1",
+          "canonical_smiles": "Clc1ccccc1Nc1ncccn1",
+          "mol_wt": 205.648,
+          "logp": 2.8735999999999997,
+          "hbd": 1,
+          "hba": 3,
+          "tpsa": 37.81,
+          "rotatable_bonds": 2,
+          "heavy_atoms": 14,
+          "ring_count": 2,
+          "qed": 0.8194565822935654,
+          "boltz_energy": -10.54,
+          "boltz_kd_nm": 779.2,
+          "boltz_plddt": 63.0,
+          "boltz_iptm": 0.43
+        },
+        "error": null,
+        "artifacts": [],
+        "metadata": {}
+      }
+    },
+    {
+      "tool_name": "rdkit.validate_smiles",
+      "result": {
+        "ok": true,
+        "data": {
+          "smiles": "NC(=O)c1cccnc1",
+          "valid": true,
+          "canonical_smiles": "NC(=O)c1cccnc1"
+        },
+        "error": null,
+        "artifacts": [],
+        "metadata": {}
+      }
+    },
+    {
+      "tool_name": "rdkit.compute_descriptors",
+      "result": {
+        "ok": true,
+        "data": {
+          "smiles": "NC(=O)c1cccnc1",
+          "canonical_smiles": "NC(=O)c1cccnc1",
+          "mol_wt": 122.12699999999997,
+          "logp": 0.18050000000000016,
+          "hbd": 1,
+          "hba": 2,
+          "tpsa": 55.980000000000004,
+          "rotatable_bonds": 1,
+          "heavy_atoms": 9,
+          "ring_count": 1,
+          "qed": 0.5772627921564857,
+          "boltz_energy": -8.59,
+          "boltz_kd_nm": 1913.1,
+          "boltz_plddt": 94.31,
+          "boltz_iptm": 0.904
+        },
+        "error": null,
+        "artifacts": [],
+        "metadata": {}
+      }
+    },
+    {
+      "tool_name": "rdkit.validate_smiles",
+      "result": {
+        "ok": true,
+        "data": {
+          "smiles": "COc1cc(CC(N)C(=O)O)ccc1O",
+          "valid": true,
+          "canonical_smiles": "COc1cc(CC(N)C(=O)O)ccc1O"
+        },
+        "error": null,
+        "artifacts": [],
+        "metadata": {}
+      }
+    },
+    {
+      "tool_name": "rdkit.compute_descriptors",
+      "result": {
+        "ok": true,
+        "data": {
+          "smiles": "COc1cc(CC(N)C(=O)O)ccc1O",
+          "canonical_smiles": "COc1cc(CC(N)C(=O)O)ccc1O",
+          "mol_wt": 211.217,
+          "logp": 0.3551999999999998,
+          "hbd": 3,
+          "hba": 4,
+          "tpsa": 92.78,
+          "rotatable_bonds": 4,
+          "heavy_atoms": 15,
+          "ring_count": 1,
+          "qed": 0.6680555259056565,
+          "boltz_energy": -10.08,
+          "boltz_kd_nm": 963.48,
+          "boltz_plddt": 89.41,
+          "boltz_iptm": 0.623
+        },
+        "error": null,
+        "artifacts": [],
+        "metadata": {}
+      }
+    },
+    {
+      "tool_name": "rdkit.validate_smiles",
+      "result": {
+        "ok": true,
+        "data": {
+          "smiles": "CC(C)Cc1ccc(C(C)C(=O)O)cc1",
+          "valid": true,
+          "canonical_smiles": "CC(C)Cc1ccc(C(C)C(=O)O)cc1"
+        },
+        "error": null,
+        "artifacts": [],
+        "metadata": {}
+      }
+    },
+    {
+      "tool_name": "rdkit.compute_descriptors",
+      "result": {
+        "ok": true,
+        "data": {
+          "smiles": "CC(C)Cc1ccc(C(C)C(=O)O)cc1",
+          "canonical_smiles": "CC(C)Cc1ccc(C(C)C(=O)O)cc1",
+          "mol_wt": 206.28499999999997,
+          "logp": 3.073200000000001,
+          "hbd": 1,
+          "hba": 1,
+          "tpsa": 37.3,
+          "rotatable_bonds": 4,
+          "heavy_atoms": 15,
+          "ring_count": 1,
+          "qed": 0.8215995486924976,
+          "boltz_energy": -7.33,
+          "boltz_kd_nm": 3416.36,
+          "boltz_plddt": 64.95,
+          "boltz_iptm": 0.567
+        },
+        "error": null,
+        "artifacts": [],
+        "metadata": {}
+      }
+    },
+    {
+      "tool_name": "rdkit.validate_smiles",
+      "result": {
+        "ok": true,
+        "data": {
+          "smiles": "O=C1CCCN1c1ccccc1",
+          "valid": true,
+          "canonical_smiles": "O=C1CCCN1c1ccccc1"
+        },
+        "error": null,
+        "artifacts": [],
+        "metadata": {}
+      }
+    },
+    {
+      "tool_name": "rdkit.compute_descriptors",
+      "result": {
+        "ok": true,
+        "data": {
+          "smiles": "O=C1CCCN1c1ccccc1",
+          "canonical_smiles": "O=C1CCCN1c1ccccc1",
+          "mol_wt": 161.204,
+          "logp": 1.8134000000000001,
+          "hbd": 0,
+          "hba": 1,
+          "tpsa": 20.310000000000002,
+          "rotatable_bonds": 1,
+          "heavy_atoms": 12,
+          "ring_count": 2,
+          "qed": 0.6147906334184668,
+          "boltz_energy": -12.3,
+          "boltz_kd_nm": 346.88,
+          "boltz_plddt": 62.15,
+          "boltz_iptm": 0.736
+        },
+        "error": null,
+        "artifacts": [],
+        "metadata": {}
+      }
+    },
+    {
+      "tool_name": "file_io.write_csv",
+      "result": {
+        "ok": true,
+        "data": {
+          "path": "runs/20260610_141325/descriptors.csv",
+          "row_count": 12
+        },
+        "error": null,
+        "artifacts": [
+          "runs/20260610_141325/descriptors.csv"
+        ],
+        "metadata": {}
+      }
+    },
+    {
+      "tool_name": "plotting.generate_plot",
+      "result": {
+        "ok": true,
+        "data": {
+          "path": "runs/20260610_141325/qed_plot.png",
+          "points": 12
+        },
+        "error": null,
+        "artifacts": [
+          "runs/20260610_141325/qed_plot.png"
+        ],
+        "metadata": {}
+      }
+    },
+    {
+      "tool_name": "rdkit.filter_molecules",
+      "result": {
+        "ok": true,
+        "data": {
+          "kept": [
+            {
+              "smiles": "CCOC(=O)c1ccc(N)cc1",
+              "descriptors": {
+                "smiles": "CCOC(=O)c1ccc(N)cc1",
+                "canonical_smiles": "CCOC(=O)c1ccc(N)cc1",
+                "mol_wt": 165.19199999999998,
+                "logp": 1.4455,
+                "hbd": 1,
+                "hba": 3,
+                "tpsa": 52.32,
+                "rotatable_bonds": 2,
+                "heavy_atoms": 12,
+                "ring_count": 1,
+                "qed": 0.5326180793674542
+              }
+            },
+            {
+              "smiles": "COc1ccc(CCN)cc1",
+              "descriptors": {
+                "smiles": "COc1ccc(CCN)cc1",
+                "canonical_smiles": "COc1ccc(CCN)cc1",
+                "mol_wt": 151.20900000000003,
+                "logp": 1.1964000000000001,
+                "hbd": 1,
+                "hba": 2,
+                "tpsa": 35.25,
+                "rotatable_bonds": 3,
+                "heavy_atoms": 11,
+                "ring_count": 1,
+                "qed": 0.7040409817749098
+              }
+            },
+            {
+              "smiles": "O=C(Nc1ccccc1)c1ccccc1",
+              "descriptors": {
+                "smiles": "O=C(Nc1ccccc1)c1ccccc1",
+                "canonical_smiles": "O=C(Nc1ccccc1)c1ccccc1",
+                "mol_wt": 197.237,
+                "logp": 2.938900000000001,
+                "hbd": 1,
+                "hba": 1,
+                "tpsa": 29.1,
+                "rotatable_bonds": 2,
+                "heavy_atoms": 15,
+                "ring_count": 2,
+                "qed": 0.7874913866928777
+              }
+            },
+            {
+              "smiles": "CC(=O)Nc1ccc(O)cc1",
+              "descriptors": {
+                "smiles": "CC(=O)Nc1ccc(O)cc1",
+                "canonical_smiles": "CC(=O)Nc1ccc(O)cc1",
+                "mol_wt": 151.165,
+                "logp": 1.3505999999999998,
+                "hbd": 2,
+                "hba": 2,
+                "tpsa": 49.33,
+                "rotatable_bonds": 1,
+                "heavy_atoms": 11,
+                "ring_count": 1,
+                "qed": 0.5950261967780849
+              }
+            },
+            {
+              "smiles": "Cn1cnc2c1c(=O)n(C)c(=O)n2C",
+              "descriptors": {
+                "smiles": "Cn1cnc2c1c(=O)n(C)c(=O)n2C",
+                "canonical_smiles": "Cn1c(=O)c2c(ncn2C)n(C)c1=O",
+                "mol_wt": 194.194,
+                "logp": -1.0293,
+                "hbd": 0,
+                "hba": 3,
+                "tpsa": 61.82,
+                "rotatable_bonds": 0,
+                "heavy_atoms": 14,
+                "ring_count": 2,
+                "qed": 0.5384628262372215
+              }
+            },
+            {
+              "smiles": "OC(=O)c1ccc(Cl)c(Cl)c1",
+              "descriptors": {
+                "smiles": "OC(=O)c1ccc(Cl)c(Cl)c1",
+                "canonical_smiles": "O=C(O)c1ccc(Cl)c(Cl)c1",
+                "mol_wt": 191.01299999999998,
+                "logp": 2.6916,
+                "hbd": 1,
+                "hba": 1,
+                "tpsa": 37.3,
+                "rotatable_bonds": 1,
+                "heavy_atoms": 11,
+                "ring_count": 1,
+                "qed": 0.7401842714593464
+              }
+            },
+            {
+              "smiles": "Cc1ccc(S(=O)(=O)N)cc1",
+              "descriptors": {
+                "smiles": "Cc1ccc(S(=O)(=O)N)cc1",
+                "canonical_smiles": "Cc1ccc(S(N)(=O)=O)cc1",
+                "mol_wt": 171.221,
+                "logp": 0.6424200000000002,
+                "hbd": 1,
+                "hba": 2,
+                "tpsa": 60.16,
+                "rotatable_bonds": 1,
+                "heavy_atoms": 11,
+                "ring_count": 1,
+                "qed": 0.6737401345200019
+              }
+            },
+            {
+              "smiles": "Clc1ccccc1Nc1ncccn1",
+              "descriptors": {
+                "smiles": "Clc1ccccc1Nc1ncccn1",
+                "canonical_smiles": "Clc1ccccc1Nc1ncccn1",
+                "mol_wt": 205.648,
+                "logp": 2.8735999999999997,
+                "hbd": 1,
+                "hba": 3,
+                "tpsa": 37.81,
+                "rotatable_bonds": 2,
+                "heavy_atoms": 14,
+                "ring_count": 2,
+                "qed": 0.8194565822935654
+              }
+            },
+            {
+              "smiles": "NC(=O)c1cccnc1",
+              "descriptors": {
+                "smiles": "NC(=O)c1cccnc1",
+                "canonical_smiles": "NC(=O)c1cccnc1",
+                "mol_wt": 122.12699999999997,
+                "logp": 0.18050000000000016,
+                "hbd": 1,
+                "hba": 2,
+                "tpsa": 55.980000000000004,
+                "rotatable_bonds": 1,
+                "heavy_atoms": 9,
+                "ring_count": 1,
+                "qed": 0.5772627921564857
+              }
+            },
+            {
+              "smiles": "COc1cc(CC(N)C(=O)O)ccc1O",
+              "descriptors": {
+                "smiles": "COc1cc(CC(N)C(=O)O)ccc1O",
+                "canonical_smiles": "COc1cc(CC(N)C(=O)O)ccc1O",
+                "mol_wt": 211.217,
+                "logp": 0.3551999999999998,
+                "hbd": 3,
+                "hba": 4,
+                "tpsa": 92.78,
+                "rotatable_bonds": 4,
+                "heavy_atoms": 15,
+                "ring_count": 1,
+                "qed": 0.6680555259056565
+              }
+            },
+            {
+              "smiles": "CC(C)Cc1ccc(C(C)C(=O)O)cc1",
+              "descriptors": {
+                "smiles": "CC(C)Cc1ccc(C(C)C(=O)O)cc1",
+                "canonical_smiles": "CC(C)Cc1ccc(C(C)C(=O)O)cc1",
+                "mol_wt": 206.28499999999997,
+                "logp": 3.073200000000001,
+                "hbd": 1,
+                "hba": 1,
+                "tpsa": 37.3,
+                "rotatable_bonds": 4,
+                "heavy_atoms": 15,
+                "ring_count": 1,
+                "qed": 0.8215995486924976
+              }
+            },
+            {
+              "smiles": "O=C1CCCN1c1ccccc1",
+              "descriptors": {
+                "smiles": "O=C1CCCN1c1ccccc1",
+                "canonical_smiles": "O=C1CCCN1c1ccccc1",
+                "mol_wt": 161.204,
+                "logp": 1.8134000000000001,
+                "hbd": 0,
+                "hba": 1,
+                "tpsa": 20.310000000000002,
+                "rotatable_bonds": 1,
+                "heavy_atoms": 12,
+                "ring_count": 2,
+                "qed": 0.6147906334184668
+              }
+            }
+          ],
+          "rejected": [],
+          "constraints": {
+            "min_mol_wt": null,
+            "max_mol_wt": 500.0,
+            "min_qed": null,
+            "max_logp": 5.0,
+            "max_tpsa": null,
+            "allowed_elements": null
+          },
+          "errors": []
+        },
+        "error": null,
+        "artifacts": [],
+        "metadata": {}
+      }
+    },
+    {
+      "tool_name": "xtb.check_availability",
+      "result": {
+        "ok": true,
+        "data": {
+          "available": false,
+          "executable": "xtb",
+          "path": null
+        },
+        "error": null,
+        "artifacts": [],
+        "metadata": {}
+      }
+    },
+    {
+      "tool_name": "boltz_2.run_prediction",
+      "result": {
+        "ok": true,
+        "data": {
+          "job_id": "boltz-f9767c6f",
+          "status": "mock",
+          "binding_energy_kcal_mol": -12.84,
+          "binding_affinity_kd_nm": 270.85,
+          "iptm": 0.885,
+          "plddt": 63.65,
+          "pdb_file": "runs/20260610_141325/boltz/boltz-f9767c6f_predicted.pdb",
+          "output_files": [
+            "runs/20260610_141325/boltz/boltz-f9767c6f_input.yaml",
+            "runs/20260610_141325/boltz/boltz-f9767c6f_predicted.pdb"
+          ],
+          "summary": "Boltz-2 mock co-folding run completed (offline fallback). Ligand: CCOC(=O)c1ccc(N)cc1..."
+        },
+        "error": null,
+        "artifacts": [
+          "runs/20260610_141325/boltz/boltz-f9767c6f_input.yaml",
+          "runs/20260610_141325/boltz/boltz-f9767c6f_predicted.pdb"
+        ],
+        "metadata": {}
+      }
+    },
+    {
+      "tool_name": "boltz_2.run_prediction",
+      "result": {
+        "ok": true,
+        "data": {
+          "job_id": "boltz-54fe81f7",
+          "status": "mock",
+          "binding_energy_kcal_mol": -10.68,
+          "binding_affinity_kd_nm": 732.15,
+          "iptm": 0.733,
+          "plddt": 51.02,
+          "pdb_file": "runs/20260610_141325/boltz/boltz-54fe81f7_predicted.pdb",
+          "output_files": [
+            "runs/20260610_141325/boltz/boltz-54fe81f7_input.yaml",
+            "runs/20260610_141325/boltz/boltz-54fe81f7_predicted.pdb"
+          ],
+          "summary": "Boltz-2 mock co-folding run completed (offline fallback). Ligand: COc1ccc(CCN)cc1..."
+        },
+        "error": null,
+        "artifacts": [
+          "runs/20260610_141325/boltz/boltz-54fe81f7_input.yaml",
+          "runs/20260610_141325/boltz/boltz-54fe81f7_predicted.pdb"
+        ],
+        "metadata": {}
+      }
+    },
+    {
+      "tool_name": "boltz_2.run_prediction",
+      "result": {
+        "ok": true,
+        "data": {
+          "job_id": "boltz-071397bc",
+          "status": "mock",
+          "binding_energy_kcal_mol": -9.22,
+          "binding_affinity_kd_nm": 1430.66,
+          "iptm": 0.669,
+          "plddt": 91.97,
+          "pdb_file": "runs/20260610_141325/boltz/boltz-071397bc_predicted.pdb",
+          "output_files": [
+            "runs/20260610_141325/boltz/boltz-071397bc_input.yaml",
+            "runs/20260610_141325/boltz/boltz-071397bc_predicted.pdb"
+          ],
+          "summary": "Boltz-2 mock co-folding run completed (offline fallback). Ligand: O=C(Nc1ccccc1)c1ccccc1..."
+        },
+        "error": null,
+        "artifacts": [
+          "runs/20260610_141325/boltz/boltz-071397bc_input.yaml",
+          "runs/20260610_141325/boltz/boltz-071397bc_predicted.pdb"
+        ],
+        "metadata": {}
+      }
+    },
+    {
+      "tool_name": "boltz_2.run_prediction",
+      "result": {
+        "ok": true,
+        "data": {
+          "job_id": "boltz-8a12881f",
+          "status": "mock",
+          "binding_energy_kcal_mol": -7.43,
+          "binding_affinity_kd_nm": 3265.4,
+          "iptm": 0.674,
+          "plddt": 84.21,
+          "pdb_file": "runs/20260610_141325/boltz/boltz-8a12881f_predicted.pdb",
+          "output_files": [
+            "runs/20260610_141325/boltz/boltz-8a12881f_input.yaml",
+            "runs/20260610_141325/boltz/boltz-8a12881f_predicted.pdb"
+          ],
+          "summary": "Boltz-2 mock co-folding run completed (offline fallback). Ligand: CC(=O)Nc1ccc(O)cc1..."
+        },
+        "error": null,
+        "artifacts": [
+          "runs/20260610_141325/boltz/boltz-8a12881f_input.yaml",
+          "runs/20260610_141325/boltz/boltz-8a12881f_predicted.pdb"
+        ],
+        "metadata": {}
+      }
+    },
+    {
+      "tool_name": "boltz_2.run_prediction",
+      "result": {
+        "ok": true,
+        "data": {
+          "job_id": "boltz-5d6dcd35",
+          "status": "mock",
+          "binding_energy_kcal_mol": -6.19,
+          "binding_affinity_kd_nm": 5775.08,
+          "iptm": 0.505,
+          "plddt": 88.25,
+          "pdb_file": "runs/20260610_141325/boltz/boltz-5d6dcd35_predicted.pdb",
+          "output_files": [
+            "runs/20260610_141325/boltz/boltz-5d6dcd35_input.yaml",
+            "runs/20260610_141325/boltz/boltz-5d6dcd35_predicted.pdb"
+          ],
+          "summary": "Boltz-2 mock co-folding run completed (offline fallback). Ligand: Cn1cnc2c1c(=O)n(C)c(=O)n2C..."
+        },
+        "error": null,
+        "artifacts": [
+          "runs/20260610_141325/boltz/boltz-5d6dcd35_input.yaml",
+          "runs/20260610_141325/boltz/boltz-5d6dcd35_predicted.pdb"
+        ],
+        "metadata": {}
+      }
+    },
+    {
+      "tool_name": "boltz_2.run_prediction",
+      "result": {
+        "ok": true,
+        "data": {
+          "job_id": "boltz-80ed2258",
+          "status": "mock",
+          "binding_energy_kcal_mol": -11.5,
+          "binding_affinity_kd_nm": 500.26,
+          "iptm": 0.749,
+          "plddt": 62.13,
+          "pdb_file": "runs/20260610_141325/boltz/boltz-80ed2258_predicted.pdb",
+          "output_files": [
+            "runs/20260610_141325/boltz/boltz-80ed2258_input.yaml",
+            "runs/20260610_141325/boltz/boltz-80ed2258_predicted.pdb"
+          ],
+          "summary": "Boltz-2 mock co-folding run completed (offline fallback). Ligand: OC(=O)c1ccc(Cl)c(Cl)c1..."
+        },
+        "error": null,
+        "artifacts": [
+          "runs/20260610_141325/boltz/boltz-80ed2258_input.yaml",
+          "runs/20260610_141325/boltz/boltz-80ed2258_predicted.pdb"
+        ],
+        "metadata": {}
+      }
+    },
+    {
+      "tool_name": "boltz_2.run_prediction",
+      "result": {
+        "ok": true,
+        "data": {
+          "job_id": "boltz-de688313",
+          "status": "mock",
+          "binding_energy_kcal_mol": -7.17,
+          "binding_affinity_kd_nm": 3677.41,
+          "iptm": 0.642,
+          "plddt": 68.82,
+          "pdb_file": "runs/20260610_141325/boltz/boltz-de688313_predicted.pdb",
+          "output_files": [
+            "runs/20260610_141325/boltz/boltz-de688313_input.yaml",
+            "runs/20260610_141325/boltz/boltz-de688313_predicted.pdb"
+          ],
+          "summary": "Boltz-2 mock co-folding run completed (offline fallback). Ligand: Cc1ccc(S(=O)(=O)N)cc1..."
+        },
+        "error": null,
+        "artifacts": [
+          "runs/20260610_141325/boltz/boltz-de688313_input.yaml",
+          "runs/20260610_141325/boltz/boltz-de688313_predicted.pdb"
+        ],
+        "metadata": {}
+      }
+    },
+    {
+      "tool_name": "boltz_2.run_prediction",
+      "result": {
+        "ok": true,
+        "data": {
+          "job_id": "boltz-e025e42e",
+          "status": "mock",
+          "binding_energy_kcal_mol": -10.54,
+          "binding_affinity_kd_nm": 779.2,
+          "iptm": 0.43,
+          "plddt": 63.0,
+          "pdb_file": "runs/20260610_141325/boltz/boltz-e025e42e_predicted.pdb",
+          "output_files": [
+            "runs/20260610_141325/boltz/boltz-e025e42e_input.yaml",
+            "runs/20260610_141325/boltz/boltz-e025e42e_predicted.pdb"
+          ],
+          "summary": "Boltz-2 mock co-folding run completed (offline fallback). Ligand: Clc1ccccc1Nc1ncccn1..."
+        },
+        "error": null,
+        "artifacts": [
+          "runs/20260610_141325/boltz/boltz-e025e42e_input.yaml",
+          "runs/20260610_141325/boltz/boltz-e025e42e_predicted.pdb"
+        ],
+        "metadata": {}
+      }
+    },
+    {
+      "tool_name": "boltz_2.run_prediction",
+      "result": {
+        "ok": true,
+        "data": {
+          "job_id": "boltz-18710391",
+          "status": "mock",
+          "binding_energy_kcal_mol": -8.59,
+          "binding_affinity_kd_nm": 1913.1,
+          "iptm": 0.904,
+          "plddt": 94.31,
+          "pdb_file": "runs/20260610_141325/boltz/boltz-18710391_predicted.pdb",
+          "output_files": [
+            "runs/20260610_141325/boltz/boltz-18710391_input.yaml",
+            "runs/20260610_141325/boltz/boltz-18710391_predicted.pdb"
+          ],
+          "summary": "Boltz-2 mock co-folding run completed (offline fallback). Ligand: NC(=O)c1cccnc1..."
+        },
+        "error": null,
+        "artifacts": [
+          "runs/20260610_141325/boltz/boltz-18710391_input.yaml",
+          "runs/20260610_141325/boltz/boltz-18710391_predicted.pdb"
+        ],
+        "metadata": {}
+      }
+    },
+    {
+      "tool_name": "boltz_2.run_prediction",
+      "result": {
+        "ok": true,
+        "data": {
+          "job_id": "boltz-9fe234e3",
+          "status": "mock",
+          "binding_energy_kcal_mol": -10.08,
+          "binding_affinity_kd_nm": 963.48,
+          "iptm": 0.623,
+          "plddt": 89.41,
+          "pdb_file": "runs/20260610_141325/boltz/boltz-9fe234e3_predicted.pdb",
+          "output_files": [
+            "runs/20260610_141325/boltz/boltz-9fe234e3_input.yaml",
+            "runs/20260610_141325/boltz/boltz-9fe234e3_predicted.pdb"
+          ],
+          "summary": "Boltz-2 mock co-folding run completed (offline fallback). Ligand: COc1cc(CC(N)C(=O)O)ccc1O..."
+        },
+        "error": null,
+        "artifacts": [
+          "runs/20260610_141325/boltz/boltz-9fe234e3_input.yaml",
+          "runs/20260610_141325/boltz/boltz-9fe234e3_predicted.pdb"
+        ],
+        "metadata": {}
+      }
+    },
+    {
+      "tool_name": "boltz_2.run_prediction",
+      "result": {
+        "ok": true,
+        "data": {
+          "job_id": "boltz-7b8c8bc9",
+          "status": "mock",
+          "binding_energy_kcal_mol": -7.33,
+          "binding_affinity_kd_nm": 3416.36,
+          "iptm": 0.567,
+          "plddt": 64.95,
+          "pdb_file": "runs/20260610_141325/boltz/boltz-7b8c8bc9_predicted.pdb",
+          "output_files": [
+            "runs/20260610_141325/boltz/boltz-7b8c8bc9_input.yaml",
+            "runs/20260610_141325/boltz/boltz-7b8c8bc9_predicted.pdb"
+          ],
+          "summary": "Boltz-2 mock co-folding run completed (offline fallback). Ligand: CC(C)Cc1ccc(C(C)C(=O)O)cc1..."
+        },
+        "error": null,
+        "artifacts": [
+          "runs/20260610_141325/boltz/boltz-7b8c8bc9_input.yaml",
+          "runs/20260610_141325/boltz/boltz-7b8c8bc9_predicted.pdb"
+        ],
+        "metadata": {}
+      }
+    },
+    {
+      "tool_name": "boltz_2.run_prediction",
+      "result": {
+        "ok": true,
+        "data": {
+          "job_id": "boltz-9c7e0a16",
+          "status": "mock",
+          "binding_energy_kcal_mol": -12.3,
+          "binding_affinity_kd_nm": 346.88,
+          "iptm": 0.736,
+          "plddt": 62.15,
+          "pdb_file": "runs/20260610_141325/boltz/boltz-9c7e0a16_predicted.pdb",
+          "output_files": [
+            "runs/20260610_141325/boltz/boltz-9c7e0a16_input.yaml",
+            "runs/20260610_141325/boltz/boltz-9c7e0a16_predicted.pdb"
+          ],
+          "summary": "Boltz-2 mock co-folding run completed (offline fallback). Ligand: O=C1CCCN1c1ccccc1..."
+        },
+        "error": null,
+        "artifacts": [
+          "runs/20260610_141325/boltz/boltz-9c7e0a16_input.yaml",
+          "runs/20260610_141325/boltz/boltz-9c7e0a16_predicted.pdb"
+        ],
+        "metadata": {}
+      }
+    },
+    {
+      "tool_name": "doc_writer.write_scientific_report",
+      "result": {
+        "ok": true,
+        "data": {
+          "path": "runs/20260610_141325/report.docx"
+        },
+        "error": null,
+        "artifacts": [
+          "runs/20260610_141325/report.docx"
+        ],
+        "metadata": {}
+      }
+    }
+  ],
+  "errors": [],
+  "critic_notes": [
+    "Top deterministic candidate by descriptor heuristic: saturn mock candidate 8 (score=0.811)."
+  ],
+  "critic_decisions": [
+    {
+      "needs_more_passes": false,
+      "reason": "Stopping after reaching max_iterations=1.",
+      "requested_next_actions": [],
+      "stop_reason": "max_iterations_reached",
+      "valid_candidate_count": 12,
+      "best_score": 0.8105189148041606
+    }
+  ],
+  "final_report_path": "runs/20260610_141325/report.docx",
+  "messages": [
+    "planner: created deterministic discovery plan",
+    "graph: starting pass 1/1",
+    "chemist: Saturn ran in mock mode (Saturn not installed or run disabled)",
+    "chemist: seeded 12 candidates with Saturn",
+    "graph: running Boltz-2 co-folding on generated candidates",
+    "critic: ranked candidates with a simple descriptor heuristic",
+    "critic: Stopping after reaching max_iterations=1.",
+    "writer: report generation delegated to doc_writer tool",
+    "demo: wrote state to runs/20260610_141325/state.json"
+  ],
+  "run_dir": "runs/20260610_141325",
+  "run_mode": "cheap",
+  "iteration": 1,
+  "max_iterations": 1,
+  "needs_more_passes": false,
+  "stop_reason": "max_iterations_reached",
+  "requested_next_actions": [],
+  "metadata": {
+    "min_valid_candidates": 5,
+    "score_threshold": 0.75,
+    "saturn": {
+      "objective": "We are targeting the cancer protein KRAS G12D (Sequence: MTEYKLVVVGAGGVGKSALTIQLIQNHFVDEYDPTIEDSYRKQVVIDGETCLLDILDTAGQEEYSAMRDQYMRTGEGFLCVFAINNTKSFEDIHQYREQIKRVKDSDDVPMVLVGNKCDLAARTVESRQAQDLARSYGIPYIETSAKTRQGVEDAFYTLVREIRQHKLRKLNPPDESGPGCMSCKCVLS). Our starting lead benchmark molecule is Acetophenone (CC(=O)c1ccccc1) which has a weak binding energy of around -4.5 kcal/mol. Use Saturn to generate 5 optimized candidates with improved binding affinity and co-fold them using Boltz-2 to predict their new Kd and binding energy.",
+      "oracle": [
+        {
+          "name": "qed",
+          "weight": 1.0
+        },
+        {
+          "name": "sa",
+          "weight": 0.5
+        }
+      ],
+      "aggregator": "product",
+      "n_steps": 50,
+      "batch_size": 64,
+      "use_diversity_filter": true,
+      "run": false
+    },
+    "saturn_source": "planner_default",
+    "critic_history": [
+      {
+        "needs_more_passes": false,
+        "reason": "Stopping after reaching max_iterations=1.",
+        "requested_next_actions": [],
+        "stop_reason": "max_iterations_reached",
+        "valid_candidate_count": 12,
+        "best_score": 0.8105189148041606
+      }
+    ],
+    "best_score": 0.8105189148041606,
+    "valid_candidate_count": 12
+  }
+}

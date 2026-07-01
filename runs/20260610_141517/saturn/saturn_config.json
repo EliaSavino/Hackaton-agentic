@@ -1,0 +1,54 @@
+{
+  "device": "cpu",
+  "goal_directed_generation": {
+    "beam_enumeration": {
+      "use_beam_enumeration": false
+    },
+    "diversity_filter": {
+      "bucket_size": 25,
+      "minscore": 0.4,
+      "name": "IdenticalMurckoScaffold"
+    },
+    "experience_replay": {
+      "memory_size": 64,
+      "sample_size": 64,
+      "smiles": []
+    },
+    "hallucinated_memory": {
+      "use_hallucinated_memory": false
+    },
+    "reinforcement_learning": {
+      "agent": "",
+      "batch_size": 64,
+      "learning_rate": 0.0001,
+      "n_steps": 50,
+      "prior": "",
+      "sigma": 128.0
+    }
+  },
+  "logging": {
+    "logging_frequency": 1,
+    "logging_path": "runs/20260610_141517/saturn/saturn_log",
+    "model_checkpoints_dir": "runs/20260610_141517/saturn/checkpoints"
+  },
+  "model_architecture": {
+    "name": "mamba"
+  },
+  "oracle": {
+    "aggregator": "product",
+    "components": [
+      {
+        "name": "qed",
+        "specific_parameters": {},
+        "weight": 1.0
+      },
+      {
+        "name": "sa",
+        "specific_parameters": {},
+        "weight": 0.5
+      }
+    ]
+  },
+  "running_mode": "goal_directed_generation",
+  "seed": 0
+}
