@@ -157,6 +157,46 @@ try:
             typer.echo(f"Stop reason: {state.stop_reason}")
         typer.echo(f"Errors: {len(state.errors)}")
 
+    @app.command("design-adc-linkers")
+    def design_adc_linkers_command(
+        request: str = typer.Argument(
+            "Design a soluble, protease-cleavable ADC linker for maleimide conjugation with high plasma stability.",
+        ),
+        run_mode: RunMode = typer.Option(RunMode.CHEAP, "--run-mode", "-m"),
+        config_dir: Path = typer.Option(Path("configs"), "--config-dir"),
+        run_root: Path = typer.Option(Path("runs"), "--run-root"),
+        max_iterations: int = typer.Option(3, "--max-iterations", min=1, max=20),
+        run_reinvent: bool = typer.Option(False, "--run/--mock", help="Actually run REINVENT (needs priors/HPC) vs mock."),
+    ) -> None:
+        """Autonomously design ADC linkers with REINVENT LinkInvent and write a paper."""
+
+        from hackathon_agents.schemas.linkers import ADCGoalProfile
+        from hackathon_agents.tools.adc_linker_objective import build_adc_linkinvent_objective
+
+        profile = ADCGoalProfile()
+        reinvent = build_adc_linkinvent_objective(profile, run=run_reinvent)
+        reinvent["objective"] = request
+        state = run_demo(
+            request,
+            run_mode=run_mode,
+            config_dir=config_dir,
+            run_root=run_root,
+            max_iterations=max_iterations,
+            initial_metadata={
+                "adc_goal_profile": profile.model_dump(mode="json"),
+                "reinvent": reinvent,
+            },
+        )
+        typer.echo(f"Run directory: {state.run_dir}")
+        typer.echo(f"Candidates: {len(state.candidate_molecules)}")
+        if state.candidate_molecules and state.candidate_molecules[0].score is not None:
+            top = state.candidate_molecules[0]
+            typer.echo(f"Top linker: {top.name or top.smiles} (score={top.score:.3f})")
+        typer.echo(f"Objective adjustments: {len(state.metadata.get('adc_decision_trail', []))}")
+        if state.metadata.get("adc_paper_path"):
+            typer.echo(f"Paper: {state.metadata['adc_paper_path']}")
+        typer.echo(f"Iterations: {state.iteration}")
+
     @app.command("benchmark-models")
     def benchmark_models_command(
         config_dir: Path = typer.Option(Path("configs"), "--config-dir"),

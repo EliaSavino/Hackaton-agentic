@@ -57,6 +57,14 @@ _TOOL_DESCRIPTIONS: dict[str, dict[str, Any]] = {
         "outputs": ["report.tex"],
         "failure_modes": ["unwritable output path"],
     },
+    "paper_writer": {
+        "category": "reporting",
+        "summary": "Write a ~5-page publication-style LaTeX paper for the ADC linker-design workflow.",
+        "inputs": ["user request", "goal profile", "linker candidates", "autonomous decision trail", "reference corpus"],
+        "outputs": ["adc_paper.tex", "candidate score figure"],
+        "failure_modes": ["unwritable output path", "LaTeX validation failure"],
+        "planner_notes": ["Runs only when an ADC goal profile is active."],
+    },
     "paper_review": {
         "category": "literature_review",
         "summary": "Extract sections, claims, limitations, and reproducibility notes from papers.",
@@ -113,6 +121,19 @@ _TOOL_DESCRIPTIONS: dict[str, dict[str, Any]] = {
         "inputs": ["objective", "oracle components", "RL settings", "seed SMILES"],
         "outputs": ["saturn_config.json", "generated molecule records"],
         "failure_modes": ["missing Saturn checkout", "timeout", "invalid Saturn config"],
+        "mock_behavior": "Returns deterministic molecule candidates when disabled or run=false.",
+    },
+    "reinvent": {
+        "category": "molecule_generation",
+        "summary": "Generate molecules with REINVENT4 (de novo/LibInvent/LinkInvent/Mol2Mol sampling and staged_learning RL) or deterministic mock output.",
+        "inputs": ["objective", "generator_type + prior", "input SMILES (scaffolds/warheads)", "sampling or RL/scoring settings"],
+        "outputs": ["reinvent_config.json", "generated molecule records"],
+        "failure_modes": ["missing REINVENT install", "missing prior_base", "timeout", "invalid REINVENT config"],
+        "planner_notes": [
+            "Prefer REINVENT for de novo sampling, scaffold decoration (LibInvent), and linker design (LinkInvent).",
+            "Use Saturn instead for sample-efficient goal-directed RL with a custom oracle.",
+            "Set state.metadata['reinvent'] with ReinventInput fields to opt in.",
+        ],
         "mock_behavior": "Returns deterministic molecule candidates when disabled or run=false.",
     },
     "xtb": {
@@ -243,7 +264,7 @@ def _external_side_effects(name: str, tool: ToolConfig) -> list[str]:
         effects.append("writes local files")
     if tool.executable:
         effects.append("may invoke local executable")
-    if name in {"xtb", "orca", "saturn", "boltz_2"}:
+    if name in {"xtb", "orca", "saturn", "boltz_2", "reinvent"}:
         effects.append("may run long scientific compute")
     if name in {"snellius_vllm"} or tool.model_extra.get("allow_submit"):
         effects.append("may submit or prepare HPC jobs")
@@ -255,7 +276,7 @@ def _external_side_effects(name: str, tool: ToolConfig) -> list[str]:
 def _execution_risk(name: str, tool: ToolConfig, real_execution_allowed: bool) -> str:
     if name in {"python_exec", "snellius_vllm"} or tool.model_extra.get("allow_submit"):
         return "high"
-    if name in {"xtb", "orca", "saturn", "boltz_2"} and real_execution_allowed:
+    if name in {"xtb", "orca", "saturn", "boltz_2", "reinvent"} and real_execution_allowed:
         return "medium"
     if tool.executable:
         return "medium"

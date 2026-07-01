@@ -20,6 +20,7 @@ def run_demo(
     max_iterations: int = 3,
     min_valid_candidates: int = 10,
     score_threshold: float = 0.75,
+    initial_metadata: dict | None = None,
 ) -> DiscoveryStatePayload:
     configure_logging()
     config = load_config(config_dir=config_dir, run_mode=run_mode)
@@ -28,15 +29,18 @@ def run_demo(
     run_dir.mkdir(parents=True, exist_ok=True)
 
     logger.info("starting discovery demo in %s", run_dir)
+    metadata = {
+        "min_valid_candidates": min_valid_candidates,
+        "score_threshold": score_threshold,
+    }
+    if initial_metadata:
+        metadata.update(initial_metadata)
     state = DiscoveryStatePayload(
         original_user_request=request,
         run_dir=str(run_dir),
         run_mode=config.run_mode,
         max_iterations=max_iterations,
-        metadata={
-            "min_valid_candidates": min_valid_candidates,
-            "score_threshold": score_threshold,
-        },
+        metadata=metadata,
     )
     graph = build_graph(config)
     final_state = graph.invoke(state)

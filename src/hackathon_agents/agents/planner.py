@@ -34,6 +34,8 @@ def run(state: DiscoveryStatePayload, config: AppConfig | None = None) -> Discov
     if model_plan is not None:
         state.plan = model_plan
         _attach_planner_metadata(state, tool_registry)
+        if not _set_default_adc_linker_objective(state):
+            _set_default_saturn_oracle(state)
         state.append_message("planner: created model-backed discovery plan")
         return state
 
@@ -76,7 +78,11 @@ def run(state: DiscoveryStatePayload, config: AppConfig | None = None) -> Discov
         ],
     )
     _attach_planner_metadata(state, tool_registry)
-    _set_default_saturn_oracle(state)
+    # ADC linker design is the primary challenge: prefer a REINVENT LinkInvent
+    # objective. When it is active we skip the generic Saturn oracle to avoid two
+    # generators competing on the same pass.
+    if not _set_default_adc_linker_objective(state):
+        _set_default_saturn_oracle(state)
     state.append_message("planner: created deterministic discovery plan")
     return state
 
@@ -107,7 +113,7 @@ def _default_task_graph(state: DiscoveryStatePayload) -> PlannerTaskGraph:
                 task_type="hypothesis_generation",
                 agent="chemist",
                 description="Create or refine candidate molecules with explicit provenance.",
-                tool_names=["saturn"],
+                tool_names=["reinvent", "saturn"],
                 depends_on=["plan"],
                 expected_artifacts=["candidate_molecules"],
             ),
@@ -135,13 +141,60 @@ def _default_task_graph(state: DiscoveryStatePayload) -> PlannerTaskGraph:
                 title="Write run reports",
                 task_type="reporting",
                 agent="writer",
-                description="Write DOCX, LaTeX, state, memory, and artifact index outputs.",
-                tool_names=["doc_writer", "latex_writer", "memory_writer"],
+                description="Write DOCX, LaTeX, publication paper, state, memory, and artifact index outputs.",
+                tool_names=["doc_writer", "latex_writer", "paper_writer", "memory_writer"],
                 depends_on=["critique"],
-                expected_artifacts=["report.docx", "report.tex", "artifact_index.json"],
+                expected_artifacts=["report.docx", "report.tex", "adc_paper.tex", "artifact_index.json"],
             ),
         ],
     )
+
+
+_ADC_INTENT_KEYWORDS = (
+    "adc",
+    "antibody-drug",
+    "antibody drug",
+    "linker",
+    "conjugate",
+    "payload",
+    "warhead",
+    "cleavable",
+    "maleimide",
+)
+
+
+def _set_default_adc_linker_objective(state: DiscoveryStatePayload) -> bool:
+    """Seed a REINVENT LinkInvent objective when the task is ADC-linker design.
+
+    Returns ``True`` when an ADC objective is active (already seeded, e.g. by the
+    ``design-adc-linkers`` CLI command, or inferred from the request text), so
+    the caller can skip the generic Saturn default. The chemist reads
+    ``state.metadata["reinvent"]`` to run LinkInvent; the critic reads
+    ``state.metadata["adc_goal_profile"]`` to score and steer.
+    """
+
+    from hackathon_agents.schemas.linkers import ADCGoalProfile
+    from hackathon_agents.tools.adc_linker_objective import build_adc_linkinvent_objective
+
+    already_active = "adc_goal_profile" in state.metadata or "reinvent" in state.metadata
+    request = (state.original_user_request or "").lower()
+    inferred = any(keyword in request for keyword in _ADC_INTENT_KEYWORDS)
+    if not (already_active or inferred):
+        return False
+
+    profile = state.metadata.get("adc_goal_profile")
+    if profile is None:
+        profile = ADCGoalProfile()
+        state.metadata["adc_goal_profile"] = profile.model_dump(mode="json")
+    else:
+        profile = ADCGoalProfile.model_validate(profile)
+
+    if "reinvent" not in state.metadata:
+        objective = build_adc_linkinvent_objective(profile, run=False)
+        objective["objective"] = state.original_user_request
+        state.metadata["reinvent"] = objective
+        state.metadata["reinvent_source"] = "planner_adc_default"
+    return True
 
 
 def _set_default_saturn_oracle(state: DiscoveryStatePayload) -> None:

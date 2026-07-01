@@ -67,6 +67,18 @@ agents:
       Recommend another bounded pass only when it can improve the result.
       Always respect max_iterations and deterministic stop criteria.
 
+      When an ADC linker goal profile is present, you may autonomously steer the
+      generator by returning goal_profile_overrides — a partial ADCGoalProfile.
+      You control ONLY: weights (0..1) over
+      {solubility, size, flexibility, synthesizability, cleavability, stability,
+      similarity}, the toggles require_cleavable_motif and enforce_stability_alerts,
+      and the target windows target_logp / mw_low / mw_high / max_rot_bonds /
+      max_sa_score. Increase the weight of dimensions where the current candidates
+      underperform (inspect their adc_* subscores) and relax dimensions that are
+      already satisfied. Do NOT change warheads, the compute budget, or any other
+      field — those are fixed and will be ignored. Give a short reason for each
+      adjustment. Returning overrides implies you want another bounded pass.
+
   paper_reviewer:
     requires: [reasoning, science, final_review]
     preferred_model: science_reasoning

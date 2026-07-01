@@ -116,6 +116,7 @@ class DiscoveryGraph:
         state.iteration += 1
         state.append_message(f"graph: starting pass {state.iteration}/{state.max_iterations}")
         self._apply_saturn_gating(state)
+        self._apply_reinvent_gating(state)
         state = chemist.run(state, config=self.config)
         mark_task_completed(
             state,
@@ -171,6 +172,48 @@ class DiscoveryGraph:
         }
         settings = state.metadata["saturn"]
         for key, value in hpc_defaults.items():
+            settings.setdefault(key, value)
+
+    def _apply_reinvent_gating(self, state: DiscoveryStatePayload) -> None:
+        """Config-gate REINVENT4 like Saturn: drop the settings if disabled.
+
+        Unlike Saturn, the planner does not force a default REINVENT run; the
+        chemist only invokes REINVENT when ``state.metadata['reinvent']`` is
+        present (opt-in). When present and enabled, we inject config-derived
+        executable/env/HPC settings so the chemist can run it locally or as a
+        remote SLURM job. Values already present in ``state.metadata['reinvent']``
+        (e.g. set by the planner) win.
+        """
+
+        if "reinvent" not in state.metadata:
+            return
+        if not self.config.tool_enabled("reinvent"):
+            state.metadata.pop("reinvent", None)
+            state.metadata["reinvent_source"] = "disabled_by_config"
+            state.append_message("graph: REINVENT disabled for this run mode; skipping")
+            return
+
+        reinvent_tool = self.config.tools.get("reinvent")
+        extra = reinvent_tool.model_extra if reinvent_tool else {}
+        config_defaults = {
+            "run_mode": extra.get("run_mode", "local"),
+            "run_type": extra.get("run_type", "sampling"),
+            "device": extra.get("device", "cpu"),
+            "reinvent_executable": extra.get("reinvent_executable", "reinvent"),
+            "reinvent_python": extra.get("reinvent_python", "python"),
+            "prior_base": extra.get("prior_base") or None,
+            "allow_submit": bool(extra.get("allow_submit", False)),
+            "partition": extra.get("partition", "gpu_a100"),
+            "gpus_per_node": extra.get("gpus_per_node", 1),
+            "time_limit": extra.get("time_limit", "02:00:00"),
+            "poll_interval_seconds": extra.get("poll_interval_seconds", 30),
+            "remote_reinvent_executable": extra.get("remote_reinvent_executable", "reinvent"),
+            "remote_prior_base": extra.get("remote_prior_base") or None,
+            "env_setup": extra.get("env_setup") or None,
+            "timeout_seconds": reinvent_tool.timeout_seconds if reinvent_tool and reinvent_tool.timeout_seconds else 1800,
+        }
+        settings = state.metadata["reinvent"]
+        for key, value in config_defaults.items():
             settings.setdefault(key, value)
 
     def _tool_execution_node(self, state: DiscoveryStatePayload) -> DiscoveryStatePayload:
@@ -419,7 +462,32 @@ class DiscoveryGraph:
             state.add_tool_result("latex_writer.write_latex_report", latex_result)
             if latex_result.ok:
                 state.metadata["latex_report_path"] = latex_result.data.get("path")
-        artifacts = [path for path in [state.final_report_path, state.metadata.get("latex_report_path")] if path]
+        if self.config.tool_enabled("paper_writer") and state.metadata.get("adc_goal_profile") is not None:
+            from hackathon_agents.tools.paper_writer import write_adc_paper
+
+            reinvent_meta = state.metadata.get("reinvent") or {}
+            paper_result = write_adc_paper(
+                {
+                    "output_path": str(run_dir / "adc_paper.tex"),
+                    "user_request": state.original_user_request,
+                    "goal_profile": state.metadata.get("adc_goal_profile"),
+                    "candidates": [molecule.model_dump(mode="json") for molecule in state.candidate_molecules],
+                    "decision_trail": state.metadata.get("adc_decision_trail", []),
+                    "warhead_pair": (reinvent_meta.get("input_smiles") or [None])[0],
+                }
+            )
+            state.add_tool_result("paper_writer.write_adc_paper", paper_result)
+            if paper_result.ok:
+                state.metadata["adc_paper_path"] = paper_result.data.get("path")
+        artifacts = [
+            path
+            for path in [
+                state.final_report_path,
+                state.metadata.get("latex_report_path"),
+                state.metadata.get("adc_paper_path"),
+            ]
+            if path
+        ]
         self._write_memory(
             state,
             "writer_completed",
