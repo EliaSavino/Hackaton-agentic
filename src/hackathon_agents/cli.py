@@ -214,6 +214,74 @@ try:
             typer.echo(f"Paper: {state.metadata['adc_paper_path']}")
         typer.echo(f"Iterations: {state.iteration}")
 
+    @app.command("design-adc-campaign")
+    def design_adc_campaign_command(
+        request: str = typer.Argument(
+            "Design a next-generation ADC linker with high plasma stability, aqueous "
+            "solubility, tunable tumour-selective payload release, and synthetic "
+            "accessibility, compatible with diverse antibody conjugation chemistries.",
+        ),
+        run_mode: RunMode = typer.Option(RunMode.CHEAP, "--run-mode", "-m"),
+        run_root: Path = typer.Option(Path("runs"), "--run-root"),
+        device: str = typer.Option("cpu", "--device"),
+        reinvent_steps: int = typer.Option(60, "--reinvent-steps", min=1),
+        reinvent_batch: int = typer.Option(64, "--reinvent-batch", min=1, max=1024),
+        max_iterations: int = typer.Option(3, "--max-iterations", min=1, max=20),
+        run_reinvent: bool = typer.Option(True, "--run/--mock", help="Actually run REINVENT vs mock."),
+        twocolumn: bool = typer.Option(False, "--twocolumn/--onecolumn", help="Paper layout."),
+        compile_pdf: bool = typer.Option(True, "--compile/--no-compile", help="Compile the paper to PDF with pdflatex."),
+    ) -> None:
+        """Run the full multi-warhead ADC campaign and write a publication paper.
+
+        Generates warhead libraries -> designs linkers per warhead pair with
+        REINVENT LinkInvent (autonomous escalation + re-weighting) -> re-aggregates
+        the assembled linkers -> writes a ~5-page LaTeX paper (and optional PDF).
+        """
+
+        import subprocess
+
+        from hackathon_agents.demos.adc_campaign import run_campaign
+        from hackathon_agents.demos.adc_reaggregate import reaggregate
+        from hackathon_agents.tools.adc_campaign_paper import build_campaign_paper
+
+        result = run_campaign(
+            request,
+            run_mode=run_mode,
+            run_root=run_root,
+            device=device,
+            reinvent_steps=reinvent_steps,
+            reinvent_batch=reinvent_batch,
+            max_iterations=max_iterations,
+            run_reinvent=run_reinvent,
+        )
+        campaign_dir = Path(result["campaign_dir"])
+        clean = reaggregate(campaign_dir / "campaign.json")
+        clean_path = campaign_dir / "campaign_clean.json"
+        tex_path = campaign_dir / "paper" / "adc_linker_paper.tex"
+        paper = build_campaign_paper(clean_path, tex_path, twocolumn=twocolumn)
+
+        typer.echo(f"Campaign directory: {campaign_dir}")
+        typer.echo(f"Warhead pairs: {result['n_pairs']}")
+        best = clean["pooled_ranked"][0] if clean["pooled_ranked"] else {}
+        if best:
+            typer.echo(f"Best linker: {best['pair_label']} score={best['score']:.3f}")
+        if paper.ok:
+            typer.echo(f"Paper (LaTeX): {tex_path}")
+            if compile_pdf:
+                try:
+                    for _ in range(2):
+                        subprocess.run(
+                            ["pdflatex", "-interaction=nonstopmode", "-halt-on-error", tex_path.name],
+                            cwd=tex_path.parent,
+                            check=True,
+                            capture_output=True,
+                        )
+                    typer.echo(f"Paper (PDF): {tex_path.with_suffix('.pdf')}")
+                except Exception as exc:  # pragma: no cover
+                    typer.echo(f"PDF compile skipped ({exc}); .tex is ready.")
+        else:
+            typer.echo(f"Paper generation failed: {paper.error}")
+
     @app.command("benchmark-models")
     def benchmark_models_command(
         config_dir: Path = typer.Option(Path("configs"), "--config-dir"),
