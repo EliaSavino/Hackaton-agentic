@@ -30,7 +30,7 @@ Use or extend:
 - descriptor calculation
 - molecule filtering
 - plotting
-- DOCX report writer
+- DOCX and LaTeX report writers
 - xTB and ORCA wrappers
 
 Good next tools:

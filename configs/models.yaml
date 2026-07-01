@@ -9,7 +9,7 @@ models:
 
   science_reasoning:
     provider: anthropic
-    model: claude-sonnet
+    model: anthropic/claude-sonnet-4-6
     capabilities: [reasoning, chemistry, science, final_review, long_context]
     api_key_env: ANTHROPIC_API_KEY
     cost_tier: high
@@ -24,6 +24,18 @@ models:
     cost_tier: medium
     enabled: false
 
+  openrouter_general:
+    provider: openrouter
+    model: "${OPENROUTER_MODEL:-~openai/gpt-latest}"
+    host: "${OPENROUTER_API_BASE:-https://openrouter.ai/api/v1}"
+    capabilities: [reasoning, hosted, general, long_context, openrouter]
+    api_key_env: OPENROUTER_API_KEY
+    cost_tier: medium
+    enabled: "${OPENROUTER_ENABLED:-false}"
+    metadata:
+      http_referer: "${OPENROUTER_HTTP_REFERER:-}"
+      app_title: "${OPENROUTER_APP_TITLE:-Hackathon Agents}"
+
   snellius_vllm:
     provider: vllm
     model: "${SNELLIUS_VLLM_MODEL:-meta-llama/Llama-3.1-70B-Instruct}"
@@ -37,7 +49,7 @@ models:
     provider: ollama
     host: "http://${OLLAMA_BIG_HOST:-localhost}:11434"
     model: gpt-oss:latest
-    capabilities: [reasoning, chemistry, local, private, cheap, bulk, offline]
+    capabilities: [reasoning, chemistry, local, private, cheap, bulk, formatting, latex, offline]
     cost_tier: low
     enabled: true
 
@@ -45,7 +57,7 @@ models:
     provider: ollama
     host: "http://${OLLAMA_SMALL_HOST:-localhost}:11434"
     model: llama3.2
-    capabilities: [fast, cheap, local, private, summarization, routing, formatting, offline]
+    capabilities: [fast, cheap, local, private, summarization, routing, formatting, latex, offline]
     cost_tier: low
     enabled: true
 

@@ -10,6 +10,7 @@ Example aliases:
 
 - `frontier_reasoning`: high-quality hosted reasoning model.
 - `science_reasoning`: hosted science-capable reasoning model.
+- `openrouter_general`: disabled-by-default OpenRouter alias for the OpenAI-compatible OpenRouter gateway.
 - `snellius_vllm`: disabled-by-default OpenAI-compatible vLLM endpoint for heavyweight Snellius inference.
 - `local_large`: larger Ollama model for local reasoning, privacy, and bulk work.
 - `local_small`: smaller Ollama model for routing, summarization, formatting, and cheap tasks.
@@ -66,6 +67,74 @@ PYTHONPATH=src python -m hackathon_agents.cli snellius-vllm-script \
 
 Submit that script on Snellius, expose or tunnel the vLLM port, then run `check-models`. API keys are optional for vLLM unless a config sets `metadata.requires_api_key: true`.
 
+## Snellius Claude Code Gateway
+
+For Claude Code users, prefer the combined LiteLLM gateway instead of exposing vLLM directly. It keeps vLLM bound to `127.0.0.1` inside the SLURM job and exposes LiteLLM as the authenticated Anthropic-compatible gateway.
+
+Generate the job and configs:
+
+```bash
+PYTHONPATH=src python -m hackathon_agents.cli snellius-gateway-script \
+  --model-checkpoint openai/gpt-oss-120b \
+  --output-dir runs/snellius_gateway \
+  --served-model-name claude-snellius-local \
+  --gateway-port 4000
+```
+
+The generator writes:
+
+- `run_snellius_gateway.job`: starts vLLM and LiteLLM.
+- `litellm_config.yaml`: exposes `claude-snellius-local` and `claude-snellius-hosted`.
+- `litellm_config.local_only.yaml`: exposes only `claude-snellius-local`.
+
+Keep provider keys and the gateway token in the Snellius `.env`, not in generated YAML:
+
+```bash
+SNELLIUS_GATEWAY_MASTER_KEY=
+ANTHROPIC_API_KEY=
+OPENAI_API_KEY=
+OPENROUTER_API_KEY=
+SNELLIUS_HOSTED_API_KEY=
+SNELLIUS_HOSTED_ALIAS_ENABLED=true
+```
+
+Run `chmod 600 .env` before submitting the job. At startup, the script checks that a gateway token exists, derives `SNELLIUS_HOSTED_API_KEY` from the provider-specific key when possible, and disables the hosted alias if the key or provider egress preflight fails.
+
+After the job starts and reports a compute node, generate local Claude Code commands:
+
+```bash
+PYTHONPATH=src python -m hackathon_agents.cli snellius-client-env \
+  --snellius-user "$USER" \
+  --compute-node gcn31 \
+  --model-alias claude-snellius-local
+```
+
+This prints an SSH tunnel command plus `ANTHROPIC_BASE_URL`, `ANTHROPIC_AUTH_TOKEN`, `ANTHROPIC_API_KEY`, and `ANTHROPIC_DEFAULT_*_MODEL` exports. Users without Snellius SSH accounts are not automated in v1; they need an approved SURF/OOD/front-door access path.
+
+## OpenRouter
+
+OpenRouter is configured as an OpenAI-compatible hosted provider:
+
+```yaml
+openrouter_general:
+  provider: openrouter
+  model: "${OPENROUTER_MODEL:-~openai/gpt-latest}"
+  host: "${OPENROUTER_API_BASE:-https://openrouter.ai/api/v1}"
+  api_key_env: OPENROUTER_API_KEY
+  enabled: "${OPENROUTER_ENABLED:-false}"
+```
+
+Enable it with:
+
+```bash
+OPENROUTER_ENABLED=true
+OPENROUTER_API_KEY=...
+OPENROUTER_MODEL=~openai/gpt-latest
+OPENROUTER_APP_TITLE="Hackathon Agents"
+```
+
+`LLMClient` first attempts LiteLLM. If LiteLLM is unavailable or the provider call fails, OpenRouter uses a direct `/chat/completions` fallback against the configured `/api/v1` base URL. `check-models` calls the OpenAI-compatible `/models` endpoint when the API key is present.
+
 ## Good Local Tasks
 
 Use local models for:
@@ -97,7 +166,7 @@ PYTHONPATH=src python -m hackathon_agents.cli check-models
 ```
 
 For Ollama, this calls `/api/tags` and checks whether configured models are listed.
-For vLLM, this calls the OpenAI-compatible `/v1/models` endpoint.
+For vLLM and OpenRouter, this calls the OpenAI-compatible `/v1/models` endpoint.
 
 ## Benchmarking
 

@@ -51,7 +51,7 @@ models:
 
 Fields:
 
-- `provider`: `openai`, `anthropic`, `ollama`, `hosted`, `vllm`, or `other`.
+- `provider`: `openai`, `anthropic`, `ollama`, `hosted`, `vllm`, `openrouter`, or `other`.
 - `model`: provider model name.
 - `host`: Ollama, hosted, or vLLM base URL when relevant.
 - `capabilities`: labels used by `ModelRouter`.
@@ -109,6 +109,7 @@ Fields:
 - `executable`: command name for external tools.
 - `timeout_seconds`: hard runtime cap.
 - `enabled_modes`: run modes where the tool is active.
+- `jsonl_path` / `markdown_path`: optional artifact paths for tools such as `memory_writer`.
 
 ## Environment Variables
 
@@ -119,6 +120,8 @@ OPENAI_API_KEY=
 ANTHROPIC_API_KEY=
 LITELLM_MODEL_DEFAULT=local_small
 HACKATHON_RUN_MODE=cheap
+HACKATHON_AGENT_LLM_MODE=auto
+HACKATHON_MODEL_CHECK_TIMEOUT=0.5
 OLLAMA_BIG_HOST=localhost
 OLLAMA_SMALL_HOST=localhost
 HOSTED_API_KEY=
@@ -126,6 +129,18 @@ HOSTED_API_BASE=
 SNELLIUS_VLLM_ENABLED=false
 SNELLIUS_VLLM_MODEL=
 SNELLIUS_VLLM_BASE_URL=
+SNELLIUS_GATEWAY_MASTER_KEY=
+SNELLIUS_HOSTED_API_KEY=
+SNELLIUS_HOSTED_ALIAS_ENABLED=true
+OPENROUTER_ENABLED=false
+OPENROUTER_API_KEY=
+OPENROUTER_MODEL=~openai/gpt-latest
+OPENROUTER_HTTP_REFERER=
+OPENROUTER_APP_TITLE=Hackathon Agents
+RAG_DB_PATH=data/rag.sqlite
+PROJECT_MEMORY_JSONL=data/memory/project_memory.jsonl
+PROJECT_MEMORY_MARKDOWN=data/memory/project_memory.md
+MECHANISM_LITERATURE_CORPUS_DIR=
 SATURN_ENABLED=false
 SATURN_REPO=
 SATURN_PYTHON=python
@@ -137,6 +152,12 @@ BOLTZ_DEVICE=cpu
 ```
 
 Do not put API keys in YAML or source code.
+
+`HACKATHON_AGENT_LLM_MODE` controls whether the planner, chemist, and critic use configured model calls:
+
+- `auto`: check selected model availability with `HACKATHON_MODEL_CHECK_TIMEOUT`, then fall back deterministically when unavailable.
+- `off`: skip agent model calls.
+- `always`: attempt the selected model and fall back only if the call or schema validation fails.
 
 ## Saturn Tool Config
 

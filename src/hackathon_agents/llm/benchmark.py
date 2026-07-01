@@ -2,13 +2,14 @@ from __future__ import annotations
 
 import json
 import time
-from datetime import datetime
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
 from hackathon_agents.config import AppConfig
 from hackathon_agents.llm.client import CompletionRequest, LLMClient
 from hackathon_agents.llm.router import ModelRouter
+from hackathon_agents.llm.validators import validate_json_output
 
 
 BENCHMARK_TASKS: dict[str, list[dict[str, str]]] = {
@@ -31,7 +32,7 @@ def benchmark_models(config: AppConfig, run_root: str | Path = "runs") -> Path:
     availability = router.check_model_availability()
     client = LLMClient(config)
     output: dict[str, Any] = {
-        "created_at": datetime.utcnow().isoformat(timespec="seconds") + "Z",
+        "created_at": datetime.now(UTC).isoformat(timespec="seconds").replace("+00:00", "Z"),
         "availability": {alias: item.model_dump(mode="json") for alias, item in availability.items()},
         "results": {},
     }
@@ -44,7 +45,7 @@ def benchmark_models(config: AppConfig, run_root: str | Path = "runs") -> Path:
                 CompletionRequest(
                     model_alias=alias,
                     messages=messages,
-                    temperature=0.0,
+                    temperature=None if model.provider == "openai" else 0.0,
                     max_tokens=256,
                     retries=1,
                 )
@@ -53,7 +54,12 @@ def benchmark_models(config: AppConfig, run_root: str | Path = "runs") -> Path:
             task_payload = result.model_dump(mode="json")
             task_payload["latency_seconds"] = elapsed
             if task_name == "json_compliance":
-                task_payload["json_valid"] = _is_json(result.content)
+                validation = validate_json_output(result.content)
+                task_payload["json_valid"] = validation.ok
+                task_payload["normalized_json"] = validation.normalized if validation.ok else ""
+                task_payload["json_repaired"] = bool(validation.warnings)
+                task_payload["json_validation_warnings"] = validation.warnings or []
+                task_payload["json_validation_errors"] = validation.errors
             if task_name == "tool_calling_ability":
                 task_payload["mentions_tool"] = "validate_smiles" in result.content
             model_results["tasks"][task_name] = task_payload
@@ -61,14 +67,6 @@ def benchmark_models(config: AppConfig, run_root: str | Path = "runs") -> Path:
 
     run_path = Path(run_root)
     run_path.mkdir(parents=True, exist_ok=True)
-    target = run_path / f"model_benchmark_{datetime.utcnow().strftime('%Y%m%d_%H%M%S')}.json"
+    target = run_path / f"model_benchmark_{datetime.now(UTC).strftime('%Y%m%d_%H%M%S')}.json"
     target.write_text(json.dumps(output, indent=2), encoding="utf-8")
     return target
-
-
-def _is_json(value: str) -> bool:
-    try:
-        json.loads(value)
-        return True
-    except Exception:
-        return False

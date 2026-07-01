@@ -19,4 +19,4 @@ dependencies:
   - pytest
   - pip:
       - langgraph>=0.2.0
-      - litellm>=1.52.0
+      - litellm>=1.52.0,!=1.82.7,!=1.82.8

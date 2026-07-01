@@ -7,7 +7,7 @@ requires-python = ">=3.11"
 authors = [{ name = "Hackathon Agents Team" }]
 dependencies = [
   "langgraph>=0.2.0",
-  "litellm>=1.52.0",
+  "litellm>=1.52.0,!=1.82.7,!=1.82.8",
   "pydantic>=2.7.0",
   "python-dotenv>=1.0.1",
   "pyyaml>=6.0.1",
@@ -24,7 +24,8 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
-  "pytest>=8.0.0"
+  "pytest>=8.0.0",
+  "build>=1.2.0"
 ]
 # Bayesian Design of Experiments (next-experiment recommendation). Optional and
 # imported lazily; without it the baybe tool falls back to deterministic mocks.

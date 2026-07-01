@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import os
 import time
 import urllib.request
 from typing import Any
@@ -13,7 +14,7 @@ from hackathon_agents.config import AppConfig, ModelConfig
 class CompletionRequest(BaseModel):
     model_alias: str | None = None
     messages: list[dict[str, str]]
-    temperature: float = 0.1
+    temperature: float | None = 0.1
     max_tokens: int = 1200
     retries: int = 1
     fallback_aliases: list[str] = Field(default_factory=list)
@@ -78,21 +79,24 @@ class LLMClient:
                 return self._direct_ollama_completion(alias, model_config, request)
             if model_config.provider == "vllm":
                 return self._direct_vllm_completion(alias, model_config, request)
+            if model_config.provider == "openrouter":
+                return self._direct_openrouter_completion(alias, model_config, request)
             return CompletionResult(
                 ok=False,
                 model_alias=alias,
                 provider=model_config.provider,
-                error="LiteLLM is not installed and direct fallback only supports Ollama.",
+                error="LiteLLM is not installed and no direct fallback is available for this provider.",
             )
 
         kwargs: dict[str, Any] = {
             "model": model_config.litellm_model,
             "messages": request.messages,
-            "temperature": request.temperature,
             "max_tokens": request.max_tokens,
             "metadata": {"model_alias": alias, **request.metadata},
             "drop_params": True,
         }
+        if request.temperature is not None:
+            kwargs["temperature"] = request.temperature
         if model_config.api_base:
             kwargs["api_base"] = model_config.api_base
         if model_config.api_key:
@@ -122,6 +126,8 @@ class LLMClient:
                 return self._direct_ollama_completion(alias, model_config, request, previous_error=str(exc))
             if model_config.provider == "vllm":
                 return self._direct_vllm_completion(alias, model_config, request, previous_error=str(exc))
+            if model_config.provider == "openrouter":
+                return self._direct_openrouter_completion(alias, model_config, request, previous_error=str(exc))
             return CompletionResult(ok=False, model_alias=alias, provider=model_config.provider, error=str(exc))
 
     def _direct_ollama_completion(
@@ -139,11 +145,15 @@ class LLMClient:
                 error=previous_error or "Ollama host is not configured.",
             )
 
+        options: dict[str, Any] = {"num_predict": request.max_tokens}
+        if request.temperature is not None:
+            options["temperature"] = request.temperature
         payload = {
             "model": model_config.model,
             "messages": request.messages,
             "stream": False,
-            "options": {"temperature": request.temperature, "num_predict": request.max_tokens},
+            "think": False,
+            "options": options,
         }
         try:
             req = urllib.request.Request(
@@ -187,10 +197,11 @@ class LLMClient:
         payload = {
             "model": model_config.model,
             "messages": request.messages,
-            "temperature": request.temperature,
             "max_tokens": request.max_tokens,
             "stream": False,
         }
+        if request.temperature is not None:
+            payload["temperature"] = request.temperature
         headers = {"Content-Type": "application/json"}
         if model_config.api_key:
             headers["Authorization"] = f"Bearer {model_config.api_key}"
@@ -221,6 +232,58 @@ class LLMClient:
                 error = f"LiteLLM failed: {previous_error}; direct vLLM fallback failed: {error}"
             return CompletionResult(ok=False, model_alias=alias, provider=model_config.provider, error=error)
 
+    def _direct_openrouter_completion(
+        self,
+        alias: str,
+        model_config: ModelConfig,
+        request: CompletionRequest,
+        previous_error: str | None = None,
+    ) -> CompletionResult:
+        api_key = model_config.api_key
+        if not api_key:
+            return CompletionResult(
+                ok=False,
+                model_alias=alias,
+                provider=model_config.provider,
+                error=previous_error or f"Missing environment variable {model_config.api_key_env or 'OPENROUTER_API_KEY'}.",
+            )
+
+        payload = {
+            "model": model_config.model.removeprefix("openrouter/"),
+            "messages": request.messages,
+            "max_tokens": request.max_tokens,
+            "stream": False,
+        }
+        if request.temperature is not None:
+            payload["temperature"] = request.temperature
+        headers = _openrouter_headers(model_config, api_key)
+        try:
+            req = urllib.request.Request(
+                _openai_compatible_chat_completions_url(model_config.api_base or "https://openrouter.ai/api/v1"),
+                data=json.dumps(payload).encode("utf-8"),
+                headers=headers,
+                method="POST",
+            )
+            with urllib.request.urlopen(req, timeout=120) as response:
+                data = json.loads(response.read().decode("utf-8"))
+            choices = data.get("choices") or []
+            content = ""
+            if choices:
+                content = (choices[0].get("message") or {}).get("content") or ""
+            return CompletionResult(
+                ok=True,
+                content=content,
+                model_alias=alias,
+                provider=model_config.provider,
+                usage=data.get("usage") or {},
+                raw=data,
+            )
+        except Exception as exc:
+            error = str(exc)
+            if previous_error:
+                error = f"LiteLLM failed: {previous_error}; direct OpenRouter fallback failed: {error}"
+            return CompletionResult(ok=False, model_alias=alias, provider=model_config.provider, error=error)
+
 
 def _extract_content(response: Any) -> str:
     try:
@@ -246,7 +309,27 @@ def _to_dict(response: Any) -> dict[str, Any]:
 
 
 def _vllm_chat_completions_url(base_url: str) -> str:
+    return _openai_compatible_chat_completions_url(base_url)
+
+
+def _openai_compatible_chat_completions_url(base_url: str) -> str:
     base = base_url.rstrip("/")
     if not base.endswith("/v1"):
         base = f"{base}/v1"
     return f"{base}/chat/completions"
+
+
+def _openrouter_headers(model_config: ModelConfig, api_key: str) -> dict[str, str]:
+    headers = {
+        "Authorization": f"Bearer {api_key}",
+        "Content-Type": "application/json",
+    }
+    referer = str(model_config.metadata.get("http_referer") or os.getenv("OPENROUTER_HTTP_REFERER") or "")
+    app_title = str(
+        model_config.metadata.get("app_title") or os.getenv("OPENROUTER_APP_TITLE") or "Hackathon Agents"
+    )
+    if referer:
+        headers["HTTP-Referer"] = referer
+    if app_title:
+        headers["X-OpenRouter-Title"] = app_title
+    return headers

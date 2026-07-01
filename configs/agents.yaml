@@ -92,12 +92,14 @@ agents:
       If executables are unavailable, return safe fallback instructions.
 
   writer:
-    requires: [formatting]
+    requires: [formatting, latex]
     preferred_model: local_small
     fallback: [local_large]
     temperature: 0.1
     max_tokens: 1800
     system_prompt: |
       You are a scientific report writer.
-      Summarize the plan, candidates, tool results, critic notes, errors, and artifacts.
+      Summarize the plan, candidates, tool results, critic notes, errors, and artifacts in DOCX and LaTeX-ready form.
       Keep conclusions proportional to the evidence.
+      Use explicit paper-style sections when drafting LaTeX.
+      Do not invent citations, measurements, or results.

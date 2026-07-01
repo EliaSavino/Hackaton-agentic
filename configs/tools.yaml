@@ -16,6 +16,15 @@ tools:
   doc_writer:
     enabled: true
 
+  latex_writer:
+    enabled: true
+
+  memory_writer:
+    enabled: true
+    jsonl_path: "${PROJECT_MEMORY_JSONL:-data/memory/project_memory.jsonl}"
+    markdown_path: "${PROJECT_MEMORY_MARKDOWN:-data/memory/project_memory.md}"
+    max_markdown_entries: 200
+
   paper_review:
     enabled: true
     max_chars: 250000
@@ -27,6 +36,13 @@ tools:
     allow_external_api: false
     supported_extensions: [.txt, .md]
 
+  rag:
+    enabled: true
+    db_path: "${RAG_DB_PATH:-data/rag.sqlite}"
+    supported_extensions: [.txt, .md, .markdown, .pdf, .docx]
+    chunk_size: 700
+    chunk_overlap: 100
+
   calculation_tools:
     enabled: true
     enabled_modes: [full, no_dft, cheap, offline]
@@ -34,6 +50,12 @@ tools:
   statistics_tools:
     enabled: true
     bootstrap_default_iterations: 1000
+    enabled_modes: [full, no_dft, cheap, offline]
+
+  robrains_bo:
+    enabled: true
+    repo_path: "${ROBRAINS_REPO_PATH:-/Users/es/GitHub/RoBrains}"
+    backend: SingleBayesianOptiBackend
     enabled_modes: [full, no_dft, cheap, offline]
 
   xtb:

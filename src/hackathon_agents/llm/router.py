@@ -53,6 +53,7 @@ class ModelRouter:
     def check_model_availability(self, timeout_seconds: float = 2.0) -> dict[str, ModelAvailability]:
         ollama_models_by_host: dict[str, tuple[bool, str, list[str]]] = {}
         vllm_models_by_base: dict[str, tuple[bool, str, list[str]]] = {}
+        openrouter_models_by_base: dict[str, tuple[bool, str, list[str]]] = {}
 
         for alias, model in self.config.models.items():
             if not model.enabled:
@@ -95,6 +96,38 @@ class ModelRouter:
                 available = ok and (not listed or model.model in listed)
                 if ok and listed and model.model not in listed:
                     reason = f"vLLM endpoint is reachable but model {model.model!r} is not listed."
+                self.availability[alias] = ModelAvailability(
+                    alias=alias,
+                    provider=model.provider,
+                    model=model.model,
+                    available=available,
+                    reason=reason,
+                    host=base_url,
+                    capabilities=model.capabilities,
+                    listed_models=listed,
+                )
+                continue
+
+            if model.provider == "openrouter":
+                base_url = model.api_base or model.host or "https://openrouter.ai/api/v1"
+                if model.api_key_env and not os.getenv(model.api_key_env):
+                    self.availability[alias] = ModelAvailability(
+                        alias=alias,
+                        provider=model.provider,
+                        model=model.model,
+                        available=False,
+                        reason=f"missing environment variable {model.api_key_env}",
+                        host=base_url,
+                        capabilities=model.capabilities,
+                    )
+                    continue
+                if base_url not in openrouter_models_by_base:
+                    openrouter_models_by_base[base_url] = self._ping_openrouter(model, timeout_seconds)
+                ok, reason, listed = openrouter_models_by_base[base_url]
+                listed_model = model.model.removeprefix("openrouter/")
+                available = ok and (not listed or listed_model.startswith("~") or listed_model in listed)
+                if ok and listed and not listed_model.startswith("~") and listed_model not in listed:
+                    reason = f"OpenRouter is reachable but model {listed_model!r} is not listed."
                 self.availability[alias] = ModelAvailability(
                     alias=alias,
                     provider=model.provider,
@@ -227,7 +260,7 @@ class ModelRouter:
             return False
         if model.api_key_env and not os.getenv(model.api_key_env) and _requires_api_key(model):
             return False
-        if model.api_base_env and not os.getenv(model.api_base_env):
+        if model.api_base_env and not os.getenv(model.api_base_env) and model.provider != "openrouter":
             return False
         if model.provider == "vllm" and not (model.api_base or model.host):
             return False
@@ -271,6 +304,20 @@ class ModelRouter:
         except Exception as exc:
             return False, str(exc), []
 
+    def _ping_openrouter(self, model: ModelConfig, timeout_seconds: float) -> tuple[bool, str, list[str]]:
+        base_url = model.api_base or model.host or "https://openrouter.ai/api/v1"
+        headers = {}
+        if model.api_key:
+            headers["Authorization"] = f"Bearer {model.api_key}"
+        try:
+            request = urllib.request.Request(_openai_compatible_models_url(base_url), headers=headers, method="GET")
+            with urllib.request.urlopen(request, timeout=timeout_seconds) as response:
+                payload = json.loads(response.read().decode("utf-8"))
+            models = [item.get("id", "") for item in payload.get("data", []) if item.get("id")]
+            return True, "reachable", models
+        except Exception as exc:
+            return False, str(exc), []
+
 
 def _dedupe(values: list[str]) -> list[str]:
     seen: set[str] = set()
@@ -283,6 +330,10 @@ def _dedupe(values: list[str]) -> list[str]:
 
 
 def _vllm_models_url(base_url: str) -> str:
+    return _openai_compatible_models_url(base_url)
+
+
+def _openai_compatible_models_url(base_url: str) -> str:
     base = base_url.rstrip("/")
     if not base.endswith("/v1"):
         base = f"{base}/v1"

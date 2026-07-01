@@ -3,6 +3,29 @@ from __future__ import annotations
 from pydantic import BaseModel, Field
 
 
+class PlannedTask(BaseModel):
+    id: str
+    title: str
+    task_type: str
+    agent: str
+    description: str
+    tool_names: list[str] = Field(default_factory=list)
+    depends_on: list[str] = Field(default_factory=list)
+    expected_artifacts: list[str] = Field(default_factory=list)
+    status: str = "planned"
+    started_at: str | None = None
+    completed_at: str | None = None
+    status_reason: str | None = None
+    attempts: int = 0
+    produced_artifacts: list[str] = Field(default_factory=list)
+    events: list[str] = Field(default_factory=list)
+
+
+class PlannerTaskGraph(BaseModel):
+    objective: str
+    tasks: list[PlannedTask] = Field(default_factory=list)
+
+
 class DiscoveryPlanStep(BaseModel):
     name: str
     description: str

@@ -11,8 +11,10 @@ This documentation is written for hackathon use: fast onboarding, clear extensio
 - [Agents](agents.md): how to write agents and system prompts.
 - [Graph And Iteration](graph-iteration.md): LangGraph topology, bounded loops, and context sharing.
 - [Tools](tools.md): tool contracts and the current tool inventory.
+- [Function Guide](function-guide.md): how to call the public functions, classes, and CLI commands.
 - [Paper Review](paper-review.md): deterministic paper reviewing workflow.
 - [Testing](testing.md): unit tests, smoke tests, and dependency-sensitive tests.
+- [HPC And Remote Terminal](hpc.md): Slurm workflows, vLLM serving, and SSH tunnels.
 - [Hackathon Playbook](hackathon-playbook.md): practical workflow for uncertain challenge prompts.
 
 ## Core Design Rule

@@ -15,6 +15,7 @@ Start with:
 - [Agents](docs/agents.md)
 - [Graph And Iteration](docs/graph-iteration.md)
 - [Tools](docs/tools.md)
+- [Function Guide](docs/function-guide.md)
 - [Paper Review](docs/paper-review.md)
 - [Testing](docs/testing.md)
 - [Hackathon Playbook](docs/hackathon-playbook.md)
@@ -56,6 +57,18 @@ Useful local model variables:
 OLLAMA_BIG_HOST=localhost
 OLLAMA_SMALL_HOST=localhost
 HACKATHON_RUN_MODE=cheap
+HACKATHON_AGENT_LLM_MODE=auto
+HACKATHON_MODEL_CHECK_TIMEOUT=0.5
+```
+
+Useful OpenRouter variables:
+
+```bash
+OPENROUTER_ENABLED=true
+OPENROUTER_API_KEY=
+OPENROUTER_MODEL=~openai/gpt-latest
+OPENROUTER_HTTP_REFERER=
+OPENROUTER_APP_TITLE=Hackathon Agents
 ```
 
 The code supports four run modes:
@@ -64,6 +77,12 @@ The code supports four run modes:
 - `no_dft`: skip xTB and ORCA execution.
 - `cheap`: favor local Ollama models and reserve frontier calls for final criticism.
 - `offline`: only route to Ollama models and local tools.
+
+Agent model calls use `HACKATHON_AGENT_LLM_MODE`:
+
+- `auto`: check configured model availability with a short timeout, use model-backed planner/chemist/critic calls when reachable, otherwise fall back deterministically.
+- `off`: force deterministic planner/chemist/critic behavior.
+- `always`: attempt the selected model and fall back only if the call or JSON validation fails.
 
 ## Run the Demo
 
@@ -74,8 +93,11 @@ python -m hackathon_agents.cli demo "Find promising substrate candidates for rea
 Outputs are written to `runs/<timestamp>/`:
 
 - `report.docx`
+- `report.tex`
 - `state.json`
 - any generated plots or DFT input files
+
+Shared run memory is written to `data/memory/project_memory.jsonl` and regenerated as `data/memory/project_memory.md` so future users can see what has already been tried.
 
 ## Benchmark Models
 
@@ -84,6 +106,30 @@ python -m hackathon_agents.cli benchmark-models
 ```
 
 This pings configured Ollama hosts, tests configured models on latency, JSON compliance, tool-call formatting, simple chemistry reasoning, and code generation, then saves results to `runs/model_benchmark_<date>.json`.
+
+## Local RAG And Prompt Terminal
+
+Index local documents into the SQLite RAG database:
+
+```bash
+python -m hackathon_agents.cli rag-ingest docs --db-path data/rag.sqlite
+```
+
+Search indexed context:
+
+```bash
+python -m hackathon_agents.cli rag-search "photoredox light intensity" --context
+```
+
+Open an interactive prompting terminal with per-prompt RAG retrieval:
+
+```bash
+python -m hackathon_agents.cli prompt-terminal \
+  --model-alias openrouter_general \
+  --db-path data/rag.sqlite
+```
+
+Use `--no-rag` for plain chat, `/rag <query>` to inspect retrieved context, `/clear` to clear recent history, and `/exit` to leave the terminal.
 
 ## Snellius vLLM For Heavy Tasks
 
@@ -115,6 +161,38 @@ python -m hackathon_agents.cli check-models
 ```
 
 When enabled and reachable, high-difficulty or large-context routing requests prefer `snellius_vllm` before falling back to local or hosted models. The repo does not submit Snellius jobs automatically; the generated script is dry-run-safe and contains no credentials.
+
+## Snellius Claude Code Gateway
+
+For shared Claude Code access, generate a SLURM script that starts vLLM behind a LiteLLM Anthropic-compatible gateway:
+
+```bash
+python -m hackathon_agents.cli snellius-gateway-script \
+  --model-checkpoint openai/gpt-oss-120b \
+  --output-dir runs/snellius_gateway \
+  --partition gpu_a100 \
+  --gpus-per-node 1 \
+  --vllm-port 8000 \
+  --gateway-port 4000
+```
+
+On Snellius, keep provider keys and the gateway token in a server-side `.env` next to the generated job, then lock it down:
+
+```bash
+chmod 600 .env
+sbatch run_snellius_gateway.job
+```
+
+After the job reports its compute node, print local Claude Code setup commands:
+
+```bash
+python -m hackathon_agents.cli snellius-client-env \
+  --snellius-user "$USER" \
+  --compute-node gcn31 \
+  --model-alias claude-snellius-local
+```
+
+The generated gateway uses `claude-snellius-local` for the vLLM-served model and `claude-snellius-hosted` for the server-key-backed hosted model. The hosted alias is disabled at job startup if the required key or outbound provider preflight is missing.
 
 ## Review A Paper
 
@@ -188,7 +266,9 @@ Run the mock loop:
 python -m hackathon_agents.cli mechanism-loop \
   --objective "Infer mechanism for photochemical reaction A + B -> P" \
   --rounds 3 \
-  --mode mock
+  --mode mock \
+  --literature-corpus-dir data/literature \
+  --dft-structure-file data/example.xyz
 ```
 
 Run one analysis pass on existing kinetic data:
@@ -211,6 +291,8 @@ Outputs are written to `runs/mechanism_<timestamp>/` or `runs/mechanism_once_<ti
 - `trace.log`
 
 Mock mode uses `MockRobotClient`, `MockHPCClient`, and local mock literature text. The robot mock generates synthetic time-resolved concentration data from a hidden toy mechanism, fits each hypothesis with SciPy `least_squares`, ranks hypotheses, recommends the next experiment, and writes JSON/DOCX reports.
+
+Passing `--literature-corpus-dir` replaces the mock literature prior with local lexical retrieval over `.txt`/`.md` files. Passing `--dft-structure-file` uses those XYZ-style coordinates in generated DFT jobs instead of the built-in toy structure.
 
 Dry-run mode avoids real robot and cluster submissions. It still uses mock kinetic data, but the HPC backend writes SLURM submission scripts under the run directory instead of calling `sbatch`.
 

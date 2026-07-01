@@ -17,6 +17,13 @@ uv sync
 cp .env.example .env
 ```
 
+Use pip for a standard editable install:
+
+```bash
+python -m pip install -e ".[dev]"
+cp .env.example .env
+```
+
 ## Configure Environment
 
 Edit `.env`:
@@ -26,16 +33,17 @@ OPENAI_API_KEY=
 ANTHROPIC_API_KEY=
 LITELLM_MODEL_DEFAULT=local_small
 HACKATHON_RUN_MODE=cheap
+HACKATHON_AGENT_LLM_MODE=auto
 OLLAMA_BIG_HOST=localhost
 OLLAMA_SMALL_HOST=localhost
 ```
 
-Hosted keys are optional if you are running `offline` mode with Ollama. The app should remain functional without internet access as long as local Ollama models are available.
+Hosted keys are optional if you are running `offline` mode with Ollama. `HACKATHON_AGENT_LLM_MODE=auto` uses configured models when reachable and deterministic fallbacks otherwise. Set it to `off` for fully deterministic local smoke tests.
 
 ## Run The Discovery Demo
 
 ```bash
-PYTHONPATH=src python -m hackathon_agents.cli demo \
+hackathon-agents demo \
   "Find promising substrate candidates for reaction X" \
   --run-mode cheap \
   --max-iterations 3 \
@@ -49,6 +57,8 @@ Expected artifacts:
 
 - `state.json`: full structured run state.
 - `report.docx`: scientific report, if `python-docx` is installed.
+- `report.tex`: LaTeX report for paper drafting.
+- `data/memory/project_memory.md`: shared knowledge-transfer timeline across runs.
 - `descriptors.csv`: descriptor table, if RDKit is installed.
 - `qed_plot.png`: simple plot, if plotting succeeds.
 - ORCA input files when ORCA wrapper is enabled.
@@ -56,7 +66,7 @@ Expected artifacts:
 ## Review A Paper
 
 ```bash
-PYTHONPATH=src python -m hackathon_agents.cli review-paper path/to/paper.txt \
+hackathon-agents review-paper path/to/paper.txt \
   --domain chem_bio \
   --focus-question "Are controls and replicates described?"
 ```
@@ -73,7 +83,7 @@ The output is a JSON review artifact with claims, evidence snippets, reproducibi
 ## Check Models
 
 ```bash
-PYTHONPATH=src python -m hackathon_agents.cli check-models
+hackathon-agents check-models
 ```
 
 This checks hosted key presence and pings configured Ollama servers.
@@ -81,15 +91,30 @@ This checks hosted key presence and pings configured Ollama servers.
 ## Benchmark Models
 
 ```bash
-PYTHONPATH=src python -m hackathon_agents.cli benchmark-models
+hackathon-agents benchmark-models
 ```
 
 Benchmark results are saved to `runs/model_benchmark_<date>.json`.
 
+## Benchmark The System
+
+Run deterministic end-to-end benchmark cases that exercise CSV parsing,
+mechanism ranking, descriptor generation, paper review, numeric statistics,
+reporting, criteria checks, and artifact indexing:
+
+```bash
+hackathon-agents benchmark-system
+```
+
+Results are saved under `runs/system_benchmark_<date>/system_benchmark.json`.
+Each case records pass/fail criteria, metrics, duration, warnings, errors, and
+artifacts.
+
 ## Run Tests
 
 ```bash
-PYTHONPATH=src python -m unittest discover -s tests
+pytest -q
+python -m compileall -q src tests
 ```
 
 Some tests are skipped when optional local dependencies such as RDKit or `python-docx` are not installed.
