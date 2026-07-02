@@ -1,0 +1,50 @@
+Design a Novel Linker Chemistry with in-silico proof points
+Background
+Antibody-drug conjugates (ADCs) are a class of targeted
+therapeutics that fuse the precision of monoclonal antibodies
+(mAbs) with the high potency of payloads. ADCs offer several
+strategic advantages for the drug industry: 1. enable targeted
+delivery to diseased tissues to improve the therapeutic index
+and reduce off-target toxicity; 2. allow the use of highly potent
+payloads that would be too toxic systemically; 3. provide
+modular platforms for biomarker-driven patient selection,
+supporting precision medicine. An ADC’s performance hinges
+on three integrated components: the antibody for tumor
+targeting, the payload for bioactivity, and the linker that
+connects the payload to the antibody. Although the linker itself
+does not exhibit the bioactivity or antigen selectivity, it largely
+determines clinical performance of ADC. The linker governs
+plasma stability, pharmacokinetics, and the conditional release
+of the payload at the tumor site. Cleavable linkers respond to
+tumor microenvironment cues (acidic pH, proteases, or
+reducing environments) to release payload after internalization.
+Non-cleavable linkers rely on antibody degradation, producing
+different pharmacology and potentially altered bystander
+effects. Payload diversification beyond traditional cytotoxins is
+expanding the ADC field’s scope and demanding compatibility
+with broader conjugation chemistries and trigger mechanisms.
+This diversification aims to broaden therapeutic windows,
+overcome resistance, and enable combination strategies.
+Problem statement
+Many ADCs suffer from suboptimal drug properties (e.g.,
+instability, aggregation, poor solubility) and pharmacology
+(narrow therapeutic windows, systemic toxicity, and insufficient
+tumor payload delivery) largely due to premature payload
+release or insufficient release at the tumor site. Existing linkers
+often lack tunability to accommodate diverse antibody–payload
+combinations and cannot adapt to heterogeneous tumor
+environments. There is a critical need for next-generation
+linkers that deliver enhanced in vivo stability, precise and
+tunable payload release, and broader compatibility with non-
+traditional payloads.
+Key objectives for linker design include balancing circulation
+stability with efficient tumor- or cell-type–specific release while
+preserving antibody binding and Fc functions. Goals also
+encompass developing tunable cleavage triggers, improving
+aqueous solubility, and enabling robust conjugation chemistries
+across diverse payload classes (including oligonucleotides and
+immunomodulators). Achieving scalable, cost-efficient
+manufacturing with consistent product quality will require
+integrated linker technologies that enable rapid, reproducible
+production and broader therapeutic applicability across
+heterogeneous tumor environments.
