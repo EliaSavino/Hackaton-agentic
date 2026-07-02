@@ -174,14 +174,27 @@ def build_adc_linkinvent_objective(
             )
         )
 
-    # --- Cleavable trigger present (reward) ----------------------------------
-    if profile.require_cleavable_motif and weights["cleavability"] > 0.0:
+    # --- Cleavable trigger: reward, penalize, or ignore (payload-dependent) ---
+    pref = _effective_cleavage_pref(profile)
+    if pref == "reward" and weights["cleavability"] > 0.0:
         scoring.append(
             _component(
                 "MatchingSubstructure",
                 name="cleavable motif present",
                 weight=weights["cleavability"],
                 params={"smarts": list(CLEAVABLE_MOTIF_SMARTS), "use_chirality": False},
+            )
+        )
+    elif pref == "penalize":
+        # Non-cleavable payload (e.g. antibody--oligonucleotide conjugate): a
+        # cleavable motif is a liability, so filter it out (favour non-cleavable,
+        # rigid linkers). CustomAlerts returns 0 on a match -> penalised via the
+        # geometric mean, mirroring the offline subscore inversion below.
+        scoring.append(
+            _component(
+                "CustomAlerts",
+                name="avoid cleavable motif (non-cleavable payload)",
+                params={"smarts": list(CLEAVABLE_MOTIF_SMARTS)},
             )
         )
 
@@ -235,6 +248,15 @@ def score_adc_linker(
         return None, {}
     logp, tpsa, mol_wt, rot_bonds, sa_score = parsed
 
+    pref = _effective_cleavage_pref(profile)
+    has_cleavable = _matches_any(smiles, CLEAVABLE_MOTIF_SMARTS)
+    # For a non-cleavable payload the polarity flips: a cleavable motif is bad, a
+    # rigid non-cleavable linker is good.
+    if pref == "penalize":
+        cleavability = 1.0 if not has_cleavable else 0.2
+    else:  # reward / ignore
+        cleavability = 1.0 if has_cleavable else 0.4
+
     subscores: dict[str, float] = {
         "solubility": round(
             0.7 * _sigmoid_low(logp, profile.target_logp, width=2.0)
@@ -247,7 +269,7 @@ def score_adc_linker(
             max(0.0, min(1.0, (profile.max_sa_score - sa_score) / max(0.1, profile.max_sa_score - 1.0))),
             4,
         ),
-        "cleavability": round(1.0 if _matches_any(smiles, CLEAVABLE_MOTIF_SMARTS) else 0.4, 4),
+        "cleavability": round(cleavability, 4),
         "stability": round(0.0 if _matches_any(smiles, LABILE_ALERT_SMARTS) else 1.0, 4),
         "similarity": 0.5,  # neutral placeholder until the corpus carries linker SMILES
     }
@@ -257,7 +279,7 @@ def score_adc_linker(
         key: subscores[key]
         for key in ADC_GOAL_KEYS
         if weights.get(key, 0.0) > 0.0
-        and not (key == "cleavability" and not profile.require_cleavable_motif)
+        and not (key == "cleavability" and pref == "ignore")
     }
     composite = _weighted_geomean(active, weights)
     # Stability alerts act as a hard filter (like REINVENT CustomAlerts).
@@ -332,6 +354,19 @@ def _weighted_geomean(subscores: dict[str, float], weights: dict[str, float]) ->
         floored = max(1e-6, score)
         acc += weights.get(key, 0.0) * math.log(floored)
     return math.exp(acc / total_w)
+
+
+def _effective_cleavage_pref(profile: ADCGoalProfile) -> str:
+    """Resolve the cleavage-handling regime for a profile.
+
+    ``cleavage_preference`` (payload-aware) wins when set; otherwise fall back to
+    the legacy ``require_cleavable_motif`` toggle ("reward" if requiring a
+    cleavable motif, else "ignore"). Keeps every pre-payload caller unchanged.
+    """
+    pref = getattr(profile, "cleavage_preference", None)
+    if pref in ("reward", "penalize", "ignore"):
+        return pref
+    return "reward" if profile.require_cleavable_motif else "ignore"
 
 
 def _coerce_profile(profile: ADCGoalProfile | dict[str, Any] | None) -> ADCGoalProfile:

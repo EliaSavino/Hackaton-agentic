@@ -42,6 +42,12 @@ class ADCGoalProfile(BaseModel):
     )
     require_cleavable_motif: bool = True
     enforce_stability_alerts: bool = True
+    # Payload-class-aware cleavage handling. ``None`` = legacy behaviour derived
+    # from ``require_cleavable_motif`` ("reward" if True else "ignore"). "penalize"
+    # actively disfavours a cleavable motif (non-cleavable payloads such as
+    # antibody--oligonucleotide conjugates, where a rigid non-cleavable linker is
+    # preferred). Set by ``tools/payload_profiles.profile_for_payload``.
+    cleavage_preference: Literal["reward", "penalize", "ignore"] | None = None
     target_logp: float = 2.0
     mw_low: float = 150.0
     mw_high: float = 600.0

@@ -63,7 +63,8 @@ def run_boltz_panel(stats: dict[str, Any], work_root: Path, *, max_designed: int
     work_root.mkdir(parents=True, exist_ok=True)
     panel: list[tuple[str, str, str]] = []  # (label, kind, smiles)
 
-    # Best designed linker from each protease-cleavable context (cathepsin B relevant).
+    # Best designed linker from each protease-cleavable context (cathepsin B should
+    # recognise these).
     by_ctx: dict[str, dict[str, Any]] = {}
     for c in stats["pooled"]:
         if "Cit" not in c.get("trigger", "") and "Ala" not in c.get("trigger", ""):
@@ -73,6 +74,17 @@ def run_boltz_panel(stats: dict[str, Any], work_root: Path, *, max_designed: int
             by_ctx[key] = c
     for key, c in sorted(by_ctx.items(), key=lambda kv: -(kv[1].get("score") or 0))[:max_designed]:
         panel.append((key, "designed", c["smiles"]))
+
+    # Payload-aware negative control: the oligonucleotide-optimal rigid non-cleavable
+    # design. Cathepsin B should NOT recognise it (low interface ipTM) -- the
+    # structural counterpart of the payload-class ranking flip.
+    neg = None
+    for c in stats["pooled"]:
+        if "rigid" in c.get("trigger", "").lower() or "Non-cleavable-rigid" == c.get("trigger"):
+            if neg is None or (c.get("score") or 0) > (neg.get("score") or 0):
+                neg = c
+    if neg is not None:
+        panel.append((f"{neg['handle']}/Non-cleavable-rigid", "negative", neg["smiles"]))
 
     comm = {x["name"]: x for x in COMMERCIAL_LINKERS}
     for name in _BOLTZ_CONTROLS:

@@ -17,24 +17,32 @@ from typing import Any
 # Grid statistics
 # --------------------------------------------------------------------------- #
 def grid_stats(grid: dict[str, Any]) -> dict[str, Any]:
-    """Per-context best/mean/std across seeds, pooled ranking, seed variance."""
-    by_ctx: dict[tuple[str, str], list[float]] = defaultdict(list)
+    """Per-context best/mean/std across seeds, pooled ranking, seed variance.
+
+    A context is keyed by (handle, trigger, payload) so the payload-class sweep's
+    ranking flips are visible; ``payload`` defaults to ``cytotoxin`` for legacy
+    grids that predate the payload dimension.
+    """
+    by_ctx: dict[tuple[str, str, str], list[float]] = defaultdict(list)
     pooled: list[dict[str, Any]] = []
     real = mock = 0
     for rec in grid.get("records", []):
+        payload = rec.get("payload", "cytotoxin")
         if rec.get("ok") and not rec.get("mock"):
             real += 1
         else:
             mock += 1
         if rec.get("best_score") is not None:
-            by_ctx[(rec["handle"], rec["trigger"])].append(rec["best_score"])
+            by_ctx[(rec["handle"], rec["trigger"], payload)].append(rec["best_score"])
         for cand in rec.get("top", []):
-            pooled.append({**cand, "handle": rec["handle"], "trigger": rec["trigger"], "seed": rec.get("seed")})
+            pooled.append({**cand, "handle": rec["handle"], "trigger": rec["trigger"],
+                           "payload": payload, "seed": rec.get("seed")})
     contexts = []
-    for (handle, trigger), scores in by_ctx.items():
+    for (handle, trigger, payload), scores in by_ctx.items():
         contexts.append({
             "handle": handle,
             "trigger": trigger,
+            "payload": payload,
             "best": max(scores),
             "mean": round(statistics.mean(scores), 4),
             "std": round(statistics.pstdev(scores), 4) if len(scores) > 1 else 0.0,
@@ -73,36 +81,74 @@ def render_figures(
 
     handles = grid.get("handles", [])
     triggers = grid.get("triggers", [])
-    ctx_lookup = {(c["handle"], c["trigger"]): c for c in stats["contexts"]}
+    ctx_lookup = {(c["handle"], c["trigger"], c.get("payload", "cytotoxin")): c for c in stats["contexts"]}
 
-    # Fig 1 — grid heatmap: mean best-score per (handle x trigger).
+    # Fig 1 — conjugation-chemistry heatmap: mean best-score per (handle x trigger),
+    # for the cytotoxin conjugation sweep (Block 1). Only handles/triggers present
+    # under the cytotoxin payload are shown.
     try:
-        mat = np.full((len(handles), len(triggers)), np.nan)
-        for i, h in enumerate(handles):
-            for j, t in enumerate(triggers):
-                c = ctx_lookup.get((h, t))
+        h_present = [h for h in handles if any((h, t, "cytotoxin") in ctx_lookup for t in triggers)]
+        t_present = [t for t in triggers if any((h, t, "cytotoxin") in ctx_lookup for h in h_present)]
+        mat = np.full((len(h_present), len(t_present)), np.nan)
+        for i, h in enumerate(h_present):
+            for j, t in enumerate(t_present):
+                c = ctx_lookup.get((h, t, "cytotoxin"))
                 if c:
                     mat[i, j] = c["mean"]
         fig, ax = plt.subplots(figsize=(6.8, 4.2))
         im = ax.imshow(mat, aspect="auto", cmap="viridis", vmin=0, vmax=max(0.3, np.nanmax(mat)))
-        ax.set_xticks(range(len(triggers))); ax.set_xticklabels(triggers, rotation=20, ha="right", fontsize=9)
-        ax.set_yticks(range(len(handles))); ax.set_yticklabels(handles, fontsize=9)
-        for i in range(len(handles)):
-            for j in range(len(triggers)):
+        ax.set_xticks(range(len(t_present))); ax.set_xticklabels(t_present, rotation=20, ha="right", fontsize=9)
+        ax.set_yticks(range(len(h_present))); ax.set_yticklabels(h_present, fontsize=9)
+        for i in range(len(h_present)):
+            for j in range(len(t_present)):
                 if not np.isnan(mat[i, j]):
                     ax.text(j, i, f"{mat[i, j]:.2f}", ha="center", va="center",
                             color="white" if mat[i, j] < 0.4 else "black", fontsize=8)
-        ax.set_title("Mean composite score across seeds (conjugation x trigger)")
+        ax.set_title("Cytotoxin sweep: mean composite (conjugation x trigger)")
         fig.colorbar(im, ax=ax, shrink=0.85, label="mean best composite")
         fig.tight_layout(); p = figdir / "fig_grid_heatmap.png"; fig.savefig(p, dpi=200); plt.close(fig)
         out["heatmap"] = p
     except Exception:
         pass
 
+    # Fig 1b — payload-class ranking flip: for the shared Block-2 trigger panel,
+    # mean composite grouped by payload class. The optimum moves from cleavable
+    # (cytotoxin) to non-cleavable-rigid (oligonucleotide).
+    try:
+        payloads = [p for p in grid.get("payloads", []) if p != "cytotoxin"] or []
+        payloads = ["cytotoxin"] + [p for p in grid.get("payloads", []) if p != "cytotoxin"]
+        payloads = [p for p in payloads if any(c.get("payload") == p for c in stats["contexts"])]
+        # Trigger panel = triggers that appear under a non-cytotoxin payload.
+        panel_triggers = list(dict.fromkeys(
+            c["trigger"] for c in stats["contexts"] if c.get("payload") in payloads and c.get("payload") != "cytotoxin"
+        ))
+        # Representative handle for the flip figure (first Block-2 handle present).
+        flip_handle = next((h for h in handles if any(
+            (h, t, p) in ctx_lookup for t in panel_triggers for p in payloads)), None)
+        if len(payloads) >= 2 and panel_triggers and flip_handle:
+            colors = {"cytotoxin": "#3b7dd8", "oligonucleotide": "#5aa469", "immunomodulator": "#d1495b"}
+            x = np.arange(len(panel_triggers)); width = 0.8 / max(1, len(payloads))
+            fig, ax = plt.subplots(figsize=(7.0, 3.9))
+            for k, p in enumerate(payloads):
+                vals = [ (ctx_lookup.get((flip_handle, t, p)) or {}).get("mean", np.nan) for t in panel_triggers ]
+                ax.bar(x + k * width, vals, width, label=p, color=colors.get(p, None), edgecolor="black", linewidth=0.4)
+            ax.set_xticks(x + width * (len(payloads) - 1) / 2)
+            ax.set_xticklabels(panel_triggers, rotation=12, ha="right", fontsize=8)
+            ax.set_ylabel("mean composite"); ax.set_ylim(0, 1.0)
+            ax.set_title(f"Payload-class ranking flip ({flip_handle} handle)")
+            ax.legend(fontsize=8, title="payload", loc="upper right")
+            fig.tight_layout(); p_ = figdir / "fig_payload_flip.png"; fig.savefig(p_, dpi=200); plt.close(fig)
+            out["payload_flip"] = p_
+    except Exception:
+        pass
+
     # Fig 2 — per-context best with seed error bars (top 12 contexts).
     try:
         top = stats["contexts"][:12]
-        labels = [f"{c['handle'][:8]}/{c['trigger'][:7]}" for c in top]
+        def _clab(c):
+            tag = "" if c.get("payload", "cytotoxin") == "cytotoxin" else f"[{c['payload'][:4]}]"
+            return f"{c['handle'][:7]}/{c['trigger'][:6]}{tag}"
+        labels = [_clab(c) for c in top]
         means = [c["mean"] for c in top]; errs = [c["std"] for c in top]
         fig, ax = plt.subplots(figsize=(7.0, 3.8))
         x = range(len(top))
@@ -156,13 +202,15 @@ def render_figures(
             rows = [b for b in boltz if b.get("iptm") is not None and b.get("binding_affinity_kd_nm")]
             if rows:
                 fig, ax = plt.subplots(figsize=(6.2, 4.0))
+                _style = {
+                    "commercial": ("*", "#d1495b", 90, 5),
+                    "negative": ("s", "#8d8d8d", 60, 4),
+                    "designed": ("o", "#3b7dd8", 55, 3),
+                }
                 for b in rows:
-                    is_comm = b.get("kind") == "commercial"
-                    ax.scatter(b["binding_affinity_kd_nm"], b["iptm"],
-                               s=90 if is_comm else 55,
-                               marker="*" if is_comm else "o",
-                               color="#d1495b" if is_comm else "#3b7dd8",
-                               edgecolor="black", linewidth=0.5, zorder=5 if is_comm else 3)
+                    marker, color, size, z = _style.get(b.get("kind"), _style["designed"])
+                    ax.scatter(b["binding_affinity_kd_nm"], b["iptm"], s=size, marker=marker,
+                               color=color, edgecolor="black", linewidth=0.5, zorder=z)
                     ax.annotate(b.get("label", "")[:14], (b["binding_affinity_kd_nm"], b["iptm"]),
                                 fontsize=6, xytext=(3, 3), textcoords="offset points")
                 ax.set_xscale("log")

@@ -124,6 +124,61 @@ python -c "from hackathon_agents.demos.adc_grid import run_grid; run_grid(seeds=
 python -c "from hackathon_agents.demos.adc_study import finalize_study; finalize_study('runs/grid_war2/grid.json')"
 ```
 
+## ROUND 3 — Payload-class-aware design (2026-07-02, chemist review)
+
+Chemist critique of Study 2: the scorer was implicitly built for **cytotoxin** delivery;
+it must handle **non-traditional payloads** whose linker requirements invert. We made the
+whole pipeline **payload-aware**. Deliverables in `deliverables/study2/`. Plan in
+`PLAN_STUDY2.md`.
+
+**The idea:** an agent reads the literature per payload class and emits a design rule that
+re-parameterises a fixed scorer:
+- **Cytotoxin** → reward cleavable (bystander); moderate rigidity; standard stability.
+- **Oligonucleotide (ARC, siRNA)** → **penalise cleavable → favour rigid non-cleavable**
+  (sulfo-SMCC), high stability. [Bioconjugate Chem. 2025]
+- **Immunomodulator (ISAC, TLR7/8)** → reward cleavable **but stability paramount** (systemic
+  release = cytokine toxicity). [Mol. Pharm. 2022; Front. Pharmacol. 2023; J. Med. Chem. 2025]
+
+**New / changed code:**
+- `schemas/linkers.py` — `ADCGoalProfile.cleavage_preference ∈ {reward,penalize,ignore}|None`
+  (None = legacy, derives from `require_cleavable_motif`). Backward compatible.
+- `tools/adc_linker_objective.py` — `_effective_cleavage_pref()`; `penalize` emits a
+  `CustomAlerts` on the cleavable SMARTS (REINVENT) and inverts the offline cleavability
+  subscore. `reward`/`ignore` unchanged from before.
+- `tools/payload_profiles.py` **(new)** — `PAYLOAD_CLASSES` (3 literature-cited rules),
+  `resolve_cleavage`, `profile_for_payload`, `derive_payload_rules` (the agentic literature
+  step: LLM-derived with an API key, else literature-encoded; this run = encoded).
+- `demos/adc_grid.py` — added **Tetrazine** + **TCO** (IEDDA) handles and a
+  **Non-cleavable-rigid** (sulfo-SMCC) trigger; generalised to 3-D cells
+  `(handle,trigger,payload)` with an explicit `cells=` argument; payload in the job key /
+  records so the sweep stays resumable.
+- `demos/adc_study2.py` **(new)** — `build_study2_cells()` = 38 curated deduped cells
+  (Block 1 conjugation sweep + Block 2 payload sweep); `run_study2_grid(seeds=(0,1), ...)`.
+- `tools/adc_analysis.py` — contexts keyed by `(handle,trigger,payload)`; new
+  **payload-flip** figure; Boltz negative-control styling.
+- `demos/adc_study.py` — Boltz panel adds a payload-aware **negative control** (the
+  oligo-optimal rigid non-cleavable design; cathepsin B should NOT recognise it).
+- `tools/adc_study_paper.py` — payload-aware paper (ARC/ISAC intro biology, payload-rules
+  table = the agent's output, payload-flip figure). **5-page main + 3-page supp.**
+- `tests/test_payload_profiles.py` **(new, 10 tests)**.
+
+**IMPORTANT honesty guard (do not overclaim):** the compact non-cleavable cap wins on pure
+drug-likeness for *every* payload (physicochemistry dominates), so we do **not** claim
+"cleavable wins for cytotoxins". The genuine, demonstrable result is that the payload rule
+**re-scores the same cleavable context** — e.g. Maleimide/Val-Cit ≈ 0.52 (cytotoxin) →
+≈ 0.39 (oligonucleotide, penalised) — and the rigid sulfo-SMCC cap is the unambiguous
+oligonucleotide optimum. The paper is written around this honest framing.
+
+**Re-run:**
+```bash
+# clean orphans, then launch detached + resumable (workers=5, steps=40, batch=32, 2 seeds)
+ssh pod 'pkill -9 -f reinvent || true'
+python -c "from hackathon_agents.demos.adc_study2 import run_study2_grid; run_study2_grid(resume_dir='runs/grid_war3')"
+python -c "from hackathon_agents.demos.adc_study import finalize_study; finalize_study('runs/grid_war3/grid.json')"
+```
+
+**RESULTS: _(filled after the grid + finalize complete — see `deliverables/study2/README.md`)_**
+
 ## Fast smoke test (confirm the pod + REINVENT still work)
 
 ```bash
