@@ -506,9 +506,11 @@
         "size": 1.0,
         "flexibility": 0.2,
         "synthesizability": 1.0,
-        "stability": 0.7,
+        "stability": 1.0,
         "cleavability": 1.0
-      }
+      },
+      "stability_gated": true,
+      "stability_evidence_n": 0
     },
     "confidence": {
       "score": 0.821,

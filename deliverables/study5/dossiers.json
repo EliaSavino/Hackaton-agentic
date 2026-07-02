@@ -460,7 +460,7 @@
         "assembled_smiles": "CC(NC(=O)C(NC(=O)CC(N)C(=O)NCC(=O)N1C(=O)C=CC1=O)C(C)C)C(=O)Nc1ccc(CO)cc1.CC(C)COCc1cnc2c(n1)n(cn2)CCO",
         "handle": "Maleimide",
         "trigger": "Val-Ala-PABC",
-        "composite_score": 0.7355,
+        "composite_score": 0.7347,
         "subscores": {
           "solubility": 0.9148,
           "size": 1.0,
@@ -549,7 +549,7 @@
         "assembled_smiles": "CC(NC(=O)C(NC(=O)CS(=O)(=O)CC(=O)NCC(=O)N1C(=O)C=CC1=O)C(C)C)C(=O)Nc1ccc(CO)cc1.CC(C)COCc1cnc2c(n1)n(cn2)CCO",
         "handle": "Maleimide",
         "trigger": "Val-Ala-PABC",
-        "composite_score": 0.7348,
+        "composite_score": 0.7341,
         "subscores": {
           "solubility": 0.9255,
           "size": 1.0,
@@ -638,7 +638,7 @@
         "assembled_smiles": "CC(NC(=O)C(NC(=O)C=CC(=O)NCC(=O)NCC(=O)N1C(=O)C=CC1=O)C(C)C)C(=O)Nc1ccc(CO)cc1.CC(C)COCc1cnc2c(n1)n(cn2)CCO",
         "handle": "Maleimide",
         "trigger": "Val-Ala-PABC",
-        "composite_score": 0.7334,
+        "composite_score": 0.7327,
         "subscores": {
           "solubility": 0.9164,
           "size": 1.0,
@@ -728,7 +728,7 @@
         "assembled_smiles": "CC(NC(=O)C(NC(=O)CCC(=O)NCC(=O)NCC(=O)N1C(=O)C=CC1=O)C(C)C)C(=O)Nc1ccc(CO)cc1.CC(C)COCc1cnc2c(n1)n(cn2)CCO",
         "handle": "Maleimide",
         "trigger": "Val-Ala-PABC",
-        "composite_score": 0.7307,
+        "composite_score": 0.7302,
         "subscores": {
           "solubility": 0.9078,
           "size": 1.0,
@@ -818,7 +818,7 @@
         "assembled_smiles": "CC(NC(=O)C(NC(=O)C(N)CCC(=O)NCC(=O)N1C(=O)C=CC1=O)C(C)C)C(=O)Nc1ccc(CO)cc1.CC(C)COCc1cnc2c(n1)n(cn2)CCO",
         "handle": "Maleimide",
         "trigger": "Val-Ala-PABC",
-        "composite_score": 0.7297,
+        "composite_score": 0.7293,
         "subscores": {
           "solubility": 0.8991,
           "size": 1.0,

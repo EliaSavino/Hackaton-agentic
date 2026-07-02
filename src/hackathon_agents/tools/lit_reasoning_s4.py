@@ -307,11 +307,48 @@ def normalize_rule(rule: dict[str, Any]) -> dict[str, Any]:
     return {"cleavage_preference": canon_cleave, "rigidity": canon_rigid, "stability_priority": canon_stab}
 
 
-def compile_objective(rule: dict[str, Any]) -> dict[str, Any]:
+# Minimum number of grounded exemplars that must *state a plasma-stability level*
+# for the LLM's stability sub-decision to be trusted over the encoded domain prior.
+STABILITY_EVIDENCE_MIN = 3
+_STAB_WEIGHT = {"paramount": 1.0, "high": 0.85, "standard": 0.7}
+_STAB_UNSPEC = {"", "unspecified", "unknown", "none", "n/a", "na", "not specified"}
+
+
+def _stability_evidence_count(exemplars: list[dict[str, Any]] | None) -> int:
+    """Grounded exemplars that state a definite plasma-stability level (not 'unspecified')."""
+    return sum(
+        1 for e in (exemplars or [])
+        if e.get("grounded") and str(e.get("plasma_stability", "")).strip().lower() not in _STAB_UNSPEC
+    )
+
+
+def _domain_stability_floor(payload_class: str | None) -> float | None:
+    """The encoded domain-prior stability weight for a class (the safety floor)."""
+    if not payload_class:
+        return None
+    from hackathon_agents.tools.payload_profiles import PAYLOAD_CLASSES
+    spec = PAYLOAD_CLASSES.get(payload_class)
+    if not spec:
+        return None
+    return _STAB_WEIGHT.get(str(spec.get("stability_priority", "")).lower())
+
+
+def compile_objective(
+    rule: dict[str, Any],
+    *,
+    payload_class: str | None = None,
+    exemplars: list[dict[str, Any]] | None = None,
+) -> dict[str, Any]:
     """Compile the derived rule into concrete scorer weights + cleavage regime.
 
     Mirrors ``payload_profiles.profile_for_payload`` but is driven by the *LLM's* rule,
     so the optimisation objective is genuinely a function of the agent's reasoning.
+
+    ``payload_class``/``exemplars`` enable a **low-evidence safety gate** (Reviewer IX.4):
+    a safety-critical sub-decision (plasma stability) must not ship under-weighted just
+    because the LLM downgraded it on thin evidence. When the class states fewer than
+    ``STABILITY_EVIDENCE_MIN`` grounded plasma-stability exemplars, the stability weight
+    is floored to the encoded domain prior (never lowered) rather than the model default.
     """
     canon = normalize_rule(rule)
     weights = {"solubility": 1.0, "size": 1.0, "flexibility": 0.5,
@@ -340,12 +377,24 @@ def compile_objective(rule: dict[str, Any]) -> dict[str, Any]:
     elif canon["stability_priority"] == "high":
         weights["stability"] = 0.85
 
+    # Low-evidence safety gate: thin plasma-stability evidence -> fall back to the
+    # encoded domain prior (e.g. ISAC/immunomodulator is 'paramount' because premature
+    # systemic TLR7/8 release drives cytokine-release syndrome).
+    stab_evidence_n = _stability_evidence_count(exemplars)
+    floor = _domain_stability_floor(payload_class)
+    stability_gated = False
+    if floor is not None and stab_evidence_n < STABILITY_EVIDENCE_MIN and floor > weights["stability"]:
+        weights["stability"] = floor
+        stability_gated = True
+
     return {
         "canonical_spec": canon,
         "cleavage_regime": pref,
         "require_cleavable_motif": require_cleavable,
         "max_rot_bonds": max_rot_bonds,
         "weights": weights,
+        "stability_gated": stability_gated,
+        "stability_evidence_n": stab_evidence_n,
     }
 
 
@@ -422,7 +471,8 @@ def build_reasoning_chain(
     exemplars, ex_ok = extract_exemplars(client, payload_class, passages)
     rule, rule_ok = derive_rule(client, payload_class, exemplars, passages)
     llm_ok = ex_ok and rule_ok and rule is not None
-    objective = compile_objective(rule) if rule is not None else None
+    objective = (compile_objective(rule, payload_class=payload_class, exemplars=exemplars)
+                 if rule is not None else None)
     confidence = rule_confidence(rule, exemplars, passages)
 
     return {

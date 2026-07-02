@@ -205,7 +205,7 @@
       "flexibility": 0.2,
       "synthesizability": 1.0,
       "cleavability": 1.0,
-      "stability": 0.7,
+      "stability": 1.0,
       "similarity": 0.0
     },
     "mock": false,
@@ -213,11 +213,11 @@
     "error": null,
     "n_generated": 25,
     "n_assembled": 25,
-    "best_score": 0.7355,
+    "best_score": 0.7347,
     "top": [
       {
         "smiles": "CC(NC(=O)C(NC(=O)CC(N)C(=O)NCC(=O)N1C(=O)C=CC1=O)C(C)C)C(=O)Nc1ccc(CO)cc1",
-        "score": 0.7355,
+        "score": 0.7347,
         "subscores": {
           "solubility": 0.9148,
           "size": 1.0,
@@ -231,7 +231,7 @@
       },
       {
         "smiles": "CC(NC(=O)C(NC(=O)CS(=O)(=O)CC(=O)NCC(=O)N1C(=O)C=CC1=O)C(C)C)C(=O)Nc1ccc(CO)cc1",
-        "score": 0.7348,
+        "score": 0.7341,
         "subscores": {
           "solubility": 0.9255,
           "size": 1.0,
@@ -245,7 +245,7 @@
       },
       {
         "smiles": "CC(NC(=O)C(NC(=O)C=CC(=O)NCC(=O)NCC(=O)N1C(=O)C=CC1=O)C(C)C)C(=O)Nc1ccc(CO)cc1",
-        "score": 0.7334,
+        "score": 0.7327,
         "subscores": {
           "solubility": 0.9164,
           "size": 1.0,
@@ -259,7 +259,7 @@
       },
       {
         "smiles": "CC(NC(=O)C(NC(=O)CCC(=O)NCC(=O)NCC(=O)N1C(=O)C=CC1=O)C(C)C)C(=O)Nc1ccc(CO)cc1",
-        "score": 0.7307,
+        "score": 0.7302,
         "subscores": {
           "solubility": 0.9078,
           "size": 1.0,
@@ -273,7 +273,7 @@
       },
       {
         "smiles": "CC(NC(=O)C(NC(=O)C(N)CCC(=O)NCC(=O)N1C(=O)C=CC1=O)C(C)C)C(=O)Nc1ccc(CO)cc1",
-        "score": 0.7297,
+        "score": 0.7293,
         "subscores": {
           "solubility": 0.8991,
           "size": 1.0,
@@ -287,7 +287,7 @@
       },
       {
         "smiles": "CC(NC(=O)C(NC(=O)CNC(=O)C(N)CC(=O)NCC(=O)N1C(=O)C=CC1=O)C(C)C)C(=O)Nc1ccc(CO)cc1",
-        "score": 0.7284,
+        "score": 0.7281,
         "subscores": {
           "solubility": 0.9427,
           "size": 0.9964,
@@ -301,7 +301,7 @@
       },
       {
         "smiles": "CC(NC(=O)C(NC(=O)CC(N)C(=O)NCC(=O)NCC(=O)N1C(=O)C=CC1=O)C(C)C)C(=O)Nc1ccc(CO)cc1",
-        "score": 0.7283,
+        "score": 0.728,
         "subscores": {
           "solubility": 0.9427,
           "size": 0.9964,
@@ -315,7 +315,7 @@
       },
       {
         "smiles": "CC(NC(=O)C=CC(=O)NCC(=O)N1C(=O)C=CC1=O)C(=O)NC(C(=O)NC(C)C(=O)Nc1ccc(CO)cc1)C(C)C",
-        "score": 0.7258,
+        "score": 0.7256,
         "subscores": {
           "solubility": 0.9011,
           "size": 1.0,
@@ -343,7 +343,7 @@
       },
       {
         "smiles": "CC(NC(=O)C(NC(=O)C=C(N)CCC(=O)NCC(=O)N1C(=O)C=CC1=O)C(C)C)C(=O)Nc1ccc(CO)cc1",
-        "score": 0.7229,
+        "score": 0.7228,
         "subscores": {
           "solubility": 0.8747,
           "size": 1.0,
@@ -383,7 +383,9 @@
         },
         "descriptors": {}
       }
-    ]
+    ],
+    "stability_gated": true,
+    "stability_evidence_n": 0
   },
   "oligonucleotide": {
     "payload_class": "oligonucleotide",

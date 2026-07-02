@@ -119,7 +119,7 @@ def build_main_tex(art: dict[str, Any]) -> str:
         outcome = ("flips, contested" if fdir != hdir else "recovers")
         ho_rows.append(
             f"{_SHORT[cls]} & {_cite(h['withheld'][0])} & {fdir} ({fullc[cls]['score']:.2f}) & "
-            f"{hdir} ({heldc[cls]['score']:.2f}) & {comp['n_cleavable']}/{comp['n_non_cleavable']} & {outcome} \\\\")
+            f"{hdir} ({heldc[cls]['score']:.2f}) & {comp['n_grounded']} ({comp['n_cleavable']}/{comp['n_non_cleavable']}) & {outcome} \\\\")
     ho_table = "\n".join(ho_rows)
 
     title = r"\textbf{An Autonomous Agent that Derives ADC Linker Rules from the Literature, Designs the Molecules, and Flags When the Field Disagrees}"
@@ -239,7 +239,15 @@ def build_main_tex(art: dict[str, Any]) -> str:
         "\\subsection{Held-out test: robust rules and a contested one}\n"
         "The leave-one-paper-out test discriminates (Figure~\\ref{fig:heldout}, Table~\\ref{tab:heldout}). "
         "The cytotoxin and ISAC rules are robust: their grounded exemplars are unanimously cleavable, "
-        "so withholding a paper leaves the derived rule and its high confidence intact. The ARC rule "
+        "so withholding a paper leaves the derived rule and its high confidence intact. ISAC's "
+        "robustness, however, reflects evidence \\emph{volume}, not tested consensus: with a single "
+        "cleavage-labelled exemplar ($n_c{+}n_n{=}1$) it cannot be flagged contested by construction, so "
+        "its 0.83 is a lower bound on uncertainty. That same thin evidence let the model downgrade ISAC's "
+        "plasma-stability priority to \\emph{standard} (from zero stability-labelled exemplars), which "
+        "would have shipped a TLR7/8 agonist---whose premature systemic release drives cytokine-release "
+        "syndrome---at the lowest stability weight of the three classes; a low-evidence safety gate floors "
+        "it to the encoded domain prior instead (paramount, Figure~\\ref{fig:steer}; SI), extending the "
+        "confidence machinery to the safety-critical stability sub-rule. The ARC rule "
         "is contested. With the full corpus the top-retrieved siRNA papers give rigid non-cleavable. "
         "Withhold them, and from the clinical antibody-oligonucleotide literature (DYNE-101/251, "
         "AOC-1001) the agent derives protease-cleavable Val-Cit instead---its direction flips, and "
@@ -270,12 +278,15 @@ def build_main_tex(art: dict[str, Any]) -> str:
         f"weaker ({kd_olig:.0f}\\,nM), a separation beyond that noise floor. The prediction is thus both literature-derived and "
         "structurally feasible, and directly falsifiable: a wet-lab comparison of Val-Cit versus "
         "sulfo-SMCC ARC linkers on protease-mediated release and potency would confirm or refute it.\n\n"
-        "\\begin{table}[t]\\centering\\caption{Leave-one-paper-out. Confidence is disagreement-aware; "
-        "``evidence'' is the grounded cleavable/non-cleavable split. The ARC rule flips direction and "
-        "loses confidence because its evidence is genuinely divided.}\\label{tab:heldout}\\footnotesize\n"
+        "\\begin{table}[t]\\centering\\caption{Leave-one-paper-out. Confidence is disagreement-aware. The "
+        "evidence column reports $n$, the total grounded exemplars (which sets $E=\\min(1,n/6)$), and in "
+        "parentheses the cleavable/non-cleavable split among the cleavage-labelled ones (which sets the "
+        "consensus $\\kappa$); e.g.\\ ISAC $5\\,(1/0)$ gives $E=5/6$, $\\kappa=1$, $C=0.83$. The ARC rule "
+        "flips direction and loses confidence because its evidence is genuinely divided ($4/2$).}"
+        "\\label{tab:heldout}\\footnotesize\n"
         "\\setlength{\\tabcolsep}{4pt}\n"
         "\\begin{tabular}{l l c c c l}\\toprule\n"
-        "Class & Withheld & Full-corpus & Held-out & Evidence & Outcome \\\\ \\midrule\n"
+        "Class & Withheld & Full-corpus & Held-out & $n$ (c/n) & Outcome \\\\ \\midrule\n"
         f"{ho_table}\n\\bottomrule\\end{{tabular}}\\end{{table}}\n\n"
         "\\subsection{Structural recognition}\n"
         f"The rule-generated Val-Cit cytotoxin design co-folds tightly with cathepsin~B (predicted "
@@ -286,8 +297,10 @@ def build_main_tex(art: dict[str, Any]) -> str:
         "not cleavage.\n\n"
         "\\subsection{Actionable designs}\n"
         "Table~\\ref{tab:short} gives one representative generated design per class (all fifteen, with "
-        "dossiers---route, cost, failure modes, validation---in the SI). Structures are drawn with "
-        "SMARTS-detected handle/scissile/spacer highlights (Figure~\\ref{fig:journey})."
+        "dossiers---route, cost, failure modes, validation---in the SI); Figure~\\ref{fig:gallery} shows "
+        "example trial molecules from the generated pool. Each is a real REINVENT design that carries its "
+        "class motif by construction (Val-Cit for cytotoxin, Val-Ala for ISAC, a rigid DBCO cap for ARC), "
+        "drawn with SMARTS-detected handle/scissile/spacer highlights."
     )
 
     discussion = (
@@ -303,12 +316,12 @@ def build_main_tex(art: dict[str, Any]) -> str:
         "\\emph{Limitations.} The "
         "complexity index is a count-based proxy, not a retrosynthetic route (AiZynthFinder is the "
         "planned upgrade); the co-fold places linker and payload as co-present ligands, not a covalent "
-        "construct; the retrieval is lexical; and generation samples 25 designs per class. Each is "
-        "tagged, not hidden."
+        "construct; the retrieval is lexical; and generation samples 25 designs per class (15 shortlisted, "
+        "five per class). Each is tagged, not hidden."
     )
 
     conclusion = (
-        "An autonomous agent derived payload-class ADC-linker rules from 31 papers, used them to "
+        f"An autonomous agent derived payload-class ADC-linker rules from {n_docs} papers, used them to "
         "generate synthesisable linkers, and, under a held-out test, distinguished robust rules from a "
         "genuinely contested one---surfacing an unresolved question in ARC linker design and lowering "
         "its confidence where the literature divides. The approach points toward an autonomous "
@@ -330,13 +343,14 @@ def build_main_tex(art: dict[str, Any]) -> str:
             r"\section{Methods}" + methods,
             r"\section{Results}" + results,
             r"\begin{figure}[t]\centering\includegraphics[width=0.74\linewidth]{fig2_heldout.png}\caption{Held-out test. Top: full-corpus vs held-out confidence (disagreement-aware); the ARC rule flips (red) while cytotoxin/ISAC recover (green). Bottom: the grounded-evidence split that explains it---ARC is 4:2 (contested), the others unanimous.}\label{fig:heldout}\end{figure}",
-            r"\begin{figure}[t]\centering\includegraphics[width=0.86\linewidth]{fig3_rules_steer.png}\caption{The rules steer the chemistry. Left: the compiled objective weights differ by class. Right: the generated designs separate by class, driven mainly by the rigidity knob (rotatable bonds); the cleavable-motif axis is set by the welded trigger.}\label{fig:steer}\end{figure}",
+            r"\begin{figure}[t]\centering\includegraphics[width=0.9\linewidth]{fig3_rules_steer.png}\caption{The rules steer the chemistry. Left: the compiled objective weights---a deterministic rule-compilation (a heuristic keyed by the agent's derived category, effectively three buckets, not continuously tuned). The ``rigidity'' term rewards \emph{fewer} rotatable bonds; the real separator is the per-class rotatable-bond setpoint (rot$\leq$5/10/14), shown by each class. ISAC's stability weight is floored to paramount by the low-evidence safety gate. Right: the generated designs separate by class, driven mainly by the rigidity setpoint (x); y is the per-molecule Ertl SA subscore (a real quantity, not jitter).}\label{fig:steer}\end{figure}",
             r"\begin{figure}[t]\centering"
             r"\begin{minipage}[t]{0.49\linewidth}\centering\includegraphics[width=\linewidth]{fig5_sensitivity.png}"
             r"\caption{Stress-test of the confidence metric: varying retrieval depth (top-$k$) leaves each class's confidence stable---the ARC rule stays contested ($\approx$0.33) at every $k$. Reproducible, not a lucky $k$.}\label{fig:sens}\end{minipage}\hfill"
             r"\begin{minipage}[t]{0.49\linewidth}\centering\includegraphics[width=\linewidth]{fig4_cofold.png}"
             r"\caption{Cathepsin-B co-fold (affinity indexes recognition, not cleavage). The cleavable Val-Cit designs (cytotoxin, and the held-out-derived ARC linker) are recognised in the clinical-substrate regime; the rigid ARC design binds $>$10$\times$ weaker---the in-silico feasibility proof.}\label{fig:cofold}\end{minipage}"
             r"\end{figure}",
+            r"\begin{figure}[t]\centering\includegraphics[width=0.8\linewidth]{fig6_gallery.png}\caption{Example generated (trial) linkers from the pool, two per payload class. Every molecule is a real REINVENT design carrying its literature-derived motif by construction; handle (blue), scissile bond (red) and spacer (green) are SMARTS-detected. The ARC designs (bottom) carry the rigid non-cleavable DBCO cap---no scissile bond---while the cytotoxin/ISAC designs carry cleavable Val-Cit/Val-Ala dipeptides.}\label{fig:gallery}\end{figure}",
             _short_table(dossiers),
             r"\section{Discussion}" + discussion,
             r"\section{Conclusion}" + conclusion, ack, BIB, r"\end{document}"]
@@ -379,13 +393,24 @@ def build_supp_tex(art: dict[str, Any]) -> str:
     body.append(r"\section{Full reasoning chains and disagreement-aware confidence}")
     for cls in ("cytotoxin", "oligonucleotide", "immunomodulator"):
         ch = chains[cls]; rule = ch.get("rule", {}) or {}; c = fullc[cls]; comp = c["composition"]
+        obj = ch.get("objective") or {}
         body.append(r"\subsection{" + cls.capitalize() + "}")
+        gate_note = ""
+        if obj.get("stability_gated"):
+            gate_note = (
+                f" \\emph{{Low-evidence safety gate:}} the LLM derived stability\\_priority="
+                f"\\textbf{{{_tex_escape(str(rule.get('stability_priority','?')))}}} from "
+                f"{obj.get('stability_evidence_n',0)} grounded plasma-stability exemplars; because that is "
+                f"below the evidence threshold, the compiler floored the stability weight to the encoded "
+                f"domain prior (paramount, weight {obj.get('weights',{}).get('stability','?')}) rather than "
+                f"shipping the thinly-evidenced downgrade for a safety-critical decision.")
         body.append(f"Retrieved {ch.get('n_passages',0)} passages; grounded exemplars split "
                     f"{comp['n_cleavable']} cleavable / {comp['n_non_cleavable']} non-cleavable "
                     f"({'contested' if c['contested'] else 'unanimous'}); disagreement-aware confidence "
                     f"{c['score']:.2f}. Derived rule: cleavage=\\textbf{{{_tex_escape(rule.get('cleavage_preference','?'))}}}, "
                     f"rigidity={_tex_escape(rule.get('rigidity','?'))}. self\\_confidence (LLM self-report, varied): "
-                    f"{rule.get('self_confidence','?')}. Rationale: {_tex_escape((rule.get('rationale') or '')[:460])}")
+                    f"{rule.get('self_confidence','?')}. Rationale: {_tex_escape((rule.get('rationale') or '')[:460])}"
+                    + gate_note)
 
     body.append(r"\section{Held-out details}")
     for cls in ("cytotoxin", "immunomodulator", "oligonucleotide"):

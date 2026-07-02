@@ -1,0 +1,182 @@
+{
+  "topk": {
+    "cytotoxin": {
+      "6": {
+        "score": 0.6,
+        "consensus": 0.8,
+        "contested": false,
+        "modal": "cleavable",
+        "n_cleavable": 12,
+        "n_non_cleavable": 3,
+        "n_grounded": 15,
+        "llm_ok": true
+      },
+      "8": {
+        "score": 0.6,
+        "consensus": 0.8,
+        "contested": false,
+        "modal": "cleavable",
+        "n_cleavable": 12,
+        "n_non_cleavable": 3,
+        "n_grounded": 15,
+        "llm_ok": true
+      },
+      "10": {
+        "score": 0.572,
+        "consensus": 0.786,
+        "contested": false,
+        "modal": "cleavable",
+        "n_cleavable": 11,
+        "n_non_cleavable": 3,
+        "n_grounded": 14,
+        "llm_ok": true
+      },
+      "12": {
+        "score": 0.6,
+        "consensus": 0.8,
+        "contested": false,
+        "modal": "cleavable",
+        "n_cleavable": 12,
+        "n_non_cleavable": 3,
+        "n_grounded": 15,
+        "llm_ok": true
+      }
+    },
+    "immunomodulator": {
+      "6": {
+        "score": 0.833,
+        "consensus": 1.0,
+        "contested": false,
+        "modal": "cleavable",
+        "n_cleavable": 1,
+        "n_non_cleavable": 0,
+        "n_grounded": 5,
+        "llm_ok": true
+      },
+      "8": {
+        "score": 0.97,
+        "consensus": 1.0,
+        "contested": false,
+        "modal": "cleavable",
+        "n_cleavable": 1,
+        "n_non_cleavable": 0,
+        "n_grounded": 6,
+        "llm_ok": true
+      },
+      "10": {
+        "score": 0.833,
+        "consensus": 1.0,
+        "contested": false,
+        "modal": "cleavable",
+        "n_cleavable": 1,
+        "n_non_cleavable": 0,
+        "n_grounded": 5,
+        "llm_ok": true
+      },
+      "12": {
+        "score": 0.833,
+        "consensus": 1.0,
+        "contested": false,
+        "modal": "cleavable",
+        "n_cleavable": 1,
+        "n_non_cleavable": 0,
+        "n_grounded": 5,
+        "llm_ok": true
+      }
+    },
+    "oligonucleotide": {
+      "6": {
+        "score": 0.334,
+        "consensus": 0.667,
+        "contested": true,
+        "modal": "cleavable",
+        "n_cleavable": 4,
+        "n_non_cleavable": 2,
+        "n_grounded": 9,
+        "llm_ok": true
+      },
+      "8": {
+        "score": 0.334,
+        "consensus": 0.667,
+        "contested": true,
+        "modal": "cleavable",
+        "n_cleavable": 4,
+        "n_non_cleavable": 2,
+        "n_grounded": 9,
+        "llm_ok": true
+      },
+      "10": {
+        "score": 0.334,
+        "consensus": 0.667,
+        "contested": true,
+        "modal": "cleavable",
+        "n_cleavable": 4,
+        "n_non_cleavable": 2,
+        "n_grounded": 9,
+        "llm_ok": true
+      },
+      "12": {
+        "score": 0.334,
+        "consensus": 0.667,
+        "contested": true,
+        "modal": "cleavable",
+        "n_cleavable": 4,
+        "n_non_cleavable": 2,
+        "n_grounded": 9,
+        "llm_ok": true
+      }
+    }
+  },
+  "jackknife": {
+    "cytotoxin": {
+      "score": 0.75,
+      "consensus": 0.875,
+      "contested": false,
+      "modal": "cleavable",
+      "n_cleavable": 14,
+      "n_non_cleavable": 2,
+      "n_grounded": 16,
+      "llm_ok": true
+    },
+    "immunomodulator": {
+      "score": 0.0,
+      "consensus": 0.5,
+      "contested": false,
+      "modal": "cleavable",
+      "n_cleavable": 1,
+      "n_non_cleavable": 1,
+      "n_grounded": 4,
+      "llm_ok": true
+    },
+    "oligonucleotide": {
+      "score": 0.666,
+      "consensus": 0.833,
+      "contested": false,
+      "modal": "cleavable",
+      "n_cleavable": 5,
+      "n_non_cleavable": 1,
+      "n_grounded": 10,
+      "llm_ok": true
+    }
+  },
+  "summary": {
+    "cytotoxin": {
+      "min": 0.572,
+      "max": 0.75,
+      "always_high": false,
+      "always_contested": false
+    },
+    "immunomodulator": {
+      "min": 0.0,
+      "max": 0.97,
+      "always_high": false,
+      "always_contested": false
+    },
+    "oligonucleotide": {
+      "min": 0.334,
+      "max": 0.666,
+      "always_high": false,
+      "always_contested": false
+    }
+  }
+}

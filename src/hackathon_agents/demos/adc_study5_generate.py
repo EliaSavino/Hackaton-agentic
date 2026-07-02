@@ -42,12 +42,21 @@ CLASS_WARHEAD = {
 }
 
 
-def profile_from_rule(rule: dict[str, Any] | None) -> ADCGoalProfile:
-    """Build the optimisation profile from the LLM-DERIVED rule (not a hardcoded preset)."""
+def profile_from_rule(
+    rule: dict[str, Any] | None,
+    *,
+    payload_class: str | None = None,
+    exemplars: list[dict[str, Any]] | None = None,
+) -> ADCGoalProfile:
+    """Build the optimisation profile from the LLM-DERIVED rule (not a hardcoded preset).
+
+    ``payload_class``/``exemplars`` feed the compiler's low-evidence safety gate
+    (thin plasma-stability evidence -> encoded domain prior; see ``compile_objective``).
+    """
     base = ADCGoalProfile()
     if not rule:
         return base
-    obj = compile_objective(rule)
+    obj = compile_objective(rule, payload_class=payload_class, exemplars=exemplars)
     weights = dict(base.weights)
     weights.update(obj.get("weights", {}))
     data = base.model_dump()
@@ -125,7 +134,8 @@ def run_generation(
         logger.info("=== V5 reason+generate: %s ===", pc)
         chain = build_reasoning_chain(pc, config, db_path=db_path, limit=limit)
         chains[pc] = chain
-        profile = profile_from_rule(chain.get("rule"))
+        profile = profile_from_rule(chain.get("rule"), payload_class=pc,
+                                    exemplars=chain.get("exemplars"))
         logger.info("  derived profile: cleavage=%s rot<=%s weights=%s",
                     profile.cleavage_preference, profile.max_rot_bonds, profile.weights)
         rec = _generate_one(pc, profile, steps=steps, batch=batch, work_root=work_root, top_n=top_n)

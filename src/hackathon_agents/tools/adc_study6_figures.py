@@ -82,33 +82,40 @@ def fig2_heldout_composition(chains, heldout, out: Path) -> Path:
 
 # --------------------------------------------------------------------------- #
 def fig3_rules_steer(designs, out: Path) -> Path:
-    """Weight heatmap (class x term) + generated designs in (cleavability, flexibility) space."""
+    """Heuristic weight heatmap (class x term) + generated designs in a real 2-D space.
+
+    IX.1: the 'flexibility' weight rewards *rigidity* (a reverse-sigmoid on rotatable bonds),
+    so it is relabelled and the per-class rotatable-bond setpoint (5/10/14) is exposed -- that
+    setpoint, not the weight, is the real driver. IX.2: the scatter y-axis carries a real
+    per-molecule quantity (Ertl SA subscore), not decorative jitter. IX.3: the weights are a
+    deterministic rule-compilation (a heuristic keyed by the agent's derived category)."""
     import matplotlib; matplotlib.use("Agg")
     import matplotlib.pyplot as plt
     import numpy as np
 
     classes = ["cytotoxin", "immunomodulator", "oligonucleotide"]
     terms = ["solubility", "flexibility", "cleavability", "stability"]
+    term_labels = ["solubility", "rigidity\n(low-rot reward)", "cleavability", "stability"]
     mat = np.array([[designs[c]["weights"].get(t, 0.0) for t in terms] for c in classes])
+    mrb = {c: designs[c].get("max_rot_bonds") for c in classes}
 
-    fig, (axh, axs) = plt.subplots(1, 2, figsize=(9.6, 3.9), width_ratios=[1.0, 1.25])
+    fig, (axh, axs) = plt.subplots(1, 2, figsize=(9.9, 3.9), width_ratios=[1.05, 1.2])
     im = axh.imshow(mat, cmap="viridis", vmin=0, vmax=1, aspect="auto")
-    axh.set_xticks(range(len(terms))); axh.set_xticklabels(terms, rotation=20, ha="right", fontsize=8)
-    axh.set_yticks(range(len(classes))); axh.set_yticklabels([_SHORT[c] for c in classes], fontsize=8)
+    axh.set_xticks(range(len(terms))); axh.set_xticklabels(term_labels, rotation=20, ha="right", fontsize=7.6)
+    # expose the rotatable-bond setpoint (the real separator) alongside each class label
+    axh.set_yticks(range(len(classes)))
+    axh.set_yticklabels([f"{_SHORT[c]}\n(rot$\\leq${mrb[c]})" for c in classes], fontsize=7.6)
     for i in range(len(classes)):
         for j in range(len(terms)):
             axh.text(j, i, f"{mat[i,j]:.2f}", ha="center", va="center", fontsize=8,
                      color="white" if mat[i, j] < 0.55 else "black")
-    axh.set_title("Compiled objective weights\n(differ by derived rule)", fontsize=9)
-    fig.colorbar(im, ax=axh, shrink=0.8, label="weight")
+    axh.set_title("Compiled objective weights\n(deterministic rule-compilation, heuristic)", fontsize=8.8)
+    fig.colorbar(im, ax=axh, shrink=0.8, label="weight (3 buckets)")
 
-    # Plot the two RAW, rule-driven properties (not the regime-normalised subscores,
-    # which are ~1.0 for every design): rotatable-bond count (the rigidity knob) and
-    # whether a cleavable motif is present (the cleavage knob).
+    # Real 2-D: x = rotatable bonds (the rigidity setpoint, the true class separator);
+    # y = per-molecule Ertl SA subscore (a genuine quantity, not jitter).
     from rdkit import Chem
     from rdkit.Chem import Descriptors
-    from hackathon_agents.tools.adc_shortlist import has_cleavable_motif
-    rng = 0
     for c in classes:
         xs, ys = [], []
         for m in designs[c]["top"]:
@@ -116,15 +123,14 @@ def fig3_rules_steer(designs, out: Path) -> Path:
             if mol is None:
                 continue
             xs.append(Descriptors.NumRotatableBonds(mol))
-            # jitter the binary cleavable flag so overlapping points are visible
-            rng = (rng * 1103515245 + 12345) & 0x7fffffff
-            ys.append((1 if has_cleavable_motif(m["smiles"]) else 0) + ((rng % 100) / 100.0 - 0.5) * 0.22)
-        axs.scatter(xs, ys, s=34, color=_COL[c], edgecolor="black", lw=0.4, alpha=0.8, label=_SHORT[c])
-    axs.set_xlabel("rotatable bonds  (rigidity knob)")
-    axs.set_yticks([0, 1]); axs.set_yticklabels(["non-\ncleavable", "cleavable"], fontsize=8)
-    axs.set_ylim(-0.6, 1.6)
-    axs.set_title("Generated designs separate by class\nalong the two rule knobs", fontsize=9)
-    axs.legend(fontsize=7.5, loc="center right")
+            ys.append((m.get("subscores") or {}).get("synthesizability", 0.0))
+        axs.scatter(xs, ys, s=34, color=_COL[c], edgecolor="black", lw=0.4, alpha=0.8,
+                    label=f"{_SHORT[c]}  (rot$\\leq${mrb[c]})")
+    axs.set_xlabel("rotatable bonds  (the rigidity setpoint per class)")
+    axs.set_ylabel("Ertl SA subscore  (per molecule)")
+    axs.set_ylim(0, 1.05)
+    axs.set_title("Generated designs separate by class,\ndriven mainly by the rigidity knob", fontsize=8.8)
+    axs.legend(fontsize=7.2, loc="lower right")
     fig.tight_layout()
     out.parent.mkdir(parents=True, exist_ok=True); fig.savefig(out, dpi=200); plt.close(fig)
     return out
@@ -208,6 +214,45 @@ def fig5_sensitivity(sens, out: Path) -> Path:
     return out
 
 
+def fig6_designs_gallery(designs, out: Path, tmp_dir: Path, per_class: int = 2) -> Path:
+    """Gallery of the actual generated (trial) linkers, `per_class` per payload class.
+
+    Each is a real REINVENT design carrying its derived motif (Val-Cit / Val-Ala / rigid cap),
+    drawn with SMARTS-detected handle (blue) / scissile (red) / spacer (green) highlights."""
+    import matplotlib; matplotlib.use("Agg")
+    import matplotlib.image as mpimg
+    import matplotlib.pyplot as plt
+    from hackathon_agents.tools.draw_linker_constructs import draw_construct
+
+    classes = ["cytotoxin", "immunomodulator", "oligonucleotide"]
+    tmp_dir.mkdir(parents=True, exist_ok=True)
+    fig, axes = plt.subplots(len(classes), per_class, figsize=(3.3 * per_class, 1.95 * len(classes)))
+    if per_class == 1:
+        axes = [[a] for a in axes]
+    for r, c in enumerate(classes):
+        top = designs[c].get("top", [])
+        trig = designs[c].get("trigger", "?")
+        for k in range(per_class):
+            ax = axes[r][k]; ax.axis("off")
+            if k >= len(top):
+                continue
+            m = top[k]; smi = m["smiles"]
+            png = tmp_dir / f"_gal_{c}_{k}.png"
+            res = draw_construct(smi, png, legend="", size=(420, 300))
+            if res is not None:
+                ax.imshow(mpimg.imread(str(png)))
+            sc = m.get("score")
+            ax.set_title(f"{_SHORT[c]} #{k+1}" + (f"  (score {sc:.2f})" if sc is not None else ""),
+                         fontsize=8.2, color=_COL[c], fontweight="bold")
+            ax.text(0.5, -0.06, f"welded motif: {trig}", transform=ax.transAxes,
+                    ha="center", va="top", fontsize=6.8, color="#555")
+    fig.suptitle("Representative generated (trial) linkers -- real REINVENT designs\nhandle = blue,  scissile bond = red,  spacer = green",
+                 fontsize=8.6, y=0.998)
+    fig.tight_layout(rect=(0, 0, 1, 0.95))
+    out.parent.mkdir(parents=True, exist_ok=True); fig.savefig(out, dpi=200); plt.close(fig)
+    return out
+
+
 def fig1_journey(chains, designs, boltz, out: Path, out_struct: Path) -> Path:
     """Hero: one cytotoxin molecule threaded from real quote -> exemplar -> rule -> structure -> Kd."""
     import matplotlib; matplotlib.use("Agg")
@@ -285,6 +330,7 @@ def render_study6_figures(src="deliverables/study5", out_dir="deliverables/study
         "fig2": fig2_heldout_composition(chains, heldout, out / "fig2_heldout.png"),
         "fig3": fig3_rules_steer(designs, out / "fig3_rules_steer.png"),
         "fig4": fig4_cofold_kd(boltz, out / "fig4_cofold.png", hypothesis=hypothesis),
+        "fig6": fig6_designs_gallery(designs, out / "fig6_gallery.png", out / "_gallery_tmp"),
     }
     sens_path = Path(out_dir).parent / "sensitivity.json"
     if sens_path.exists():
