@@ -823,3 +823,119 @@ would fix both at once (raises `n` past the contested threshold and grounds the 
 
 None change the result. After X.1–X.3 the arithmetic is check-proof and the counts are consistent —
 which is exactly what the "provenance-gated, nothing hidden" story needs to survive a careful juror.
+
+---
+
+# Part XI — Cosmetic pass on v7 (`deliverables/study7/`, purely stylistic)
+
+Content is frozen; every v7 fix landed (Table 1 has the `n (c/n)` column, the counts read 30
+throughout, Fig 3's caption now names the rot≤5/10/14 setpoint). This part is *only* about how the
+paper looks. Two goals: **(a) get it back under 5 pages**, **(b) make it beautiful and coherent.**
+Nothing here changes a number or a claim.
+
+## XI.0 The blocker: the PDF is **6 pages** — over the hard limit
+Page 6 contains exactly one figure (Fig 6, the molecule gallery) plus references [6–8]. That figure
+is the single most decorative one in the paper *and* it is redundant with Table 2, which already
+lists a representative generated design per class. So the fix and the beauty win are the same move:
+
+- **Move Fig 6 (`fig6_gallery.png`) to the SI.** Table 2 + Fig 1's inset already show the reader a
+  real generated molecule with the handle/scissile/spacer highlighting. The 6-panel gallery is a
+  "look, fifteen real designs" flourish that belongs next to the dossiers in the SI, not in a
+  5-page main text. Removing it pulls refs [6–8] onto page 5 → clean 5-page paper.
+- **If page 5 is still tight after that,** the next thing to demote is **Fig 4 (`fig5_sensitivity.png`,
+  the retrieval-depth stress-test).** It is a defensive "not a lucky *k*" robustness plot — a
+  reviewer-rebuttal figure, not a headline — and §3.3's sentence already states the result. It is
+  the weakest keeper. Try Fig 6→SI first; only pull Fig 4 if the reflow doesn't close.
+
+**Figure triage (what stays / what goes):**
+
+| Fig | Role | Verdict |
+|---|---|---|
+| 1 journey | narrative opener, quote→rule→molecule→cofold | **keep** — earns it, it's the whole thesis in one strip |
+| 2 held-out + evidence split | the headline / novelty figure | **keep — this is the money figure** |
+| 3 rules-steer (heatmap+scatter) | mechanism: rules compile to weights & separate designs | **keep**, but trim the scatter (XI.3) |
+| 4 sensitivity | robustness stress-test | **demote to SI if any overflow remains** |
+| 5 co-fold Kd | in-silico feasibility proof-point | **keep** — but redraw (XI.3), it's mostly whitespace |
+| 6 gallery | 6 pretty molecules | **move to SI** — redundant with Table 2, and it's what breaks 5 pages |
+
+That leaves a 4-figure main text (1, 2, 3, 5) + 2 tables — a much tighter, more confident spine.
+
+## XI.1 Unify the colour language (the biggest beauty win)
+Right now the palette is inconsistent *and* internally contradictory across figures:
+- Fig 1 boxes are a **rainbow** (grey / blue / green / orange / pink) with no semantic logic.
+- Fig 2 **top** encodes "held-out" as **green** and "flips" as **red**; Fig 2 **bottom** encodes
+  "favour cleavable" as **blue** and "non-cleavable" as **orange**. So within one figure the reader
+  meets *green ≈ good/cleavable* and then *blue = cleavable* — "cleavable" is two colours.
+- Fig 5 markers are a five-way **rainbow** (blue circle / orange diamond / red star / purple
+  triangle / green square) keyed to nothing.
+
+Pick **one three-colour semantic and use it in every figure:**
+- **cleavable = teal/blue** (`#2C7FB8`)
+- **non-cleavable / rigid = amber** (`#E6820E`)
+- **contested / flips = red** (`#D7301F`); **robust / recovers = green** (`#2CA25F`) as outcome accents only
+- **clinical reference / neutral = slate grey** (`#636363`)
+
+Keep Fig 6's blue/red/green as-is *only* where they mean handle/scissile/spacer — that's the RDKit
+chemistry convention and shouldn't be touched (and Fig 6 is moving to SI anyway). Everywhere the
+colour means a *rule direction*, use the palette above. Once "cleavable is always teal, rigid is
+always amber," Fig 2, Fig 3 and Fig 5 start telling the same story with the same ink and the paper
+reads as one designed object.
+
+## XI.2 Make the title smaller (not shorter) so it looks spectacular
+Current: `\title{\textbf{...}}` in a `10pt` article → default `\LARGE`, wrapping to **three** lines
+and dominating a third of page 1. Drop it a couple of points so it settles to **two** lines with air
+around it. Concretely, replace the title line with an explicit size:
+
+```latex
+\title{\textbf{\fontsize{16}{19}\selectfont An Autonomous Agent that Derives ADC Linker Rules
+from the Literature, Designs the Molecules, and Flags When the Field Disagrees}}
+```
+
+(≈16/19pt is the target; nudge to 15 or 17 to taste.) Same words, less shouting — a smaller, well-leaded
+title over the author block reads far more "designed" than the current wall of large type. Add a hair of
+`\vspace` after `\maketitle` if the abstract crowds it.
+
+## XI.3 Per-figure nitpicks
+- **Fig 5 (co-fold) — redraw; it's ~60% empty and has a label collision.** It's a 1-D strip whose
+  entire vertical extent and whole middle band are whitespace. Two fixes: **(i)** cut the figure
+  height hard (all markers share one y — it needs maybe 40% of its current height), which also lets
+  it sit more elegantly beside Fig 4/its neighbour. **(ii)** The bold "**cleavable Val-Cit ARC
+  design (hypothesis) 10 nM**" label **overlaps the blue circle + orange diamond** at the left edge —
+  move it below the axis or offset it so it stops sitting on top of the markers. **(iii)** Recolour
+  the five markers by cleavage class per XI.1 (cleavable designs teal, rigid ARC amber, clinical
+  substrate slate) and let *shape alone* carry class — the "cleavables cluster tight-left, the rigid
+  design sits alone far-right" story should be readable in colour, not just position.
+- **Fig 3 right (scatter) — trim.** The clusters barely separate and the panel is mostly air with a
+  big legend box. Either shrink it and tuck the legend inside the plot, or drop the right panel and
+  keep just the weight heatmap (the left panel is the one that carries "rules → weights"). If kept,
+  recolour the three class series to the XI.1 palette so it matches Fig 2/Fig 5.
+- **Fig 3 left (heatmap) — fine, minor.** Viridis with white numeric labels is readable; leave it,
+  but the "0.20" cell in dark purple has low label contrast — bump that one label to white/bold or
+  switch to a lighter sequential map (e.g. `YlGnBu`) so every cell's number is legible.
+- **Fig 1 (journey) — harmonise the box borders.** Keep the five-stage flow, but the rainbow borders
+  are arbitrary. Either make all five a single neutral border (slate) with a coloured *accent* only
+  on the DERIVED RULE / GENERATED stages, or key them to the XI.1 palette. The tiny "generated
+  Val-Cit design" caption under the inset is nearly illegible — enlarge it a step.
+- **Fig 2 — the money figure, small polish only.** Top and bottom panels use different x-affordances;
+  add a faint horizontal gridline at the top panel's 0.5 (the contested floor) so the ARC-flip bar's
+  drop below it is visually anchored. Recolour the "full-corpus" bars from steel-blue to neutral
+  slate so the *held-out* bars (green recover / red flip) are the only saturated ink — that makes the
+  recover-vs-flip contrast pop instead of competing with the baseline bars.
+
+## XI.4 Typographic micro-nits (2 minutes, do while regenerating)
+- Fig 6 title (and any figure titles rendered in matplotlib) uses `--` (double hyphen) where it wants
+  an em-dash `—`. Cosmetic but visible in a rendered title.
+- Figure in-plot title fonts are heavier/larger than the LaTeX caption font, so each figure shouts a
+  title and then repeats it in the caption. Consider dropping the in-plot suptitles (Fig 2, Fig 5,
+  Fig 6) and letting the LaTeX caption be the single voice — cleaner, and reclaims vertical space
+  (which also helps the 5-page fit).
+
+## Order for the cosmetic pass
+1. **Fig 6 → SI** (gets to 5 pages — do first, then recompile and confirm the page count).
+2. **Title size** down to ~16pt (one-line preamble edit).
+3. **Unify palette** (XI.1) across Fig 1/2/3/5.
+4. **Fig 5 redraw** (height + label collision + recolour) — biggest per-figure beauty gain.
+5. **Fig 3 scatter trim**, then the smaller nits (XI.3–XI.4).
+6. If still >5 pp after step 1, **Fig 4 → SI** as the release valve.
+
+None of this touches a result; it makes the same science look like it was laid out on purpose.
