@@ -73,6 +73,57 @@ libraries → REINVENT linker design → autonomous scoring/re-seed → 5-page p
 - **More warhead pairs:** edit `DEFAULT_CAMPAIGN` in `adc_campaign.py` (Library A has
   NHS-ester/azide/oxyamine handles unused; Library B has Phe-Lys-PABC too).
 
+## ROUND 2 — Design grid + commercial benchmark + Boltz proof point (2026-07-02)
+
+Second, deeper study on top of Round 1. Deliverables in `deliverables/study/`:
+`ADC_Linker_Study_Paper.pdf` (5pp main) + `ADC_Linker_Study_Supplementary.pdf` (2pp) +
+figures + `grid_results.json` / `benchmark.json` / `boltz.json`.
+
+**What it is:** a *controlled* sweep — 6 conjugation chemistries × 4 trigger classes × 3
+seeds = **72 real REINVENT staged-learning runs**, objective held FIXED so differences are
+attributable to warhead chemistry. Then a non-circular evaluation: commercial-linker
+benchmark on independent yardsticks (QED, physchem, Morgan novelty), a stability-surrogate
+calibration table, and a **Boltz-2 structural proof point** (co-fold designed + commercial
+linkers vs cathepsin B).
+
+**New code:**
+- `demos/adc_grid.py` — the grid (6 handles × 4 triggers), resumable + incremental
+  (`records.jsonl`), parallel SSH sweep. `run_grid(...)`.
+- `tools/linker_benchmark.py` — commercial linkers + yardsticks + novelty + calibration.
+- `tools/adc_analysis.py` — grid stats + 5 matplotlib figures.
+- `tools/adc_study_paper.py` — 5pp main + supplementary (authored per AUTHORS.md).
+- `demos/adc_study.py` — `finalize_study(grid.json)`: Boltz panel → benchmark → paper.
+- `tools/boltz_tools.py` — new **`ssh_remote`** mode + Boltz-2 YAML writer (see
+  `boltz-pod-ssh-integration` memory; pod venv `/workspace/boltz_venv`, `--no_kernels`).
+- `reinvent_tools.py` — uuid suffix on remote job dir (concurrency-safe).
+- Tests: `tests/test_boltz_ssh.py`, extended `tests/test_adc_campaign.py`.
+
+**Key results:** 72/72 real, 0 failures; low seed variance (SD 0.003–0.03 → robust). Best
+context Oxyamine/Non-cleavable (mean 0.84); best protease trigger is **Val-Ala** (beats
+Val-Cit's citrulline bulk); **glucuronide is drug-likeness-penalised** (~0.07, honest
+finding). Designed linkers Pareto-dominate commercial ones on the optimised objective but
+**trail on synthesizability** (the honest trade-off). Boltz: designed protease linkers reach
+cathepsin-B interface **ipTM 0.70–0.82**, just behind the clinical mc-Val-Cit control (0.87)
+— positive-control validation. Calibration: surrogate correctly flags hydrazone as least
+plasma-stable.
+
+**IMPORTANT lessons for re-running the grid (hard-won):**
+- The pod is **shared** — cleavable jobs (MatchingSubstructure scoring is CPU-heavy) slow
+  down badly under high concurrency. Use `max_workers=5`, `steps=40`, `batch=32`,
+  `timeout_seconds=1800`. 8-way + 60 steps → timeouts (empty-error failures, all cleavable).
+- **Always clean pod orphans before/after** a killed run: `pkill -9 -f reinvent` over SSH.
+  A killed orchestrator leaves remote REINVENT procs running that oversubscribe the box.
+- Long jobs must be **detached** (`( nohup python ... & )`) — harness background jobs get
+  killed. The grid is resumable (`resume_dir=`), so a kill just means re-run to continue.
+
+**Re-run the whole study:**
+```bash
+# grid (detached, resumable) — see /Users/es/.claude/jobs/.../tmp/run_grid_full.py
+python -c "from hackathon_agents.demos.adc_grid import run_grid; run_grid(seeds=(0,1,2), steps=40, batch=32, max_workers=5, resume_dir='runs/grid_war2')"
+# then finalize (Boltz + benchmark + paper)
+python -c "from hackathon_agents.demos.adc_study import finalize_study; finalize_study('runs/grid_war2/grid.json')"
+```
+
 ## Fast smoke test (confirm the pod + REINVENT still work)
 
 ```bash

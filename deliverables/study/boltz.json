@@ -1,0 +1,122 @@
+[
+  {
+    "label": "Maleimide/Val-Ala-PABC",
+    "kind": "designed",
+    "smiles": "CC(NC(=O)C(NC(=O)NC(=O)NC(=O)NC(=O)CN1C(=O)C=CC1=O)C(C)C)C(=O)Nc1ccc(CO)cc1",
+    "ok": true,
+    "status": "completed",
+    "iptm": 0.803,
+    "plddt": 89.73,
+    "binding_affinity_kd_nm": 17.76,
+    "binding_energy_kcal_mol": -10.57,
+    "error": null
+  },
+  {
+    "label": "Oxyamine/Val-Ala-PABC",
+    "kind": "designed",
+    "smiles": "CC(NC(=O)C(NC(=O)N1CC(=O)N(C(=O)CCON)C(=O)C1)C(C)C)C(=O)Nc1ccc(CO)cc1",
+    "ok": true,
+    "status": "completed",
+    "iptm": 0.821,
+    "plddt": 88.2,
+    "binding_affinity_kd_nm": 623.41,
+    "binding_energy_kcal_mol": -8.47,
+    "error": null
+  },
+  {
+    "label": "NHS_ester/Val-Ala-PABC",
+    "kind": "designed",
+    "smiles": "CC(NC(=O)C(NC(=O)NC(=O)CNC(=O)C(=O)NC(=O)ON1C(=O)CCC1=O)C(C)C)C(=O)Nc1ccc(CO)cc1",
+    "ok": true,
+    "status": "completed",
+    "iptm": 0.699,
+    "plddt": 85.47,
+    "binding_affinity_kd_nm": 21.44,
+    "binding_energy_kcal_mol": -10.46,
+    "error": null
+  },
+  {
+    "label": "Bromoacetamide/Val-Ala-PABC",
+    "kind": "designed",
+    "smiles": "CC(NC(=O)CNC(=O)C(=O)NC(C(=O)NC(C)C(=O)Nc1ccc(CO)cc1)C(C)C)C(=O)NC(=O)CBr",
+    "ok": true,
+    "status": "completed",
+    "iptm": 0.716,
+    "plddt": 84.43,
+    "binding_affinity_kd_nm": 8.09,
+    "binding_energy_kcal_mol": -11.04,
+    "error": null
+  },
+  {
+    "label": "Maleimide/Val-Cit-PABC",
+    "kind": "designed",
+    "smiles": "CC(C)C(NC(=O)C(=O)NC(=O)NC(=O)CN1C(=O)C=CC1=O)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+    "ok": true,
+    "status": "completed",
+    "iptm": 0.815,
+    "plddt": 84.9,
+    "binding_affinity_kd_nm": 7.48,
+    "binding_energy_kcal_mol": -11.09,
+    "error": null
+  },
+  {
+    "label": "Disulfide/Val-Ala-PABC",
+    "kind": "designed",
+    "smiles": "CC(NC(=O)C(NC(=O)CNC(=O)CNC(=O)C(=O)SSc1ccccn1)C(C)C)C(=O)Nc1ccc(CO)cc1",
+    "ok": true,
+    "status": "completed",
+    "iptm": 0.823,
+    "plddt": 86.83,
+    "binding_affinity_kd_nm": 11.29,
+    "binding_energy_kcal_mol": -10.84,
+    "error": null
+  },
+  {
+    "label": "mc-Val-Cit-PABC",
+    "kind": "commercial",
+    "smiles": "O=C1C=CC(=O)N1CCCCCC(=O)NC(C(C)C)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+    "ok": true,
+    "status": "completed",
+    "iptm": 0.873,
+    "plddt": 87.38,
+    "binding_affinity_kd_nm": 32.99,
+    "binding_energy_kcal_mol": -10.21,
+    "error": null
+  },
+  {
+    "label": "mc-Val-Ala-PABC",
+    "kind": "commercial",
+    "smiles": "O=C1C=CC(=O)N1CCCCCC(=O)NC(C(C)C)C(=O)NC(C)C(=O)Nc1ccc(CO)cc1",
+    "ok": true,
+    "status": "completed",
+    "iptm": 0.827,
+    "plddt": 87.75,
+    "binding_affinity_kd_nm": 129.6,
+    "binding_energy_kcal_mol": -9.4,
+    "error": null
+  },
+  {
+    "label": "maleimidocaproyl (mc)",
+    "kind": "commercial",
+    "smiles": "O=C1C=CC(=O)N1CCCCCC(=O)O",
+    "ok": true,
+    "status": "completed",
+    "iptm": 0.863,
+    "plddt": 91.51,
+    "binding_affinity_kd_nm": 90175.96,
+    "binding_energy_kcal_mol": -5.52,
+    "error": null
+  },
+  {
+    "label": "AcBut hydrazone",
+    "kind": "commercial",
+    "smiles": "CC(=NN)c1ccc(OCCCC(=O)O)cc1",
+    "ok": true,
+    "status": "completed",
+    "iptm": 0.77,
+    "plddt": 89.49,
+    "binding_affinity_kd_nm": 21150.79,
+    "binding_energy_kcal_mol": -6.38,
+    "error": null
+  }
+]

@@ -1,0 +1,6058 @@
+{
+  "timestamp": "war2",
+  "grid_dir": "runs/grid_war2",
+  "handles": [
+    "Maleimide",
+    "Bromoacetamide",
+    "DBCO",
+    "Disulfide",
+    "NHS_ester",
+    "Oxyamine"
+  ],
+  "triggers": [
+    "Val-Cit-PABC",
+    "Val-Ala-PABC",
+    "Glucuronide",
+    "Non-cleavable"
+  ],
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "steps": 40,
+  "batch": 32,
+  "handle_meta": {
+    "Maleimide": {
+      "smiles": "O=C1C=CC(=O)N1*",
+      "chemistry": "cysteine thiol-Michael addition",
+      "lib_a_count": 83
+    },
+    "Bromoacetamide": {
+      "smiles": "*NC(=O)CBr",
+      "chemistry": "cysteine alkylation (irreversible, retro-Michael-free)",
+      "lib_a_count": 3
+    },
+    "DBCO": {
+      "smiles": "*N1Cc2ccccc2C#Cc2ccccc21",
+      "chemistry": "copper-free strain-promoted click (SPAAC)",
+      "lib_a_count": 131
+    },
+    "Disulfide": {
+      "smiles": "*SSc1ccccn1",
+      "chemistry": "pyridyl-disulfide exchange (redox-labile conjugation)",
+      "lib_a_count": 6
+    },
+    "NHS_ester": {
+      "smiles": "*C(=O)ON1C(=O)CCC1=O",
+      "chemistry": "lysine amide coupling",
+      "lib_a_count": 7
+    },
+    "Oxyamine": {
+      "smiles": "*CON",
+      "chemistry": "aldehyde-tag / HIPS oxime ligation",
+      "lib_a_count": 79
+    }
+  },
+  "trigger_meta": {
+    "Val-Cit-PABC": {
+      "smiles": "CC(C)[C@@H](C(=O)N[C@@H](CCCNC(=O)N)C(=O)Nc1ccc(CO)cc1)N*",
+      "mechanism": "lysosomal cathepsin-B protease (self-immolative PABC)",
+      "require_cleavable": true
+    },
+    "Val-Ala-PABC": {
+      "smiles": "CC(C)[C@@H](C(=O)N[C@@H](C)C(=O)Nc1ccc(CO)cc1)N*",
+      "mechanism": "lysosomal cathepsin-B protease (Val-Ala, higher plasma stability)",
+      "require_cleavable": true
+    },
+    "Glucuronide": {
+      "smiles": "*NC(=O)[C@@H]1O[C@@H](Oc2ccc(CO)cc2)[C@@H](O)[C@H](O)[C@H]1O",
+      "mechanism": "beta-glucuronidase glycosidic cleavage (hydrophilic trigger)",
+      "require_cleavable": true,
+      "enforce_stability": false
+    },
+    "Non-cleavable": {
+      "smiles": "*NCc1ccccc1",
+      "mechanism": "non-cleavable (payload release by antibody catabolism)",
+      "require_cleavable": false
+    }
+  },
+  "records": [
+    {
+      "handle": "Maleimide",
+      "trigger": "Val-Ala-PABC",
+      "seed": 1,
+      "warhead_pair": "O=C1C=CC(=O)N1*|CC(C)[C@@H](C(=O)N[C@@H](C)C(=O)Nc1ccc(CO)cc1)N*",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 25,
+      "best_score": 0.7686,
+      "top": [
+        {
+          "smiles": "CC(NC(=O)C(NC(=O)CNC(=O)C(=O)NC(=O)CN1C(=O)C=CC1=O)C(C)C)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.7686,
+          "subscores": {
+            "solubility": 0.9348,
+            "size": 1.0,
+            "flexibility": 0.4174,
+            "synthesizability": 0.3833,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)C(NC(=O)C(=O)NCC(=O)NCC(=O)N1C(=O)C=CC1=O)C(C)C)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.7611,
+          "subscores": {
+            "solubility": 0.9348,
+            "size": 1.0,
+            "flexibility": 0.4174,
+            "synthesizability": 0.3625,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)C(NC(=O)C(=O)NC(=O)C=CC(=O)NC(=O)CN1C(=O)C=CC1=O)C(C)C)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.743,
+          "subscores": {
+            "solubility": 0.9324,
+            "size": 1.0,
+            "flexibility": 0.4174,
+            "synthesizability": 0.3177,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)C(NC(=O)C(=O)NC(=O)C(=O)NC(=O)CNC(=O)CN1C(=O)C=CC1=O)C(C)C)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.74,
+          "subscores": {
+            "solubility": 0.9654,
+            "size": 0.9343,
+            "flexibility": 0.4174,
+            "synthesizability": 0.3129,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)C(NC(=O)CC(N)C(=O)NC(=O)CN1C(=O)C=CC1=O)C(C)C)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.7342,
+          "subscores": {
+            "solubility": 0.9148,
+            "size": 1.0,
+            "flexibility": 0.3392,
+            "synthesizability": 0.3376,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        }
+      ]
+    },
+    {
+      "handle": "Maleimide",
+      "trigger": "Val-Ala-PABC",
+      "seed": 0,
+      "warhead_pair": "O=C1C=CC(=O)N1*|CC(C)[C@@H](C(=O)N[C@@H](C)C(=O)Nc1ccc(CO)cc1)N*",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 25,
+      "best_score": 0.7724,
+      "top": [
+        {
+          "smiles": "CC(NC(=O)C(NC(=O)NC(=O)NC(=O)NC(=O)CN1C(=O)C=CC1=O)C(C)C)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.7724,
+          "subscores": {
+            "solubility": 0.8816,
+            "size": 1.0,
+            "flexibility": 0.5826,
+            "synthesizability": 0.3587,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)C(NC(=O)NC(=O)NC(=O)CNC(=O)N1C(=O)C=CC1=O)C(C)C)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.7669,
+          "subscores": {
+            "solubility": 0.8816,
+            "size": 1.0,
+            "flexibility": 0.5826,
+            "synthesizability": 0.3446,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)C(NC(=O)NC(=O)NCC(=O)NC(=O)N1C(=O)C=CC1=O)C(C)C)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.7664,
+          "subscores": {
+            "solubility": 0.8816,
+            "size": 1.0,
+            "flexibility": 0.5826,
+            "synthesizability": 0.3434,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)C(NC(=O)NC(=O)NC(=O)NCC(=O)N1C(=O)C=CC1=O)C(C)C)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.7631,
+          "subscores": {
+            "solubility": 0.8816,
+            "size": 1.0,
+            "flexibility": 0.5826,
+            "synthesizability": 0.3351,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)C(NC(=O)CNC(=O)NC(=O)CNC(=O)N1C(=O)C=CC1=O)C(C)C)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.7554,
+          "subscores": {
+            "solubility": 0.908,
+            "size": 1.0,
+            "flexibility": 0.4174,
+            "synthesizability": 0.3605,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        }
+      ]
+    },
+    {
+      "handle": "Maleimide",
+      "trigger": "Val-Cit-PABC",
+      "seed": 1,
+      "warhead_pair": "O=C1C=CC(=O)N1*|CC(C)[C@@H](C(=O)N[C@@H](CCCNC(=O)N)C(=O)Nc1ccc(CO)cc1)N*",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 25,
+      "best_score": 0.7008,
+      "top": [
+        {
+          "smiles": "CC(C)C(NC(=O)NC(=O)C(=O)NCC(=O)N1C(=O)C=CC1=O)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.7008,
+          "subscores": {
+            "solubility": 0.9342,
+            "size": 0.932,
+            "flexibility": 0.2689,
+            "synthesizability": 0.2997,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(C)C(NC(=O)C(=O)NC(=O)NCC(=O)N1C(=O)C=CC1=O)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.6997,
+          "subscores": {
+            "solubility": 0.9342,
+            "size": 0.932,
+            "flexibility": 0.2689,
+            "synthesizability": 0.2969,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(C)C(NC(=O)NCC(=O)NC(=O)C(=O)N1C(=O)C=CC1=O)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.6969,
+          "subscores": {
+            "solubility": 0.9342,
+            "size": 0.932,
+            "flexibility": 0.2689,
+            "synthesizability": 0.2904,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(C)C(NC(=O)C(=O)NC(=O)C(=O)NCC(=O)N1C(=O)C=CC1=O)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.6865,
+          "subscores": {
+            "solubility": 0.9598,
+            "size": 0.8697,
+            "flexibility": 0.2689,
+            "synthesizability": 0.2717,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(C)C(NC(=O)NC(=O)NC(=O)NCC(=O)N1C(=O)C=CC1=O)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.6856,
+          "subscores": {
+            "solubility": 0.9071,
+            "size": 0.8986,
+            "flexibility": 0.2689,
+            "synthesizability": 0.2824,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        }
+      ]
+    },
+    {
+      "handle": "Maleimide",
+      "trigger": "Val-Cit-PABC",
+      "seed": 2,
+      "warhead_pair": "O=C1C=CC(=O)N1*|CC(C)[C@@H](C(=O)N[C@@H](CCCNC(=O)N)C(=O)Nc1ccc(CO)cc1)N*",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 25,
+      "best_score": 0.6495,
+      "top": [
+        {
+          "smiles": "CC(NC(=O)C(=O)NC(C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1)C(C)C)C(=O)NC(=O)CN1C(=O)C=CC1=O",
+          "score": 0.6495,
+          "subscores": {
+            "solubility": 0.94,
+            "size": 0.8696,
+            "flexibility": 0.1589,
+            "synthesizability": 0.2656,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(C)C(NC(=O)c1nc[nH]c1C(=O)NCC(=O)N1C(=O)C=CC1=O)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.6485,
+          "subscores": {
+            "solubility": 0.9003,
+            "size": 0.8808,
+            "flexibility": 0.1589,
+            "synthesizability": 0.2752,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(C)C(NC(=O)c1[nH]cnc1C(=O)NCC(=O)N1C(=O)C=CC1=O)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.6484,
+          "subscores": {
+            "solubility": 0.9003,
+            "size": 0.8808,
+            "flexibility": 0.1589,
+            "synthesizability": 0.275,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)CNC(=O)C(=O)NC(C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1)C(C)C)C(=O)N1C(=O)C=CC1=O",
+          "score": 0.6432,
+          "subscores": {
+            "solubility": 0.94,
+            "size": 0.8696,
+            "flexibility": 0.1589,
+            "synthesizability": 0.2515,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(C)C(NC(=O)C(N)CC(=O)NCC(=O)N1C(=O)C=CC1=O)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.6395,
+          "subscores": {
+            "solubility": 0.934,
+            "size": 0.9319,
+            "flexibility": 0.1192,
+            "synthesizability": 0.2689,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        }
+      ]
+    },
+    {
+      "handle": "Maleimide",
+      "trigger": "Val-Cit-PABC",
+      "seed": 0,
+      "warhead_pair": "O=C1C=CC(=O)N1*|CC(C)[C@@H](C(=O)N[C@@H](CCCNC(=O)N)C(=O)Nc1ccc(CO)cc1)N*",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 25,
+      "best_score": 0.7082,
+      "top": [
+        {
+          "smiles": "CC(C)C(NC(=O)C(=O)NC(=O)NC(=O)CN1C(=O)C=CC1=O)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.7082,
+          "subscores": {
+            "solubility": 0.9342,
+            "size": 0.932,
+            "flexibility": 0.2689,
+            "synthesizability": 0.3178,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(C)C(NC(=O)C(=O)NC(=O)CNC(=O)N1C(=O)C=CC1=O)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.6992,
+          "subscores": {
+            "solubility": 0.9342,
+            "size": 0.932,
+            "flexibility": 0.2689,
+            "synthesizability": 0.2958,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(C)C(NC(=O)NC(=O)NC(=O)CNC(=O)N1C(=O)C=CC1=O)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.6891,
+          "subscores": {
+            "solubility": 0.9071,
+            "size": 0.8986,
+            "flexibility": 0.2689,
+            "synthesizability": 0.2905,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(C)C(NC(=O)C(=O)NC(=O)CNC(=O)CN1C(=O)C=CC1=O)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.6756,
+          "subscores": {
+            "solubility": 0.9499,
+            "size": 0.9008,
+            "flexibility": 0.1589,
+            "synthesizability": 0.3188,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(C)C(NC(=O)CC(=O)NC(=O)NC(=O)CN1C(=O)C=CC1=O)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.6709,
+          "subscores": {
+            "solubility": 0.9216,
+            "size": 0.9008,
+            "flexibility": 0.1589,
+            "synthesizability": 0.3182,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        }
+      ]
+    },
+    {
+      "handle": "Maleimide",
+      "trigger": "Non-cleavable",
+      "seed": 0,
+      "warhead_pair": "O=C1C=CC(=O)N1*|*NCc1ccccc1",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 25,
+      "best_score": 0.843,
+      "top": [
+        {
+          "smiles": "Cn1c(=O)n(CC(=O)NCc2ccccc2)c(=O)n(CC(=O)N2C(=O)C=CC2=O)c1=O",
+          "score": 0.843,
+          "subscores": {
+            "solubility": 0.934,
+            "size": 1.0,
+            "flexibility": 0.7914,
+            "synthesizability": 0.5798,
+            "cleavability": 0.4,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(Cn1c(=O)[nH]c(=O)n(CCN2C(=O)C=CC2=O)c1=O)NCc1ccccc1",
+          "score": 0.8408,
+          "subscores": {
+            "solubility": 0.9187,
+            "size": 1.0,
+            "flexibility": 0.7311,
+            "synthesizability": 0.6088,
+            "cleavability": 0.4,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(Cn1c(=O)[nH]c(=O)n(CC(=O)N2C(=O)C=CC2=O)c1=O)NCc1ccccc1",
+          "score": 0.8408,
+          "subscores": {
+            "solubility": 0.9343,
+            "size": 1.0,
+            "flexibility": 0.7914,
+            "synthesizability": 0.5731,
+            "cleavability": 0.4,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "Cn1cc(NC(=O)CN2C(=O)C=CC2=O)c(=O)n(CC(=O)NCc2ccccc2)c1=O",
+          "score": 0.833,
+          "subscores": {
+            "solubility": 0.8859,
+            "size": 1.0,
+            "flexibility": 0.7311,
+            "synthesizability": 0.6118,
+            "cleavability": 0.4,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(CN1C(=O)C=CC1=O)Nc1n[nH]c(C(=O)NCc2ccccc2)n1",
+          "score": 0.8289,
+          "subscores": {
+            "solubility": 0.8381,
+            "size": 1.0,
+            "flexibility": 0.7914,
+            "synthesizability": 0.6167,
+            "cleavability": 0.4,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        }
+      ]
+    },
+    {
+      "handle": "Maleimide",
+      "trigger": "Val-Ala-PABC",
+      "seed": 2,
+      "warhead_pair": "O=C1C=CC(=O)N1*|CC(C)[C@@H](C(=O)N[C@@H](C)C(=O)Nc1ccc(CO)cc1)N*",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 25,
+      "best_score": 0.738,
+      "top": [
+        {
+          "smiles": "CC(NC(=O)C(NC(=O)C(=O)NC(=O)C(N)CCN1C(=O)C=CC1=O)C(C)C)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.738,
+          "subscores": {
+            "solubility": 0.9148,
+            "size": 1.0,
+            "flexibility": 0.4174,
+            "synthesizability": 0.3133,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)C(NC(=O)C(=O)NC(=O)CC(N)C(=O)N1C(=O)C=CC1=O)C(C)C)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.7358,
+          "subscores": {
+            "solubility": 0.931,
+            "size": 1.0,
+            "flexibility": 0.5,
+            "synthesizability": 0.2753,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)C(NC(=O)CC(N)C(=O)NC(=O)C(=O)N1C(=O)C=CC1=O)C(C)C)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.7347,
+          "subscores": {
+            "solubility": 0.931,
+            "size": 1.0,
+            "flexibility": 0.5,
+            "synthesizability": 0.273,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)C(NC(=O)CC(N)C(=O)NC(=O)CN1C(=O)C=CC1=O)C(C)C)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.7342,
+          "subscores": {
+            "solubility": 0.9148,
+            "size": 1.0,
+            "flexibility": 0.3392,
+            "synthesizability": 0.3376,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)CCN1C(=O)C=CC1=O)C(=O)NC(=O)C(=O)NC(C(=O)NC(C)C(=O)Nc1ccc(CO)cc1)C(C)C",
+          "score": 0.7238,
+          "subscores": {
+            "solubility": 0.9079,
+            "size": 1.0,
+            "flexibility": 0.3392,
+            "synthesizability": 0.3144,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        }
+      ]
+    },
+    {
+      "handle": "Maleimide",
+      "trigger": "Glucuronide",
+      "seed": 0,
+      "warhead_pair": "O=C1C=CC(=O)N1*|*NC(=O)[C@@H]1O[C@@H](Oc2ccc(CO)cc2)[C@@H](O)[C@H](O)[C@H]1O",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 25,
+      "best_score": 0.0819,
+      "top": [
+        {
+          "smiles": "O=C(CNC(=O)C(=O)N1C(=O)C=CC1=O)NC(=O)NC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O",
+          "score": 0.0819,
+          "subscores": {
+            "solubility": 0.9764,
+            "size": 1.0,
+            "flexibility": 0.7914,
+            "synthesizability": 0.1589,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(COC(=O)C(=O)N1C(=O)C=CC1=O)NCC(=O)NC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O",
+          "score": 0.0816,
+          "subscores": {
+            "solubility": 0.9783,
+            "size": 1.0,
+            "flexibility": 0.6608,
+            "synthesizability": 0.1697,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(CNC(=O)NC(=O)C(=O)N1C(=O)C=CC1=O)NC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O",
+          "score": 0.0815,
+          "subscores": {
+            "solubility": 0.9764,
+            "size": 1.0,
+            "flexibility": 0.7914,
+            "synthesizability": 0.1546,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(CNC(=O)NC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O)NC(=O)COC(=O)N1C(=O)C=CC1=O",
+          "score": 0.0809,
+          "subscores": {
+            "solubility": 0.9684,
+            "size": 1.0,
+            "flexibility": 0.6608,
+            "synthesizability": 0.1638,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(C)C(NC(=O)NC(=O)CN1C(=O)C=CC1=O)C(=O)NC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O",
+          "score": 0.0805,
+          "subscores": {
+            "solubility": 0.952,
+            "size": 1.0,
+            "flexibility": 0.5826,
+            "synthesizability": 0.1733,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        }
+      ]
+    },
+    {
+      "handle": "Maleimide",
+      "trigger": "Glucuronide",
+      "seed": 2,
+      "warhead_pair": "O=C1C=CC(=O)N1*|*NC(=O)[C@@H]1O[C@@H](Oc2ccc(CO)cc2)[C@@H](O)[C@H](O)[C@H]1O",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 25,
+      "best_score": 0.08,
+      "top": [
+        {
+          "smiles": "NC(=O)CC(NC(=O)CNC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O)C(=O)N1C(=O)C=CC1=O",
+          "score": 0.08,
+          "subscores": {
+            "solubility": 0.9764,
+            "size": 1.0,
+            "flexibility": 0.5,
+            "synthesizability": 0.1746,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(NC(=O)C(CO)NC(=O)N1C(=O)C=CC1=O)NC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O",
+          "score": 0.0795,
+          "subscores": {
+            "solubility": 0.9711,
+            "size": 1.0,
+            "flexibility": 0.7311,
+            "synthesizability": 0.1407,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(NC(CO)C(=O)NC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O)c1cccc(C(=O)N2C(=O)C=CC2=O)c1",
+          "score": 0.0794,
+          "subscores": {
+            "solubility": 0.9501,
+            "size": 0.9699,
+            "flexibility": 0.5826,
+            "synthesizability": 0.1648,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)c1ccc(C(=O)NC(=O)C2OC(Oc3ccc(CO)cc3)C(O)C(O)C2O)cc1O)C(=O)N1C(=O)C=CC1=O",
+          "score": 0.0786,
+          "subscores": {
+            "solubility": 0.9303,
+            "size": 0.9699,
+            "flexibility": 0.6608,
+            "synthesizability": 0.1494,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(NC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O)NC(CO)C(=O)NCC(=O)N1C(=O)C=CC1=O",
+          "score": 0.0786,
+          "subscores": {
+            "solubility": 0.9783,
+            "size": 1.0,
+            "flexibility": 0.5826,
+            "synthesizability": 0.1466,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        }
+      ]
+    },
+    {
+      "handle": "Maleimide",
+      "trigger": "Glucuronide",
+      "seed": 1,
+      "warhead_pair": "O=C1C=CC(=O)N1*|*NC(=O)[C@@H]1O[C@@H](Oc2ccc(CO)cc2)[C@@H](O)[C@H](O)[C@H]1O",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 25,
+      "best_score": 0.0806,
+      "top": [
+        {
+          "smiles": "O=C(NC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O)Nc1ccc(C(=O)NCC(=O)N2C(=O)C=CC2=O)c(O)c1",
+          "score": 0.0806,
+          "subscores": {
+            "solubility": 0.9302,
+            "size": 0.9677,
+            "flexibility": 0.6608,
+            "synthesizability": 0.1731,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(O)CC(NC(=O)CNC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O)C(=O)N1C(=O)C=CC1=O",
+          "score": 0.0802,
+          "subscores": {
+            "solubility": 0.9685,
+            "size": 1.0,
+            "flexibility": 0.5,
+            "synthesizability": 0.1798,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "NC(=O)CC(NC(=O)CNC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O)C(=O)N1C(=O)C=CC1=O",
+          "score": 0.08,
+          "subscores": {
+            "solubility": 0.9764,
+            "size": 1.0,
+            "flexibility": 0.5,
+            "synthesizability": 0.1746,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)Nc1ccc(C(=O)NC(=O)C2OC(Oc3ccc(CO)cc3)C(O)C(O)C2O)cc1)C(=O)N1C(=O)C=CC1=O",
+          "score": 0.0799,
+          "subscores": {
+            "solubility": 0.9056,
+            "size": 0.9721,
+            "flexibility": 0.6608,
+            "synthesizability": 0.1703,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(CNC(=O)NCC(=O)N1C(=O)C=CC1=O)NNC(=O)NC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O",
+          "score": 0.0796,
+          "subscores": {
+            "solubility": 0.9797,
+            "size": 1.0,
+            "flexibility": 0.6608,
+            "synthesizability": 0.1475,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        }
+      ]
+    },
+    {
+      "handle": "Maleimide",
+      "trigger": "Non-cleavable",
+      "seed": 1,
+      "warhead_pair": "O=C1C=CC(=O)N1*|*NCc1ccccc1",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 25,
+      "best_score": 0.8245,
+      "top": [
+        {
+          "smiles": "Nn1c(SCC(=O)N2C(=O)C=CC2=O)nnc(C(=O)NCc2ccccc2)c1=O",
+          "score": 0.8245,
+          "subscores": {
+            "solubility": 0.8811,
+            "size": 1.0,
+            "flexibility": 0.7914,
+            "synthesizability": 0.5659,
+            "cleavability": 0.4,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(NCc1ccccc1)c1cc(C(=O)NNC(=O)N2C(=O)C=CC2=O)[nH]n1",
+          "score": 0.8241,
+          "subscores": {
+            "solubility": 0.8368,
+            "size": 1.0,
+            "flexibility": 0.8808,
+            "synthesizability": 0.5711,
+            "cleavability": 0.4,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(Cn1c(=O)[nH]c2cc(S(=O)(=O)N3C(=O)C=CC3=O)ccc2c1=O)NCc1ccccc1",
+          "score": 0.8177,
+          "subscores": {
+            "solubility": 0.8367,
+            "size": 1.0,
+            "flexibility": 0.7914,
+            "synthesizability": 0.5823,
+            "cleavability": 0.4,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(Cn1c(=O)[nH]c(=O)c2cc(S(=O)(=O)N3C(=O)C=CC3=O)ccc21)NCc1ccccc1",
+          "score": 0.8152,
+          "subscores": {
+            "solubility": 0.8367,
+            "size": 1.0,
+            "flexibility": 0.7914,
+            "synthesizability": 0.5745,
+            "cleavability": 0.4,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(NCc1ccccc1)NS(=O)(=O)c1ccc(S(=O)(=O)N2C(=O)C=CC2=O)cc1",
+          "score": 0.8137,
+          "subscores": {
+            "solubility": 0.7763,
+            "size": 1.0,
+            "flexibility": 0.7914,
+            "synthesizability": 0.6259,
+            "cleavability": 0.4,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        }
+      ]
+    },
+    {
+      "handle": "Maleimide",
+      "trigger": "Non-cleavable",
+      "seed": 2,
+      "warhead_pair": "O=C1C=CC(=O)N1*|*NCc1ccccc1",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 25,
+      "best_score": 0.8247,
+      "top": [
+        {
+          "smiles": "O=C(Cn1c(=O)c(=O)n(CC(=O)N2C(=O)C=CC2=O)c2ccccc2c1=O)NCc1ccccc1",
+          "score": 0.8247,
+          "subscores": {
+            "solubility": 0.8564,
+            "size": 1.0,
+            "flexibility": 0.7914,
+            "synthesizability": 0.5873,
+            "cleavability": 0.4,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "Nc1nc(NCC(=O)N2C(=O)C=CC2=O)cc(C(=O)NCc2ccccc2)n1",
+          "score": 0.8117,
+          "subscores": {
+            "solubility": 0.8217,
+            "size": 1.0,
+            "flexibility": 0.7914,
+            "synthesizability": 0.5767,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(NCc1ccccc1)Nc1ccc2c(c1)c(=O)[nH]c(=O)n2CC(=O)N1C(=O)C=CC1=O",
+          "score": 0.8085,
+          "subscores": {
+            "solubility": 0.7782,
+            "size": 1.0,
+            "flexibility": 0.8411,
+            "synthesizability": 0.5887,
+            "cleavability": 0.4,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "Nn1c(N2C(=O)C=CC2=O)nc2cc(NC(=O)NCc3ccccc3)ccc2c1=O",
+          "score": 0.8071,
+          "subscores": {
+            "solubility": 0.747,
+            "size": 1.0,
+            "flexibility": 0.8808,
+            "synthesizability": 0.6008,
+            "cleavability": 0.4,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(CNC(=O)NCc1ccccc1)Nc1ccc(S(=O)(=O)N2C(=O)C=CC2=O)cc1",
+          "score": 0.807,
+          "subscores": {
+            "solubility": 0.7569,
+            "size": 1.0,
+            "flexibility": 0.7311,
+            "synthesizability": 0.6483,
+            "cleavability": 0.4,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        }
+      ]
+    },
+    {
+      "handle": "Bromoacetamide",
+      "trigger": "Val-Cit-PABC",
+      "seed": 0,
+      "warhead_pair": "*NC(=O)CBr|CC(C)[C@@H](C(=O)N[C@@H](CCCNC(=O)N)C(=O)Nc1ccc(CO)cc1)N*",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 25,
+      "best_score": 0.6807,
+      "top": [
+        {
+          "smiles": "CC(C)C(NC(=O)NC1C(=O)N(C(=O)NC(=O)CBr)C1=O)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.6807,
+          "subscores": {
+            "solubility": 0.8852,
+            "size": 0.8456,
+            "flexibility": 0.2689,
+            "synthesizability": 0.2926,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(C)C(NC(=O)NNC(=O)NC(=O)NCC(=O)NC(=O)CBr)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.6698,
+          "subscores": {
+            "solubility": 0.9034,
+            "size": 0.7744,
+            "flexibility": 0.2086,
+            "synthesizability": 0.3159,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(C)C(NC(=O)N1CC(=O)N(CC(=O)NC(=O)CBr)C(=O)C1=O)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.6662,
+          "subscores": {
+            "solubility": 0.9158,
+            "size": 0.7522,
+            "flexibility": 0.2086,
+            "synthesizability": 0.308,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)NNC(=O)NC(C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1)C(C)C)C(=O)NC(=O)CBr",
+          "score": 0.6647,
+          "subscores": {
+            "solubility": 0.8715,
+            "size": 0.8388,
+            "flexibility": 0.2086,
+            "synthesizability": 0.2981,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)NC(C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1)C(C)C)C(=O)NC(=O)NC(=O)NC(=O)CBr",
+          "score": 0.65,
+          "subscores": {
+            "solubility": 0.8604,
+            "size": 0.7766,
+            "flexibility": 0.2086,
+            "synthesizability": 0.2831,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        }
+      ]
+    },
+    {
+      "handle": "Bromoacetamide",
+      "trigger": "Val-Cit-PABC",
+      "seed": 1,
+      "warhead_pair": "*NC(=O)CBr|CC(C)[C@@H](C(=O)N[C@@H](CCCNC(=O)N)C(=O)Nc1ccc(CO)cc1)N*",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 25,
+      "best_score": 0.6435,
+      "top": [
+        {
+          "smiles": "CC(NC(=O)NCC(=O)NC(=O)CBr)C(=O)NC(C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1)C(C)C",
+          "score": 0.6435,
+          "subscores": {
+            "solubility": 0.8766,
+            "size": 0.841,
+            "flexibility": 0.1192,
+            "synthesizability": 0.3257,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)NCC(=O)NC(C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1)C(C)C)C(=O)NC(=O)CBr",
+          "score": 0.6428,
+          "subscores": {
+            "solubility": 0.8766,
+            "size": 0.841,
+            "flexibility": 0.1192,
+            "synthesizability": 0.3236,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)CNC(=O)NC(C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1)C(C)C)C(=O)NC(=O)CBr",
+          "score": 0.6427,
+          "subscores": {
+            "solubility": 0.8766,
+            "size": 0.841,
+            "flexibility": 0.1192,
+            "synthesizability": 0.3235,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)NC(C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1)C(C)C)C(=O)NCC(=O)NC(=O)CBr",
+          "score": 0.6424,
+          "subscores": {
+            "solubility": 0.8766,
+            "size": 0.841,
+            "flexibility": 0.1192,
+            "synthesizability": 0.3225,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)NC(C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1)C(C)C)C(=O)NC(C)C(=O)NC(=O)CBr",
+          "score": 0.62,
+          "subscores": {
+            "solubility": 0.8556,
+            "size": 0.8098,
+            "flexibility": 0.1192,
+            "synthesizability": 0.2802,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        }
+      ]
+    },
+    {
+      "handle": "Bromoacetamide",
+      "trigger": "Val-Cit-PABC",
+      "seed": 2,
+      "warhead_pair": "*NC(=O)CBr|CC(C)[C@@H](C(=O)N[C@@H](CCCNC(=O)N)C(=O)Nc1ccc(CO)cc1)N*",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 25,
+      "best_score": 0.6427,
+      "top": [
+        {
+          "smiles": "CC(NC(=O)CNC(=O)NC(C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1)C(C)C)C(=O)NC(=O)CBr",
+          "score": 0.6427,
+          "subscores": {
+            "solubility": 0.8766,
+            "size": 0.841,
+            "flexibility": 0.1192,
+            "synthesizability": 0.3235,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(C)C(NC(=O)CC(N)C(=O)NCC(=O)NC(=O)CBr)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.6282,
+          "subscores": {
+            "solubility": 0.9142,
+            "size": 0.841,
+            "flexibility": 0.0884,
+            "synthesizability": 0.3134,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)NC(C)C(=O)NC(C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1)C(C)C)C(=O)NC(=O)CBr",
+          "score": 0.6201,
+          "subscores": {
+            "solubility": 0.8556,
+            "size": 0.8098,
+            "flexibility": 0.1192,
+            "synthesizability": 0.2805,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)NC(C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1)C(C)C)C(=O)NC(C)C(=O)NC(=O)CBr",
+          "score": 0.62,
+          "subscores": {
+            "solubility": 0.8556,
+            "size": 0.8098,
+            "flexibility": 0.1192,
+            "synthesizability": 0.2802,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CCC(NC(=O)NCC(=O)NC(C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1)C(C)C)C(=O)NC(=O)CBr",
+          "score": 0.6134,
+          "subscores": {
+            "solubility": 0.8555,
+            "size": 0.8098,
+            "flexibility": 0.0884,
+            "synthesizability": 0.3063,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        }
+      ]
+    },
+    {
+      "handle": "Bromoacetamide",
+      "trigger": "Val-Ala-PABC",
+      "seed": 0,
+      "warhead_pair": "*NC(=O)CBr|CC(C)[C@@H](C(=O)N[C@@H](C)C(=O)Nc1ccc(CO)cc1)N*",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 25,
+      "best_score": 0.7363,
+      "top": [
+        {
+          "smiles": "CC(NC(=O)C(NC(=O)c1ccc(C(=O)NCC(=O)NC(=O)CBr)nc1)C(C)C)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.7363,
+          "subscores": {
+            "solubility": 0.7948,
+            "size": 0.9567,
+            "flexibility": 0.3392,
+            "synthesizability": 0.4228,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)C(NC(=O)c1ccc(C(=O)NCC(=O)NC(=O)CBr)o1)C(C)C)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.7331,
+          "subscores": {
+            "solubility": 0.7802,
+            "size": 0.9812,
+            "flexibility": 0.3392,
+            "synthesizability": 0.4141,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)C(NC(=O)CNC(=O)CNC(=O)NCC(=O)NC(=O)CBr)C(C)C)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.7205,
+          "subscores": {
+            "solubility": 0.9083,
+            "size": 0.9367,
+            "flexibility": 0.2086,
+            "synthesizability": 0.4102,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)C(NC(=O)CNC(=O)C(=O)NCC(=O)NCC(=O)NC(=O)CBr)C(C)C)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.7138,
+          "subscores": {
+            "solubility": 0.9431,
+            "size": 0.8745,
+            "flexibility": 0.2086,
+            "synthesizability": 0.391,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)C(NC(=O)C=CC(=O)NCC(=O)NCC(=O)NC(=O)CBr)C(C)C)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.7102,
+          "subscores": {
+            "solubility": 0.8924,
+            "size": 0.9434,
+            "flexibility": 0.2086,
+            "synthesizability": 0.3848,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        }
+      ]
+    },
+    {
+      "handle": "Bromoacetamide",
+      "trigger": "Val-Ala-PABC",
+      "seed": 1,
+      "warhead_pair": "*NC(=O)CBr|CC(C)[C@@H](C(=O)N[C@@H](C)C(=O)Nc1ccc(CO)cc1)N*",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 25,
+      "best_score": 0.7374,
+      "top": [
+        {
+          "smiles": "CC(NC(=O)NC(=O)NC(=O)NC(C(=O)NC(C)C(=O)Nc1ccc(CO)cc1)C(C)C)C(=O)NC(=O)CBr",
+          "score": 0.7374,
+          "subscores": {
+            "solubility": 0.8258,
+            "size": 0.9679,
+            "flexibility": 0.5,
+            "synthesizability": 0.3319,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)NNC(=O)NC(=O)NC(C(=O)NC(C)C(=O)Nc1ccc(CO)cc1)C(C)C)C(=O)NC(=O)CBr",
+          "score": 0.7341,
+          "subscores": {
+            "solubility": 0.8561,
+            "size": 0.9345,
+            "flexibility": 0.5,
+            "synthesizability": 0.3175,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)NC(C)C(=O)NC(C(=O)NC(C)C(=O)Nc1ccc(CO)cc1)C(C)C)C(=O)NC(=O)CBr",
+          "score": 0.7185,
+          "subscores": {
+            "solubility": 0.8201,
+            "size": 1.0,
+            "flexibility": 0.3392,
+            "synthesizability": 0.3427,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)NC(C(=O)NC(C)C(=O)Nc1ccc(CO)cc1)C(C)C)C(=O)NC(C)C(=O)NC(=O)CBr",
+          "score": 0.7184,
+          "subscores": {
+            "solubility": 0.8201,
+            "size": 1.0,
+            "flexibility": 0.3392,
+            "synthesizability": 0.3424,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)NC(C)C(=O)NC(C(=O)NC(C)C(=O)Nc1ccc(CO)cc1)C(C)C)C(=O)NC(=O)NC(=O)CBr",
+          "score": 0.7016,
+          "subscores": {
+            "solubility": 0.8388,
+            "size": 0.9055,
+            "flexibility": 0.3392,
+            "synthesizability": 0.3138,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        }
+      ]
+    },
+    {
+      "handle": "Bromoacetamide",
+      "trigger": "Val-Ala-PABC",
+      "seed": 2,
+      "warhead_pair": "*NC(=O)CBr|CC(C)[C@@H](C(=O)N[C@@H](C)C(=O)Nc1ccc(CO)cc1)N*",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 25,
+      "best_score": 0.7377,
+      "top": [
+        {
+          "smiles": "CC(NC(=O)CNC(=O)C(=O)NC(C(=O)NC(C)C(=O)Nc1ccc(CO)cc1)C(C)C)C(=O)NC(=O)CBr",
+          "score": 0.7377,
+          "subscores": {
+            "solubility": 0.8998,
+            "size": 0.9701,
+            "flexibility": 0.3392,
+            "synthesizability": 0.3622,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)C(NC(=O)c1cccc(NC(=O)C(=O)NCC(=O)NC(=O)CBr)c1)C(C)C)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.7252,
+          "subscores": {
+            "solubility": 0.7999,
+            "size": 0.8633,
+            "flexibility": 0.3392,
+            "synthesizability": 0.416,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)C(NC(=O)c1ccccc1NC(=O)C(=O)NCC(=O)NC(=O)CBr)C(C)C)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.7244,
+          "subscores": {
+            "solubility": 0.7999,
+            "size": 0.8633,
+            "flexibility": 0.3392,
+            "synthesizability": 0.4134,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)C(NC(=O)Nc1ccc(NC(=O)C(=O)NCC(=O)NC(=O)CBr)cc1)C(C)C)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.7127,
+          "subscores": {
+            "solubility": 0.7708,
+            "size": 0.8299,
+            "flexibility": 0.3392,
+            "synthesizability": 0.4068,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)C(NC(=O)CNC(=O)C=CC(=O)NCC(=O)NC(=O)CBr)C(C)C)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.7111,
+          "subscores": {
+            "solubility": 0.8924,
+            "size": 0.9434,
+            "flexibility": 0.2086,
+            "synthesizability": 0.3874,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        }
+      ]
+    },
+    {
+      "handle": "Bromoacetamide",
+      "trigger": "Non-cleavable",
+      "seed": 0,
+      "warhead_pair": "*NC(=O)CBr|*NCc1ccccc1",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 25,
+      "best_score": 0.831,
+      "top": [
+        {
+          "smiles": "O=C(CBr)NS(=O)(=O)NC(=O)NC(=O)NCc1ccccc1",
+          "score": 0.831,
+          "subscores": {
+            "solubility": 0.8151,
+            "size": 1.0,
+            "flexibility": 0.8411,
+            "synthesizability": 0.6265,
+            "cleavability": 0.4,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(CNC(=O)Cn1cc(S(=O)(=O)NC(=O)CBr)cn1)NCc1ccccc1",
+          "score": 0.8098,
+          "subscores": {
+            "solubility": 0.8432,
+            "size": 1.0,
+            "flexibility": 0.5826,
+            "synthesizability": 0.6443,
+            "cleavability": 0.4,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(CNC(=O)c1ncncc1S(=O)(=O)NC(=O)CBr)NCc1ccccc1",
+          "score": 0.8076,
+          "subscores": {
+            "solubility": 0.8302,
+            "size": 1.0,
+            "flexibility": 0.6608,
+            "synthesizability": 0.6096,
+            "cleavability": 0.4,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(CBr)NS(=O)(=O)c1ccccc1S(=O)(=O)NC(=O)NCc1ccccc1",
+          "score": 0.8026,
+          "subscores": {
+            "solubility": 0.7296,
+            "size": 1.0,
+            "flexibility": 0.7311,
+            "synthesizability": 0.6627,
+            "cleavability": 0.4,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "Cc1nn(CC(=O)NCc2ccccc2)c(C)c1S(=O)(=O)NC(=O)NC(=O)CBr",
+          "score": 0.8019,
+          "subscores": {
+            "solubility": 0.7579,
+            "size": 1.0,
+            "flexibility": 0.7311,
+            "synthesizability": 0.6294,
+            "cleavability": 0.4,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        }
+      ]
+    },
+    {
+      "handle": "Bromoacetamide",
+      "trigger": "Glucuronide",
+      "seed": 0,
+      "warhead_pair": "*NC(=O)CBr|*NC(=O)[C@@H]1O[C@@H](Oc2ccc(CO)cc2)[C@@H](O)[C@H](O)[C@H]1O",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 25,
+      "best_score": 0.0842,
+      "top": [
+        {
+          "smiles": "O=C(CNC(=O)C(=O)NC(=O)CBr)NCC(=O)NC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O",
+          "score": 0.0842,
+          "subscores": {
+            "solubility": 0.9765,
+            "size": 0.9881,
+            "flexibility": 0.5826,
+            "synthesizability": 0.2179,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)CNC(=O)NC(=O)CBr)C(=O)NC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O",
+          "score": 0.0838,
+          "subscores": {
+            "solubility": 0.9531,
+            "size": 1.0,
+            "flexibility": 0.5826,
+            "synthesizability": 0.2173,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)NNC(=O)NC(=O)CBr)C(=O)NC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O",
+          "score": 0.083,
+          "subscores": {
+            "solubility": 0.9509,
+            "size": 1.0,
+            "flexibility": 0.7311,
+            "synthesizability": 0.1846,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(CBr)NC(=O)NC(CO)C(=O)NCC(=O)NC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O",
+          "score": 0.0818,
+          "subscores": {
+            "solubility": 0.9712,
+            "size": 0.9836,
+            "flexibility": 0.5,
+            "synthesizability": 0.2025,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)CNC(=O)C(=O)NC(=O)CBr)C(=O)NC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O",
+          "score": 0.0815,
+          "subscores": {
+            "solubility": 0.9717,
+            "size": 0.9569,
+            "flexibility": 0.5826,
+            "synthesizability": 0.1871,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        }
+      ]
+    },
+    {
+      "handle": "Bromoacetamide",
+      "trigger": "Glucuronide",
+      "seed": 1,
+      "warhead_pair": "*NC(=O)CBr|*NC(=O)[C@@H]1O[C@@H](Oc2ccc(CO)cc2)[C@@H](O)[C@H](O)[C@H]1O",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 25,
+      "best_score": 0.0849,
+      "top": [
+        {
+          "smiles": "O=C(CBr)NC(=O)NNC(=O)C(=O)NCC(=O)NC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O",
+          "score": 0.0849,
+          "subscores": {
+            "solubility": 0.9754,
+            "size": 0.9859,
+            "flexibility": 0.7311,
+            "synthesizability": 0.205,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(CBr)NC(=O)CNC(=O)C(=O)NCC(=O)NC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O",
+          "score": 0.0844,
+          "subscores": {
+            "solubility": 0.9765,
+            "size": 0.9881,
+            "flexibility": 0.5826,
+            "synthesizability": 0.2218,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(CNC(=O)C(=O)NC(=O)CBr)NCC(=O)NC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O",
+          "score": 0.0842,
+          "subscores": {
+            "solubility": 0.9765,
+            "size": 0.9881,
+            "flexibility": 0.5826,
+            "synthesizability": 0.2179,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(CNC(=O)C(=O)NC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O)NCC(=O)NC(=O)CBr",
+          "score": 0.0842,
+          "subscores": {
+            "solubility": 0.9765,
+            "size": 0.9881,
+            "flexibility": 0.5826,
+            "synthesizability": 0.2179,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(CBr)NCC(=O)NCC(=O)NCC(=O)NC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O",
+          "score": 0.0841,
+          "subscores": {
+            "solubility": 0.9705,
+            "size": 1.0,
+            "flexibility": 0.4174,
+            "synthesizability": 0.2552,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        }
+      ]
+    },
+    {
+      "handle": "Bromoacetamide",
+      "trigger": "Glucuronide",
+      "seed": 2,
+      "warhead_pair": "*NC(=O)CBr|*NC(=O)[C@@H]1O[C@@H](Oc2ccc(CO)cc2)[C@@H](O)[C@H](O)[C@H]1O",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 25,
+      "best_score": 0.0851,
+      "top": [
+        {
+          "smiles": "O=C(CNC(=O)C(=O)NC(=O)CBr)NC(=O)NC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O",
+          "score": 0.0851,
+          "subscores": {
+            "solubility": 0.9688,
+            "size": 1.0,
+            "flexibility": 0.7311,
+            "synthesizability": 0.2077,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(CNC(=O)C(=O)NC(=O)CBr)NCC(=O)NC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O",
+          "score": 0.0842,
+          "subscores": {
+            "solubility": 0.9765,
+            "size": 0.9881,
+            "flexibility": 0.5826,
+            "synthesizability": 0.2179,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(CNC(=O)C(=O)NC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O)NCC(=O)NC(=O)CBr",
+          "score": 0.0842,
+          "subscores": {
+            "solubility": 0.9765,
+            "size": 0.9881,
+            "flexibility": 0.5826,
+            "synthesizability": 0.2179,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(CBr)NC(=O)C(=O)NCC(=O)NC(=O)C(=O)NC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O",
+          "score": 0.0826,
+          "subscores": {
+            "solubility": 0.9813,
+            "size": 0.957,
+            "flexibility": 0.7311,
+            "synthesizability": 0.1786,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)NC(=O)CBr)C(=O)NC(=O)C(=O)NC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O",
+          "score": 0.0819,
+          "subscores": {
+            "solubility": 0.9624,
+            "size": 0.9881,
+            "flexibility": 0.7311,
+            "synthesizability": 0.1693,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        }
+      ]
+    },
+    {
+      "handle": "Bromoacetamide",
+      "trigger": "Non-cleavable",
+      "seed": 1,
+      "warhead_pair": "*NC(=O)CBr|*NCc1ccccc1",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 25,
+      "best_score": 0.8314,
+      "top": [
+        {
+          "smiles": "O=C(Cn1c(=O)nc(NC(=O)NC(=O)CBr)[nH]c1=O)NCc1ccccc1",
+          "score": 0.8314,
+          "subscores": {
+            "solubility": 0.8564,
+            "size": 1.0,
+            "flexibility": 0.7914,
+            "synthesizability": 0.6083,
+            "cleavability": 0.4,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(CBr)NC(=O)Cn1nc(NC(=O)NCc2ccccc2)c(=O)[nH]c1=O",
+          "score": 0.8284,
+          "subscores": {
+            "solubility": 0.8564,
+            "size": 1.0,
+            "flexibility": 0.7914,
+            "synthesizability": 0.5988,
+            "cleavability": 0.4,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(Cn1cnc2c(nnn2CC(=O)NC(=O)CBr)c1=O)NCc1ccccc1",
+          "score": 0.8232,
+          "subscores": {
+            "solubility": 0.8535,
+            "size": 1.0,
+            "flexibility": 0.7311,
+            "synthesizability": 0.6086,
+            "cleavability": 0.4,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "Nc1nc(NC(=O)NC(=O)CBr)nn1C(=O)NCc1ccccc1",
+          "score": 0.8143,
+          "subscores": {
+            "solubility": 0.763,
+            "size": 1.0,
+            "flexibility": 0.8808,
+            "synthesizability": 0.6084,
+            "cleavability": 0.4,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(Cn1nnc2cc(NC(=O)C(=O)NC(=O)CBr)ccc21)NCc1ccccc1",
+          "score": 0.8141,
+          "subscores": {
+            "solubility": 0.758,
+            "size": 1.0,
+            "flexibility": 0.7914,
+            "synthesizability": 0.6462,
+            "cleavability": 0.4,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        }
+      ]
+    },
+    {
+      "handle": "Bromoacetamide",
+      "trigger": "Non-cleavable",
+      "seed": 2,
+      "warhead_pair": "*NC(=O)CBr|*NCc1ccccc1",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 25,
+      "best_score": 0.8112,
+      "top": [
+        {
+          "smiles": "O=C(CBr)NS(=O)(=O)c1ccc(S(=O)(=O)NC(=O)NCc2ccccc2)cc1",
+          "score": 0.8112,
+          "subscores": {
+            "solubility": 0.7296,
+            "size": 1.0,
+            "flexibility": 0.7311,
+            "synthesizability": 0.6942,
+            "cleavability": 0.4,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(CNC(=O)NC(=O)c1cccc(S(=O)(=O)NC(=O)CBr)c1)NCc1ccccc1",
+          "score": 0.8091,
+          "subscores": {
+            "solubility": 0.7644,
+            "size": 1.0,
+            "flexibility": 0.6608,
+            "synthesizability": 0.6813,
+            "cleavability": 0.4,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(CBr)NC(=O)NS(=O)(=O)c1cccc(S(=O)(=O)NCc2ccccc2)c1",
+          "score": 0.8071,
+          "subscores": {
+            "solubility": 0.7296,
+            "size": 1.0,
+            "flexibility": 0.7311,
+            "synthesizability": 0.679,
+            "cleavability": 0.4,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(CBr)NS(=O)(=O)c1cccc(S(=O)(=O)NC(=O)NCc2ccccc2)c1",
+          "score": 0.8066,
+          "subscores": {
+            "solubility": 0.7296,
+            "size": 1.0,
+            "flexibility": 0.7311,
+            "synthesizability": 0.6774,
+            "cleavability": 0.4,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(CBr)NC(=O)NS(=O)(=O)c1ccccc1S(=O)(=O)NCc1ccccc1",
+          "score": 0.8031,
+          "subscores": {
+            "solubility": 0.7296,
+            "size": 1.0,
+            "flexibility": 0.7311,
+            "synthesizability": 0.6647,
+            "cleavability": 0.4,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        }
+      ]
+    },
+    {
+      "handle": "DBCO",
+      "trigger": "Val-Cit-PABC",
+      "seed": 0,
+      "warhead_pair": "*N1Cc2ccccc2C#Cc2ccccc21|CC(C)[C@@H](C(=O)N[C@@H](CCCNC(=O)N)C(=O)Nc1ccc(CO)cc1)N*",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 25,
+      "best_score": 0.5336,
+      "top": [
+        {
+          "smiles": "CC(C)C(NC(=O)NCC(=O)NCC(=O)NC(=O)N1Cc2ccccc2C#Cc2ccccc21)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.5336,
+          "subscores": {
+            "solubility": 0.7235,
+            "size": 0.627,
+            "flexibility": 0.1589,
+            "synthesizability": 0.1559,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(C)C(NC(=O)NC(=O)CNC(=O)c1cccc(N2Cc3ccccc3C#Cc3ccccc32)c1)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.5035,
+          "subscores": {
+            "solubility": 0.5336,
+            "size": 0.5847,
+            "flexibility": 0.1589,
+            "synthesizability": 0.1733,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(C)C(NC(=O)NC(=O)CNC(=O)c1cccc(C(=O)N2Cc3ccccc3C#Cc3ccccc32)c1)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.4981,
+          "subscores": {
+            "solubility": 0.5733,
+            "size": 0.5224,
+            "flexibility": 0.1589,
+            "synthesizability": 0.1623,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(C)C(NC(=O)NC(=O)C(NC(=O)N1Cc2ccccc2C#Cc2ccccc21)C(C)C)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.4977,
+          "subscores": {
+            "solubility": 0.5597,
+            "size": 0.6603,
+            "flexibility": 0.2086,
+            "synthesizability": 0.1219,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(C)C(NC(=O)c1cccc(C(=O)NCC(=O)NC(=O)N2Cc3ccccc3C#Cc3ccccc32)c1)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.4952,
+          "subscores": {
+            "solubility": 0.5733,
+            "size": 0.5224,
+            "flexibility": 0.1589,
+            "synthesizability": 0.1571,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        }
+      ]
+    },
+    {
+      "handle": "DBCO",
+      "trigger": "Val-Cit-PABC",
+      "seed": 1,
+      "warhead_pair": "*N1Cc2ccccc2C#Cc2ccccc21|CC(C)[C@@H](C(=O)N[C@@H](CCCNC(=O)N)C(=O)Nc1ccc(CO)cc1)N*",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 25,
+      "best_score": 0.5188,
+      "top": [
+        {
+          "smiles": "CC(C)C(NC(=O)c1cccc(COC(=O)N2Cc3ccccc3C#Cc3ccccc32)c1)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.5188,
+          "subscores": {
+            "solubility": 0.4522,
+            "size": 0.6781,
+            "flexibility": 0.2086,
+            "synthesizability": 0.197,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(C)C(NC(=O)CC(=O)OCc1cccc(S(=O)(=O)N2Cc3ccccc3C#Cc3ccccc32)c1)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.4559,
+          "subscores": {
+            "solubility": 0.5297,
+            "size": 0.5046,
+            "flexibility": 0.0884,
+            "synthesizability": 0.1498,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(C)C(NC(=O)C(=O)Nc1ccc(S(=O)(=O)N2Cc3ccccc3C#Cc3ccccc32)cc1)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.4268,
+          "subscores": {
+            "solubility": 0.5693,
+            "size": 0.5691,
+            "flexibility": 0.2086,
+            "synthesizability": 0.1766,
+            "cleavability": 0.4,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(C)C(NC(=O)C(=O)NNC(=O)c1ccc(S(=O)(=O)N2Cc3ccccc3C#Cc3ccccc32)cc1)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.4184,
+          "subscores": {
+            "solubility": 0.6709,
+            "size": 0.4735,
+            "flexibility": 0.2086,
+            "synthesizability": 0.1477,
+            "cleavability": 0.4,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(C)C(NC(=O)C(=O)Nc1ccc(C(=O)NCC(=O)N2Cc3ccccc3C#Cc3ccccc32)cc1)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.412,
+          "subscores": {
+            "solubility": 0.6059,
+            "size": 0.5224,
+            "flexibility": 0.1589,
+            "synthesizability": 0.1637,
+            "cleavability": 0.4,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        }
+      ]
+    },
+    {
+      "handle": "DBCO",
+      "trigger": "Val-Ala-PABC",
+      "seed": 0,
+      "warhead_pair": "*N1Cc2ccccc2C#Cc2ccccc21|CC(C)[C@@H](C(=O)N[C@@H](C)C(=O)Nc1ccc(CO)cc1)N*",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 25,
+      "best_score": 0.586,
+      "top": [
+        {
+          "smiles": "CC(NC(=O)C(NC(=O)C(=O)Nc1ccc(COC(=O)N2Cc3ccccc3C#Cc3ccccc32)cc1)C(C)C)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.586,
+          "subscores": {
+            "solubility": 0.4584,
+            "size": 0.7738,
+            "flexibility": 0.5,
+            "synthesizability": 0.2248,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)C(NC(=O)C(=O)Nc1cccc(COC(=O)N2Cc3ccccc3C#Cc3ccccc32)c1)C(C)C)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.5828,
+          "subscores": {
+            "solubility": 0.4584,
+            "size": 0.7738,
+            "flexibility": 0.5,
+            "synthesizability": 0.2181,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)C(NC(=O)Nc1ccc(COC(=O)C(=O)N2Cc3ccccc3C#Cc3ccccc32)cc1)C(C)C)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.5819,
+          "subscores": {
+            "solubility": 0.4584,
+            "size": 0.7738,
+            "flexibility": 0.5,
+            "synthesizability": 0.2161,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)C(NC(=O)c1ccc(COC(=O)NC(=O)N2Cc3ccccc3C#Cc3ccccc32)cc1)C(C)C)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.5786,
+          "subscores": {
+            "solubility": 0.4361,
+            "size": 0.7738,
+            "flexibility": 0.5,
+            "synthesizability": 0.2229,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)C(NC(=O)c1cccc(COC(=O)NC(=O)N2Cc3ccccc3C#Cc3ccccc32)c1)C(C)C)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.5755,
+          "subscores": {
+            "solubility": 0.4361,
+            "size": 0.7738,
+            "flexibility": 0.5,
+            "synthesizability": 0.2161,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        }
+      ]
+    },
+    {
+      "handle": "DBCO",
+      "trigger": "Val-Cit-PABC",
+      "seed": 2,
+      "warhead_pair": "*N1Cc2ccccc2C#Cc2ccccc21|CC(C)[C@@H](C(=O)N[C@@H](CCCNC(=O)N)C(=O)Nc1ccc(CO)cc1)N*",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 25,
+      "best_score": 0.5095,
+      "top": [
+        {
+          "smiles": "CC(C)C(NC(=O)OCc1ccc(C(=O)N2Cc3ccccc3C#Cc3ccccc32)c(N)c1)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.5095,
+          "subscores": {
+            "solubility": 0.4785,
+            "size": 0.6447,
+            "flexibility": 0.2086,
+            "synthesizability": 0.1723,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(C)C(NC(=O)NNC(=O)c1ccc(COC(=O)N2Cc3ccccc3C#Cc3ccccc32)cc1)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.4981,
+          "subscores": {
+            "solubility": 0.5041,
+            "size": 0.5491,
+            "flexibility": 0.2086,
+            "synthesizability": 0.1602,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(C)C(NC(=O)c1ccc(COC(=O)NNC(=O)N2Cc3ccccc3C#Cc3ccccc32)cc1)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.4958,
+          "subscores": {
+            "solubility": 0.5041,
+            "size": 0.5491,
+            "flexibility": 0.2086,
+            "synthesizability": 0.1562,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(C)C(NC(=O)Nc1ccc(COC(=O)N2Cc3ccccc3C#Cc3ccccc32)cc1N)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.494,
+          "subscores": {
+            "solubility": 0.4537,
+            "size": 0.6114,
+            "flexibility": 0.2086,
+            "synthesizability": 0.161,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(C)C(NC(=O)c1cc(COC(=O)N2Cc3ccccc3C#Cc3ccccc32)ccc1C(N)=O)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.4899,
+          "subscores": {
+            "solubility": 0.5125,
+            "size": 0.5825,
+            "flexibility": 0.1589,
+            "synthesizability": 0.1568,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        }
+      ]
+    },
+    {
+      "handle": "DBCO",
+      "trigger": "Val-Ala-PABC",
+      "seed": 1,
+      "warhead_pair": "*N1Cc2ccccc2C#Cc2ccccc21|CC(C)[C@@H](C(=O)N[C@@H](C)C(=O)Nc1ccc(CO)cc1)N*",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 25,
+      "best_score": 0.654,
+      "top": [
+        {
+          "smiles": "CC(NC(=O)C(NC(=O)C(=O)NCC(=O)NC(=O)N1Cc2ccccc2C#Cc2ccccc21)C(C)C)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.654,
+          "subscores": {
+            "solubility": 0.6905,
+            "size": 0.8829,
+            "flexibility": 0.5826,
+            "synthesizability": 0.2097,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)C(NC(=O)C(=O)NCC(=O)NC(=O)C(=O)N1Cc2ccccc2C#Cc2ccccc21)C(C)C)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.648,
+          "subscores": {
+            "solubility": 0.7778,
+            "size": 0.8206,
+            "flexibility": 0.5826,
+            "synthesizability": 0.1813,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)C(NC(=O)NC(=O)C(=O)NCC(=O)NC(=O)N1Cc2ccccc2C#Cc2ccccc21)C(C)C)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.6326,
+          "subscores": {
+            "solubility": 0.7153,
+            "size": 0.7873,
+            "flexibility": 0.5826,
+            "synthesizability": 0.1813,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)C(NC(=O)NC(=O)CNC(=O)CNC(=O)N1Cc2ccccc2C#Cc2ccccc21)C(C)C)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.6263,
+          "subscores": {
+            "solubility": 0.6746,
+            "size": 0.8183,
+            "flexibility": 0.4174,
+            "synthesizability": 0.2117,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)C(NC(=O)NCC(=O)NC(=O)NCC(=O)N1Cc2ccccc2C#Cc2ccccc21)C(C)C)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.626,
+          "subscores": {
+            "solubility": 0.6746,
+            "size": 0.8183,
+            "flexibility": 0.4174,
+            "synthesizability": 0.211,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        }
+      ]
+    },
+    {
+      "handle": "DBCO",
+      "trigger": "Val-Ala-PABC",
+      "seed": 2,
+      "warhead_pair": "*N1Cc2ccccc2C#Cc2ccccc21|CC(C)[C@@H](C(=O)N[C@@H](C)C(=O)Nc1ccc(CO)cc1)N*",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 25,
+      "best_score": 0.578,
+      "top": [
+        {
+          "smiles": "CC(NC(=O)C(NC(=O)NNC(=O)OCc1ccc(C(=O)N2Cc3ccccc3C#Cc3ccccc32)cc1)C(C)C)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.578,
+          "subscores": {
+            "solubility": 0.4653,
+            "size": 0.7405,
+            "flexibility": 0.5,
+            "synthesizability": 0.2112,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)C(NC(=O)CNC(=O)OCc1ccc(C(=O)N2Cc3ccccc3C#Cc3ccccc32)cc1)C(C)C)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.5689,
+          "subscores": {
+            "solubility": 0.4716,
+            "size": 0.7427,
+            "flexibility": 0.3392,
+            "synthesizability": 0.2301,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)C(NC(=O)c1cc(CO)cc(COC(=O)C(=O)N2Cc3ccccc3C#Cc3ccccc32)c1)C(C)C)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.5687,
+          "subscores": {
+            "solubility": 0.5201,
+            "size": 0.7405,
+            "flexibility": 0.4174,
+            "synthesizability": 0.1836,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)C(NC(=O)c1ccc(COC(=O)NCC(=O)N2Cc3ccccc3C#Cc3ccccc32)cc1)C(C)C)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.5681,
+          "subscores": {
+            "solubility": 0.4716,
+            "size": 0.7427,
+            "flexibility": 0.3392,
+            "synthesizability": 0.2282,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)C(NC(=O)OCc1ccc(C(=O)N2Cc3ccccc3C#Cc3ccccc32)c(C(=O)O)c1)C(C)C)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.5674,
+          "subscores": {
+            "solubility": 0.4367,
+            "size": 0.7716,
+            "flexibility": 0.4174,
+            "synthesizability": 0.2185,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        }
+      ]
+    },
+    {
+      "handle": "DBCO",
+      "trigger": "Glucuronide",
+      "seed": 2,
+      "warhead_pair": "*N1Cc2ccccc2C#Cc2ccccc21|*NC(=O)[C@@H]1O[C@@H](Oc2ccc(CO)cc2)[C@@H](O)[C@H](O)[C@H]1O",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 25,
+      "best_score": 0.0625,
+      "top": [
+        {
+          "smiles": "O=C(CNC(=O)C(=O)NCC(=O)N1Cc2ccccc2C#Cc2ccccc21)NC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O",
+          "score": 0.0625,
+          "subscores": {
+            "solubility": 0.9094,
+            "size": 0.8386,
+            "flexibility": 0.6608,
+            "synthesizability": 0.0476,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(CNC(=O)C(=O)NCCC(=O)N1Cc2ccccc2C#Cc2ccccc21)NC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O",
+          "score": 0.0612,
+          "subscores": {
+            "solubility": 0.8929,
+            "size": 0.8074,
+            "flexibility": 0.5826,
+            "synthesizability": 0.047,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(CNC(=O)C(=O)N1Cc2ccccc2C#Cc2ccccc21)NCC(=O)NC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O",
+          "score": 0.0606,
+          "subscores": {
+            "solubility": 0.9094,
+            "size": 0.8386,
+            "flexibility": 0.6608,
+            "synthesizability": 0.0397,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(COC(=O)C(=O)N1Cc2ccccc2C#Cc2ccccc21)NCC(=O)NC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O",
+          "score": 0.0602,
+          "subscores": {
+            "solubility": 0.8912,
+            "size": 0.8364,
+            "flexibility": 0.6608,
+            "synthesizability": 0.0395,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(CNC(=O)NC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O)NC(=O)c1ccc(C(=O)N2Cc3ccccc3C#Cc3ccccc32)cc1",
+          "score": 0.06,
+          "subscores": {
+            "solubility": 0.7593,
+            "size": 0.7006,
+            "flexibility": 0.6608,
+            "synthesizability": 0.0539,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        }
+      ]
+    },
+    {
+      "handle": "DBCO",
+      "trigger": "Non-cleavable",
+      "seed": 0,
+      "warhead_pair": "*N1Cc2ccccc2C#Cc2ccccc21|*NCc1ccccc1",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 25,
+      "best_score": 0.7347,
+      "top": [
+        {
+          "smiles": "O=C(Cn1c(=O)[nH]c(=O)n(CC(=O)N2Cc3ccccc3C#Cc3ccccc32)c1=O)NCc1ccccc1",
+          "score": 0.7347,
+          "subscores": {
+            "solubility": 0.7389,
+            "size": 1.0,
+            "flexibility": 0.7914,
+            "synthesizability": 0.426,
+            "cleavability": 0.4,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(CNC(=O)N1Cc2ccccc2C#Cc2ccccc21)NC(=O)NC(=O)NCc1ccccc1",
+          "score": 0.6987,
+          "subscores": {
+            "solubility": 0.5757,
+            "size": 1.0,
+            "flexibility": 0.8808,
+            "synthesizability": 0.4427,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(Cn1cc(C(=O)N2Cc3ccccc3C#Cc3ccccc32)c(=O)[nH]c1=O)NCc1ccccc1",
+          "score": 0.6949,
+          "subscores": {
+            "solubility": 0.5746,
+            "size": 1.0,
+            "flexibility": 0.8411,
+            "synthesizability": 0.4435,
+            "cleavability": 0.4,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(COC(=O)N1Cc2ccccc2C#Cc2ccccc21)NC(=O)NC(=O)NCc1ccccc1",
+          "score": 0.6834,
+          "subscores": {
+            "solubility": 0.5339,
+            "size": 1.0,
+            "flexibility": 0.8808,
+            "synthesizability": 0.4414,
+            "cleavability": 0.4,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(COC(=O)NCc1ccccc1)NC(=O)NC(=O)N1Cc2ccccc2C#Cc2ccccc21",
+          "score": 0.68,
+          "subscores": {
+            "solubility": 0.5339,
+            "size": 1.0,
+            "flexibility": 0.8808,
+            "synthesizability": 0.432,
+            "cleavability": 0.4,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        }
+      ]
+    },
+    {
+      "handle": "DBCO",
+      "trigger": "Glucuronide",
+      "seed": 0,
+      "warhead_pair": "*N1Cc2ccccc2C#Cc2ccccc21|*NC(=O)[C@@H]1O[C@@H](Oc2ccc(CO)cc2)[C@@H](O)[C@H](O)[C@H]1O",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 25,
+      "best_score": 0.0612,
+      "top": [
+        {
+          "smiles": "O=C(CNC(=O)C(=O)NCCC(=O)N1Cc2ccccc2C#Cc2ccccc21)NC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O",
+          "score": 0.0612,
+          "subscores": {
+            "solubility": 0.8929,
+            "size": 0.8074,
+            "flexibility": 0.5826,
+            "synthesizability": 0.047,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(CNC(=O)C(=O)NC(=O)N1Cc2ccccc2C#Cc2ccccc21)NC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O",
+          "score": 0.0601,
+          "subscores": {
+            "solubility": 0.8834,
+            "size": 0.8697,
+            "flexibility": 0.7914,
+            "synthesizability": 0.035,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(CNC(=O)c1ccccc1S(=O)(=O)N1Cc2ccccc2C#Cc2ccccc21)NC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O",
+          "score": 0.0592,
+          "subscores": {
+            "solubility": 0.7718,
+            "size": 0.7161,
+            "flexibility": 0.5826,
+            "synthesizability": 0.0516,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)c1ccc(S(=O)(=O)N2Cc3ccccc3C#Cc3ccccc32)cc1)C(=O)NC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O",
+          "score": 0.0541,
+          "subscores": {
+            "solubility": 0.741,
+            "size": 0.6849,
+            "flexibility": 0.5826,
+            "synthesizability": 0.0336,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "NC(CC(=O)NCC(=O)NC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O)C(=O)N1Cc2ccccc2C#Cc2ccccc21",
+          "score": 0.0526,
+          "subscores": {
+            "solubility": 0.883,
+            "size": 0.8696,
+            "flexibility": 0.5826,
+            "synthesizability": 0.0194,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        }
+      ]
+    },
+    {
+      "handle": "DBCO",
+      "trigger": "Glucuronide",
+      "seed": 1,
+      "warhead_pair": "*N1Cc2ccccc2C#Cc2ccccc21|*NC(=O)[C@@H]1O[C@@H](Oc2ccc(CO)cc2)[C@@H](O)[C@H](O)[C@H]1O",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 25,
+      "best_score": 0.0567,
+      "top": [
+        {
+          "smiles": "CC(NC(=O)NCC(=O)N1Cc2ccccc2C#Cc2ccccc21)C(=O)NC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O",
+          "score": 0.0567,
+          "subscores": {
+            "solubility": 0.8353,
+            "size": 0.8696,
+            "flexibility": 0.6608,
+            "synthesizability": 0.0297,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)Nc1ccc(C(=O)N2Cc3ccccc3C#Cc3ccccc32)cc1)C(=O)NC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O",
+          "score": 0.0555,
+          "subscores": {
+            "solubility": 0.6694,
+            "size": 0.7317,
+            "flexibility": 0.6608,
+            "synthesizability": 0.0396,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(CNc1ccc(C(=O)NC(=O)C(=O)N2Cc3ccccc3C#Cc3ccccc32)cc1)NC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O",
+          "score": 0.0524,
+          "subscores": {
+            "solubility": 0.7887,
+            "size": 0.7006,
+            "flexibility": 0.6608,
+            "synthesizability": 0.024,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "NC(C(=O)NC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O)c1ccc(S(=O)(=O)N2Cc3ccccc3C#Cc3ccccc32)cc1",
+          "score": 0.0524,
+          "subscores": {
+            "solubility": 0.7506,
+            "size": 0.7784,
+            "flexibility": 0.6608,
+            "synthesizability": 0.0237,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(CNC(=O)C(O)c1ccc(C(=O)N2Cc3ccccc3C#Cc3ccccc32)cc1)NC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O",
+          "score": 0.0502,
+          "subscores": {
+            "solubility": 0.7816,
+            "size": 0.7295,
+            "flexibility": 0.5826,
+            "synthesizability": 0.0198,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        }
+      ]
+    },
+    {
+      "handle": "DBCO",
+      "trigger": "Non-cleavable",
+      "seed": 1,
+      "warhead_pair": "*N1Cc2ccccc2C#Cc2ccccc21|*NCc1ccccc1",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 25,
+      "best_score": 0.6584,
+      "top": [
+        {
+          "smiles": "NC(=O)c1cc(C(=O)NCc2ccccc2)ccc1NS(=O)(=O)N1Cc2ccccc2C#Cc2ccccc21",
+          "score": 0.6584,
+          "subscores": {
+            "solubility": 0.5029,
+            "size": 1.0,
+            "flexibility": 0.7311,
+            "synthesizability": 0.4438,
+            "cleavability": 0.4,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(NCc1ccccc1)NS(=O)(=O)c1cncc(C(=O)N2Cc3ccccc3C#Cc3ccccc32)c1",
+          "score": 0.657,
+          "subscores": {
+            "solubility": 0.4714,
+            "size": 1.0,
+            "flexibility": 0.8411,
+            "synthesizability": 0.4444,
+            "cleavability": 0.4,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(NCc1ccccc1)Nc1ccc(S(=O)(=O)NC(=O)N2Cc3ccccc3C#Cc3ccccc32)cc1",
+          "score": 0.64,
+          "subscores": {
+            "solubility": 0.406,
+            "size": 1.0,
+            "flexibility": 0.8411,
+            "synthesizability": 0.4776,
+            "cleavability": 0.4,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(NCc1ccccc1)NS(=O)(=O)c1ccc(NC(=O)N2Cc3ccccc3C#Cc3ccccc32)cc1",
+          "score": 0.64,
+          "subscores": {
+            "solubility": 0.406,
+            "size": 1.0,
+            "flexibility": 0.8411,
+            "synthesizability": 0.4775,
+            "cleavability": 0.4,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(NCc1ccccc1)NS(=O)(=O)Nc1ccc(C(=O)N2Cc3ccccc3C#Cc3ccccc32)cc1",
+          "score": 0.64,
+          "subscores": {
+            "solubility": 0.4309,
+            "size": 1.0,
+            "flexibility": 0.7914,
+            "synthesizability": 0.4568,
+            "cleavability": 0.4,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        }
+      ]
+    },
+    {
+      "handle": "DBCO",
+      "trigger": "Non-cleavable",
+      "seed": 2,
+      "warhead_pair": "*N1Cc2ccccc2C#Cc2ccccc21|*NCc1ccccc1",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 25,
+      "best_score": 0.6642,
+      "top": [
+        {
+          "smiles": "O=C(CNS(=O)(=O)c1ccc(S(=O)(=O)N2Cc3ccccc3C#Cc3ccccc32)cc1)NCc1ccccc1",
+          "score": 0.6642,
+          "subscores": {
+            "solubility": 0.5147,
+            "size": 1.0,
+            "flexibility": 0.6608,
+            "synthesizability": 0.4711,
+            "cleavability": 0.4,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(NS(=O)(=O)NCc1ccccc1)c1ccc(S(=O)(=O)N2Cc3ccccc3C#Cc3ccccc32)cc1",
+          "score": 0.6594,
+          "subscores": {
+            "solubility": 0.5017,
+            "size": 1.0,
+            "flexibility": 0.7311,
+            "synthesizability": 0.4479,
+            "cleavability": 0.4,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(NCc1ccccc1)NNC(=O)c1ccccc1S(=O)(=O)N1Cc2ccccc2C#Cc2ccccc21",
+          "score": 0.6577,
+          "subscores": {
+            "solubility": 0.4615,
+            "size": 1.0,
+            "flexibility": 0.8411,
+            "synthesizability": 0.4583,
+            "cleavability": 0.4,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(CNC(=O)Nc1cccc(S(=O)(=O)N2Cc3ccccc3C#Cc3ccccc32)c1)NCc1ccccc1",
+          "score": 0.6452,
+          "subscores": {
+            "solubility": 0.4417,
+            "size": 1.0,
+            "flexibility": 0.7311,
+            "synthesizability": 0.4775,
+            "cleavability": 0.4,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(NCc1ccccc1)NC(=O)Nc1ccc(S(=O)(=O)N2Cc3ccccc3C#Cc3ccccc32)cc1",
+          "score": 0.6394,
+          "subscores": {
+            "solubility": 0.406,
+            "size": 1.0,
+            "flexibility": 0.8411,
+            "synthesizability": 0.4756,
+            "cleavability": 0.4,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        }
+      ]
+    },
+    {
+      "handle": "Disulfide",
+      "trigger": "Val-Cit-PABC",
+      "seed": 0,
+      "warhead_pair": "*SSc1ccccn1|CC(C)[C@@H](C(=O)N[C@@H](CCCNC(=O)N)C(=O)Nc1ccc(CO)cc1)N*",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 25,
+      "best_score": 0.5825,
+      "top": [
+        {
+          "smiles": "CC(C)C(NC(=O)CNC(=O)CNC(=O)CSSc1ccccn1)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.5825,
+          "subscores": {
+            "solubility": 0.7934,
+            "size": 0.8293,
+            "flexibility": 0.0474,
+            "synthesizability": 0.3376,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(C)C(NC(=O)CCNC(=O)CNC(=O)SSc1ccccn1)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.5775,
+          "subscores": {
+            "solubility": 0.7155,
+            "size": 0.8293,
+            "flexibility": 0.065,
+            "synthesizability": 0.3125,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(C)C(NC(=O)C(=O)NC(CCSSc1ccccn1)C(=O)O)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.5678,
+          "subscores": {
+            "solubility": 0.7368,
+            "size": 0.8271,
+            "flexibility": 0.065,
+            "synthesizability": 0.2746,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(C)C(NC(=O)CCC(N)C(=O)NC(=O)SSc1ccccn1)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.5665,
+          "subscores": {
+            "solubility": 0.7046,
+            "size": 0.8293,
+            "flexibility": 0.0884,
+            "synthesizability": 0.2452,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(C)C(NC(=O)CNC(=O)NC(CO)C(=O)SSc1ccccn1)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.5612,
+          "subscores": {
+            "solubility": 0.7967,
+            "size": 0.7937,
+            "flexibility": 0.065,
+            "synthesizability": 0.2405,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        }
+      ]
+    },
+    {
+      "handle": "Disulfide",
+      "trigger": "Val-Cit-PABC",
+      "seed": 1,
+      "warhead_pair": "*SSc1ccccn1|CC(C)[C@@H](C(=O)N[C@@H](CCCNC(=O)N)C(=O)Nc1ccc(CO)cc1)N*",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 25,
+      "best_score": 0.6296,
+      "top": [
+        {
+          "smiles": "CC(C)C(NC(=O)CNC(=O)C(=O)NC(=O)SSc1ccccn1)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.6296,
+          "subscores": {
+            "solubility": 0.7845,
+            "size": 0.8294,
+            "flexibility": 0.1589,
+            "synthesizability": 0.2896,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(C)C(NC(=O)C(=O)NC(=O)CNC(=O)SSc1ccccn1)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.626,
+          "subscores": {
+            "solubility": 0.7845,
+            "size": 0.8294,
+            "flexibility": 0.1589,
+            "synthesizability": 0.2805,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(C)C(NC(=O)C(=O)NNC(=O)NCCSSc1ccccn1)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.62,
+          "subscores": {
+            "solubility": 0.7862,
+            "size": 0.8271,
+            "flexibility": 0.1192,
+            "synthesizability": 0.3066,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(C)C(NC(=O)NCC(=O)NNC(=O)NNC(=O)SSc1ccccn1)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.6073,
+          "subscores": {
+            "solubility": 0.8002,
+            "size": 0.7293,
+            "flexibility": 0.1589,
+            "synthesizability": 0.254,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(C)C(NC(=O)CNC(=O)CNC(=O)C(=O)SSc1ccccn1)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.6027,
+          "subscores": {
+            "solubility": 0.8261,
+            "size": 0.7982,
+            "flexibility": 0.0884,
+            "synthesizability": 0.2932,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        }
+      ]
+    },
+    {
+      "handle": "Disulfide",
+      "trigger": "Val-Cit-PABC",
+      "seed": 2,
+      "warhead_pair": "*SSc1ccccn1|CC(C)[C@@H](C(=O)N[C@@H](CCCNC(=O)N)C(=O)Nc1ccc(CO)cc1)N*",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 25,
+      "best_score": 0.5828,
+      "top": [
+        {
+          "smiles": "CC(C)C(NC(=O)c1ccc(C(=O)NNC(=O)SSc2ccccn2)cc1O)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.5828,
+          "subscores": {
+            "solubility": 0.615,
+            "size": 0.7181,
+            "flexibility": 0.1589,
+            "synthesizability": 0.2833,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(C)C(NC(=O)c1ccc(O)c(C(=O)NNC(=O)SSc2ccccn2)c1)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.5826,
+          "subscores": {
+            "solubility": 0.615,
+            "size": 0.7181,
+            "flexibility": 0.1589,
+            "synthesizability": 0.2827,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(C)C(NC(=O)c1cc(C(=O)NC(=O)SSc2ccccn2)ccc1N)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.5807,
+          "subscores": {
+            "solubility": 0.5832,
+            "size": 0.7537,
+            "flexibility": 0.1589,
+            "synthesizability": 0.2862,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(C)C(NC(=O)c1ccc(N)c(C(=O)NC(=O)SSc2ccccn2)c1)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.5805,
+          "subscores": {
+            "solubility": 0.5832,
+            "size": 0.7537,
+            "flexibility": 0.1589,
+            "synthesizability": 0.2854,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(C)C(NC(=O)c1ccc(O)c(C(=O)NC(=O)SSc2ccccn2)c1)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.5794,
+          "subscores": {
+            "solubility": 0.5729,
+            "size": 0.7515,
+            "flexibility": 0.1589,
+            "synthesizability": 0.2896,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        }
+      ]
+    },
+    {
+      "handle": "Disulfide",
+      "trigger": "Val-Ala-PABC",
+      "seed": 0,
+      "warhead_pair": "*SSc1ccccn1|CC(C)[C@@H](C(=O)N[C@@H](C)C(=O)Nc1ccc(CO)cc1)N*",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 25,
+      "best_score": 0.6821,
+      "top": [
+        {
+          "smiles": "CC(NC(=O)C(NC(=O)C(N)CC(=O)NNC(=O)SSc1ccccn1)C(C)C)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.6821,
+          "subscores": {
+            "solubility": 0.7311,
+            "size": 1.0,
+            "flexibility": 0.3392,
+            "synthesizability": 0.2953,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)C(NC(=O)NC(CO)C(=O)NNC(=O)SSc1ccccn1)C(C)C)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.679,
+          "subscores": {
+            "solubility": 0.7453,
+            "size": 0.9829,
+            "flexibility": 0.3392,
+            "synthesizability": 0.2846,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)C(NC(=O)C(C)(C)C(=O)NNC(=O)SSc1ccccn1)C(C)C)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.6728,
+          "subscores": {
+            "solubility": 0.6181,
+            "size": 1.0,
+            "flexibility": 0.4174,
+            "synthesizability": 0.304,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)CNC(=O)SSc1ccccn1)C(=O)NC(C(=O)NC(C)C(=O)Nc1ccc(CO)cc1)C(C)C",
+          "score": 0.6649,
+          "subscores": {
+            "solubility": 0.6664,
+            "size": 1.0,
+            "flexibility": 0.2689,
+            "synthesizability": 0.3224,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)C(NC(=O)C(CO)NC(=O)CNC(=O)SSc1ccccn1)C(C)C)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.6623,
+          "subscores": {
+            "solubility": 0.7532,
+            "size": 0.9851,
+            "flexibility": 0.2086,
+            "synthesizability": 0.3109,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        }
+      ]
+    },
+    {
+      "handle": "Disulfide",
+      "trigger": "Val-Ala-PABC",
+      "seed": 1,
+      "warhead_pair": "*SSc1ccccn1|CC(C)[C@@H](C(=O)N[C@@H](C)C(=O)Nc1ccc(CO)cc1)N*",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 25,
+      "best_score": 0.6985,
+      "top": [
+        {
+          "smiles": "CC(NC(=O)C(NC(=O)CNC(=O)CNC(=O)C(=O)SSc1ccccn1)C(C)C)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.6985,
+          "subscores": {
+            "solubility": 0.7862,
+            "size": 0.9895,
+            "flexibility": 0.2689,
+            "synthesizability": 0.349,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)C(NC(=O)C(=O)NC(=O)CNC(=O)NC(=O)SSc1ccccn1)C(C)C)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.6972,
+          "subscores": {
+            "solubility": 0.763,
+            "size": 0.9251,
+            "flexibility": 0.4174,
+            "synthesizability": 0.3025,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)C(NC(=O)NC(=O)NC(=O)NC(=O)SSc1ccccn1)C(C)C)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.6969,
+          "subscores": {
+            "solubility": 0.622,
+            "size": 1.0,
+            "flexibility": 0.5826,
+            "synthesizability": 0.3111,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)C(NC(=O)C(=O)NCC(=O)NCC(=O)SSc1ccccn1)C(C)C)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.696,
+          "subscores": {
+            "solubility": 0.7862,
+            "size": 0.9895,
+            "flexibility": 0.2689,
+            "synthesizability": 0.342,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)C(NC(=O)NCC(=O)NC(=O)NC(=O)SSc1ccccn1)C(C)C)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.6948,
+          "subscores": {
+            "solubility": 0.6738,
+            "size": 0.9873,
+            "flexibility": 0.4174,
+            "synthesizability": 0.3302,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        }
+      ]
+    },
+    {
+      "handle": "Disulfide",
+      "trigger": "Val-Ala-PABC",
+      "seed": 2,
+      "warhead_pair": "*SSc1ccccn1|CC(C)[C@@H](C(=O)N[C@@H](C)C(=O)Nc1ccc(CO)cc1)N*",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 25,
+      "best_score": 0.6638,
+      "top": [
+        {
+          "smiles": "CC(NC(=O)C(NC(=O)c1ccc(C(=O)NNC(=O)CSSc2ccccn2)cc1)C(C)C)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.6638,
+          "subscores": {
+            "solubility": 0.5916,
+            "size": 0.9138,
+            "flexibility": 0.2689,
+            "synthesizability": 0.3968,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)C(NC(=O)C(=O)NC(=O)c1ccc(NC(=O)SSc2ccccn2)cc1)C(C)C)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.6596,
+          "subscores": {
+            "solubility": 0.5572,
+            "size": 0.8828,
+            "flexibility": 0.4174,
+            "synthesizability": 0.3398,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)C(NC(=O)c1ccc(C(=O)NNC(=O)NC(=O)SSc2ccccn2)cc1)C(C)C)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.6569,
+          "subscores": {
+            "solubility": 0.5662,
+            "size": 0.8494,
+            "flexibility": 0.4174,
+            "synthesizability": 0.335,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)C(NC(=O)NNC(=O)c1ccc(NC(=O)SSc2ccccn2)cc1)C(C)C)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.6561,
+          "subscores": {
+            "solubility": 0.5127,
+            "size": 0.9116,
+            "flexibility": 0.4174,
+            "synthesizability": 0.3574,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)C(NC(=O)c1cccc(NC(=O)NNC(=O)SSc2ccccn2)c1)C(C)C)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.6544,
+          "subscores": {
+            "solubility": 0.5127,
+            "size": 0.9116,
+            "flexibility": 0.4174,
+            "synthesizability": 0.3521,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        }
+      ]
+    },
+    {
+      "handle": "Disulfide",
+      "trigger": "Glucuronide",
+      "seed": 0,
+      "warhead_pair": "*SSc1ccccn1|*NC(=O)[C@@H]1O[C@@H](Oc2ccc(CO)cc2)[C@@H](O)[C@H](O)[C@H]1O",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 25,
+      "best_score": 0.0751,
+      "top": [
+        {
+          "smiles": "O=C(NC(=O)c1ccc(C(=O)SSc2ccccn2)cc1O)NC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O",
+          "score": 0.0751,
+          "subscores": {
+            "solubility": 0.7589,
+            "size": 0.9297,
+            "flexibility": 0.6608,
+            "synthesizability": 0.1546,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "Nc1cc(S(=O)(=O)NC(=O)C2OC(Oc3ccc(CO)cc3)C(O)C(O)C2O)ccc1NC(=O)SSc1ccccn1",
+          "score": 0.0749,
+          "subscores": {
+            "solubility": 0.7504,
+            "size": 0.914,
+            "flexibility": 0.5826,
+            "synthesizability": 0.1659,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(NS(=O)(=O)c1ccccc1C(=O)NC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O)SSc1ccccn1",
+          "score": 0.0748,
+          "subscores": {
+            "solubility": 0.7712,
+            "size": 0.8851,
+            "flexibility": 0.5826,
+            "synthesizability": 0.1638,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(NC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O)NS(=O)(=O)c1cccc(C(=O)SSc2ccccn2)c1",
+          "score": 0.0748,
+          "subscores": {
+            "solubility": 0.7712,
+            "size": 0.8851,
+            "flexibility": 0.5826,
+            "synthesizability": 0.1637,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(Nc1cc(C(=O)O)cc(C(=O)NC(=O)C2OC(Oc3ccc(CO)cc3)C(O)C(O)C2O)c1)SSc1ccccn1",
+          "score": 0.0747,
+          "subscores": {
+            "solubility": 0.7032,
+            "size": 0.9297,
+            "flexibility": 0.5826,
+            "synthesizability": 0.1761,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        }
+      ]
+    },
+    {
+      "handle": "Disulfide",
+      "trigger": "Glucuronide",
+      "seed": 1,
+      "warhead_pair": "*SSc1ccccn1|*NC(=O)[C@@H]1O[C@@H](Oc2ccc(CO)cc2)[C@@H](O)[C@H](O)[C@H]1O",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 25,
+      "best_score": 0.0752,
+      "top": [
+        {
+          "smiles": "O=C(CSSc1ccccn1)Nc1cc(S(=O)(=O)NC(=O)C2OC(Oc3ccc(CO)cc3)C(O)C(O)C2O)ccc1O",
+          "score": 0.0752,
+          "subscores": {
+            "solubility": 0.7867,
+            "size": 0.8806,
+            "flexibility": 0.4174,
+            "synthesizability": 0.1945,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "Nc1cc(NC(=O)C2OC(Oc3ccc(CO)cc3)C(O)C(O)C2O)ccc1S(=O)(=O)NC(=O)SSc1ccccn1",
+          "score": 0.0752,
+          "subscores": {
+            "solubility": 0.7504,
+            "size": 0.914,
+            "flexibility": 0.5826,
+            "synthesizability": 0.17,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "Nc1cc(S(=O)(=O)NC(=O)C2OC(Oc3ccc(CO)cc3)C(O)C(O)C2O)ccc1NC(=O)SSc1ccccn1",
+          "score": 0.0749,
+          "subscores": {
+            "solubility": 0.7504,
+            "size": 0.914,
+            "flexibility": 0.5826,
+            "synthesizability": 0.1659,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(Nc1ccc(NC(=O)C2OC(Oc3ccc(CO)cc3)C(O)C(O)C2O)cc1S(=O)(=O)O)SSc1ccccn1",
+          "score": 0.0747,
+          "subscores": {
+            "solubility": 0.6833,
+            "size": 0.9118,
+            "flexibility": 0.5826,
+            "synthesizability": 0.1845,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "Nc1ccc(S(=O)(=O)NC(=O)C2OC(Oc3ccc(CO)cc3)C(O)C(O)C2O)cc1NC(=O)SSc1ccccn1",
+          "score": 0.0747,
+          "subscores": {
+            "solubility": 0.7504,
+            "size": 0.914,
+            "flexibility": 0.5826,
+            "synthesizability": 0.1638,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        }
+      ]
+    },
+    {
+      "handle": "Disulfide",
+      "trigger": "Glucuronide",
+      "seed": 2,
+      "warhead_pair": "*SSc1ccccn1|*NC(=O)[C@@H]1O[C@@H](Oc2ccc(CO)cc2)[C@@H](O)[C@H](O)[C@H]1O",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 25,
+      "best_score": 0.0762,
+      "top": [
+        {
+          "smiles": "O=C(NS(=O)(=O)c1ccc(C(=O)NC(=O)C2OC(Oc3ccc(CO)cc3)C(O)C(O)C2O)cc1)SSc1ccccn1",
+          "score": 0.0762,
+          "subscores": {
+            "solubility": 0.7712,
+            "size": 0.8851,
+            "flexibility": 0.5826,
+            "synthesizability": 0.1816,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(Nc1ccc(C(=O)NC(=O)C2OC(Oc3ccc(CO)cc3)C(O)C(O)C2O)cc1C(=O)O)SSc1ccccn1",
+          "score": 0.0752,
+          "subscores": {
+            "solubility": 0.7032,
+            "size": 0.9297,
+            "flexibility": 0.5826,
+            "synthesizability": 0.1819,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(Nc1ccc(C(=O)NC(=O)C2OC(Oc3ccc(CO)cc3)C(O)C(O)C2O)c(C(=O)O)c1)SSc1ccccn1",
+          "score": 0.075,
+          "subscores": {
+            "solubility": 0.7032,
+            "size": 0.9297,
+            "flexibility": 0.5826,
+            "synthesizability": 0.1794,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(Nc1cc(C(=O)O)cc(C(=O)NC(=O)C2OC(Oc3ccc(CO)cc3)C(O)C(O)C2O)c1)SSc1ccccn1",
+          "score": 0.0747,
+          "subscores": {
+            "solubility": 0.7032,
+            "size": 0.9297,
+            "flexibility": 0.5826,
+            "synthesizability": 0.1761,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(NC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O)Nc1cc(C(=O)SSc2ccccn2)ccc1C(=O)O",
+          "score": 0.0747,
+          "subscores": {
+            "solubility": 0.7032,
+            "size": 0.9297,
+            "flexibility": 0.5826,
+            "synthesizability": 0.1754,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        }
+      ]
+    },
+    {
+      "handle": "Disulfide",
+      "trigger": "Non-cleavable",
+      "seed": 0,
+      "warhead_pair": "*SSc1ccccn1|*NCc1ccccc1",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 25,
+      "best_score": 0.7612,
+      "top": [
+        {
+          "smiles": "O=C(NCc1ccccc1)NC(=O)NC(=O)C(=O)NC(=O)SSc1ccccn1",
+          "score": 0.7612,
+          "subscores": {
+            "solubility": 0.668,
+            "size": 1.0,
+            "flexibility": 0.8808,
+            "synthesizability": 0.5346,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(CNC(=O)NC(=O)SSc1ccccn1)NC(=O)NCc1ccccc1",
+          "score": 0.7552,
+          "subscores": {
+            "solubility": 0.6267,
+            "size": 1.0,
+            "flexibility": 0.7914,
+            "synthesizability": 0.5901,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "Nc1c(C(=O)SSc2ccccn2)nnn1CC(=O)NCc1ccccc1",
+          "score": 0.7421,
+          "subscores": {
+            "solubility": 0.6261,
+            "size": 1.0,
+            "flexibility": 0.7311,
+            "synthesizability": 0.5695,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(Cn1cc(C(=O)NCC(=O)SSc2ccccn2)nn1)NCc1ccccc1",
+          "score": 0.7389,
+          "subscores": {
+            "solubility": 0.6746,
+            "size": 1.0,
+            "flexibility": 0.5826,
+            "synthesizability": 0.5703,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(Cn1cc(C(=O)NC(=O)SSc2ccccn2)nn1)NCc1ccccc1",
+          "score": 0.7374,
+          "subscores": {
+            "solubility": 0.6227,
+            "size": 1.0,
+            "flexibility": 0.7311,
+            "synthesizability": 0.5578,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        }
+      ]
+    },
+    {
+      "handle": "Disulfide",
+      "trigger": "Non-cleavable",
+      "seed": 1,
+      "warhead_pair": "*SSc1ccccn1|*NCc1ccccc1",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 25,
+      "best_score": 0.7181,
+      "top": [
+        {
+          "smiles": "O=C(NCc1ccccc1)NNC(=O)c1ccc(S(=O)(=O)SSc2ccccn2)cc1",
+          "score": 0.7181,
+          "subscores": {
+            "solubility": 0.5289,
+            "size": 1.0,
+            "flexibility": 0.7311,
+            "synthesizability": 0.6089,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(NCc1ccccc1)NS(=O)(=O)c1ccc(C(=O)NC(=O)SSc2ccccn2)cc1",
+          "score": 0.7116,
+          "subscores": {
+            "solubility": 0.52,
+            "size": 1.0,
+            "flexibility": 0.7311,
+            "synthesizability": 0.5976,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(NCc1ccccc1)NC(=O)c1cccc(S(=O)(=O)NC(=O)SSc2ccccn2)c1",
+          "score": 0.7112,
+          "subscores": {
+            "solubility": 0.52,
+            "size": 1.0,
+            "flexibility": 0.7311,
+            "synthesizability": 0.5963,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(NCc1ccccc1)NC(=O)c1ccc(C(=O)NC(=O)NC(=O)SSc2ccccn2)cc1",
+          "score": 0.7104,
+          "subscores": {
+            "solubility": 0.5081,
+            "size": 1.0,
+            "flexibility": 0.7914,
+            "synthesizability": 0.5869,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(NCc1ccccc1)NC(=O)c1ccc(C(=O)NC(=O)SSc2ccccn2)cc1",
+          "score": 0.709,
+          "subscores": {
+            "solubility": 0.4806,
+            "size": 1.0,
+            "flexibility": 0.7914,
+            "synthesizability": 0.6239,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        }
+      ]
+    },
+    {
+      "handle": "Disulfide",
+      "trigger": "Non-cleavable",
+      "seed": 2,
+      "warhead_pair": "*SSc1ccccn1|*NCc1ccccc1",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 25,
+      "best_score": 0.7842,
+      "top": [
+        {
+          "smiles": "O=C(NCc1ccccc1)NNC(=O)NNC(=O)C(=O)SSc1ccccn1",
+          "score": 0.7842,
+          "subscores": {
+            "solubility": 0.728,
+            "size": 1.0,
+            "flexibility": 0.8808,
+            "synthesizability": 0.5469,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(NCc1ccccc1)NNC(=O)C(=O)NC(=O)SSc1ccccn1",
+          "score": 0.7756,
+          "subscores": {
+            "solubility": 0.6859,
+            "size": 1.0,
+            "flexibility": 0.8808,
+            "synthesizability": 0.5615,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "NC(=O)C(=O)Nc1ccc(NC(=O)NCc2ccccc2)cc1C(=O)SSc1ccccn1",
+          "score": 0.7123,
+          "subscores": {
+            "solubility": 0.5317,
+            "size": 1.0,
+            "flexibility": 0.7311,
+            "synthesizability": 0.584,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "Nc1cc(NC(=O)C(=O)SSc2ccccn2)ccc1NC(=O)NCc1ccccc1",
+          "score": 0.7083,
+          "subscores": {
+            "solubility": 0.4958,
+            "size": 1.0,
+            "flexibility": 0.7914,
+            "synthesizability": 0.5974,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "Nc1ccc(C(=O)NCC(=O)SSc2ccccn2)cc1NC(=O)NCc1ccccc1",
+          "score": 0.7017,
+          "subscores": {
+            "solubility": 0.5109,
+            "size": 1.0,
+            "flexibility": 0.6608,
+            "synthesizability": 0.6047,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        }
+      ]
+    },
+    {
+      "handle": "NHS_ester",
+      "trigger": "Val-Cit-PABC",
+      "seed": 0,
+      "warhead_pair": "*C(=O)ON1C(=O)CCC1=O|CC(C)[C@@H](C(=O)N[C@@H](CCCNC(=O)N)C(=O)Nc1ccc(CO)cc1)N*",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 25,
+      "best_score": 0.6248,
+      "top": [
+        {
+          "smiles": "CC(C)C(NC(=O)CCC(=O)NC(=O)CNC(=O)ON1C(=O)CCC1=O)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.6248,
+          "subscores": {
+            "solubility": 0.9005,
+            "size": 0.8296,
+            "flexibility": 0.0884,
+            "synthesizability": 0.313,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(C)C(NC(=O)C1CCCN1C(=O)NC(=O)CNC(=O)ON1C(=O)CCC1=O)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.6149,
+          "subscores": {
+            "solubility": 0.8881,
+            "size": 0.7384,
+            "flexibility": 0.1589,
+            "synthesizability": 0.2369,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(C)C(NC(=O)CC(N)C(=O)NC(=O)CNC(=O)ON1C(=O)CCC1=O)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.5985,
+          "subscores": {
+            "solubility": 0.9379,
+            "size": 0.7962,
+            "flexibility": 0.0884,
+            "synthesizability": 0.2409,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(C)C(NC(=O)C(=O)N1CCCC1C(=O)NC(=O)COC(=O)ON1C(=O)CCC1=O)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.5959,
+          "subscores": {
+            "solubility": 0.915,
+            "size": 0.6739,
+            "flexibility": 0.1589,
+            "synthesizability": 0.2049,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(C)C(NC(=O)CNC(=O)CCC(=O)NC(=O)CNC(=O)ON1C(=O)CCC1=O)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.5725,
+          "subscores": {
+            "solubility": 0.9326,
+            "size": 0.7028,
+            "flexibility": 0.0474,
+            "synthesizability": 0.2833,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        }
+      ]
+    },
+    {
+      "handle": "NHS_ester",
+      "trigger": "Val-Cit-PABC",
+      "seed": 1,
+      "warhead_pair": "*C(=O)ON1C(=O)CCC1=O|CC(C)[C@@H](C(=O)N[C@@H](CCCNC(=O)N)C(=O)Nc1ccc(CO)cc1)N*",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 25,
+      "best_score": 0.6673,
+      "top": [
+        {
+          "smiles": "CC(C)C(NC(=O)NCC(=O)NC(=O)NNC(=O)ON1C(=O)CCC1=O)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.6673,
+          "subscores": {
+            "solubility": 0.92,
+            "size": 0.8252,
+            "flexibility": 0.2086,
+            "synthesizability": 0.2883,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(C)C(NC(=O)NC(=O)C(=O)NCC(=O)NC(=O)ON1C(=O)CCC1=O)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.6644,
+          "subscores": {
+            "solubility": 0.9381,
+            "size": 0.7963,
+            "flexibility": 0.2086,
+            "synthesizability": 0.2822,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(C)C(NC(=O)NC(=O)C(=O)NC(=O)CNC(=O)ON1C(=O)CCC1=O)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.6616,
+          "subscores": {
+            "solubility": 0.9381,
+            "size": 0.7963,
+            "flexibility": 0.2086,
+            "synthesizability": 0.2754,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(C)C(NC(=O)CNC(=O)NC(=O)CNC(=O)ON1C(=O)CCC1=O)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.6455,
+          "subscores": {
+            "solubility": 0.9234,
+            "size": 0.8274,
+            "flexibility": 0.1192,
+            "synthesizability": 0.3144,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(C)C(NC(=O)CNC(=O)NCC(=O)NC(=O)ON1C(=O)CCC1=O)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.6435,
+          "subscores": {
+            "solubility": 0.9234,
+            "size": 0.8274,
+            "flexibility": 0.1192,
+            "synthesizability": 0.309,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        }
+      ]
+    },
+    {
+      "handle": "NHS_ester",
+      "trigger": "Val-Ala-PABC",
+      "seed": 0,
+      "warhead_pair": "*C(=O)ON1C(=O)CCC1=O|CC(C)[C@@H](C(=O)N[C@@H](C)C(=O)Nc1ccc(CO)cc1)N*",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 25,
+      "best_score": 0.7502,
+      "top": [
+        {
+          "smiles": "CC(NC(=O)C(NC(=O)N1CCN(C(=O)NNC(=O)ON2C(=O)CCC2=O)C(=O)C1)C(C)C)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.7502,
+          "subscores": {
+            "solubility": 0.8767,
+            "size": 0.9587,
+            "flexibility": 0.6608,
+            "synthesizability": 0.2971,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)C(NC(=O)N1CCN(C(=O)CNC(=O)ON2C(=O)CCC2=O)C(=O)C1)C(C)C)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.7446,
+          "subscores": {
+            "solubility": 0.8816,
+            "size": 0.9609,
+            "flexibility": 0.5,
+            "synthesizability": 0.3248,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)C(NC(=O)CN1C(=O)CN(C(=O)NC(=O)ON2C(=O)CCC2=O)CC1=O)C(C)C)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.7407,
+          "subscores": {
+            "solubility": 0.9031,
+            "size": 0.9298,
+            "flexibility": 0.5,
+            "synthesizability": 0.3135,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)C(NC(=O)N1CCN(C(=O)CNC(=O)ON2C(=O)CCC2=O)C(=O)C1=O)C(C)C)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.7366,
+          "subscores": {
+            "solubility": 0.9031,
+            "size": 0.9298,
+            "flexibility": 0.5,
+            "synthesizability": 0.3038,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)C(NC(=O)CN1C(=O)CN(C(=O)NNC(=O)ON2C(=O)CCC2=O)CC1=O)C(C)C)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.7327,
+          "subscores": {
+            "solubility": 0.922,
+            "size": 0.8964,
+            "flexibility": 0.5,
+            "synthesizability": 0.2955,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        }
+      ]
+    },
+    {
+      "handle": "NHS_ester",
+      "trigger": "Val-Cit-PABC",
+      "seed": 2,
+      "warhead_pair": "*C(=O)ON1C(=O)CCC1=O|CC(C)[C@@H](C(=O)N[C@@H](CCCNC(=O)N)C(=O)Nc1ccc(CO)cc1)N*",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 25,
+      "best_score": 0.6681,
+      "top": [
+        {
+          "smiles": "CC(C)C(NC(=O)NC(=O)CNC(=O)NNC(=O)ON1C(=O)CCC1=O)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.6681,
+          "subscores": {
+            "solubility": 0.92,
+            "size": 0.8252,
+            "flexibility": 0.2086,
+            "synthesizability": 0.2903,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(C)C(NC(=O)NNC(=O)NC(=O)CNC(=O)ON1C(=O)CCC1=O)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.6677,
+          "subscores": {
+            "solubility": 0.92,
+            "size": 0.8252,
+            "flexibility": 0.2086,
+            "synthesizability": 0.2894,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(C)C(NC(=O)NCC(=O)NC(=O)NNC(=O)ON1C(=O)CCC1=O)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.6673,
+          "subscores": {
+            "solubility": 0.92,
+            "size": 0.8252,
+            "flexibility": 0.2086,
+            "synthesizability": 0.2883,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(C)C(NC(=O)NNC(=O)NCC(=O)NC(=O)ON1C(=O)CCC1=O)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.6668,
+          "subscores": {
+            "solubility": 0.92,
+            "size": 0.8252,
+            "flexibility": 0.2086,
+            "synthesizability": 0.2871,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(C)C(NC(=O)N(C)C(=O)CNC(=O)NNC(=O)ON1C(=O)CCC1=O)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.6455,
+          "subscores": {
+            "solubility": 0.907,
+            "size": 0.794,
+            "flexibility": 0.2086,
+            "synthesizability": 0.2507,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        }
+      ]
+    },
+    {
+      "handle": "NHS_ester",
+      "trigger": "Val-Ala-PABC",
+      "seed": 1,
+      "warhead_pair": "*C(=O)ON1C(=O)CCC1=O|CC(C)[C@@H](C(=O)N[C@@H](C)C(=O)Nc1ccc(CO)cc1)N*",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 25,
+      "best_score": 0.7616,
+      "top": [
+        {
+          "smiles": "CC(NC(=O)C(NC(=O)NC(=O)CNC(=O)C(=O)NC(=O)ON1C(=O)CCC1=O)C(C)C)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.7616,
+          "subscores": {
+            "solubility": 0.92,
+            "size": 0.9876,
+            "flexibility": 0.5,
+            "synthesizability": 0.3425,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)C(NC(=O)NC(=O)NC(=O)CNC(=O)NC(=O)ON1C(=O)CCC1=O)C(C)C)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.7455,
+          "subscores": {
+            "solubility": 0.8881,
+            "size": 0.9543,
+            "flexibility": 0.5,
+            "synthesizability": 0.3255,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)C(NC(=O)N(C)C(=O)CNC(=O)NNC(=O)ON1C(=O)CCC1=O)C(C)C)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.738,
+          "subscores": {
+            "solubility": 0.8815,
+            "size": 0.9853,
+            "flexibility": 0.5,
+            "synthesizability": 0.3031,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)C(NC(=O)NC(=O)NC(=O)CNC(=O)C(=O)NC(=O)ON1C(=O)CCC1=O)C(C)C)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.7371,
+          "subscores": {
+            "solubility": 0.9297,
+            "size": 0.892,
+            "flexibility": 0.5,
+            "synthesizability": 0.3034,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)C(NC(=O)CNC(=O)N1C(=O)CN(C(=O)ON2C(=O)CCC2=O)CC1=O)C(C)C)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.7353,
+          "subscores": {
+            "solubility": 0.9031,
+            "size": 0.9298,
+            "flexibility": 0.5,
+            "synthesizability": 0.3008,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        }
+      ]
+    },
+    {
+      "handle": "NHS_ester",
+      "trigger": "Val-Ala-PABC",
+      "seed": 2,
+      "warhead_pair": "*C(=O)ON1C(=O)CCC1=O|CC(C)[C@@H](C(=O)N[C@@H](C)C(=O)Nc1ccc(CO)cc1)N*",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 25,
+      "best_score": 0.7456,
+      "top": [
+        {
+          "smiles": "CC(NC(=O)C(NC(=O)CNC(=O)NC(=O)CNC(=O)ON1C(=O)CCC1=O)C(C)C)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.7456,
+          "subscores": {
+            "solubility": 0.9016,
+            "size": 1.0,
+            "flexibility": 0.3392,
+            "synthesizability": 0.3748,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)C(NC(=O)NC(=O)NC(=O)CNC(=O)NC(=O)ON1C(=O)CCC1=O)C(C)C)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.7455,
+          "subscores": {
+            "solubility": 0.8881,
+            "size": 0.9543,
+            "flexibility": 0.5,
+            "synthesizability": 0.3255,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)C(NC(=O)NC(=O)NC(=O)NC(=O)CNC(=O)ON1C(=O)CCC1=O)C(C)C)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.7434,
+          "subscores": {
+            "solubility": 0.8881,
+            "size": 0.9543,
+            "flexibility": 0.5,
+            "synthesizability": 0.3206,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)C(NC(=O)NC(=O)NC(=O)CNC(=O)C(=O)NC(=O)ON1C(=O)CCC1=O)C(C)C)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.7371,
+          "subscores": {
+            "solubility": 0.9297,
+            "size": 0.892,
+            "flexibility": 0.5,
+            "synthesizability": 0.3034,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)NC(=O)ON1C(=O)CCC1=O)C(=O)NC(=O)NC(C(=O)NC(C)C(=O)Nc1ccc(CO)cc1)C(C)C",
+          "score": 0.737,
+          "subscores": {
+            "solubility": 0.8524,
+            "size": 1.0,
+            "flexibility": 0.5,
+            "synthesizability": 0.3102,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        }
+      ]
+    },
+    {
+      "handle": "NHS_ester",
+      "trigger": "Non-cleavable",
+      "seed": 0,
+      "warhead_pair": "*C(=O)ON1C(=O)CCC1=O|*NCc1ccccc1",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 25,
+      "best_score": 0.8116,
+      "top": [
+        {
+          "smiles": "O=C(CNC(=O)ON1C(=O)CCC1=O)NNC(=O)c1cccc(S(=O)(=O)NCc2ccccc2)c1",
+          "score": 0.8116,
+          "subscores": {
+            "solubility": 0.8306,
+            "size": 1.0,
+            "flexibility": 0.6608,
+            "synthesizability": 0.6226,
+            "cleavability": 0.4,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(NS(=O)(=O)c1ccc(S(=O)(=O)NCc2ccccc2)cc1)ON1C(=O)CCC1=O",
+          "score": 0.8079,
+          "subscores": {
+            "solubility": 0.7643,
+            "size": 1.0,
+            "flexibility": 0.7311,
+            "synthesizability": 0.6436,
+            "cleavability": 0.4,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(CC(=O)ON1C(=O)CCC1=O)NNC(=O)c1cccc(S(=O)(=O)NCc2ccccc2)c1",
+          "score": 0.8078,
+          "subscores": {
+            "solubility": 0.817,
+            "size": 1.0,
+            "flexibility": 0.6608,
+            "synthesizability": 0.6224,
+            "cleavability": 0.4,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(NS(=O)(=O)c1cccc(S(=O)(=O)NCc2ccccc2)c1)ON1C(=O)CCC1=O",
+          "score": 0.8035,
+          "subscores": {
+            "solubility": 0.7643,
+            "size": 1.0,
+            "flexibility": 0.7311,
+            "synthesizability": 0.6285,
+            "cleavability": 0.4,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(COc1ccc(C(=O)NNC(=O)CNC(=O)ON2C(=O)CCC2=O)cc1)NCc1ccccc1",
+          "score": 0.8015,
+          "subscores": {
+            "solubility": 0.8163,
+            "size": 1.0,
+            "flexibility": 0.5826,
+            "synthesizability": 0.6414,
+            "cleavability": 0.4,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        }
+      ]
+    },
+    {
+      "handle": "NHS_ester",
+      "trigger": "Glucuronide",
+      "seed": 0,
+      "warhead_pair": "*C(=O)ON1C(=O)CCC1=O|*NC(=O)[C@@H]1O[C@@H](Oc2ccc(CO)cc2)[C@@H](O)[C@H](O)[C@H]1O",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 25,
+      "best_score": 0.0789,
+      "top": [
+        {
+          "smiles": "NC(Cc1ccc(C(=O)NC(=O)ON2C(=O)CCC2=O)cc1)C(=O)NC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O",
+          "score": 0.0789,
+          "subscores": {
+            "solubility": 0.933,
+            "size": 0.9321,
+            "flexibility": 0.5826,
+            "synthesizability": 0.1669,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(O)CC(NC(=O)NC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O)C(=O)NC(=O)ON1C(=O)CCC1=O",
+          "score": 0.0785,
+          "subscores": {
+            "solubility": 0.9608,
+            "size": 1.0,
+            "flexibility": 0.5826,
+            "synthesizability": 0.1493,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "NC(=O)CC(NC(=O)NC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O)C(=O)NC(=O)ON1C(=O)CCC1=O",
+          "score": 0.0783,
+          "subscores": {
+            "solubility": 0.9705,
+            "size": 1.0,
+            "flexibility": 0.5826,
+            "synthesizability": 0.1446,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)C(CO)NC(=O)ON1C(=O)CCC1=O)C(=O)NC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O",
+          "score": 0.0772,
+          "subscores": {
+            "solubility": 0.9717,
+            "size": 1.0,
+            "flexibility": 0.5,
+            "synthesizability": 0.1443,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)ON1C(=O)CCC1=O)C(=O)NC(CO)C(=O)NC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O",
+          "score": 0.0768,
+          "subscores": {
+            "solubility": 0.9717,
+            "size": 1.0,
+            "flexibility": 0.5,
+            "synthesizability": 0.1402,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        }
+      ]
+    },
+    {
+      "handle": "NHS_ester",
+      "trigger": "Glucuronide",
+      "seed": 1,
+      "warhead_pair": "*C(=O)ON1C(=O)CCC1=O|*NC(=O)[C@@H]1O[C@@H](Oc2ccc(CO)cc2)[C@@H](O)[C@H](O)[C@H]1O",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 25,
+      "best_score": 0.0782,
+      "top": [
+        {
+          "smiles": "CC(NC(=O)OCC(=O)NC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O)C(=O)NC(=O)ON1C(=O)CCC1=O",
+          "score": 0.0782,
+          "subscores": {
+            "solubility": 0.9591,
+            "size": 0.9722,
+            "flexibility": 0.5826,
+            "synthesizability": 0.1489,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(O)CC(NC(=O)ON1C(=O)CCC1=O)C(=O)NCC(=O)NC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O",
+          "score": 0.0773,
+          "subscores": {
+            "solubility": 0.9704,
+            "size": 0.9722,
+            "flexibility": 0.4174,
+            "synthesizability": 0.1626,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)C(CO)NC(=O)ON1C(=O)CCC1=O)C(=O)NC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O",
+          "score": 0.0772,
+          "subscores": {
+            "solubility": 0.9717,
+            "size": 1.0,
+            "flexibility": 0.5,
+            "synthesizability": 0.1443,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(O)CC(NC(=O)CNC(=O)ON1C(=O)CCC1=O)C(=O)NC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O",
+          "score": 0.0771,
+          "subscores": {
+            "solubility": 0.9704,
+            "size": 0.9722,
+            "flexibility": 0.4174,
+            "synthesizability": 0.16,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "NC(=O)CC(NC(=O)ON1C(=O)CCC1=O)C(=O)NCC(=O)NC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O",
+          "score": 0.0771,
+          "subscores": {
+            "solubility": 0.9778,
+            "size": 0.9744,
+            "flexibility": 0.4174,
+            "synthesizability": 0.158,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        }
+      ]
+    },
+    {
+      "handle": "NHS_ester",
+      "trigger": "Glucuronide",
+      "seed": 2,
+      "warhead_pair": "*C(=O)ON1C(=O)CCC1=O|*NC(=O)[C@@H]1O[C@@H](Oc2ccc(CO)cc2)[C@@H](O)[C@H](O)[C@H]1O",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 25,
+      "best_score": 0.0782,
+      "top": [
+        {
+          "smiles": "O=C(NC(=O)C(=O)NC(CO)C(=O)NC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O)ON1C(=O)CCC1=O",
+          "score": 0.0782,
+          "subscores": {
+            "solubility": 0.9814,
+            "size": 1.0,
+            "flexibility": 0.6608,
+            "synthesizability": 0.1333,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(C)C(NC(=O)C(=O)NC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O)C(=O)NC(=O)ON1C(=O)CCC1=O",
+          "score": 0.0775,
+          "subscores": {
+            "solubility": 0.9586,
+            "size": 0.9766,
+            "flexibility": 0.6608,
+            "synthesizability": 0.1331,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(O)CC(NC(=O)ON1C(=O)CCC1=O)C(=O)NCC(=O)NC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O",
+          "score": 0.0773,
+          "subscores": {
+            "solubility": 0.9704,
+            "size": 0.9722,
+            "flexibility": 0.4174,
+            "synthesizability": 0.1626,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)C(CO)NC(=O)ON1C(=O)CCC1=O)C(=O)NC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O",
+          "score": 0.0772,
+          "subscores": {
+            "solubility": 0.9717,
+            "size": 1.0,
+            "flexibility": 0.5,
+            "synthesizability": 0.1443,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "NC(=O)CC(NC(=O)ON1C(=O)CCC1=O)C(=O)NCC(=O)NC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O",
+          "score": 0.0771,
+          "subscores": {
+            "solubility": 0.9778,
+            "size": 0.9744,
+            "flexibility": 0.4174,
+            "synthesizability": 0.158,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        }
+      ]
+    },
+    {
+      "handle": "NHS_ester",
+      "trigger": "Non-cleavable",
+      "seed": 1,
+      "warhead_pair": "*C(=O)ON1C(=O)CCC1=O|*NCc1ccccc1",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 25,
+      "best_score": 0.8055,
+      "top": [
+        {
+          "smiles": "O=C(NC(=O)c1cc(C(=O)NCc2ccccc2)c(O)cc1O)ON1C(=O)CCC1=O",
+          "score": 0.8055,
+          "subscores": {
+            "solubility": 0.7392,
+            "size": 1.0,
+            "flexibility": 0.8411,
+            "synthesizability": 0.6174,
+            "cleavability": 0.4,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(NC(=O)c1cc(O)c(C(=O)NCc2ccccc2)c(O)c1)ON1C(=O)CCC1=O",
+          "score": 0.8019,
+          "subscores": {
+            "solubility": 0.7392,
+            "size": 1.0,
+            "flexibility": 0.8411,
+            "synthesizability": 0.6057,
+            "cleavability": 0.4,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "Nc1cc(NC(=O)ON2C(=O)CCC2=O)c(C(=O)NCc2ccccc2)cc1N",
+          "score": 0.7963,
+          "subscores": {
+            "solubility": 0.7027,
+            "size": 1.0,
+            "flexibility": 0.8411,
+            "synthesizability": 0.6255,
+            "cleavability": 0.4,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "Nc1nc(C(=O)NCc2ccccc2)c(O)cc1NC(=O)ON1C(=O)CCC1=O",
+          "score": 0.7959,
+          "subscores": {
+            "solubility": 0.7429,
+            "size": 1.0,
+            "flexibility": 0.8411,
+            "synthesizability": 0.5822,
+            "cleavability": 0.4,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(NCc1ccccc1)Nc1cc(C(=O)NC(=O)ON2C(=O)CCC2=O)ccc1O",
+          "score": 0.7956,
+          "subscores": {
+            "solubility": 0.681,
+            "size": 1.0,
+            "flexibility": 0.8411,
+            "synthesizability": 0.648,
+            "cleavability": 0.4,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        }
+      ]
+    },
+    {
+      "handle": "NHS_ester",
+      "trigger": "Non-cleavable",
+      "seed": 2,
+      "warhead_pair": "*C(=O)ON1C(=O)CCC1=O|*NCc1ccccc1",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 25,
+      "best_score": 0.8079,
+      "top": [
+        {
+          "smiles": "O=C(NS(=O)(=O)c1ccc(S(=O)(=O)NCc2ccccc2)cc1)ON1C(=O)CCC1=O",
+          "score": 0.8079,
+          "subscores": {
+            "solubility": 0.7643,
+            "size": 1.0,
+            "flexibility": 0.7311,
+            "synthesizability": 0.6436,
+            "cleavability": 0.4,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(NS(=O)(=O)c1cccc(S(=O)(=O)NCc2ccccc2)c1)ON1C(=O)CCC1=O",
+          "score": 0.8035,
+          "subscores": {
+            "solubility": 0.7643,
+            "size": 1.0,
+            "flexibility": 0.7311,
+            "synthesizability": 0.6285,
+            "cleavability": 0.4,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "Nc1cc(S(=O)(=O)NC(=O)ON2C(=O)CCC2=O)ccc1S(=O)(=O)NCc1ccccc1",
+          "score": 0.8027,
+          "subscores": {
+            "solubility": 0.7958,
+            "size": 1.0,
+            "flexibility": 0.7311,
+            "synthesizability": 0.5948,
+            "cleavability": 0.4,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(NS(=O)(=O)c1ccccc1S(=O)(=O)NCc1ccccc1)ON1C(=O)CCC1=O",
+          "score": 0.7998,
+          "subscores": {
+            "solubility": 0.7643,
+            "size": 1.0,
+            "flexibility": 0.7311,
+            "synthesizability": 0.6157,
+            "cleavability": 0.4,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "O=C(NS(=O)(=O)c1ccc(O)c(S(=O)(=O)NCc2ccccc2)c1)ON1C(=O)CCC1=O",
+          "score": 0.7984,
+          "subscores": {
+            "solubility": 0.7867,
+            "size": 1.0,
+            "flexibility": 0.7311,
+            "synthesizability": 0.5895,
+            "cleavability": 0.4,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        }
+      ]
+    },
+    {
+      "handle": "Oxyamine",
+      "trigger": "Val-Cit-PABC",
+      "seed": 0,
+      "warhead_pair": "*CON|CC(C)[C@@H](C(=O)N[C@@H](CCCNC(=O)N)C(=O)Nc1ccc(CO)cc1)N*",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 25,
+      "best_score": 0.6626,
+      "top": [
+        {
+          "smiles": "CC(C)C(NC(=O)NC(=O)NC(=O)C1CCCN1CON)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.6626,
+          "subscores": {
+            "solubility": 0.8763,
+            "size": 0.983,
+            "flexibility": 0.2086,
+            "synthesizability": 0.2584,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(C)C(NC(=O)CN1C(=O)CC(NCON)C1=O)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.6515,
+          "subscores": {
+            "solubility": 0.9251,
+            "size": 1.0,
+            "flexibility": 0.1192,
+            "synthesizability": 0.2868,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(=O)NC(CCON)C(=O)NC(=O)C(=O)NC(C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1)C(C)C",
+          "score": 0.6503,
+          "subscores": {
+            "solubility": 0.9296,
+            "size": 0.9808,
+            "flexibility": 0.1192,
+            "synthesizability": 0.2862,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(C)C(NC(=O)CC(N)C(=O)NC(=O)CCON)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.6428,
+          "subscores": {
+            "solubility": 0.9225,
+            "size": 1.0,
+            "flexibility": 0.0884,
+            "synthesizability": 0.3098,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(C)C(NC(=O)C(=O)NC(=O)C(CO)NC(=O)CCON)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.6306,
+          "subscores": {
+            "solubility": 0.9561,
+            "size": 0.9452,
+            "flexibility": 0.0884,
+            "synthesizability": 0.2774,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        }
+      ]
+    },
+    {
+      "handle": "Oxyamine",
+      "trigger": "Val-Cit-PABC",
+      "seed": 2,
+      "warhead_pair": "*CON|CC(C)[C@@H](C(=O)N[C@@H](CCCNC(=O)N)C(=O)Nc1ccc(CO)cc1)N*",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 25,
+      "best_score": 0.6588,
+      "top": [
+        {
+          "smiles": "CC(NC(=O)NC(C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1)C(C)C)C(=O)NC(=O)CCON",
+          "score": 0.6588,
+          "subscores": {
+            "solubility": 0.8879,
+            "size": 1.0,
+            "flexibility": 0.1192,
+            "synthesizability": 0.3212,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(C)C(NC(=O)C(=O)NC(=O)C(N)CCCON)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.6553,
+          "subscores": {
+            "solubility": 0.9225,
+            "size": 1.0,
+            "flexibility": 0.1192,
+            "synthesizability": 0.2973,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(C)C(NC(=O)N1CCN(C(=O)C(N)CCON)C1=O)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.6465,
+          "subscores": {
+            "solubility": 0.8893,
+            "size": 0.983,
+            "flexibility": 0.1589,
+            "synthesizability": 0.2531,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(C)C(NC(=O)NC(C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1)C(C)C)C(=O)NC(=O)CCON",
+          "score": 0.6289,
+          "subscores": {
+            "solubility": 0.8546,
+            "size": 0.9807,
+            "flexibility": 0.0884,
+            "synthesizability": 0.3058,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)C(=O)NC(=O)CNCON)C(=O)NC(C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1)C(C)C",
+          "score": 0.6252,
+          "subscores": {
+            "solubility": 0.9521,
+            "size": 0.9474,
+            "flexibility": 0.0884,
+            "synthesizability": 0.2653,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        }
+      ]
+    },
+    {
+      "handle": "Oxyamine",
+      "trigger": "Val-Cit-PABC",
+      "seed": 1,
+      "warhead_pair": "*CON|CC(C)[C@@H](C(=O)N[C@@H](CCCNC(=O)N)C(=O)Nc1ccc(CO)cc1)N*",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 25,
+      "best_score": 0.6713,
+      "top": [
+        {
+          "smiles": "CC(C)C(NC(=O)NCC(=O)NC(=O)C(=O)CON)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.6713,
+          "subscores": {
+            "solubility": 0.934,
+            "size": 1.0,
+            "flexibility": 0.1192,
+            "synthesizability": 0.3353,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)NC(C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1)C(C)C)C(=O)NC(=O)CCON",
+          "score": 0.6588,
+          "subscores": {
+            "solubility": 0.8879,
+            "size": 1.0,
+            "flexibility": 0.1192,
+            "synthesizability": 0.3212,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)NC(C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1)C(C)C)C(=O)NC(=O)C(=O)CON",
+          "score": 0.6471,
+          "subscores": {
+            "solubility": 0.9214,
+            "size": 1.0,
+            "flexibility": 0.1192,
+            "synthesizability": 0.2773,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(C)C(NC(=O)CC(N)C(=O)NC(=O)CCON)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.6428,
+          "subscores": {
+            "solubility": 0.9225,
+            "size": 1.0,
+            "flexibility": 0.0884,
+            "synthesizability": 0.3098,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(C)C(NC(=O)CNC(=O)C(=O)NC(=O)C(N)CCON)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.6317,
+          "subscores": {
+            "solubility": 0.9568,
+            "size": 0.9474,
+            "flexibility": 0.0884,
+            "synthesizability": 0.2793,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        }
+      ]
+    },
+    {
+      "handle": "Oxyamine",
+      "trigger": "Val-Ala-PABC",
+      "seed": 0,
+      "warhead_pair": "*CON|CC(C)[C@@H](C(=O)N[C@@H](C)C(=O)Nc1ccc(CO)cc1)N*",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 25,
+      "best_score": 0.7635,
+      "top": [
+        {
+          "smiles": "CC(NC(=O)C(NC(=O)N1CC(=O)N(C(=O)CCON)C(=O)C1)C(C)C)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.7635,
+          "subscores": {
+            "solubility": 0.8807,
+            "size": 1.0,
+            "flexibility": 0.5,
+            "synthesizability": 0.3633,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)C(NC(=O)C(=O)NC(=O)C1(NCON)CCC1)C(C)C)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.7378,
+          "subscores": {
+            "solubility": 0.8841,
+            "size": 1.0,
+            "flexibility": 0.4174,
+            "synthesizability": 0.3263,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)NC(C(=O)NC(C)C(=O)Nc1ccc(CO)cc1)C(C)C)C(=O)NC(=O)N1CCN(CON)CC1",
+          "score": 0.7348,
+          "subscores": {
+            "solubility": 0.8704,
+            "size": 1.0,
+            "flexibility": 0.4174,
+            "synthesizability": 0.3252,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)C(NC(=O)C(=O)NC(=O)C1CCCN1C(=O)C(N)CON)C(C)C)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.7245,
+          "subscores": {
+            "solubility": 0.9297,
+            "size": 1.0,
+            "flexibility": 0.4174,
+            "synthesizability": 0.2768,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)C(NC(=O)CNC(=O)C(=O)NC(=O)C1CCN1CON)C(C)C)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.7208,
+          "subscores": {
+            "solubility": 0.9349,
+            "size": 1.0,
+            "flexibility": 0.3392,
+            "synthesizability": 0.2961,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        }
+      ]
+    },
+    {
+      "handle": "Oxyamine",
+      "trigger": "Val-Ala-PABC",
+      "seed": 1,
+      "warhead_pair": "*CON|CC(C)[C@@H](C(=O)N[C@@H](C)C(=O)Nc1ccc(CO)cc1)N*",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 25,
+      "best_score": 0.7372,
+      "top": [
+        {
+          "smiles": "CC(NC(=O)C(NC(=O)C(=O)NC(=O)C(N)CCCON)C(C)C)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.7372,
+          "subscores": {
+            "solubility": 0.9006,
+            "size": 1.0,
+            "flexibility": 0.3392,
+            "synthesizability": 0.3521,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)C(NC(=O)CC(N)C(=O)NC(=O)CCON)C(C)C)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.7274,
+          "subscores": {
+            "solubility": 0.9006,
+            "size": 1.0,
+            "flexibility": 0.2689,
+            "synthesizability": 0.3668,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)C(NC(=O)CC(=O)NC(=O)CNC(=O)CCON)C(C)C)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.7258,
+          "subscores": {
+            "solubility": 0.9092,
+            "size": 1.0,
+            "flexibility": 0.2086,
+            "synthesizability": 0.4067,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)C(NC(=O)C(=O)NC(=O)C(N)CCCCON)C(C)C)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.7187,
+          "subscores": {
+            "solubility": 0.8827,
+            "size": 1.0,
+            "flexibility": 0.2689,
+            "synthesizability": 0.3516,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)C(NC(=O)CCC(=O)NC(=O)C(N)CCON)C(C)C)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.7096,
+          "subscores": {
+            "solubility": 0.8827,
+            "size": 1.0,
+            "flexibility": 0.2086,
+            "synthesizability": 0.3717,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        }
+      ]
+    },
+    {
+      "handle": "Oxyamine",
+      "trigger": "Glucuronide",
+      "seed": 0,
+      "warhead_pair": "*CON|*NC(=O)[C@@H]1O[C@@H](Oc2ccc(CO)cc2)[C@@H](O)[C@H](O)[C@H]1O",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 25,
+      "best_score": 0.0836,
+      "top": [
+        {
+          "smiles": "NOCCC(=O)NCC(=O)NCC(=O)NC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O",
+          "score": 0.0836,
+          "subscores": {
+            "solubility": 0.9736,
+            "size": 1.0,
+            "flexibility": 0.4174,
+            "synthesizability": 0.2471,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "NOCNCC(=O)NC(=O)c1ccc(C(=O)NC(=O)C2OC(Oc3ccc(CO)cc3)C(O)C(O)C2O)cc1",
+          "score": 0.0835,
+          "subscores": {
+            "solubility": 0.9465,
+            "size": 1.0,
+            "flexibility": 0.5,
+            "synthesizability": 0.2314,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "NOCNC(=O)NC(=O)c1ccc(C(=O)NCC(=O)NC(=O)C2OC(Oc3ccc(CO)cc3)C(O)C(O)C2O)cc1",
+          "score": 0.083,
+          "subscores": {
+            "solubility": 0.9533,
+            "size": 1.0,
+            "flexibility": 0.5,
+            "synthesizability": 0.2225,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "NOCCCC(=O)NC(=O)C(=O)NCC(=O)NC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O",
+          "score": 0.0829,
+          "subscores": {
+            "solubility": 0.9746,
+            "size": 1.0,
+            "flexibility": 0.5,
+            "synthesizability": 0.2145,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "NOCCC(=O)NC(=O)c1ccc(C(=O)NCC(=O)NC(=O)C2OC(Oc3ccc(CO)cc3)C(O)C(O)C2O)cc1",
+          "score": 0.0828,
+          "subscores": {
+            "solubility": 0.9475,
+            "size": 1.0,
+            "flexibility": 0.4174,
+            "synthesizability": 0.2418,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        }
+      ]
+    },
+    {
+      "handle": "Oxyamine",
+      "trigger": "Val-Ala-PABC",
+      "seed": 2,
+      "warhead_pair": "*CON|CC(C)[C@@H](C(=O)N[C@@H](C)C(=O)Nc1ccc(CO)cc1)N*",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 25,
+      "best_score": 0.7366,
+      "top": [
+        {
+          "smiles": "CC(NC(=O)C(NC(=O)NC(=O)C(N)CC(=O)NCON)C(C)C)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.7366,
+          "subscores": {
+            "solubility": 0.9107,
+            "size": 1.0,
+            "flexibility": 0.3392,
+            "synthesizability": 0.3458,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)C(NC(=O)C(=O)NC(=O)C(CO)NCON)C(C)C)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.7296,
+          "subscores": {
+            "solubility": 0.9417,
+            "size": 1.0,
+            "flexibility": 0.3392,
+            "synthesizability": 0.3143,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)C(NC(=O)NC(=O)C(N)Cc1ccc(C(=O)NC(=O)CON)cc1)C(C)C)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.7156,
+          "subscores": {
+            "solubility": 0.8621,
+            "size": 1.0,
+            "flexibility": 0.2689,
+            "synthesizability": 0.3534,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)C(NC(=O)c1ccccc1C(=O)NC(=O)CNC(=O)CCON)C(C)C)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.7135,
+          "subscores": {
+            "solubility": 0.8298,
+            "size": 1.0,
+            "flexibility": 0.2086,
+            "synthesizability": 0.4139,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)C(NC(=O)c1ccccc1C(=O)NC(=O)C(N)CCON)C(C)C)C(=O)Nc1ccc(CO)cc1",
+          "score": 0.712,
+          "subscores": {
+            "solubility": 0.8158,
+            "size": 1.0,
+            "flexibility": 0.2689,
+            "synthesizability": 0.368,
+            "cleavability": 1.0,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        }
+      ]
+    },
+    {
+      "handle": "Oxyamine",
+      "trigger": "Glucuronide",
+      "seed": 2,
+      "warhead_pair": "*CON|*NC(=O)[C@@H]1O[C@@H](Oc2ccc(CO)cc2)[C@@H](O)[C@H](O)[C@H]1O",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 25,
+      "best_score": 0.0809,
+      "top": [
+        {
+          "smiles": "NOCOc1ccc(C(=O)NC(CO)C(=O)NC(=O)C2OC(Oc3ccc(CO)cc3)C(O)C(O)C2O)cc1",
+          "score": 0.0809,
+          "subscores": {
+            "solubility": 0.9463,
+            "size": 1.0,
+            "flexibility": 0.4174,
+            "synthesizability": 0.2123,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "COc1cc(CC(=O)NCC(=O)NC(=O)C2OC(Oc3ccc(CO)cc3)C(O)C(O)C2O)ccc1NCON",
+          "score": 0.0795,
+          "subscores": {
+            "solubility": 0.9291,
+            "size": 1.0,
+            "flexibility": 0.3392,
+            "synthesizability": 0.2187,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "NOCOc1ccc(O)c(CC(N)C(=O)NC(=O)C2OC(Oc3ccc(CO)cc3)C(O)C(O)C2O)c1",
+          "score": 0.0792,
+          "subscores": {
+            "solubility": 0.9329,
+            "size": 1.0,
+            "flexibility": 0.5,
+            "synthesizability": 0.1758,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CN(CON)CC(=O)NCC(=O)NCC(=O)NC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O",
+          "score": 0.0791,
+          "subscores": {
+            "solubility": 0.9793,
+            "size": 1.0,
+            "flexibility": 0.3392,
+            "synthesizability": 0.1983,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "NOCOc1ccc(CC(N)C(=O)NC(=O)C2OC(Oc3ccc(CO)cc3)C(O)C(O)C2O)c(O)c1",
+          "score": 0.0791,
+          "subscores": {
+            "solubility": 0.9329,
+            "size": 1.0,
+            "flexibility": 0.5,
+            "synthesizability": 0.1745,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        }
+      ]
+    },
+    {
+      "handle": "Oxyamine",
+      "trigger": "Glucuronide",
+      "seed": 1,
+      "warhead_pair": "*CON|*NC(=O)[C@@H]1O[C@@H](Oc2ccc(CO)cc2)[C@@H](O)[C@H](O)[C@H]1O",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 25,
+      "best_score": 0.0831,
+      "top": [
+        {
+          "smiles": "CC(C)C(NC(=O)NC(=O)CON)C(=O)NC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O",
+          "score": 0.0831,
+          "subscores": {
+            "solubility": 0.9527,
+            "size": 1.0,
+            "flexibility": 0.5826,
+            "synthesizability": 0.2077,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "NOCC(=O)NC(CC(=O)O)C(=O)NC(=O)NC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O",
+          "score": 0.0814,
+          "subscores": {
+            "solubility": 0.973,
+            "size": 1.0,
+            "flexibility": 0.5,
+            "synthesizability": 0.1941,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(C)C(NC(=O)CON)C(=O)NC(=O)NC(=O)NC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O",
+          "score": 0.08,
+          "subscores": {
+            "solubility": 0.9588,
+            "size": 1.0,
+            "flexibility": 0.5826,
+            "synthesizability": 0.1659,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "NOCC(=O)NC(=O)C(NC(=O)NC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O)C(=O)O",
+          "score": 0.0797,
+          "subscores": {
+            "solubility": 0.9776,
+            "size": 1.0,
+            "flexibility": 0.5826,
+            "synthesizability": 0.1591,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(NC(=O)C(=O)NCC(=O)CON)C(=O)NC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O",
+          "score": 0.0796,
+          "subscores": {
+            "solubility": 0.9786,
+            "size": 1.0,
+            "flexibility": 0.5,
+            "synthesizability": 0.1703,
+            "cleavability": 1.0,
+            "stability": 0.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        }
+      ]
+    },
+    {
+      "handle": "Oxyamine",
+      "trigger": "Non-cleavable",
+      "seed": 1,
+      "warhead_pair": "*CON|*NCc1ccccc1",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 25,
+      "best_score": 0.8334,
+      "top": [
+        {
+          "smiles": "CN(C(=O)NCc1ccccc1)c1c(N)n(CCON)c(=O)[nH]c1=O",
+          "score": 0.8334,
+          "subscores": {
+            "solubility": 0.8527,
+            "size": 1.0,
+            "flexibility": 0.7914,
+            "synthesizability": 0.6181,
+            "cleavability": 0.4,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "NOCn1c(N)nc(N2CCN(C(=O)NCc3ccccc3)CC2)cc1=O",
+          "score": 0.8273,
+          "subscores": {
+            "solubility": 0.8313,
+            "size": 1.0,
+            "flexibility": 0.8411,
+            "synthesizability": 0.5994,
+            "cleavability": 0.4,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "NOCCn1c(=O)c(C(=O)NCc2ccccc2)cc2cnc(N)nc21",
+          "score": 0.8236,
+          "subscores": {
+            "solubility": 0.7981,
+            "size": 1.0,
+            "flexibility": 0.7914,
+            "synthesizability": 0.6375,
+            "cleavability": 0.4,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "NOCNS(=O)(=O)c1ccc(NC(=O)NCc2ccccc2)cc1",
+          "score": 0.8149,
+          "subscores": {
+            "solubility": 0.7246,
+            "size": 1.0,
+            "flexibility": 0.7311,
+            "synthesizability": 0.7143,
+            "cleavability": 0.4,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "NOCNc1cnc(N)nc1N1CCN(C(=O)NCc2ccccc2)CC1",
+          "score": 0.8069,
+          "subscores": {
+            "solubility": 0.7867,
+            "size": 1.0,
+            "flexibility": 0.7914,
+            "synthesizability": 0.5933,
+            "cleavability": 0.4,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        }
+      ]
+    },
+    {
+      "handle": "Oxyamine",
+      "trigger": "Non-cleavable",
+      "seed": 0,
+      "warhead_pair": "*CON|*NCc1ccccc1",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 25,
+      "best_score": 0.8477,
+      "top": [
+        {
+          "smiles": "NOCC(=O)n1cc(C(=O)NCc2ccccc2)c(=O)[nH]c1=O",
+          "score": 0.8477,
+          "subscores": {
+            "solubility": 0.8725,
+            "size": 1.0,
+            "flexibility": 0.8411,
+            "synthesizability": 0.6276,
+            "cleavability": 0.4,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "CC(=O)NC(=O)c1c(C(=O)NCc2ccccc2)[nH]c(=O)n(CCON)c1=O",
+          "score": 0.8292,
+          "subscores": {
+            "solubility": 0.8903,
+            "size": 1.0,
+            "flexibility": 0.7311,
+            "synthesizability": 0.5961,
+            "cleavability": 0.4,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "NOCCCNC(=O)c1cn(C(=O)NCc2ccccc2)c(=O)[nH]c1=O",
+          "score": 0.829,
+          "subscores": {
+            "solubility": 0.8556,
+            "size": 1.0,
+            "flexibility": 0.7311,
+            "synthesizability": 0.6258,
+            "cleavability": 0.4,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "NOCC(=O)Nc1c(C(=O)NCc2ccccc2)[nH][nH]c1=O",
+          "score": 0.8276,
+          "subscores": {
+            "solubility": 0.8464,
+            "size": 1.0,
+            "flexibility": 0.7914,
+            "synthesizability": 0.6052,
+            "cleavability": 0.4,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "NOCCC(=O)c1c(C(=O)NCc2ccccc2)[nH]c(=O)[nH]c1=O",
+          "score": 0.8195,
+          "subscores": {
+            "solubility": 0.8467,
+            "size": 1.0,
+            "flexibility": 0.7311,
+            "synthesizability": 0.6028,
+            "cleavability": 0.4,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        }
+      ]
+    },
+    {
+      "handle": "Oxyamine",
+      "trigger": "Non-cleavable",
+      "seed": 2,
+      "warhead_pair": "*CON|*NCc1ccccc1",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 25,
+      "best_score": 0.8388,
+      "top": [
+        {
+          "smiles": "Cn1c(=O)n(CCON)c(=O)c2c1c(=O)n(CC(=O)NCc1ccccc1)c(=O)n2C",
+          "score": 0.8388,
+          "subscores": {
+            "solubility": 0.9247,
+            "size": 1.0,
+            "flexibility": 0.7311,
+            "synthesizability": 0.5979,
+            "cleavability": 0.4,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "Cn1c(=O)c2c(=O)n(CCON)c(=O)[nH]c2c(=O)n(CC(=O)NCc2ccccc2)c1=O",
+          "score": 0.8386,
+          "subscores": {
+            "solubility": 0.944,
+            "size": 1.0,
+            "flexibility": 0.7311,
+            "synthesizability": 0.5818,
+            "cleavability": 0.4,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "Cn1c(=O)c2c(ncn2CCON)c(=O)n(CC(=O)NCc2ccccc2)c1=O",
+          "score": 0.8345,
+          "subscores": {
+            "solubility": 0.898,
+            "size": 1.0,
+            "flexibility": 0.7311,
+            "synthesizability": 0.6064,
+            "cleavability": 0.4,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "NOCCn1c(=O)c2cc(C(=O)NCc3ccccc3)ccc2n(C(N)=O)c1=O",
+          "score": 0.8292,
+          "subscores": {
+            "solubility": 0.8178,
+            "size": 1.0,
+            "flexibility": 0.7914,
+            "synthesizability": 0.6369,
+            "cleavability": 0.4,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        },
+        {
+          "smiles": "NOCCn1c(=O)c2cc(C(=O)NCc3ccccc3)ccc2n(CC(N)=O)c1=O",
+          "score": 0.8275,
+          "subscores": {
+            "solubility": 0.846,
+            "size": 1.0,
+            "flexibility": 0.6608,
+            "synthesizability": 0.6621,
+            "cleavability": 0.4,
+            "stability": 1.0,
+            "similarity": 0.5
+          },
+          "descriptors": {}
+        }
+      ]
+    }
+  ]
+}

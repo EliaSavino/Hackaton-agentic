@@ -1,0 +1,1442 @@
+{
+  "commercial": [
+    {
+      "name": "mc-Val-Cit-PABC",
+      "smiles": "O=C1C=CC(=O)N1CCCCCC(=O)NC(C(C)C)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+      "class": "protease-cleavable (maleimide/Cys)",
+      "adc": "brentuximab vedotin (Adcetris)",
+      "score": 0.5241,
+      "subscores": {
+        "solubility": 0.7617,
+        "size": 1.0,
+        "flexibility": 0.0884,
+        "synthesizability": 0.3924,
+        "cleavability": 0.4,
+        "stability": 1.0,
+        "similarity": 0.5
+      },
+      "physchem": {
+        "qed": 0.1163,
+        "mol_wt": 572.7,
+        "logp": 0.68,
+        "tpsa": 200.0,
+        "fsp3": 0.5,
+        "aromatic_rings": 1,
+        "hbd": 6,
+        "hba": 7,
+        "rot_bonds": 17
+      }
+    },
+    {
+      "name": "mc-Val-Ala-PABC",
+      "smiles": "O=C1C=CC(=O)N1CCCCCC(=O)NC(C(C)C)C(=O)NC(C)C(=O)Nc1ccc(CO)cc1",
+      "class": "protease-cleavable (maleimide/Cys)",
+      "adc": "Val-Ala class",
+      "score": 0.586,
+      "subscores": {
+        "solubility": 0.715,
+        "size": 1.0,
+        "flexibility": 0.2689,
+        "synthesizability": 0.4562,
+        "cleavability": 0.4,
+        "stability": 1.0,
+        "similarity": 0.5
+      },
+      "physchem": {
+        "qed": 0.2439,
+        "mol_wt": 486.6,
+        "logp": 1.25,
+        "tpsa": 144.9,
+        "fsp3": 0.48,
+        "aromatic_rings": 1,
+        "hbd": 4,
+        "hba": 6,
+        "rot_bonds": 13
+      }
+    },
+    {
+      "name": "mc-GGFG",
+      "smiles": "O=C1C=CC(=O)N1CCCCCC(=O)NCC(=O)NCC(=O)NC(Cc1ccccc1)C(=O)NCC(=O)O",
+      "class": "protease-cleavable tetrapeptide",
+      "adc": "trastuzumab deruxtecan (Enhertu)",
+      "score": 0.5816,
+      "subscores": {
+        "solubility": 0.8904,
+        "size": 1.0,
+        "flexibility": 0.1192,
+        "synthesizability": 0.4993,
+        "cleavability": 0.4,
+        "stability": 1.0,
+        "similarity": 0.5
+      },
+      "physchem": {
+        "qed": 0.1279,
+        "mol_wt": 529.6,
+        "logp": -1.37,
+        "tpsa": 191.1,
+        "fsp3": 0.4,
+        "aromatic_rings": 1,
+        "hbd": 5,
+        "hba": 7,
+        "rot_bonds": 16
+      }
+    },
+    {
+      "name": "MCC (non-cleavable)",
+      "smiles": "O=C(O)C1CCC(CN2C(=O)C=CC2=O)CC1",
+      "class": "non-cleavable thioether",
+      "adc": "trastuzumab emtansine (Kadcyla)",
+      "score": 0.6733,
+      "subscores": {
+        "solubility": 0.6385,
+        "size": 1.0,
+        "flexibility": 0.9116,
+        "synthesizability": 0.6232,
+        "cleavability": 0.4,
+        "stability": 1.0,
+        "similarity": 0.5
+      },
+      "physchem": {
+        "qed": 0.7367,
+        "mol_wt": 237.3,
+        "logp": 0.8,
+        "tpsa": 74.7,
+        "fsp3": 0.583,
+        "aromatic_rings": 0,
+        "hbd": 1,
+        "hba": 3,
+        "rot_bonds": 3
+      }
+    },
+    {
+      "name": "SPDB disulfide",
+      "smiles": "O=C(O)CCCSSc1ccccn1",
+      "class": "redox-cleavable disulfide",
+      "adc": "mirvetuximab soravtansine (Elahere)",
+      "score": 0.7449,
+      "subscores": {
+        "solubility": 0.416,
+        "size": 1.0,
+        "flexibility": 0.7914,
+        "synthesizability": 0.6418,
+        "cleavability": 1.0,
+        "stability": 1.0,
+        "similarity": 0.5
+      },
+      "physchem": {
+        "qed": 0.6001,
+        "mol_wt": 229.3,
+        "logp": 2.69,
+        "tpsa": 50.2,
+        "fsp3": 0.333,
+        "aromatic_rings": 1,
+        "hbd": 1,
+        "hba": 4,
+        "rot_bonds": 6
+      }
+    },
+    {
+      "name": "sulfo-SPDB",
+      "smiles": "O=C(O)C(CCSSc1ccccn1)S(=O)(=O)O",
+      "class": "redox-cleavable disulfide (hydrophilic)",
+      "adc": "hindered disulfide class",
+      "score": 0.7567,
+      "subscores": {
+        "solubility": 0.6504,
+        "size": 1.0,
+        "flexibility": 0.7311,
+        "synthesizability": 0.4173,
+        "cleavability": 1.0,
+        "stability": 1.0,
+        "similarity": 0.5
+      },
+      "physchem": {
+        "qed": 0.4439,
+        "mol_wt": 309.4,
+        "logp": 1.55,
+        "tpsa": 104.6,
+        "fsp3": 0.333,
+        "aromatic_rings": 1,
+        "hbd": 2,
+        "hba": 6,
+        "rot_bonds": 7
+      }
+    },
+    {
+      "name": "AcBut hydrazone",
+      "smiles": "CC(=NN)c1ccc(OCCCC(=O)O)cc1",
+      "class": "acid-labile hydrazone",
+      "adc": "gemtuzumab ozogamicin (Mylotarg)",
+      "score": 0.0,
+      "subscores": {
+        "solubility": 0.596,
+        "size": 1.0,
+        "flexibility": 0.7914,
+        "synthesizability": 0.742,
+        "cleavability": 0.4,
+        "stability": 0.0,
+        "similarity": 0.5
+      },
+      "physchem": {
+        "qed": 0.3399,
+        "mol_wt": 236.3,
+        "logp": 1.61,
+        "tpsa": 84.9,
+        "fsp3": 0.333,
+        "aromatic_rings": 1,
+        "hbd": 2,
+        "hba": 4,
+        "rot_bonds": 6
+      }
+    },
+    {
+      "name": "beta-glucuronide",
+      "smiles": "O=C1C=CC(=O)N1CCCCCC(=O)Nc1ccc(OC2OC(C(=O)O)C(O)C(O)C2O)cc1CO",
+      "class": "glycosidase-cleavable glucuronide",
+      "adc": "glucuronide linker class",
+      "score": 0.0,
+      "subscores": {
+        "solubility": 0.8788,
+        "size": 1.0,
+        "flexibility": 0.4174,
+        "synthesizability": 0.2489,
+        "cleavability": 0.4,
+        "stability": 0.0,
+        "similarity": 0.5
+      },
+      "physchem": {
+        "qed": 0.1559,
+        "mol_wt": 508.5,
+        "logp": -1.13,
+        "tpsa": 203.2,
+        "fsp3": 0.478,
+        "aromatic_rings": 1,
+        "hbd": 6,
+        "hba": 10,
+        "rot_bonds": 11
+      }
+    },
+    {
+      "name": "maleimidocaproyl (mc)",
+      "smiles": "O=C1C=CC(=O)N1CCCCCC(=O)O",
+      "class": "conjugation spacer only",
+      "adc": "mc handle",
+      "score": 0.6806,
+      "subscores": {
+        "solubility": 0.6578,
+        "size": 1.0,
+        "flexibility": 0.7914,
+        "synthesizability": 0.6848,
+        "cleavability": 0.4,
+        "stability": 1.0,
+        "similarity": 0.5
+      },
+      "physchem": {
+        "qed": 0.5141,
+        "mol_wt": 211.2,
+        "logp": 0.56,
+        "tpsa": 74.7,
+        "fsp3": 0.5,
+        "aromatic_rings": 0,
+        "hbd": 1,
+        "hba": 3,
+        "rot_bonds": 6
+      }
+    }
+  ],
+  "calibration": {
+    "rows": [
+      {
+        "class": "acid-labile hydrazone",
+        "smiles": "CC(=NNC(C)=O)c1ccc(OCCCC(=O)O)cc1",
+        "expected_stability": "low",
+        "stability": 0.0,
+        "composite": 0.0
+      },
+      {
+        "class": "redox disulfide",
+        "smiles": "O=C(O)CCCSSc1ccccn1",
+        "expected_stability": "intermediate",
+        "stability": 1.0,
+        "composite": 0.7449
+      },
+      {
+        "class": "protease dipeptide",
+        "smiles": "O=C1C=CC(=O)N1CCCCCC(=O)NC(C(C)C)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+        "expected_stability": "high",
+        "stability": 1.0,
+        "composite": 0.5241
+      },
+      {
+        "class": "non-cleavable thioether",
+        "smiles": "O=C(O)C1CCC(CN2C(=O)C=CC2=O)CC1",
+        "expected_stability": "high",
+        "stability": 1.0,
+        "composite": 0.6733
+      }
+    ],
+    "passes": true
+  },
+  "designed": [
+    {
+      "smiles": "NOCC(=O)n1cc(C(=O)NCc2ccccc2)c(=O)[nH]c1=O",
+      "score": 0.8477,
+      "subscores": {
+        "solubility": 0.8725,
+        "size": 1.0,
+        "flexibility": 0.8411,
+        "synthesizability": 0.6276,
+        "cleavability": 0.4,
+        "stability": 1.0,
+        "similarity": 0.5
+      },
+      "descriptors": {},
+      "handle": "Oxyamine",
+      "trigger": "Non-cleavable",
+      "seed": 0,
+      "physchem": {
+        "qed": 0.6047,
+        "mol_wt": 318.3,
+        "logp": -1.0,
+        "tpsa": 136.3,
+        "fsp3": 0.143,
+        "aromatic_rings": 2,
+        "hbd": 3,
+        "hba": 6,
+        "rot_bonds": 5
+      },
+      "novelty_nn_tanimoto": 0.2025
+    },
+    {
+      "smiles": "Cn1c(=O)n(CC(=O)NCc2ccccc2)c(=O)n(CC(=O)N2C(=O)C=CC2=O)c1=O",
+      "score": 0.843,
+      "subscores": {
+        "solubility": 0.934,
+        "size": 1.0,
+        "flexibility": 0.7914,
+        "synthesizability": 0.5798,
+        "cleavability": 0.4,
+        "stability": 1.0,
+        "similarity": 0.5
+      },
+      "descriptors": {},
+      "handle": "Maleimide",
+      "trigger": "Non-cleavable",
+      "seed": 0,
+      "physchem": {
+        "qed": 0.4999,
+        "mol_wt": 427.4,
+        "logp": -2.52,
+        "tpsa": 149.5,
+        "fsp3": 0.211,
+        "aromatic_rings": 2,
+        "hbd": 1,
+        "hba": 7,
+        "rot_bonds": 6
+      },
+      "novelty_nn_tanimoto": 0.2917
+    },
+    {
+      "smiles": "O=C(Cn1c(=O)[nH]c(=O)n(CCN2C(=O)C=CC2=O)c1=O)NCc1ccccc1",
+      "score": 0.8408,
+      "subscores": {
+        "solubility": 0.9187,
+        "size": 1.0,
+        "flexibility": 0.7311,
+        "synthesizability": 0.6088,
+        "cleavability": 0.4,
+        "stability": 1.0,
+        "similarity": 0.5
+      },
+      "descriptors": {},
+      "handle": "Maleimide",
+      "trigger": "Non-cleavable",
+      "seed": 0,
+      "physchem": {
+        "qed": 0.5126,
+        "mol_wt": 399.4,
+        "logp": -2.06,
+        "tpsa": 143.3,
+        "fsp3": 0.222,
+        "aromatic_rings": 2,
+        "hbd": 2,
+        "hba": 6,
+        "rot_bonds": 7
+      },
+      "novelty_nn_tanimoto": 0.3478
+    },
+    {
+      "smiles": "O=C(Cn1c(=O)[nH]c(=O)n(CC(=O)N2C(=O)C=CC2=O)c1=O)NCc1ccccc1",
+      "score": 0.8408,
+      "subscores": {
+        "solubility": 0.9343,
+        "size": 1.0,
+        "flexibility": 0.7914,
+        "synthesizability": 0.5731,
+        "cleavability": 0.4,
+        "stability": 1.0,
+        "similarity": 0.5
+      },
+      "descriptors": {},
+      "handle": "Maleimide",
+      "trigger": "Non-cleavable",
+      "seed": 0,
+      "physchem": {
+        "qed": 0.4936,
+        "mol_wt": 413.3,
+        "logp": -2.53,
+        "tpsa": 160.4,
+        "fsp3": 0.167,
+        "aromatic_rings": 2,
+        "hbd": 2,
+        "hba": 7,
+        "rot_bonds": 6
+      },
+      "novelty_nn_tanimoto": 0.2778
+    },
+    {
+      "smiles": "Cn1c(=O)n(CCON)c(=O)c2c1c(=O)n(CC(=O)NCc1ccccc1)c(=O)n2C",
+      "score": 0.8388,
+      "subscores": {
+        "solubility": 0.9247,
+        "size": 1.0,
+        "flexibility": 0.7311,
+        "synthesizability": 0.5979,
+        "cleavability": 0.4,
+        "stability": 1.0,
+        "similarity": 0.5
+      },
+      "descriptors": {},
+      "handle": "Oxyamine",
+      "trigger": "Non-cleavable",
+      "seed": 2,
+      "physchem": {
+        "qed": 0.4023,
+        "mol_wt": 430.4,
+        "logp": -2.23,
+        "tpsa": 152.3,
+        "fsp3": 0.316,
+        "aromatic_rings": 3,
+        "hbd": 2,
+        "hba": 7,
+        "rot_bonds": 7
+      },
+      "novelty_nn_tanimoto": 0.2632
+    },
+    {
+      "smiles": "Cn1c(=O)c2c(=O)n(CCON)c(=O)[nH]c2c(=O)n(CC(=O)NCc2ccccc2)c1=O",
+      "score": 0.8386,
+      "subscores": {
+        "solubility": 0.944,
+        "size": 1.0,
+        "flexibility": 0.7311,
+        "synthesizability": 0.5818,
+        "cleavability": 0.4,
+        "stability": 1.0,
+        "similarity": 0.5
+      },
+      "descriptors": {},
+      "handle": "Oxyamine",
+      "trigger": "Non-cleavable",
+      "seed": 2,
+      "physchem": {
+        "qed": 0.3249,
+        "mol_wt": 444.4,
+        "logp": -2.88,
+        "tpsa": 180.3,
+        "fsp3": 0.263,
+        "aromatic_rings": 3,
+        "hbd": 3,
+        "hba": 8,
+        "rot_bonds": 7
+      },
+      "novelty_nn_tanimoto": 0.2381
+    },
+    {
+      "smiles": "Cn1c(=O)c2c(ncn2CCON)c(=O)n(CC(=O)NCc2ccccc2)c1=O",
+      "score": 0.8345,
+      "subscores": {
+        "solubility": 0.898,
+        "size": 1.0,
+        "flexibility": 0.7311,
+        "synthesizability": 0.6064,
+        "cleavability": 0.4,
+        "stability": 1.0,
+        "similarity": 0.5
+      },
+      "descriptors": {},
+      "handle": "Oxyamine",
+      "trigger": "Non-cleavable",
+      "seed": 2,
+      "physchem": {
+        "qed": 0.4577,
+        "mol_wt": 400.4,
+        "logp": -1.54,
+        "tpsa": 143.2,
+        "fsp3": 0.278,
+        "aromatic_rings": 3,
+        "hbd": 2,
+        "hba": 7,
+        "rot_bonds": 7
+      },
+      "novelty_nn_tanimoto": 0.25
+    },
+    {
+      "smiles": "CN(C(=O)NCc1ccccc1)c1c(N)n(CCON)c(=O)[nH]c1=O",
+      "score": 0.8334,
+      "subscores": {
+        "solubility": 0.8527,
+        "size": 1.0,
+        "flexibility": 0.7914,
+        "synthesizability": 0.6181,
+        "cleavability": 0.4,
+        "stability": 1.0,
+        "similarity": 0.5
+      },
+      "descriptors": {},
+      "handle": "Oxyamine",
+      "trigger": "Non-cleavable",
+      "seed": 1,
+      "physchem": {
+        "qed": 0.51,
+        "mol_wt": 348.4,
+        "logp": -0.64,
+        "tpsa": 148.5,
+        "fsp3": 0.267,
+        "aromatic_rings": 2,
+        "hbd": 4,
+        "hba": 6,
+        "rot_bonds": 6
+      },
+      "novelty_nn_tanimoto": 0.225
+    },
+    {
+      "smiles": "Cn1cc(NC(=O)CN2C(=O)C=CC2=O)c(=O)n(CC(=O)NCc2ccccc2)c1=O",
+      "score": 0.833,
+      "subscores": {
+        "solubility": 0.8859,
+        "size": 1.0,
+        "flexibility": 0.7311,
+        "synthesizability": 0.6118,
+        "cleavability": 0.4,
+        "stability": 1.0,
+        "similarity": 0.5
+      },
+      "descriptors": {},
+      "handle": "Maleimide",
+      "trigger": "Non-cleavable",
+      "seed": 0,
+      "physchem": {
+        "qed": 0.5303,
+        "mol_wt": 425.4,
+        "logp": -1.27,
+        "tpsa": 139.6,
+        "fsp3": 0.2,
+        "aromatic_rings": 2,
+        "hbd": 2,
+        "hba": 6,
+        "rot_bonds": 7
+      },
+      "novelty_nn_tanimoto": 0.3026
+    },
+    {
+      "smiles": "O=C(Cn1c(=O)nc(NC(=O)NC(=O)CBr)[nH]c1=O)NCc1ccccc1",
+      "score": 0.8314,
+      "subscores": {
+        "solubility": 0.8564,
+        "size": 1.0,
+        "flexibility": 0.7914,
+        "synthesizability": 0.6083,
+        "cleavability": 0.4,
+        "stability": 1.0,
+        "similarity": 0.5
+      },
+      "descriptors": {},
+      "handle": "Bromoacetamide",
+      "trigger": "Non-cleavable",
+      "seed": 1,
+      "physchem": {
+        "qed": 0.4362,
+        "mol_wt": 439.2,
+        "logp": -0.71,
+        "tpsa": 155.0,
+        "fsp3": 0.2,
+        "aromatic_rings": 2,
+        "hbd": 4,
+        "hba": 6,
+        "rot_bonds": 6
+      },
+      "novelty_nn_tanimoto": 0.2073
+    },
+    {
+      "smiles": "O=C(CBr)NS(=O)(=O)NC(=O)NC(=O)NCc1ccccc1",
+      "score": 0.831,
+      "subscores": {
+        "solubility": 0.8151,
+        "size": 1.0,
+        "flexibility": 0.8411,
+        "synthesizability": 0.6265,
+        "cleavability": 0.4,
+        "stability": 1.0,
+        "similarity": 0.5
+      },
+      "descriptors": {},
+      "handle": "Bromoacetamide",
+      "trigger": "Non-cleavable",
+      "seed": 0,
+      "physchem": {
+        "qed": 0.5209,
+        "mol_wt": 393.2,
+        "logp": -0.05,
+        "tpsa": 133.5,
+        "fsp3": 0.182,
+        "aromatic_rings": 1,
+        "hbd": 4,
+        "hba": 5,
+        "rot_bonds": 5
+      },
+      "novelty_nn_tanimoto": 0.2083
+    },
+    {
+      "smiles": "CC(=O)NC(=O)c1c(C(=O)NCc2ccccc2)[nH]c(=O)n(CCON)c1=O",
+      "score": 0.8292,
+      "subscores": {
+        "solubility": 0.8903,
+        "size": 1.0,
+        "flexibility": 0.7311,
+        "synthesizability": 0.5961,
+        "cleavability": 0.4,
+        "stability": 1.0,
+        "similarity": 0.5
+      },
+      "descriptors": {},
+      "handle": "Oxyamine",
+      "trigger": "Non-cleavable",
+      "seed": 0,
+      "physchem": {
+        "qed": 0.4242,
+        "mol_wt": 389.4,
+        "logp": -1.37,
+        "tpsa": 165.4,
+        "fsp3": 0.235,
+        "aromatic_rings": 2,
+        "hbd": 4,
+        "hba": 7,
+        "rot_bonds": 7
+      },
+      "novelty_nn_tanimoto": 0.2169
+    },
+    {
+      "smiles": "NOCCn1c(=O)c2cc(C(=O)NCc3ccccc3)ccc2n(C(N)=O)c1=O",
+      "score": 0.8292,
+      "subscores": {
+        "solubility": 0.8178,
+        "size": 1.0,
+        "flexibility": 0.7914,
+        "synthesizability": 0.6369,
+        "cleavability": 0.4,
+        "stability": 1.0,
+        "similarity": 0.5
+      },
+      "descriptors": {},
+      "handle": "Oxyamine",
+      "trigger": "Non-cleavable",
+      "seed": 2,
+      "physchem": {
+        "qed": 0.4945,
+        "mol_wt": 397.4,
+        "logp": -0.09,
+        "tpsa": 151.4,
+        "fsp3": 0.158,
+        "aromatic_rings": 3,
+        "hbd": 3,
+        "hba": 6,
+        "rot_bonds": 6
+      },
+      "novelty_nn_tanimoto": 0.2262
+    },
+    {
+      "smiles": "NOCCCNC(=O)c1cn(C(=O)NCc2ccccc2)c(=O)[nH]c1=O",
+      "score": 0.829,
+      "subscores": {
+        "solubility": 0.8556,
+        "size": 1.0,
+        "flexibility": 0.7311,
+        "synthesizability": 0.6258,
+        "cleavability": 0.4,
+        "stability": 1.0,
+        "similarity": 0.5
+      },
+      "descriptors": {},
+      "handle": "Oxyamine",
+      "trigger": "Non-cleavable",
+      "seed": 0,
+      "physchem": {
+        "qed": 0.3786,
+        "mol_wt": 361.4,
+        "logp": -0.7,
+        "tpsa": 148.3,
+        "fsp3": 0.25,
+        "aromatic_rings": 2,
+        "hbd": 4,
+        "hba": 6,
+        "rot_bonds": 7
+      },
+      "novelty_nn_tanimoto": 0.2195
+    },
+    {
+      "smiles": "O=C(CN1C(=O)C=CC1=O)Nc1n[nH]c(C(=O)NCc2ccccc2)n1",
+      "score": 0.8289,
+      "subscores": {
+        "solubility": 0.8381,
+        "size": 1.0,
+        "flexibility": 0.7914,
+        "synthesizability": 0.6167,
+        "cleavability": 0.4,
+        "stability": 1.0,
+        "similarity": 0.5
+      },
+      "descriptors": {},
+      "handle": "Maleimide",
+      "trigger": "Non-cleavable",
+      "seed": 0,
+      "physchem": {
+        "qed": 0.6036,
+        "mol_wt": 354.3,
+        "logp": -0.4,
+        "tpsa": 137.1,
+        "fsp3": 0.125,
+        "aromatic_rings": 2,
+        "hbd": 3,
+        "hba": 6,
+        "rot_bonds": 6
+      },
+      "novelty_nn_tanimoto": 0.2933
+    },
+    {
+      "smiles": "O=C(CBr)NC(=O)Cn1nc(NC(=O)NCc2ccccc2)c(=O)[nH]c1=O",
+      "score": 0.8284,
+      "subscores": {
+        "solubility": 0.8564,
+        "size": 1.0,
+        "flexibility": 0.7914,
+        "synthesizability": 0.5988,
+        "cleavability": 0.4,
+        "stability": 1.0,
+        "similarity": 0.5
+      },
+      "descriptors": {},
+      "handle": "Bromoacetamide",
+      "trigger": "Non-cleavable",
+      "seed": 1,
+      "physchem": {
+        "qed": 0.4362,
+        "mol_wt": 439.2,
+        "logp": -0.71,
+        "tpsa": 155.0,
+        "fsp3": 0.2,
+        "aromatic_rings": 2,
+        "hbd": 4,
+        "hba": 6,
+        "rot_bonds": 6
+      },
+      "novelty_nn_tanimoto": 0.2048
+    },
+    {
+      "smiles": "NOCC(=O)Nc1c(C(=O)NCc2ccccc2)[nH][nH]c1=O",
+      "score": 0.8276,
+      "subscores": {
+        "solubility": 0.8464,
+        "size": 1.0,
+        "flexibility": 0.7914,
+        "synthesizability": 0.6052,
+        "cleavability": 0.4,
+        "stability": 1.0,
+        "similarity": 0.5
+      },
+      "descriptors": {},
+      "handle": "Oxyamine",
+      "trigger": "Non-cleavable",
+      "seed": 0,
+      "physchem": {
+        "qed": 0.4556,
+        "mol_wt": 305.3,
+        "logp": -0.54,
+        "tpsa": 142.1,
+        "fsp3": 0.154,
+        "aromatic_rings": 2,
+        "hbd": 5,
+        "hba": 5,
+        "rot_bonds": 6
+      },
+      "novelty_nn_tanimoto": 0.2078
+    },
+    {
+      "smiles": "NOCCn1c(=O)c2cc(C(=O)NCc3ccccc3)ccc2n(CC(N)=O)c1=O",
+      "score": 0.8275,
+      "subscores": {
+        "solubility": 0.846,
+        "size": 1.0,
+        "flexibility": 0.6608,
+        "synthesizability": 0.6621,
+        "cleavability": 0.4,
+        "stability": 1.0,
+        "similarity": 0.5
+      },
+      "descriptors": {},
+      "handle": "Oxyamine",
+      "trigger": "Non-cleavable",
+      "seed": 2,
+      "physchem": {
+        "qed": 0.4239,
+        "mol_wt": 411.4,
+        "logp": -0.53,
+        "tpsa": 151.4,
+        "fsp3": 0.2,
+        "aromatic_rings": 3,
+        "hbd": 3,
+        "hba": 6,
+        "rot_bonds": 8
+      },
+      "novelty_nn_tanimoto": 0.2235
+    },
+    {
+      "smiles": "NOCn1c(N)nc(N2CCN(C(=O)NCc3ccccc3)CC2)cc1=O",
+      "score": 0.8273,
+      "subscores": {
+        "solubility": 0.8313,
+        "size": 1.0,
+        "flexibility": 0.8411,
+        "synthesizability": 0.5994,
+        "cleavability": 0.4,
+        "stability": 1.0,
+        "similarity": 0.5
+      },
+      "descriptors": {},
+      "handle": "Oxyamine",
+      "trigger": "Non-cleavable",
+      "seed": 1,
+      "physchem": {
+        "qed": 0.6134,
+        "mol_wt": 373.4,
+        "logp": -0.29,
+        "tpsa": 131.7,
+        "fsp3": 0.353,
+        "aromatic_rings": 2,
+        "hbd": 3,
+        "hba": 7,
+        "rot_bonds": 5
+      },
+      "novelty_nn_tanimoto": 0.2317
+    },
+    {
+      "smiles": "O=C(Cn1c(=O)c(=O)n(CC(=O)N2C(=O)C=CC2=O)c2ccccc2c1=O)NCc1ccccc1",
+      "score": 0.8247,
+      "subscores": {
+        "solubility": 0.8564,
+        "size": 1.0,
+        "flexibility": 0.7914,
+        "synthesizability": 0.5873,
+        "cleavability": 0.4,
+        "stability": 1.0,
+        "similarity": 0.5
+      },
+      "descriptors": {},
+      "handle": "Maleimide",
+      "trigger": "Non-cleavable",
+      "seed": 2,
+      "physchem": {
+        "qed": 0.3671,
+        "mol_wt": 474.4,
+        "logp": -0.71,
+        "tpsa": 144.6,
+        "fsp3": 0.125,
+        "aromatic_rings": 3,
+        "hbd": 1,
+        "hba": 7,
+        "rot_bonds": 6
+      },
+      "novelty_nn_tanimoto": 0.2667
+    },
+    {
+      "smiles": "Nn1c(SCC(=O)N2C(=O)C=CC2=O)nnc(C(=O)NCc2ccccc2)c1=O",
+      "score": 0.8245,
+      "subscores": {
+        "solubility": 0.8811,
+        "size": 1.0,
+        "flexibility": 0.7914,
+        "synthesizability": 0.5659,
+        "cleavability": 0.4,
+        "stability": 1.0,
+        "similarity": 0.5
+      },
+      "descriptors": {},
+      "handle": "Maleimide",
+      "trigger": "Non-cleavable",
+      "seed": 1,
+      "physchem": {
+        "qed": 0.3373,
+        "mol_wt": 414.4,
+        "logp": -1.17,
+        "tpsa": 157.3,
+        "fsp3": 0.118,
+        "aromatic_rings": 2,
+        "hbd": 2,
+        "hba": 9,
+        "rot_bonds": 6
+      },
+      "novelty_nn_tanimoto": 0.2346
+    },
+    {
+      "smiles": "O=C(NCc1ccccc1)c1cc(C(=O)NNC(=O)N2C(=O)C=CC2=O)[nH]n1",
+      "score": 0.8241,
+      "subscores": {
+        "solubility": 0.8368,
+        "size": 1.0,
+        "flexibility": 0.8808,
+        "synthesizability": 0.5711,
+        "cleavability": 0.4,
+        "stability": 1.0,
+        "similarity": 0.5
+      },
+      "descriptors": {},
+      "handle": "Maleimide",
+      "trigger": "Non-cleavable",
+      "seed": 1,
+      "physchem": {
+        "qed": 0.4175,
+        "mol_wt": 382.3,
+        "logp": -0.38,
+        "tpsa": 153.4,
+        "fsp3": 0.059,
+        "aromatic_rings": 2,
+        "hbd": 4,
+        "hba": 6,
+        "rot_bonds": 4
+      },
+      "novelty_nn_tanimoto": 0.2597
+    },
+    {
+      "smiles": "NOCCn1c(=O)c(C(=O)NCc2ccccc2)cc2cnc(N)nc21",
+      "score": 0.8236,
+      "subscores": {
+        "solubility": 0.7981,
+        "size": 1.0,
+        "flexibility": 0.7914,
+        "synthesizability": 0.6375,
+        "cleavability": 0.4,
+        "stability": 1.0,
+        "similarity": 0.5
+      },
+      "descriptors": {},
+      "handle": "Oxyamine",
+      "trigger": "Non-cleavable",
+      "seed": 1,
+      "physchem": {
+        "qed": 0.5372,
+        "mol_wt": 354.4,
+        "logp": 0.19,
+        "tpsa": 138.1,
+        "fsp3": 0.176,
+        "aromatic_rings": 3,
+        "hbd": 3,
+        "hba": 7,
+        "rot_bonds": 6
+      },
+      "novelty_nn_tanimoto": 0.2262
+    },
+    {
+      "smiles": "O=C(Cn1cnc2c(nnn2CC(=O)NC(=O)CBr)c1=O)NCc1ccccc1",
+      "score": 0.8232,
+      "subscores": {
+        "solubility": 0.8535,
+        "size": 1.0,
+        "flexibility": 0.7311,
+        "synthesizability": 0.6086,
+        "cleavability": 0.4,
+        "stability": 1.0,
+        "similarity": 0.5
+      },
+      "descriptors": {},
+      "handle": "Bromoacetamide",
+      "trigger": "Non-cleavable",
+      "seed": 1,
+      "physchem": {
+        "qed": 0.4445,
+        "mol_wt": 462.3,
+        "logp": -0.66,
+        "tpsa": 140.9,
+        "fsp3": 0.235,
+        "aromatic_rings": 3,
+        "hbd": 2,
+        "hba": 7,
+        "rot_bonds": 7
+      },
+      "novelty_nn_tanimoto": 0.1977
+    },
+    {
+      "smiles": "NOCCC(=O)c1c(C(=O)NCc2ccccc2)[nH]c(=O)[nH]c1=O",
+      "score": 0.8195,
+      "subscores": {
+        "solubility": 0.8467,
+        "size": 1.0,
+        "flexibility": 0.7311,
+        "synthesizability": 0.6028,
+        "cleavability": 0.4,
+        "stability": 1.0,
+        "similarity": 0.5
+      },
+      "descriptors": {},
+      "handle": "Oxyamine",
+      "trigger": "Non-cleavable",
+      "seed": 0,
+      "physchem": {
+        "qed": 0.3952,
+        "mol_wt": 332.3,
+        "logp": -0.54,
+        "tpsa": 147.1,
+        "fsp3": 0.2,
+        "aromatic_rings": 2,
+        "hbd": 4,
+        "hba": 6,
+        "rot_bonds": 7
+      },
+      "novelty_nn_tanimoto": 0.2179
+    },
+    {
+      "smiles": "O=C(Cn1c(=O)[nH]c2cc(S(=O)(=O)N3C(=O)C=CC3=O)ccc2c1=O)NCc1ccccc1",
+      "score": 0.8177,
+      "subscores": {
+        "solubility": 0.8367,
+        "size": 1.0,
+        "flexibility": 0.7914,
+        "synthesizability": 0.5823,
+        "cleavability": 0.4,
+        "stability": 1.0,
+        "similarity": 0.5
+      },
+      "descriptors": {},
+      "handle": "Maleimide",
+      "trigger": "Non-cleavable",
+      "seed": 1,
+      "physchem": {
+        "qed": 0.4673,
+        "mol_wt": 468.4,
+        "logp": -0.38,
+        "tpsa": 155.5,
+        "fsp3": 0.095,
+        "aromatic_rings": 3,
+        "hbd": 2,
+        "hba": 7,
+        "rot_bonds": 6
+      },
+      "novelty_nn_tanimoto": 0.2561
+    },
+    {
+      "smiles": "O=C(Cn1c(=O)[nH]c(=O)c2cc(S(=O)(=O)N3C(=O)C=CC3=O)ccc21)NCc1ccccc1",
+      "score": 0.8152,
+      "subscores": {
+        "solubility": 0.8367,
+        "size": 1.0,
+        "flexibility": 0.7914,
+        "synthesizability": 0.5745,
+        "cleavability": 0.4,
+        "stability": 1.0,
+        "similarity": 0.5
+      },
+      "descriptors": {},
+      "handle": "Maleimide",
+      "trigger": "Non-cleavable",
+      "seed": 1,
+      "physchem": {
+        "qed": 0.4673,
+        "mol_wt": 468.4,
+        "logp": -0.38,
+        "tpsa": 155.5,
+        "fsp3": 0.095,
+        "aromatic_rings": 3,
+        "hbd": 2,
+        "hba": 7,
+        "rot_bonds": 6
+      },
+      "novelty_nn_tanimoto": 0.2561
+    },
+    {
+      "smiles": "NOCNS(=O)(=O)c1ccc(NC(=O)NCc2ccccc2)cc1",
+      "score": 0.8149,
+      "subscores": {
+        "solubility": 0.7246,
+        "size": 1.0,
+        "flexibility": 0.7311,
+        "synthesizability": 0.7143,
+        "cleavability": 0.4,
+        "stability": 1.0,
+        "similarity": 0.5
+      },
+      "descriptors": {},
+      "handle": "Oxyamine",
+      "trigger": "Non-cleavable",
+      "seed": 1,
+      "physchem": {
+        "qed": 0.4404,
+        "mol_wt": 350.4,
+        "logp": 1.13,
+        "tpsa": 122.5,
+        "fsp3": 0.133,
+        "aromatic_rings": 2,
+        "hbd": 4,
+        "hba": 5,
+        "rot_bonds": 7
+      },
+      "novelty_nn_tanimoto": 0.1935
+    },
+    {
+      "smiles": "Nc1nc(NC(=O)NC(=O)CBr)nn1C(=O)NCc1ccccc1",
+      "score": 0.8143,
+      "subscores": {
+        "solubility": 0.763,
+        "size": 1.0,
+        "flexibility": 0.8808,
+        "synthesizability": 0.6084,
+        "cleavability": 0.4,
+        "stability": 1.0,
+        "similarity": 0.5
+      },
+      "descriptors": {},
+      "handle": "Bromoacetamide",
+      "trigger": "Non-cleavable",
+      "seed": 1,
+      "physchem": {
+        "qed": 0.5592,
+        "mol_wt": 396.2,
+        "logp": 0.66,
+        "tpsa": 144.0,
+        "fsp3": 0.154,
+        "aromatic_rings": 2,
+        "hbd": 4,
+        "hba": 6,
+        "rot_bonds": 4
+      },
+      "novelty_nn_tanimoto": 0.1975
+    },
+    {
+      "smiles": "O=C(Cn1nnc2cc(NC(=O)C(=O)NC(=O)CBr)ccc21)NCc1ccccc1",
+      "score": 0.8141,
+      "subscores": {
+        "solubility": 0.758,
+        "size": 1.0,
+        "flexibility": 0.7914,
+        "synthesizability": 0.6462,
+        "cleavability": 0.4,
+        "stability": 1.0,
+        "similarity": 0.5
+      },
+      "descriptors": {},
+      "handle": "Bromoacetamide",
+      "trigger": "Non-cleavable",
+      "seed": 1,
+      "physchem": {
+        "qed": 0.3569,
+        "mol_wt": 473.3,
+        "logp": 0.72,
+        "tpsa": 135.1,
+        "fsp3": 0.158,
+        "aromatic_rings": 3,
+        "hbd": 3,
+        "hba": 6,
+        "rot_bonds": 6
+      },
+      "novelty_nn_tanimoto": 0.1977
+    },
+    {
+      "smiles": "O=C(NCc1ccccc1)NS(=O)(=O)c1ccc(S(=O)(=O)N2C(=O)C=CC2=O)cc1",
+      "score": 0.8137,
+      "subscores": {
+        "solubility": 0.7763,
+        "size": 1.0,
+        "flexibility": 0.7914,
+        "synthesizability": 0.6259,
+        "cleavability": 0.4,
+        "stability": 1.0,
+        "similarity": 0.5
+      },
+      "descriptors": {},
+      "handle": "Maleimide",
+      "trigger": "Non-cleavable",
+      "seed": 1,
+      "physchem": {
+        "qed": 0.6101,
+        "mol_wt": 449.5,
+        "logp": 0.49,
+        "tpsa": 146.8,
+        "fsp3": 0.056,
+        "aromatic_rings": 2,
+        "hbd": 2,
+        "hba": 7,
+        "rot_bonds": 6
+      },
+      "novelty_nn_tanimoto": 0.2639
+    },
+    {
+      "smiles": "Nc1nc(NCC(=O)N2C(=O)C=CC2=O)cc(C(=O)NCc2ccccc2)n1",
+      "score": 0.8117,
+      "subscores": {
+        "solubility": 0.8217,
+        "size": 1.0,
+        "flexibility": 0.7914,
+        "synthesizability": 0.5767,
+        "cleavability": 1.0,
+        "stability": 1.0,
+        "similarity": 0.5
+      },
+      "descriptors": {},
+      "handle": "Maleimide",
+      "trigger": "Non-cleavable",
+      "seed": 2,
+      "physchem": {
+        "qed": 0.5863,
+        "mol_wt": 380.4,
+        "logp": -0.15,
+        "tpsa": 147.4,
+        "fsp3": 0.111,
+        "aromatic_rings": 2,
+        "hbd": 3,
+        "hba": 8,
+        "rot_bonds": 6
+      },
+      "novelty_nn_tanimoto": 0.2692
+    },
+    {
+      "smiles": "O=C(CNC(=O)ON1C(=O)CCC1=O)NNC(=O)c1cccc(S(=O)(=O)NCc2ccccc2)c1",
+      "score": 0.8116,
+      "subscores": {
+        "solubility": 0.8306,
+        "size": 1.0,
+        "flexibility": 0.6608,
+        "synthesizability": 0.6226,
+        "cleavability": 0.4,
+        "stability": 1.0,
+        "similarity": 0.5
+      },
+      "descriptors": {},
+      "handle": "NHS_ester",
+      "trigger": "Non-cleavable",
+      "seed": 0,
+      "physchem": {
+        "qed": 0.2802,
+        "mol_wt": 503.5,
+        "logp": -0.28,
+        "tpsa": 180.1,
+        "fsp3": 0.19,
+        "aromatic_rings": 2,
+        "hbd": 4,
+        "hba": 8,
+        "rot_bonds": 8
+      },
+      "novelty_nn_tanimoto": 0.2326
+    },
+    {
+      "smiles": "O=C(CBr)NS(=O)(=O)c1ccc(S(=O)(=O)NC(=O)NCc2ccccc2)cc1",
+      "score": 0.8112,
+      "subscores": {
+        "solubility": 0.7296,
+        "size": 1.0,
+        "flexibility": 0.7311,
+        "synthesizability": 0.6942,
+        "cleavability": 0.4,
+        "stability": 1.0,
+        "similarity": 0.5
+      },
+      "descriptors": {},
+      "handle": "Bromoacetamide",
+      "trigger": "Non-cleavable",
+      "seed": 2,
+      "physchem": {
+        "qed": 0.4968,
+        "mol_wt": 490.4,
+        "logp": 1.07,
+        "tpsa": 138.5,
+        "fsp3": 0.125,
+        "aromatic_rings": 2,
+        "hbd": 3,
+        "hba": 6,
+        "rot_bonds": 7
+      },
+      "novelty_nn_tanimoto": 0.2083
+    },
+    {
+      "smiles": "O=C(CNC(=O)Cn1cc(S(=O)(=O)NC(=O)CBr)cn1)NCc1ccccc1",
+      "score": 0.8098,
+      "subscores": {
+        "solubility": 0.8432,
+        "size": 1.0,
+        "flexibility": 0.5826,
+        "synthesizability": 0.6443,
+        "cleavability": 0.4,
+        "stability": 1.0,
+        "similarity": 0.5
+      },
+      "descriptors": {},
+      "handle": "Bromoacetamide",
+      "trigger": "Non-cleavable",
+      "seed": 0,
+      "physchem": {
+        "qed": 0.4215,
+        "mol_wt": 472.3,
+        "logp": -0.48,
+        "tpsa": 139.3,
+        "fsp3": 0.25,
+        "aromatic_rings": 2,
+        "hbd": 3,
+        "hba": 6,
+        "rot_bonds": 9
+      },
+      "novelty_nn_tanimoto": 0.2532
+    },
+    {
+      "smiles": "O=C(CNC(=O)NC(=O)c1cccc(S(=O)(=O)NC(=O)CBr)c1)NCc1ccccc1",
+      "score": 0.8091,
+      "subscores": {
+        "solubility": 0.7644,
+        "size": 1.0,
+        "flexibility": 0.6608,
+        "synthesizability": 0.6813,
+        "cleavability": 0.4,
+        "stability": 1.0,
+        "similarity": 0.5
+      },
+      "descriptors": {},
+      "handle": "Bromoacetamide",
+      "trigger": "Non-cleavable",
+      "seed": 2,
+      "physchem": {
+        "qed": 0.3823,
+        "mol_wt": 511.4,
+        "logp": 0.64,
+        "tpsa": 150.5,
+        "fsp3": 0.158,
+        "aromatic_rings": 2,
+        "hbd": 4,
+        "hba": 6,
+        "rot_bonds": 8
+      },
+      "novelty_nn_tanimoto": 0.2346
+    },
+    {
+      "smiles": "O=C(NCc1ccccc1)Nc1ccc2c(c1)c(=O)[nH]c(=O)n2CC(=O)N1C(=O)C=CC1=O",
+      "score": 0.8085,
+      "subscores": {
+        "solubility": 0.7782,
+        "size": 1.0,
+        "flexibility": 0.8411,
+        "synthesizability": 0.5887,
+        "cleavability": 0.4,
+        "stability": 1.0,
+        "similarity": 0.5
+      },
+      "descriptors": {},
+      "handle": "Maleimide",
+      "trigger": "Non-cleavable",
+      "seed": 2,
+      "physchem": {
+        "qed": 0.4838,
+        "mol_wt": 447.4,
+        "logp": 0.46,
+        "tpsa": 150.4,
+        "fsp3": 0.091,
+        "aromatic_rings": 3,
+        "hbd": 3,
+        "hba": 6,
+        "rot_bonds": 5
+      },
+      "novelty_nn_tanimoto": 0.241
+    },
+    {
+      "smiles": "O=C(NS(=O)(=O)c1ccc(S(=O)(=O)NCc2ccccc2)cc1)ON1C(=O)CCC1=O",
+      "score": 0.8079,
+      "subscores": {
+        "solubility": 0.7643,
+        "size": 1.0,
+        "flexibility": 0.7311,
+        "synthesizability": 0.6436,
+        "cleavability": 0.4,
+        "stability": 1.0,
+        "similarity": 0.5
+      },
+      "descriptors": {},
+      "handle": "NHS_ester",
+      "trigger": "Non-cleavable",
+      "seed": 0,
+      "physchem": {
+        "qed": 0.5621,
+        "mol_wt": 467.5,
+        "logp": 0.64,
+        "tpsa": 156.0,
+        "fsp3": 0.167,
+        "aromatic_rings": 2,
+        "hbd": 2,
+        "hba": 8,
+        "rot_bonds": 7
+      },
+      "novelty_nn_tanimoto": 0.194
+    },
+    {
+      "smiles": "O=C(CC(=O)ON1C(=O)CCC1=O)NNC(=O)c1cccc(S(=O)(=O)NCc2ccccc2)c1",
+      "score": 0.8078,
+      "subscores": {
+        "solubility": 0.817,
+        "size": 1.0,
+        "flexibility": 0.6608,
+        "synthesizability": 0.6224,
+        "cleavability": 0.4,
+        "stability": 1.0,
+        "similarity": 0.5
+      },
+      "descriptors": {},
+      "handle": "NHS_ester",
+      "trigger": "Non-cleavable",
+      "seed": 0,
+      "physchem": {
+        "qed": 0.2634,
+        "mol_wt": 488.5,
+        "logp": -0.08,
+        "tpsa": 168.0,
+        "fsp3": 0.19,
+        "aromatic_rings": 2,
+        "hbd": 3,
+        "hba": 8,
+        "rot_bonds": 8
+      },
+      "novelty_nn_tanimoto": 0.1954
+    },
+    {
+      "smiles": "O=C(CNC(=O)c1ncncc1S(=O)(=O)NC(=O)CBr)NCc1ccccc1",
+      "score": 0.8076,
+      "subscores": {
+        "solubility": 0.8302,
+        "size": 1.0,
+        "flexibility": 0.6608,
+        "synthesizability": 0.6096,
+        "cleavability": 0.4,
+        "stability": 1.0,
+        "similarity": 0.5
+      },
+      "descriptors": {},
+      "handle": "Bromoacetamide",
+      "trigger": "Non-cleavable",
+      "seed": 0,
+      "physchem": {
+        "qed": 0.45,
+        "mol_wt": 470.3,
+        "logp": -0.28,
+        "tpsa": 147.2,
+        "fsp3": 0.188,
+        "aromatic_rings": 2,
+        "hbd": 3,
+        "hba": 7,
+        "rot_bonds": 8
+      },
+      "novelty_nn_tanimoto": 0.2195
+    }
+  ]
+}
