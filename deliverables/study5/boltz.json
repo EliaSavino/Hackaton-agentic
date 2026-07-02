@@ -4,55 +4,55 @@
     "kind": "designed_conjugate",
     "linker_smiles": "CC(C)C(NC(=O)C(=O)NC(=O)CNC(=O)N1C(=O)C=CC1=O)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
     "payload_smiles": "CC[C@H](C)[C@@H]([C@@H](CC(=O)N1CCC[C@H]1[C@@H]([C@@H](C(C)C)OC)N(C)C(=O)[C@@H](NC(=O)[C@H](C)NC)C(C)C)OC)OC(=O)OCc1ccc(N)cc1",
-    "whole_conjugate": true,
     "ok": true,
     "status": "completed",
     "iptm": 0.745,
     "plddt": 79.22,
     "binding_affinity_kd_nm": 8.9,
     "binding_energy_kcal_mol": -10.98,
-    "error": null
+    "error": null,
+    "co_present": true
   },
   {
     "label": "immu-Maleim-0",
     "kind": "designed_conjugate",
     "linker_smiles": "CC(NC(=O)C(NC(=O)CC(N)C(=O)NCC(=O)N1C(=O)C=CC1=O)C(C)C)C(=O)Nc1ccc(CO)cc1",
     "payload_smiles": "CC(C)COCc1cnc2c(n1)n(cn2)CCO",
-    "whole_conjugate": true,
     "ok": true,
     "status": "completed",
     "iptm": 0.859,
     "plddt": 85.1,
     "binding_affinity_kd_nm": 46.48,
     "binding_energy_kcal_mol": -10.0,
-    "error": null
+    "error": null,
+    "co_present": true
   },
   {
     "label": "olig-DBCO-0",
     "kind": "negative_conjugate",
     "linker_smiles": "NCC1CCC(NC(=O)N2CCN(c3ccc(S(=O)(=O)N4Cc5ccccc5C#Cc5ccccc54)cn3)CC2)CC1",
     "payload_smiles": "COP(=O)(O)OCC1OC(N)C(O)C1OP(=O)(O)OCC",
-    "whole_conjugate": true,
     "ok": true,
     "status": "completed",
     "iptm": 0.883,
     "plddt": 85.58,
     "binding_affinity_kd_nm": 108.69,
     "binding_energy_kcal_mol": -9.5,
-    "error": null
+    "error": null,
+    "co_present": true
   },
   {
     "label": "clinical-mcValCitPABC+MMAE",
     "kind": "commercial_conjugate",
     "linker_smiles": "O=C1C=CC(=O)N1CCCCCC(=O)NC(C(C)C)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
     "payload_smiles": "CC[C@H](C)[C@@H]([C@@H](CC(=O)N1CCC[C@H]1[C@@H]([C@@H](C(C)C)OC)N(C)C(=O)[C@@H](NC(=O)[C@H](C)NC)C(C)C)OC)OC(=O)OCc1ccc(N)cc1",
-    "whole_conjugate": true,
     "ok": true,
     "status": "completed",
     "iptm": 0.791,
     "plddt": 79.06,
     "binding_affinity_kd_nm": 35.23,
     "binding_energy_kcal_mol": -10.17,
-    "error": null
+    "error": null,
+    "co_present": true
   }
 ]

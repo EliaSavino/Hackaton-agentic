@@ -49,12 +49,13 @@ HANDLE_SMARTS: list[str] = [
     "NO",                     # aminooxy
 ]
 
-# Cleavable / scissile motifs -> RED.
+# Cleavable / scissile motifs -> RED. Tightened (Reviewer 2, Part VI-C) so red marks
+# the single scissile bond (the Cit/Ala->PABC anilide amide that cathepsin B cleaves,
+# or a redox disulfide / acid hydrazone), NOT every carbonyl in the peptide backbone.
 SCISSILE_SMARTS: list[str] = [
-    "[NX3][CX4][CX3](=O)[NX3][CX3](=O)",  # dipeptide protease amide
-    "c1ccc(CO[CX3](=O))cc1",               # PABC benzyl carbamate
-    "[#16X2][#16X2]",                       # disulfide
-    "[CX3]=[NX2][NX3]",                     # hydrazone
+    "[CX3](=O)[NX3][c]",  # anilide amide: the Cit/Ala-PABC scissile bond (protease-cleaved)
+    "[#16X2][#16X2]",      # disulfide (redox-scissile)
+    "[CX3]=[NX2][NX3]",    # hydrazone (acid-scissile)
 ]
 
 # Spacers / solubilizers -> GREEN.
@@ -208,7 +209,7 @@ def _entry_legend(entry: dict[str, Any]) -> str:
     if score is not None:
         parts.append(f"score={score:.3f}")
     if steps is not None:
-        parts.append(f"steps={steps}")
+        parts.append(f"cplx idx={steps}")  # heuristic complexity index, NOT synthetic steps
     if stab is not None:
         parts.append(f"stab={stab:.2f}")
     return " | ".join(parts)
