@@ -15,17 +15,16 @@ from typing import Any
 
 from hackathon_agents.tools.consensus import disagreement_aware_confidence, evidence_composition
 
-# Unified semantic palette (critiques Part XI.1) -- one colour language across every figure:
-#   cleavable = teal, rigid/non-cleavable = amber, contested/flips = red,
-#   robust/recovers = green (outcome accents only), clinical/neutral = slate.
-PAL_CLEAVABLE = "#2C7FB8"   # teal/blue
-PAL_RIGID = "#E6820E"       # amber
-PAL_CONTESTED = "#D7301F"   # red
-PAL_ROBUST = "#2CA25F"      # green
-PAL_SLATE = "#636363"       # slate grey (clinical reference / neutral)
-# Per-class colours: the two cleavable classes share the cool teal family, the rigid/contested
-# ARC class is amber -- three distinguishable series that still read cool=cleavable, warm=rigid.
-_COL = {"cytotoxin": PAL_CLEAVABLE, "immunomodulator": "#66C2A4", "oligonucleotide": PAL_RIGID}
+# Semantic palette sampled from the *plasma* colormap (the paper's general colour map):
+#   cleavable = purple, rigid/non-cleavable = orange, robust/recovers = indigo,
+#   contested/flips = amber, clinical/neutral = grey. Heatmaps use cmap="plasma".
+PAL_CLEAVABLE = "#8f0da4"   # plasma 0.30 (purple)
+PAL_RIGID = "#fb9f3a"       # plasma 0.78 (orange)
+PAL_CONTESTED = "#feba2c"   # plasma 0.85 (amber)
+PAL_ROBUST = "#5601a4"      # plasma 0.15 (indigo)
+PAL_SLATE = "#7a7a7a"       # neutral grey (clinical reference / full-corpus baseline)
+# Per-target (class) colours, spread across plasma so the three targets are distinguishable.
+_COL = {"cytotoxin": "#5601a4", "immunomodulator": "#cc4778", "oligonucleotide": "#fdae32"}
 _SHORT = {"cytotoxin": "Cytotoxin", "oligonucleotide": "Oligonucleotide (ARC)", "immunomodulator": "Immunomodulator (ISAC)"}
 _DIRW = {"reward": "cleavable", "penalize": "non-cleavable", "ignore": "either"}
 
@@ -51,87 +50,101 @@ def fig2_heldout_composition(chains, heldout, out: Path) -> Path:
     held_dir = [_DIRW.get(heldout[c]["score"].get("predicted_cleavage"), "?") for c in classes]
     comps = [h["composition"] for h in held]
 
-    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(8.8, 6.0), height_ratios=[2.15, 1.0])
+    # Side-by-side (left confidence / right evidence split) -- less wide and much shorter than
+    # the old stacked layout, so it costs little vertical space. Plasma-derived colours.
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(8.2, 3.5), width_ratios=[1.28, 1.0])
     x = np.arange(len(classes)); w = 0.36
 
-    # top: confidence bars. Full-corpus is muted neutral so the held-out bars (green recover /
-    # red flip) are the only saturated ink; a dotted line at the 0.5 "contested floor" anchors
-    # the ARC flip bar's drop below it. (In-plot title dropped -- the LaTeX caption is the voice.)
-    ax1.axhline(0.5, ls=":", lw=0.9, color="#b0b0b0", zorder=0)
-    ax1.bar(x - w / 2, full_conf, w, label="full-corpus confidence", color="#bcbcbc", edgecolor="black", lw=0.5)
+    # LEFT: confidence bars. Full-corpus muted grey; held-out coloured by outcome (indigo recover
+    # / amber flip); a dotted 0.5 "contested floor" anchors the ARC flip below it.
+    ax1.axhline(0.5, ls=":", lw=0.9, color="#c0c0c0", zorder=0)
+    ax1.bar(x - w / 2, full_conf, w, label="full-corpus", color="#bcbcbc", edgecolor="black", lw=0.5)
     hc = [PAL_ROBUST if v == "agree" else PAL_CONTESTED for v in verdict]
-    ax1.bar(x + w / 2, held_conf, w, label="held-out confidence", color=hc, edgecolor="black", lw=0.5)
-    ax1.set_ylabel("derived-rule confidence\n(disagreement-aware)"); ax1.set_ylim(0, 1.2); ax1.set_xlim(-0.7, 2.7)
+    ax1.bar(x + w / 2, held_conf, w, label="held-out", color=hc, edgecolor="black", lw=0.5)
+    ax1.set_ylabel("derived-rule confidence\n(disagreement-aware)", fontsize=8.5)
+    ax1.set_ylim(0, 1.18); ax1.set_xlim(-0.7, 2.7)
     for i in range(len(classes)):
         ax1.text(x[i] - w / 2, full_conf[i] + 0.02, f"{full_dir[i]}\n{full_conf[i]:.2f}",
-                 ha="center", va="bottom", fontsize=7, color="#666")
+                 ha="center", va="bottom", fontsize=6.4, color="#666")
         flip = full_dir[i] != held_dir[i]
-        col = "#a51e12" if verdict[i] != "agree" else "#1f7a45"
+        col = "#9a6b00" if verdict[i] != "agree" else "#3d0a75"
         ax1.text(x[i] + w / 2, held_conf[i] + 0.02,
                  f"{held_dir[i]}\n{held_conf[i]:.2f}\n{'FLIPS' if flip else 'recovers'}",
-                 ha="center", va="bottom", fontsize=7, color=col, fontweight="bold")
-    ax1.text(-0.66, 0.5, "0.5", fontsize=6.5, color="#999", va="center", ha="left")
-    ax1.set_xticks(x); ax1.set_xticklabels([_SHORT[c] for c in classes], fontsize=8)
-    ax1.legend(fontsize=8, loc="upper center", ncol=2, bbox_to_anchor=(0.5, 1.11), frameon=True)
+                 ha="center", va="bottom", fontsize=6.4, color=col, fontweight="bold")
+    ax1.set_xticks(x); ax1.set_xticklabels([_SHORT[c] for c in classes], fontsize=6.8, rotation=10, ha="right")
+    ax1.legend(fontsize=7, loc="upper center", ncol=2, bbox_to_anchor=(0.5, 1.12), frameon=True)
 
-    # bottom: evidence-composition strip (cleavable teal vs non-cleavable amber among grounded)
+    # RIGHT: evidence-composition strip (cleavable purple vs non-cleavable orange among grounded)
     for i, c in enumerate(comps):
         n = max(1, c["n_cleavable"] + c["n_non_cleavable"])
         fc = c["n_cleavable"] / n
-        ax2.barh(i, fc, color=PAL_CLEAVABLE, edgecolor="black", lw=0.5, label="favour cleavable" if i == 0 else None)
-        ax2.barh(i, 1 - fc, left=fc, color=PAL_RIGID, edgecolor="black", lw=0.5, label="favour non-cleavable" if i == 0 else None)
-        ax2.text(0.5, i, f"{c['n_cleavable']} cleavable / {c['n_non_cleavable']} non-cleavable"
-                 + ("  (CONTESTED)" if c["contested"] else "  (unanimous)"),
-                 ha="center", va="center", fontsize=7.5, color="white" if c["contested"] else "black", fontweight="bold")
-    ax2.set_yticks(range(len(classes))); ax2.set_yticklabels([_SHORT[c] for c in classes], fontsize=8)
-    ax2.set_xlim(0, 1); ax2.set_xlabel("fraction of grounded exemplars (held-out)")
-    ax2.legend(fontsize=7.5, loc="lower center", ncol=2, bbox_to_anchor=(0.5, 1.0))
+        ax2.barh(i, fc, color=PAL_CLEAVABLE, edgecolor="black", lw=0.5, label="cleavable" if i == 0 else None)
+        ax2.barh(i, 1 - fc, left=fc, color=PAL_RIGID, edgecolor="black", lw=0.5, label="non-cleavable" if i == 0 else None)
+        ax2.text(0.5, i, f"{c['n_cleavable']}/{c['n_non_cleavable']}"
+                 + ("  contested" if c["contested"] else "  unanim."),
+                 ha="center", va="center", fontsize=6.8, color="white" if c["contested"] else "black", fontweight="bold")
+    ax2.set_yticks(range(len(classes))); ax2.set_yticklabels([_SHORT[c] for c in classes], fontsize=6.8)
+    ax2.invert_yaxis()
+    ax2.set_xlim(0, 1); ax2.set_xlabel("grounded exemplars\n(cleavable vs non-cleavable)", fontsize=8.5)
+    ax2.legend(fontsize=7, loc="upper center", ncol=2, bbox_to_anchor=(0.5, 1.12))
     fig.tight_layout()
     out.parent.mkdir(parents=True, exist_ok=True); fig.savefig(out, dpi=200); plt.close(fig)
     return out
 
 
 # --------------------------------------------------------------------------- #
-def fig3_rules_steer(designs, out: Path) -> Path:
-    """Heuristic weight heatmap (class x term) + generated designs in a real 2-D space.
+def fig3_rules_steer(designs, out: Path, tmp_dir: Path | None = None, per_class: int = 2) -> Path:
+    """Three panels: score, values, molecules -- the whole steer-the-chemistry story in one.
 
-    IX.1: the 'flexibility' weight rewards *rigidity* (a reverse-sigmoid on rotatable bonds),
-    so it is relabelled and the per-class rotatable-bond setpoint (5/10/14) is exposed -- that
-    setpoint, not the weight, is the real driver. IX.2: the scatter y-axis carries a real
-    per-molecule quantity (Ertl SA subscore), not decorative jitter. IX.3: the weights are a
-    deterministic rule-compilation (a heuristic keyed by the agent's derived category)."""
+    (a) the compiled objective weights heatmap (plasma; a deterministic rule-compilation);
+    (b) the generated designs in rotatable-bond x SA space -- colour encodes the *target*
+        (cyto/ISAC/ARC), shape encodes whether the linker is *cleavable* (o) or not (X);
+    (c) the actual generated molecules (real REINVENT designs) with their scores, drawn with
+        SMARTS-detected handle/scissile/spacer highlights (this absorbs the old gallery)."""
     import matplotlib; matplotlib.use("Agg")
     import matplotlib.pyplot as plt
+    import matplotlib.image as mpimg
     import numpy as np
+    from matplotlib.lines import Line2D
+    from hackathon_agents.tools.draw_linker_constructs import draw_construct
 
     classes = ["cytotoxin", "immunomodulator", "oligonucleotide"]
-    markers = {"cytotoxin": "o", "immunomodulator": "^", "oligonucleotide": "s"}
     terms = ["solubility", "flexibility", "cleavability", "stability"]
     term_labels = ["solubility", "rigidity\n(low-rot reward)", "cleavability", "stability"]
     mat = np.array([[designs[c]["weights"].get(t, 0.0) for t in terms] for c in classes])
     mrb = {c: designs[c].get("max_rot_bonds") for c in classes}
+    def _cleavable(c):
+        return "non-clea" not in str(designs[c].get("trigger", "")).lower()
 
-    fig, (axh, axs) = plt.subplots(1, 2, figsize=(9.6, 3.7), width_ratios=[1.1, 1.05])
-    # YlGnBu keys the heatmap to the cool "cleavable" end of the palette and gives every cell
-    # legible label contrast (light cells -> black text, dark cells -> white).
-    im = axh.imshow(mat, cmap="YlGnBu", vmin=0, vmax=1, aspect="auto")
-    axh.set_xticks(range(len(terms))); axh.set_xticklabels(term_labels, rotation=20, ha="right", fontsize=7.6)
-    # expose the rotatable-bond setpoint (the real separator) alongside each class label
+    tmp_dir = tmp_dir or (out.parent / "_fig3_tmp")
+    tmp_dir.mkdir(parents=True, exist_ok=True)
+
+    fig = plt.figure(figsize=(9.6, 4.7))
+    # Explicit margins (no tight_layout -- it can't reconcile the colorbar + image subgrid).
+    gs = fig.add_gridspec(2, 2, height_ratios=[1.0, 1.02], hspace=0.5, wspace=0.24,
+                          left=0.075, right=0.97, top=0.9, bottom=0.03)
+    axh = fig.add_subplot(gs[0, 0])
+    axs = fig.add_subplot(gs[0, 1])
+    gs_m = gs[1, :].subgridspec(per_class, len(classes), hspace=0.12, wspace=0.06)
+
+    # (a) weight heatmap -- plasma; legible labels (dark cells -> white text).
+    im = axh.imshow(mat, cmap="plasma", vmin=0, vmax=1, aspect="auto")
+    axh.set_xticks(range(len(terms))); axh.set_xticklabels(term_labels, rotation=20, ha="right", fontsize=7.4)
     axh.set_yticks(range(len(classes)))
-    axh.set_yticklabels([f"{_SHORT[c]}\n(rot$\\leq${mrb[c]})" for c in classes], fontsize=7.6)
+    axh.set_yticklabels([f"{_SHORT[c]}\n(rot$\\leq${mrb[c]})" for c in classes], fontsize=7.4)
     for i in range(len(classes)):
         for j in range(len(terms)):
-            axh.text(j, i, f"{mat[i,j]:.2f}", ha="center", va="center", fontsize=8,
-                     color="black" if mat[i, j] < 0.5 else "white")
-    axh.set_title("Compiled objective weights\n(deterministic rule-compilation, heuristic)", fontsize=8.8)
-    fig.colorbar(im, ax=axh, shrink=0.8, label="weight (3 buckets)")
+            axh.text(j, i, f"{mat[i,j]:.2f}", ha="center", va="center", fontsize=7.6,
+                     color="white" if mat[i, j] < 0.55 else "black")
+    axh.set_title("(a) Compiled objective weights\n(deterministic rule-compilation, heuristic)", fontsize=8.4)
+    fig.colorbar(im, ax=axh, shrink=0.82, label="weight (3 buckets)")
 
-    # Real 2-D: x = rotatable bonds (the rigidity setpoint, the true class separator);
-    # y = per-molecule Ertl SA subscore (a genuine quantity, not jitter). Palette-keyed colour
-    # (cleavable classes teal, rigid ARC amber) + a distinct marker per class.
+    # (b) scatter: x = rotatable bonds (rigidity setpoint), y = per-molecule Ertl SA subscore.
+    # Colour = target class; shape = cleavable (o) vs non-cleavable (X).
     from rdkit import Chem
     from rdkit.Chem import Descriptors
     for c in classes:
+        mk = "o" if _cleavable(c) else "X"
         xs, ys = [], []
         for m in designs[c]["top"]:
             mol = Chem.MolFromSmiles(m.get("smiles", ""))
@@ -139,14 +152,36 @@ def fig3_rules_steer(designs, out: Path) -> Path:
                 continue
             xs.append(Descriptors.NumRotatableBonds(mol))
             ys.append((m.get("subscores") or {}).get("synthesizability", 0.0))
-        axs.scatter(xs, ys, s=36, color=_COL[c], marker=markers[c], edgecolor="black", lw=0.4, alpha=0.85,
-                    label=f"{_SHORT[c]}  (rot$\\leq${mrb[c]})")
-    axs.set_xlabel("rotatable bonds  (the rigidity setpoint per class)")
-    axs.set_ylabel("Ertl SA subscore  (per molecule)")
+        axs.scatter(xs, ys, s=44, color=_COL[c], marker=mk, edgecolor="black", lw=0.4, alpha=0.9)
+    axs.set_xlabel("rotatable bonds  (rigidity setpoint)", fontsize=8)
+    axs.set_ylabel("Ertl SA subscore", fontsize=8)
     axs.set_ylim(0, 1.05)
-    axs.set_title("Designs separate by class,\ndriven by the rigidity setpoint", fontsize=8.8)
-    axs.legend(fontsize=6.8, loc="lower left", framealpha=0.9, handletextpad=0.3, borderpad=0.35)
-    fig.tight_layout()
+    axs.set_title("(b) Generated designs: colour = target,\nshape = cleavable ($\\circ$) vs non-cleavable ($\\times$)", fontsize=8.4)
+    col_handles = [Line2D([0], [0], marker="s", ls="", mfc=_COL[c], mec="black", ms=6.5, label=_SHORT[c]) for c in classes]
+    leg1 = axs.legend(handles=col_handles, fontsize=6.4, loc="lower left", title="target",
+                      title_fontsize=6.6, framealpha=0.9, handletextpad=0.2, borderpad=0.3)
+    axs.add_artist(leg1)
+    shp_handles = [Line2D([0], [0], marker="o", ls="", mfc="#bdbdbd", mec="black", ms=6.5, label="cleavable"),
+                   Line2D([0], [0], marker="X", ls="", mfc="#bdbdbd", mec="black", ms=6.5, label="non-cleavable")]
+    axs.legend(handles=shp_handles, fontsize=6.4, loc="lower right", title="linker",
+               title_fontsize=6.6, framealpha=0.9, handletextpad=0.2, borderpad=0.3)
+
+    # (c) real generated molecules with their scores (absorbs the gallery).
+    for col, c in enumerate(classes):
+        top = designs[c].get("top", [])
+        for row in range(per_class):
+            ax = fig.add_subplot(gs_m[row, col]); ax.axis("off")
+            if row == 0:
+                ax.set_title(_SHORT[c], fontsize=7.6, color=_COL[c], fontweight="bold", pad=1)
+            if row >= len(top):
+                continue
+            m = top[row]; smi = m.get("smiles", "")
+            png = tmp_dir / f"_f3_{c}_{row}.png"
+            if draw_construct(smi, png, legend="", size=(440, 250)) is not None:
+                ax.imshow(mpimg.imread(str(png)))
+            sc = m.get("score")
+            ax.text(0.5, -0.02, (f"score {sc:.2f}  " if sc is not None else "") + f"motif {designs[c].get('trigger','?')}",
+                    transform=ax.transAxes, ha="center", va="top", fontsize=6.0, color="#555")
     out.parent.mkdir(parents=True, exist_ok=True); fig.savefig(out, dpi=200); plt.close(fig)
     return out
 
@@ -219,10 +254,10 @@ def fig5_sensitivity(sens, out: Path) -> Path:
     # Palette-aligned robust/contested bands; in-plot title dropped (the LaTeX caption is the
     # single voice) and the height trimmed to help the main text hold five pages.
     fig, ax = plt.subplots(figsize=(7.4, 2.7))
-    ax.axhspan(0.6, 1.02, color=PAL_ROBUST, alpha=0.08)
-    ax.axhspan(-0.02, 0.4, color=PAL_CONTESTED, alpha=0.08)
-    ax.text(6.0, 0.93, "robust", color="#1f7a45", fontsize=8, fontweight="bold")
-    ax.text(6.0, 0.05, "contested / low", color="#a51e12", fontsize=8, fontweight="bold")
+    ax.axhspan(0.6, 1.02, color=PAL_ROBUST, alpha=0.10)
+    ax.axhspan(-0.02, 0.4, color=PAL_CONTESTED, alpha=0.12)
+    ax.text(6.0, 0.93, "robust", color="#3d0a75", fontsize=8, fontweight="bold")
+    ax.text(6.0, 0.05, "contested / low", color="#9a6b00", fontsize=8, fontweight="bold")
     for pc in classes:
         ys = [sens["topk"][pc][str(k)]["score"] for k in topk]
         lab = f"{_SHORT[pc]}  ({min(ys):.2f}--{max(ys):.2f})"
@@ -354,9 +389,9 @@ def render_study6_figures(src="deliverables/study5", out_dir="deliverables/study
     figs = {
         "fig1": fig1_journey(chains, designs, boltz, out / "fig1_journey.png", out / "_struct_cyto.png"),
         "fig2": fig2_heldout_composition(chains, heldout, out / "fig2_heldout.png"),
-        "fig3": fig3_rules_steer(designs, out / "fig3_rules_steer.png"),
+        # Fig 3 now carries score (weights) + values (scatter) + molecules (gallery panel).
+        "fig3": fig3_rules_steer(designs, out / "fig3_rules_steer.png", out / "_fig3_tmp"),
         "fig4": fig4_cofold_kd(boltz, out / "fig4_cofold.png", hypothesis=hypothesis),
-        "fig6": fig6_designs_gallery(designs, out / "fig6_gallery.png", out / "_gallery_tmp"),
     }
     sens_path = Path(out_dir).parent / "sensitivity.json"
     if sens_path.exists():

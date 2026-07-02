@@ -45,9 +45,9 @@ Also: scissile-bond SMARTS tightened (red marks the Cit-PABC anilide, not every 
 `boltz.json` flag renamed `whole_conjugate` → `co_present`; gallery label "steps" → "cplx idx".
 
 ## Files
-- `ADC_Linker_Study6_Paper.pdf` (**5 pp**) · `ADC_Linker_Study6_Supplementary.pdf` (**8 pp**)
-- `figures/` — fig1_journey, fig2_heldout, fig3_rules_steer, fig4_cofold, fig5_sensitivity, fig6_gallery
-  (fig6 is now rendered in the **SI**, not the main text — see Part XI)
+- `ADC_Linker_Study6_Paper.pdf` (**5 pp**) · `ADC_Linker_Study6_Supplementary.pdf` (7 pp)
+- `figures/` — fig1_journey, fig2_heldout, fig3_rules_steer, fig4_cofold, fig5_sensitivity
+  (the old fig6 gallery is now **panel (c) of Figure 3** — see Part XII)
 - Data JSONs live in `deliverables/study5/` (the ISAC objective was corrected in place by the V7
   safety gate; molecules are the same real REINVENT SMILES, re-scored under the gated objective).
 
@@ -137,6 +137,28 @@ data, re-rendered and re-typeset only.
   the markers or the axis ticks. Sensitivity (Fig 4): shortened, palette-aligned bands.
 - **XI.4 — typographic nits:** em-dashes and redundant in-plot titles removed (the caption is the
   single voice).
+
+## Part XII — Second cosmetic round (plasma + a consolidated Figure 3)
+
+Still purely stylistic — no number or claim changed. This round supersedes the Part XI palette
+and figure layout:
+
+- **Plasma is the general colour map.** Every semantic colour is sampled from `plasma`
+  (cleavable = purple `#8f0da4`, rigid/non-cleavable = orange `#fb9f3a`, robust/recovers =
+  indigo `#5601a4`, contested/flips = amber `#feba2c`, clinical/neutral = grey), targets are
+  three plasma tones (cyto indigo, ISAC magenta, ARC orange), and the weight heatmap uses
+  `cmap="plasma"`.
+- **Figure 3 is now a single three-panel figure — score, values, molecules.** (a) the compiled
+  objective-weight heatmap; (b) the generated designs in rotatable-bond × Ertl-SA space, where
+  **colour = target and marker shape = cleavable (○) vs non-cleavable (×)**; (c) the actual
+  generated molecules with their scores (this absorbs the old Fig 6 gallery, so it no longer
+  lives in the SI).
+- **Figure 2 is now left/right instead of top/bottom** (confidence bars | evidence-composition
+  split) and slightly less wide — same information, much shorter, plasma-coloured.
+- **Figures no longer drift into the bibliography.** A `\FloatBarrier` (placeins) before the
+  Discussion anchors every figure inside Results; page 5 is Discussion → Conclusion →
+  Acknowledgements → References with no floats.
+- Main text holds at **5 pp**, 0 overfull; SI back to 7 pp.
 
 ## Standing (deferred, named in the paper as boundaries)
 Real retrosynthesis (AiZynthFinder, n=15); covalent Boltz conjugate; deeper generative sampling

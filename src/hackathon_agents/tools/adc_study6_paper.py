@@ -131,7 +131,10 @@ def build_main_tex(art: dict[str, Any]) -> str:
     author_setup = "\n".join([
         r"\usepackage{authblk}",
         r"\usepackage{anyfontsize}",
-        # Tighten float<->text and caption spacing so the five figures sit closer to the prose
+        # placeins/\FloatBarrier keeps figures anchored in Results -- they can no longer drift
+        # onto the references page.
+        r"\usepackage{placeins}",
+        # Tighten float<->text and caption spacing so the figures sit closer to the prose
         # (denser, more intentional layout) -- this reclaims the last lines for a clean 5-page main.
         r"\captionsetup{skip=4pt}",
         r"\setlength{\textfloatsep}{9pt plus 2pt minus 2pt}",
@@ -240,11 +243,11 @@ def build_main_tex(art: dict[str, Any]) -> str:
 
     results = (
         "\\subsection{The rules generate, and steer, the molecules}\n"
-        "Each derived rule compiles into a distinct objective (Figure~\\ref{fig:steer}, left) that "
-        "generates its linkers: the designs separate cleanly by class along the two rule knobs "
-        "(Figure~\\ref{fig:steer}, right), ARC in a rigid non-cleavable region (4--6 rotatable bonds), "
-        "cytotoxin and ISAC as cleavable flexible peptides (12--16). The molecules are made by the "
-        "reasoning, not labelled after the fact.\n\n"
+        "Each derived rule compiles into a distinct objective (Figure~\\ref{fig:steer}a) that "
+        "generates its linkers: the designs separate cleanly by target, driven mainly by the "
+        "rigidity setpoint (Figure~\\ref{fig:steer}b), ARC in a rigid non-cleavable region (4--6 "
+        "rotatable bonds), cytotoxin and ISAC as cleavable flexible peptides (12--16). The molecules "
+        "themselves (Figure~\\ref{fig:steer}c) are made by the reasoning, not labelled after the fact.\n\n"
         "\\subsection{Held-out test: robust rules and a contested one}\n"
         "The leave-one-paper-out test discriminates (Figure~\\ref{fig:heldout}, Table~\\ref{tab:heldout}). "
         "The cytotoxin and ISAC rules are robust: their grounded exemplars are unanimously cleavable, "
@@ -306,8 +309,8 @@ def build_main_tex(art: dict[str, Any]) -> str:
         "not cleavage.\n\n"
         "\\subsection{Actionable designs}\n"
         "Table~\\ref{tab:short} gives one representative generated design per class (all fifteen, with "
-        "dossiers---route, cost, failure modes, validation, and a gallery of example trial molecules from "
-        "the generated pool---in the SI). Each is a real REINVENT design that carries its "
+        "dossiers---route, cost, failure modes, validation---in the SI); Figure~\\ref{fig:steer}(c) shows "
+        "example generated molecules with their scores. Each is a real REINVENT design that carries its "
         "class motif by construction (Val-Cit for cytotoxin, Val-Ala for ISAC, a rigid DBCO cap for ARC), "
         "drawn with SMARTS-detected handle/scissile/spacer highlights."
     )
@@ -347,12 +350,12 @@ def build_main_tex(art: dict[str, Any]) -> str:
     body = [PREAMBLE, author_setup, r"\title{" + title + "}", author_block, r"\date{}",
             r"\begin{document}", r"\maketitle",
             r"\begin{abstract}" + abstract + r"\end{abstract}",
-            r"\begin{figure}[t]\centering\includegraphics[width=0.8\linewidth]{fig1_journey.png}\caption{One molecule, end to end: a retrieved quote grounds the cytotoxin rule that generates a Val-Cit linker that cathepsin~B recognises. Handle (blue), scissile bond (red) and spacer (green) are SMARTS-detected.}\label{fig:journey}\end{figure}",
+            r"\begin{figure}[t]\centering\includegraphics[width=0.76\linewidth]{fig1_journey.png}\caption{One molecule, end to end: a retrieved quote grounds the cytotoxin rule that generates a Val-Cit linker that cathepsin~B recognises. Handle (blue), scissile bond (red) and spacer (green) are SMARTS-detected.}\label{fig:journey}\end{figure}",
             r"\section{Introduction}" + intro,
             r"\section{Methods}" + methods,
             r"\section{Results}" + results,
-            r"\begin{figure}[t]\centering\includegraphics[width=0.74\linewidth]{fig2_heldout.png}\caption{Held-out test. Top: full-corpus vs held-out confidence (disagreement-aware); the ARC rule flips (red) while cytotoxin/ISAC recover (green). Bottom: the grounded-evidence split that explains it---ARC is 4:2 (contested), the others unanimous.}\label{fig:heldout}\end{figure}",
-            r"\begin{figure}[t]\centering\includegraphics[width=0.8\linewidth]{fig3_rules_steer.png}\caption{The rules steer the chemistry. Left: the compiled objective weights---a deterministic rule-compilation (a heuristic keyed by the agent's derived category, effectively three buckets, not continuously tuned). The ``rigidity'' term rewards \emph{fewer} rotatable bonds; the real separator is the per-class rotatable-bond setpoint (rot$\leq$5/10/14), shown by each class. ISAC's stability weight is floored to paramount by the low-evidence safety gate. Right: the generated designs separate by class, driven mainly by the rigidity setpoint (x); y is the per-molecule Ertl SA subscore (a real quantity, not jitter).}\label{fig:steer}\end{figure}",
+            r"\begin{figure}[t]\centering\includegraphics[width=0.8\linewidth]{fig2_heldout.png}\caption{Held-out test. Left: full-corpus vs held-out confidence (disagreement-aware); the ARC rule flips (amber) while cytotoxin/ISAC recover (indigo), the dotted line marking the 0.5 contested floor. Right: the grounded-evidence split that explains it---ARC is 4:2 (contested), the others unanimous (cleavable purple, non-cleavable orange).}\label{fig:heldout}\end{figure}",
+            r"\begin{figure}[t]\centering\includegraphics[width=0.88\linewidth]{fig3_rules_steer.png}\caption{The rules steer the chemistry, in three panels. \textbf{(a)} the compiled objective weights---a deterministic rule-compilation (a heuristic keyed by the agent's derived category, effectively three buckets, not continuously tuned); the ``rigidity'' term rewards \emph{fewer} rotatable bonds, so the real separator is the per-class rotatable-bond setpoint (rot$\leq$5/10/14) shown by each class, and ISAC's stability weight is floored to paramount by the low-evidence safety gate. \textbf{(b)} the generated designs in rotatable-bond\,$\times$\,Ertl-SA space---colour encodes the target (cyto/ISAC/ARC), marker shape whether the linker is cleavable ($\circ$) or non-cleavable ($\times$); they separate mainly along the rigidity setpoint. \textbf{(c)} the actual generated molecules with their scores, drawn with SMARTS-detected handle (blue), scissile bond (red) and spacer (green)---each a real REINVENT design carrying its literature-derived motif.}\label{fig:steer}\end{figure}",
             r"\begin{figure}[t]\centering"
             r"\begin{minipage}[t]{0.49\linewidth}\centering\includegraphics[width=\linewidth]{fig5_sensitivity.png}"
             r"\caption{Stress-test of the confidence metric: varying retrieval depth (top-$k$) leaves each class's confidence stable---the ARC rule stays contested ($\approx$0.33) at every $k$. Reproducible, not a lucky $k$.}\label{fig:sens}\end{minipage}\hfill"
@@ -360,6 +363,7 @@ def build_main_tex(art: dict[str, Any]) -> str:
             r"\caption{Cathepsin-B co-fold (affinity indexes recognition, not cleavage). The cleavable Val-Cit designs (cytotoxin, and the held-out-derived ARC linker) are recognised in the clinical-substrate regime; the rigid ARC design binds $>$10$\times$ weaker---the in-silico feasibility proof.}\label{fig:cofold}\end{minipage}"
             r"\end{figure}",
             _short_table(dossiers),
+            r"\FloatBarrier",
             r"\section{Discussion}" + discussion,
             r"\section{Conclusion}" + conclusion, ack, BIB, r"\end{document}"]
     return "\n".join(body)
@@ -446,15 +450,6 @@ def build_supp_tex(art: dict[str, Any]) -> str:
                 + f"Failure modes: {_tex_escape('; '.join(map(str, n.get('expected_failure_modes', [])))[:200])}. "
                 + f"Validation: {_tex_escape('; '.join(map(str, n.get('validation_experiments', [])))[:200])}."
                 + r" \\[0.4em]")
-
-    body.append(r"\section{Generated trial-molecule gallery}")
-    body.append(r"\begin{figure}[h]\centering\includegraphics[width=0.86\linewidth]{fig6_gallery.png}"
-                r"\caption{Example generated (trial) linkers from the pool, two per payload class. Every "
-                r"molecule is a real REINVENT design carrying its literature-derived motif by construction; "
-                r"handle (blue), scissile bond (red) and spacer (green) are SMARTS-detected. The ARC designs "
-                r"(bottom) carry the rigid non-cleavable DBCO cap---no scissile bond---while the "
-                r"cytotoxin/ISAC designs carry cleavable Val-Cit/Val-Ala dipeptides.}\label{fig:gallery}"
-                r"\end{figure}")
 
     body.append(r"\section{Boltz-2 co-folds (linker + payload co-present, cathepsin B)}")
     brows = "\n".join(f"{_tex_escape(r.get('label','?'))} & {r.get('iptm','?')} & {r.get('binding_affinity_kd_nm','?')} \\\\" for r in boltz)
