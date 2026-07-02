@@ -216,7 +216,7 @@ def render_figures(
                 ax.set_xscale("log")
                 ax.set_xlabel("predicted Kd vs cathepsin B (nM, log)")
                 ax.set_ylabel("interface ipTM")
-                ax.set_title("Boltz-2 co-folding: protease recognition of the linker")
+                ax.set_title("Boltz-2 co-folding: predicted affinity separates substrates")
                 fig.tight_layout(); p = figdir / "fig_boltz.png"; fig.savefig(p, dpi=200); plt.close(fig)
                 out["boltz"] = p
     except Exception:

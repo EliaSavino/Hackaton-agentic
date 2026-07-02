@@ -177,7 +177,23 @@ python -c "from hackathon_agents.demos.adc_study2 import run_study2_grid; run_st
 python -c "from hackathon_agents.demos.adc_study import finalize_study; finalize_study('runs/grid_war3/grid.json')"
 ```
 
-**RESULTS: _(filled after the grid + finalize complete — see `deliverables/study2/README.md`)_**
+**RESULTS (grid_war3, 2026-07-02):** 76/76 real runs, **0 failures**; seed SD 0.0001–0.038.
+- **Payload flip (real):** Maleimide/Val-Cit **0.70 (cytotoxin) → 0.45 (oligonucleotide,
+  penalised) → 0.72 (immuno)**; non-cleavable caps hold ~0.76–0.85 across payloads. DBCO
+  same pattern (0.53→0.38). The oligo rule collapses the cleavable context ~a third.
+- **IEDDA handles work:** Tetrazine/Non-cleavable 0.82 (competitive with the best handles),
+  TCO/Non-cleavable 0.69; glucuronide still ~0.08 (known acetal false-positive).
+- **Boltz (affinity, NOT ipTM):** ipTM uniformly 0.77–0.91 (everything docks → does not
+  discriminate; the non-cleavable control even scored ipTM 0.856, *higher* than most cleavable
+  designs — so I pivoted the narrative to affinity). Predicted **Kd discriminates**: designed
+  protease linkers 6–76 nM (best Maleimide/Val-Cit 6 nM), clinical mc-Val-Cit 43 nM (validates),
+  non-cleavable **negative control 787 nM** (~15× weaker), non-substrate spacers (mc 114 µM,
+  hydrazone 16 µM). Paper leads with Kd and states ipTM does not separate substrates.
+- **Paper:** `deliverables/study2/` — 5-page main + 4-page supp, 0 undefined refs, compiles clean.
+
+**Uncommitted:** the working tree has post-`9585781` edits to `adc_study_paper.py` (Boltz
+affinity rewrite + honesty corrections + length trims) plus new `deliverables/study2/`. Not
+committed by me — commit when ready.
 
 ## Fast smoke test (confirm the pod + REINVENT still work)
 

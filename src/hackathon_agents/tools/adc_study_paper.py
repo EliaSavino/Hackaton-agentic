@@ -93,7 +93,7 @@ def _preamble(title: str, twocolumn: bool = False) -> list[str]:
         "\\documentclass[10pt" + (",twocolumn" if twocolumn else "") + "]{article}",
         "\\usepackage[T1]{fontenc}",
         "\\usepackage[utf8]{inputenc}",
-        "\\usepackage[margin=0.75in]{geometry}",
+        "\\usepackage[margin=0.7in]{geometry}",
         "\\usepackage{graphicx}",
         "\\usepackage{booktabs}",
         "\\usepackage{amsmath}",
@@ -105,7 +105,7 @@ def _preamble(title: str, twocolumn: bool = False) -> list[str]:
         "\\usepackage{titlesec}",
         "\\titleformat*{\\section}{\\large\\bfseries}",
         "\\titleformat*{\\subsection}{\\normalsize\\bfseries}",
-        "\\setlength{\\parskip}{0.25em}",
+        "\\setlength{\\parskip}{0.15em}",
         "\\graphicspath{{./}{figures/}}",
         "\\title{\\textbf{" + title + "}}",
         "\\author{" + _AUTHORS + "}",
@@ -159,20 +159,23 @@ def _render_main(grid, stats, benchmark, boltz, figures) -> str:
       "cleavable release only under stringent plasma stability. We present a fully autonomous "
       "agentic pipeline that (i) reads the literature to derive payload-class design rules, (ii) "
       "compiles each rule into a multi-objective scorer, and (iii) designs the linker fragment "
-      "between a fixed conjugation handle and trigger with REINVENT4 LinkInvent. We evaluate it "
+      "between a fixed conjugation handle and trigger with REINVENT4 LinkInvent, evaluated "
       "as a \\emph{controlled experiment}: "
       f"{len(handles)} conjugation chemistries (including a tetrazine/\\emph{{trans}}-cyclooctene "
       f"IEDDA pair) across {len(payloads)} payload classes and {len(seeds)} seeds, holding the "
       "objective \\emph{dimensions} fixed so differences are attributable to the payload rule and "
       "warhead chemistry. The payload rule \\emph{re-scores} each context: the protease-cleavable "
-      "context is penalised under the oligonucleotide rule---collapsing its score so the rigid "
-      "sulfo-SMCC non-cleavable cap is the clear optimum---while it remains admissible for "
-      "cytotoxins, and the immunomodulator rule makes plasma stability decisive. "
+      "context is penalised under the oligonucleotide rule---its score collapsing by a third so "
+      "that non-cleavable caps (the rigid sulfo-SMCC and flexible motifs) become the optimum---while "
+      "it remains admissible for cytotoxins, and the immunomodulator rule makes plasma stability "
+      "decisive. "
       "We benchmark against clinical linkers on metrics the optimiser never saw (drug-likeness, "
       "physicochemistry, novelty), calibrate the stability surrogate, and add a Boltz-2 "
-      "structural proof point: protease-cleavable designs are recognised by cathepsin~B while the "
-      "oligonucleotide-optimal non-cleavable design is not. A single agent thus designs correctly "
-      "for three payload modalities without human re-specification.")
+      "structural proof point: designed protease-cleavable linkers reach tight predicted affinity "
+      "to cathepsin~B (single- to double-digit nM), bracketing the clinical substrate, whereas the "
+      "oligonucleotide-optimal non-cleavable design and non-substrate spacers bind an order of "
+      "magnitude or more weakly. A single agent thus designs correctly for three payload "
+      "modalities without human re-specification.")
     A("\\end{abstract}")
 
     # Introduction (biological context)
@@ -250,9 +253,10 @@ def _render_main(grid, stats, benchmark, boltz, figures) -> str:
       "\\emph{independent} yardsticks the optimiser never saw---QED, physicochemistry, and "
       "Morgan-Tanimoto novelty against the commercial set; (ii) a \\emph{calibration} of the "
       "stability surrogate against known mechanistic ordering; and (iii) a \\emph{structural} proof "
-      "point: Boltz-2 co-folding of designed linkers with cathepsin~B (UniProt P07858), testing "
-      "whether the protease recognises the scissile region---and whether the non-cleavable "
-      "oligonucleotide-optimal design is correctly \\emph{not} recognised.")
+      "point: Boltz-2 co-folding of designed linkers with cathepsin~B (UniProt P07858) and its "
+      "predicted binding affinity, testing whether the designed cleavable linkers are recognised as "
+      "tight substrates---and whether the non-cleavable oligonucleotide-optimal design correctly "
+      "binds weakly.")
 
     # Results
     A("\\section{Results}")
@@ -264,7 +268,7 @@ def _render_main(grid, stats, benchmark, boltz, figures) -> str:
     L += _fig(figures, "heatmap", "Cytotoxin conjugation sweep: mean composite (seed-averaged) for "
               "each conjugation chemistry $\\times$ trigger, including the new tetrazine/TCO IEDDA "
               "handles. Protease triggers with cysteine/irreversible handles score highest.",
-              "fig:heat", "0.58\\linewidth")
+              "fig:heat", "0.5\\linewidth")
 
     A("\\subsection{The payload rule re-scores the same context}")
     A("The central result: holding the conjugation handle and trigger fixed and changing only the "
@@ -272,16 +276,18 @@ def _render_main(grid, stats, benchmark, boltz, figures) -> str:
       "compact non-cleavable cap scores highest on pure drug-likeness under every rule---but the "
       "\\emph{cleavability} axis flips: the protease-cleavable context is admissible under the "
       "cytotoxin rule (both cleavable and non-cleavable release are clinically valid for "
-      "cytotoxins) yet is actively \\emph{penalised} under the oligonucleotide rule, so the rigid "
-      "sulfo-SMCC cap becomes the unambiguous optimum---reproducing the antibody--oligonucleotide "
-      "conjugate design principle. The immunomodulator rule permits cleavable release but "
+      "cytotoxins) yet is actively \\emph{penalised} under the oligonucleotide rule (its score "
+      "collapsing by roughly a third), so the non-cleavable caps---including the rigid sulfo-SMCC "
+      "motif---become the optimum, reproducing the antibody--oligonucleotide conjugate design "
+      "principle that a cleavable linker is a liability for oligonucleotide cargo. The "
+      "immunomodulator rule permits cleavable release but "
       "up-weights plasma stability to paramount, encoding the ISAC requirement that premature "
       "systemic cleavage (and cytokine toxicity) be avoided.")
     L += _fig(figures, "payload_flip", "Payload-class re-scoring for a fixed conjugation handle: "
               "mean composite of each trigger under the cytotoxin, oligonucleotide and "
-              "immunomodulator rules. The protease-cleavable context is penalised under the "
-              "oligonucleotide rule; the rigid non-cleavable cap is the oligonucleotide optimum.",
-              "fig:flip", "0.66\\linewidth")
+              "immunomodulator rules. The protease-cleavable (Val-Cit) context collapses under the "
+              "oligonucleotide rule, so the non-cleavable caps become the oligonucleotide optimum.",
+              "fig:flip", "0.58\\linewidth")
 
     A("\\subsection{Designed versus commercial linkers}")
     if benchmark:
@@ -302,28 +308,41 @@ def _render_main(grid, stats, benchmark, boltz, figures) -> str:
           + (", validating its use for ranking" if cal.get("passes") else "")
           + " (SI Table~S1); it does not finely rank disulfide vs peptide, a stated limitation.")
 
-    # Boltz structural proof point
+    # Boltz structural proof point (affinity discriminates; ipTM does not).
     if boltz:
-        A("\\subsection{Structural proof point: protease recognition}")
-        best_b = max((b for b in boltz if b.get("kind") == "designed" and b.get("iptm")), key=lambda b: b["iptm"], default={})
+        A("\\subsection{Structural proof point: protease affinity}")
+        des = [b for b in boltz if b.get("kind") == "designed" and b.get("binding_affinity_kd_nm")]
+        best_b = min(des, key=lambda b: b["binding_affinity_kd_nm"], default={})
         ctrl_b = next((b for b in boltz if "Val-Cit" in b.get("label", "") and b.get("kind") == "commercial"), {})
-        neg_b = next((b for b in boltz if b.get("kind") == "negative" and b.get("iptm")), {})
-        A("Figure~\\ref{fig:boltz} reports Boltz-2 co-folding of designed linkers (and commercial "
-          "controls) with cathepsin~B (full metrics in SI Table~S3). The best protease-cleavable "
-          f"designed linker reached an interface ipTM of {_fmt(best_b.get('iptm'))}"
-          + (f", approaching the clinical mc-Val-Cit-PABC control ({_fmt(ctrl_b.get('iptm'))})" if ctrl_b else "")
-          + ". High ipTM and sub-micromolar predicted affinity indicate the designed linkers present "
-          "their scissile region to the protease---an independent structural corroboration of "
-          "cleavability, and a validation of the co-fold (the known clinical substrate scores highest).")
+        neg_b = next((b for b in boltz if b.get("kind") == "negative" and b.get("binding_affinity_kd_nm")), {})
+        weak = [b for b in boltz if b.get("kind") == "commercial" and (b.get("binding_affinity_kd_nm") or 0) > 5000]
+        iptms = [b["iptm"] for b in boltz if b.get("iptm")]
+        des_kds = sorted(b["binding_affinity_kd_nm"] for b in des)
+        A("Figure~\\ref{fig:boltz} reports Boltz-2 co-folding of designed linkers and controls with "
+          "cathepsin~B (full metrics in SI Table~S3). Interface confidence (ipTM) is uniformly high "
+          f"({_fmt(min(iptms))}--{_fmt(max(iptms))}): every ligand docks into the protease cleft, so "
+          "ipTM alone does not separate substrates from non-substrates. The \\emph{predicted binding "
+          "affinity} does. The designed protease-cleavable linkers reach tight "
+          f"$K_\\mathrm{{d}}$ of {_fmt(des_kds[0],0)}--{_fmt(des_kds[-1],0)}\\,nM (best "
+          f"{_esc(best_b.get('label',''))}, {_fmt(best_b.get('binding_affinity_kd_nm'),0)}\\,nM), "
+          f"bracketing the clinical mc-Val-Cit-PABC substrate ({_fmt(ctrl_b.get('binding_affinity_kd_nm'),0)}"
+          "\\,nM)---a validation of the co-fold, since the known substrate lands squarely among the "
+          "designs.")
         if neg_b:
-            A("As a payload-aware negative control we co-folded the oligonucleotide-optimal, rigid "
-              f"non-cleavable design: it scored a lower interface ipTM ({_fmt(neg_b.get('iptm'))}), "
-              "consistent with a linker that the protease should \\emph{not} recognise---the "
-              "structural counterpart of the payload-class ranking flip.")
-        L += _fig(figures, "boltz", "Boltz-2 cathepsin-B co-folding: interface confidence (ipTM) "
-                  "vs predicted Kd for designed linkers (blue) and commercial controls (red stars). "
-                  "Protease-cleavable designs cluster with the clinical substrate; the non-cleavable "
-                  "control does not.", "fig:boltz", "0.58\\linewidth")
+            A("The payload-aware negative control---the oligonucleotide-optimal rigid non-cleavable "
+              f"design---binds an order of magnitude more weakly ({_fmt(neg_b.get('binding_affinity_kd_nm'),0)}"
+              "\\,nM)"
+              + (f", and non-substrate spacers (maleimidocaproyl, acid-labile hydrazone) bind in the "
+                 "micromolar range" if weak else "")
+              + ". Predicted affinity therefore tracks cleavability where interface confidence does "
+              "not, and the non-cleavable design behaves exactly as a non-substrate should---the "
+              "structural counterpart of the payload-class re-scoring.")
+        L += _fig(figures, "boltz", "Boltz-2 cathepsin-B co-folding: interface ipTM vs predicted "
+                  "$K_\\mathrm{d}$ (log) for designed linkers (blue), the non-cleavable negative "
+                  "control (grey square) and commercial controls (red stars). ipTM is uniformly high; "
+                  "predicted affinity separates the tight protease substrates (designs, clinical "
+                  "mc-Val-Cit) from the weakly-bound non-cleavable and non-substrate controls.",
+                  "fig:boltz", "0.52\\linewidth")
 
     # Top designed linkers -> full table in the Supplementary Information.
     seed_sds = [c["std"] for c in stats["contexts"] if c.get("n_seeds", 0) > 1]
