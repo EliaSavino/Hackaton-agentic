@@ -1,0 +1,74 @@
+[
+  {
+    "label": "Cytotoxin_cand",
+    "kind": "designed",
+    "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
+    "ok": true,
+    "status": "completed",
+    "iptm": 0.85,
+    "plddt": 85.0,
+    "binding_affinity_kd_nm": 45.0,
+    "binding_energy_kcal_mol": -10.0,
+    "error": null
+  },
+  {
+    "label": "Cytotoxin_cand",
+    "kind": "designed",
+    "smiles": "O=C1C=CC(=O)N1c1ccc(CO)cc1",
+    "ok": true,
+    "status": "completed",
+    "iptm": 0.85,
+    "plddt": 85.0,
+    "binding_affinity_kd_nm": 45.0,
+    "binding_energy_kcal_mol": -10.0,
+    "error": null
+  },
+  {
+    "label": "Oligonucleotide_cand",
+    "kind": "designed",
+    "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
+    "ok": true,
+    "status": "completed",
+    "iptm": 0.25,
+    "plddt": 85.0,
+    "binding_affinity_kd_nm": 999.0,
+    "binding_energy_kcal_mol": -10.0,
+    "error": null
+  },
+  {
+    "label": "Oligonucleotide_cand",
+    "kind": "designed",
+    "smiles": "O=C1C=CC(=O)N1c1ccc(CO)cc1",
+    "ok": true,
+    "status": "completed",
+    "iptm": 0.25,
+    "plddt": 85.0,
+    "binding_affinity_kd_nm": 999.0,
+    "binding_energy_kcal_mol": -10.0,
+    "error": null
+  },
+  {
+    "label": "Immunomodulator_cand",
+    "kind": "designed",
+    "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
+    "ok": true,
+    "status": "completed",
+    "iptm": 0.85,
+    "plddt": 85.0,
+    "binding_affinity_kd_nm": 45.0,
+    "binding_energy_kcal_mol": -10.0,
+    "error": null
+  },
+  {
+    "label": "Immunomodulator_cand",
+    "kind": "designed",
+    "smiles": "O=C1C=CC(=O)N1c1ccc(CO)cc1",
+    "ok": true,
+    "status": "completed",
+    "iptm": 0.85,
+    "plddt": 85.0,
+    "binding_affinity_kd_nm": 45.0,
+    "binding_energy_kcal_mol": -10.0,
+    "error": null
+  }
+]

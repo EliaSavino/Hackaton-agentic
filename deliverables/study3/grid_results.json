@@ -1,0 +1,1808 @@
+{
+  "timestamp": "104014",
+  "grid_dir": "/workspace/Hackaton-agentic/runs/campaign_study3_20260702_104014",
+  "handles": [
+    "Maleimide",
+    "Bromoacetamide",
+    "DBCO",
+    "Disulfide",
+    "NHS_ester",
+    "Oxyamine",
+    "Tetrazine",
+    "TCO"
+  ],
+  "triggers": [
+    "Val-Cit-PABC",
+    "Glucuronide",
+    "Non-cleavable",
+    "Non-cleavable-rigid"
+  ],
+  "payloads": [
+    "cytotoxin",
+    "oligonucleotide",
+    "immunomodulator"
+  ],
+  "cells": [
+    {
+      "handle": "Maleimide",
+      "trigger": "Val-Cit-PABC",
+      "payload": "cytotoxin"
+    },
+    {
+      "handle": "Maleimide",
+      "trigger": "Glucuronide",
+      "payload": "cytotoxin"
+    },
+    {
+      "handle": "Maleimide",
+      "trigger": "Non-cleavable",
+      "payload": "cytotoxin"
+    },
+    {
+      "handle": "Bromoacetamide",
+      "trigger": "Val-Cit-PABC",
+      "payload": "cytotoxin"
+    },
+    {
+      "handle": "Bromoacetamide",
+      "trigger": "Glucuronide",
+      "payload": "cytotoxin"
+    },
+    {
+      "handle": "Bromoacetamide",
+      "trigger": "Non-cleavable",
+      "payload": "cytotoxin"
+    },
+    {
+      "handle": "DBCO",
+      "trigger": "Val-Cit-PABC",
+      "payload": "cytotoxin"
+    },
+    {
+      "handle": "DBCO",
+      "trigger": "Glucuronide",
+      "payload": "cytotoxin"
+    },
+    {
+      "handle": "DBCO",
+      "trigger": "Non-cleavable",
+      "payload": "cytotoxin"
+    },
+    {
+      "handle": "Disulfide",
+      "trigger": "Val-Cit-PABC",
+      "payload": "cytotoxin"
+    },
+    {
+      "handle": "Disulfide",
+      "trigger": "Glucuronide",
+      "payload": "cytotoxin"
+    },
+    {
+      "handle": "Disulfide",
+      "trigger": "Non-cleavable",
+      "payload": "cytotoxin"
+    },
+    {
+      "handle": "NHS_ester",
+      "trigger": "Val-Cit-PABC",
+      "payload": "cytotoxin"
+    },
+    {
+      "handle": "NHS_ester",
+      "trigger": "Glucuronide",
+      "payload": "cytotoxin"
+    },
+    {
+      "handle": "NHS_ester",
+      "trigger": "Non-cleavable",
+      "payload": "cytotoxin"
+    },
+    {
+      "handle": "Oxyamine",
+      "trigger": "Val-Cit-PABC",
+      "payload": "cytotoxin"
+    },
+    {
+      "handle": "Oxyamine",
+      "trigger": "Glucuronide",
+      "payload": "cytotoxin"
+    },
+    {
+      "handle": "Oxyamine",
+      "trigger": "Non-cleavable",
+      "payload": "cytotoxin"
+    },
+    {
+      "handle": "Tetrazine",
+      "trigger": "Val-Cit-PABC",
+      "payload": "cytotoxin"
+    },
+    {
+      "handle": "Tetrazine",
+      "trigger": "Glucuronide",
+      "payload": "cytotoxin"
+    },
+    {
+      "handle": "Tetrazine",
+      "trigger": "Non-cleavable",
+      "payload": "cytotoxin"
+    },
+    {
+      "handle": "TCO",
+      "trigger": "Val-Cit-PABC",
+      "payload": "cytotoxin"
+    },
+    {
+      "handle": "TCO",
+      "trigger": "Glucuronide",
+      "payload": "cytotoxin"
+    },
+    {
+      "handle": "TCO",
+      "trigger": "Non-cleavable",
+      "payload": "cytotoxin"
+    },
+    {
+      "handle": "Maleimide",
+      "trigger": "Val-Cit-PABC",
+      "payload": "oligonucleotide"
+    },
+    {
+      "handle": "Maleimide",
+      "trigger": "Val-Cit-PABC",
+      "payload": "immunomodulator"
+    },
+    {
+      "handle": "Maleimide",
+      "trigger": "Non-cleavable-rigid",
+      "payload": "cytotoxin"
+    },
+    {
+      "handle": "Maleimide",
+      "trigger": "Non-cleavable-rigid",
+      "payload": "oligonucleotide"
+    },
+    {
+      "handle": "Maleimide",
+      "trigger": "Non-cleavable-rigid",
+      "payload": "immunomodulator"
+    },
+    {
+      "handle": "Maleimide",
+      "trigger": "Non-cleavable",
+      "payload": "oligonucleotide"
+    },
+    {
+      "handle": "Maleimide",
+      "trigger": "Non-cleavable",
+      "payload": "immunomodulator"
+    },
+    {
+      "handle": "DBCO",
+      "trigger": "Val-Cit-PABC",
+      "payload": "oligonucleotide"
+    },
+    {
+      "handle": "DBCO",
+      "trigger": "Val-Cit-PABC",
+      "payload": "immunomodulator"
+    },
+    {
+      "handle": "DBCO",
+      "trigger": "Non-cleavable-rigid",
+      "payload": "cytotoxin"
+    },
+    {
+      "handle": "DBCO",
+      "trigger": "Non-cleavable-rigid",
+      "payload": "oligonucleotide"
+    },
+    {
+      "handle": "DBCO",
+      "trigger": "Non-cleavable-rigid",
+      "payload": "immunomodulator"
+    },
+    {
+      "handle": "DBCO",
+      "trigger": "Non-cleavable",
+      "payload": "oligonucleotide"
+    },
+    {
+      "handle": "DBCO",
+      "trigger": "Non-cleavable",
+      "payload": "immunomodulator"
+    }
+  ],
+  "seeds": [
+    0
+  ],
+  "steps": 100,
+  "batch": 64,
+  "handle_meta": {},
+  "trigger_meta": {},
+  "records": [
+    {
+      "handle": "Maleimide",
+      "trigger": "Val-Cit-PABC",
+      "payload": "cytotoxin",
+      "seed": 0,
+      "warhead_pair": "O=C1C=CC(=O)N1*|*NCc1ccccc1",
+      "cleavage_preference": "reward",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 3,
+      "best_score": 0.88,
+      "top": [
+        {
+          "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
+          "score": 0.88,
+          "subscores": {
+            "solubility": 0.8235333333333333,
+            "stability": 0.85,
+            "cleavability": 0.85,
+            "synthesizability": 0.85,
+            "size": 1.0,
+            "flexibility": 0.5
+          },
+          "descriptors": {
+            "qed": 0.25,
+            "mol_wt": 273.28,
+            "logp": 2.93,
+            "tpsa": 247.06,
+            "fsp3": 0.5,
+            "aromatic_rings": 1,
+            "hbd": 2,
+            "hba": 4,
+            "rot_bonds": 11
+          }
+        },
+        {
+          "smiles": "O=C1C=CC(=O)N1c1ccc(CO)cc1",
+          "score": 0.88,
+          "subscores": {
+            "solubility": 0.7312333333333334,
+            "stability": 0.85,
+            "cleavability": 0.85,
+            "synthesizability": 0.85,
+            "size": 1.0,
+            "flexibility": 0.5
+          },
+          "descriptors": {
+            "qed": 0.25,
+            "mol_wt": 203.2,
+            "logp": 4.59,
+            "tpsa": 219.37,
+            "fsp3": 0.5,
+            "aromatic_rings": 2,
+            "hbd": 2,
+            "hba": 4,
+            "rot_bonds": 2
+          }
+        },
+        {
+          "smiles": "O=C1C=CC(=O)N1CCCC(=O)NC(C(C)C)C(=O)N",
+          "score": 0.8,
+          "subscores": {
+            "solubility": 0.9044333333333333,
+            "stability": 0.85,
+            "cleavability": 0.85,
+            "synthesizability": 0.65,
+            "size": 1.0,
+            "flexibility": 0.5
+          },
+          "descriptors": {
+            "qed": 0.25,
+            "mol_wt": 281.31,
+            "logp": 3.3,
+            "tpsa": 271.33,
+            "fsp3": 0.5,
+            "aromatic_rings": 1,
+            "hbd": 2,
+            "hba": 4,
+            "rot_bonds": 7
+          }
+        }
+      ]
+    },
+    {
+      "handle": "Maleimide",
+      "trigger": "Glucuronide",
+      "payload": "cytotoxin",
+      "seed": 0,
+      "warhead_pair": "O=C1C=CC(=O)N1*|*NCc1ccccc1",
+      "cleavage_preference": "reward",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 1,
+      "best_score": 0.45,
+      "top": [
+        {
+          "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
+          "score": 0.45,
+          "subscores": {
+            "solubility": 0.75,
+            "stability": 0.85,
+            "cleavability": 0.5,
+            "synthesizability": 0.85,
+            "size": 1.0,
+            "flexibility": 0.5
+          },
+          "descriptors": {
+            "qed": 0.15,
+            "mol_wt": 273.28,
+            "logp": 1.0,
+            "tpsa": 95.0,
+            "fsp3": 0.5,
+            "aromatic_rings": 1,
+            "hbd": 2,
+            "hba": 4,
+            "rot_bonds": 11
+          }
+        }
+      ]
+    },
+    {
+      "handle": "Maleimide",
+      "trigger": "Non-cleavable",
+      "payload": "cytotoxin",
+      "seed": 0,
+      "warhead_pair": "O=C1C=CC(=O)N1*|*NCc1ccccc1",
+      "cleavage_preference": "reward",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 1,
+      "best_score": 0.45,
+      "top": [
+        {
+          "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
+          "score": 0.45,
+          "subscores": {
+            "solubility": 0.75,
+            "stability": 0.85,
+            "cleavability": 0.5,
+            "synthesizability": 0.85,
+            "size": 1.0,
+            "flexibility": 0.5
+          },
+          "descriptors": {
+            "qed": 0.15,
+            "mol_wt": 273.28,
+            "logp": 1.0,
+            "tpsa": 95.0,
+            "fsp3": 0.5,
+            "aromatic_rings": 1,
+            "hbd": 2,
+            "hba": 4,
+            "rot_bonds": 11
+          }
+        }
+      ]
+    },
+    {
+      "handle": "Bromoacetamide",
+      "trigger": "Val-Cit-PABC",
+      "payload": "cytotoxin",
+      "seed": 0,
+      "warhead_pair": "O=C1C=CC(=O)N1*|*NCc1ccccc1",
+      "cleavage_preference": "reward",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 1,
+      "best_score": 0.45,
+      "top": [
+        {
+          "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
+          "score": 0.45,
+          "subscores": {
+            "solubility": 0.75,
+            "stability": 0.85,
+            "cleavability": 0.5,
+            "synthesizability": 0.85,
+            "size": 1.0,
+            "flexibility": 0.5
+          },
+          "descriptors": {
+            "qed": 0.15,
+            "mol_wt": 273.28,
+            "logp": 1.0,
+            "tpsa": 95.0,
+            "fsp3": 0.5,
+            "aromatic_rings": 1,
+            "hbd": 2,
+            "hba": 4,
+            "rot_bonds": 11
+          }
+        }
+      ]
+    },
+    {
+      "handle": "Bromoacetamide",
+      "trigger": "Glucuronide",
+      "payload": "cytotoxin",
+      "seed": 0,
+      "warhead_pair": "O=C1C=CC(=O)N1*|*NCc1ccccc1",
+      "cleavage_preference": "reward",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 1,
+      "best_score": 0.45,
+      "top": [
+        {
+          "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
+          "score": 0.45,
+          "subscores": {
+            "solubility": 0.75,
+            "stability": 0.85,
+            "cleavability": 0.5,
+            "synthesizability": 0.85,
+            "size": 1.0,
+            "flexibility": 0.5
+          },
+          "descriptors": {
+            "qed": 0.15,
+            "mol_wt": 273.28,
+            "logp": 1.0,
+            "tpsa": 95.0,
+            "fsp3": 0.5,
+            "aromatic_rings": 1,
+            "hbd": 2,
+            "hba": 4,
+            "rot_bonds": 11
+          }
+        }
+      ]
+    },
+    {
+      "handle": "Bromoacetamide",
+      "trigger": "Non-cleavable",
+      "payload": "cytotoxin",
+      "seed": 0,
+      "warhead_pair": "O=C1C=CC(=O)N1*|*NCc1ccccc1",
+      "cleavage_preference": "reward",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 1,
+      "best_score": 0.45,
+      "top": [
+        {
+          "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
+          "score": 0.45,
+          "subscores": {
+            "solubility": 0.75,
+            "stability": 0.85,
+            "cleavability": 0.5,
+            "synthesizability": 0.85,
+            "size": 1.0,
+            "flexibility": 0.5
+          },
+          "descriptors": {
+            "qed": 0.15,
+            "mol_wt": 273.28,
+            "logp": 1.0,
+            "tpsa": 95.0,
+            "fsp3": 0.5,
+            "aromatic_rings": 1,
+            "hbd": 2,
+            "hba": 4,
+            "rot_bonds": 11
+          }
+        }
+      ]
+    },
+    {
+      "handle": "DBCO",
+      "trigger": "Val-Cit-PABC",
+      "payload": "cytotoxin",
+      "seed": 0,
+      "warhead_pair": "O=C1C=CC(=O)N1*|*NCc1ccccc1",
+      "cleavage_preference": "reward",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 1,
+      "best_score": 0.45,
+      "top": [
+        {
+          "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
+          "score": 0.45,
+          "subscores": {
+            "solubility": 0.75,
+            "stability": 0.85,
+            "cleavability": 0.5,
+            "synthesizability": 0.85,
+            "size": 1.0,
+            "flexibility": 0.5
+          },
+          "descriptors": {
+            "qed": 0.15,
+            "mol_wt": 273.28,
+            "logp": 1.0,
+            "tpsa": 95.0,
+            "fsp3": 0.5,
+            "aromatic_rings": 1,
+            "hbd": 2,
+            "hba": 4,
+            "rot_bonds": 11
+          }
+        }
+      ]
+    },
+    {
+      "handle": "DBCO",
+      "trigger": "Glucuronide",
+      "payload": "cytotoxin",
+      "seed": 0,
+      "warhead_pair": "O=C1C=CC(=O)N1*|*NCc1ccccc1",
+      "cleavage_preference": "reward",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 1,
+      "best_score": 0.45,
+      "top": [
+        {
+          "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
+          "score": 0.45,
+          "subscores": {
+            "solubility": 0.75,
+            "stability": 0.85,
+            "cleavability": 0.5,
+            "synthesizability": 0.85,
+            "size": 1.0,
+            "flexibility": 0.5
+          },
+          "descriptors": {
+            "qed": 0.15,
+            "mol_wt": 273.28,
+            "logp": 1.0,
+            "tpsa": 95.0,
+            "fsp3": 0.5,
+            "aromatic_rings": 1,
+            "hbd": 2,
+            "hba": 4,
+            "rot_bonds": 11
+          }
+        }
+      ]
+    },
+    {
+      "handle": "DBCO",
+      "trigger": "Non-cleavable",
+      "payload": "cytotoxin",
+      "seed": 0,
+      "warhead_pair": "O=C1C=CC(=O)N1*|*NCc1ccccc1",
+      "cleavage_preference": "reward",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 1,
+      "best_score": 0.45,
+      "top": [
+        {
+          "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
+          "score": 0.45,
+          "subscores": {
+            "solubility": 0.75,
+            "stability": 0.85,
+            "cleavability": 0.5,
+            "synthesizability": 0.85,
+            "size": 1.0,
+            "flexibility": 0.5
+          },
+          "descriptors": {
+            "qed": 0.15,
+            "mol_wt": 273.28,
+            "logp": 1.0,
+            "tpsa": 95.0,
+            "fsp3": 0.5,
+            "aromatic_rings": 1,
+            "hbd": 2,
+            "hba": 4,
+            "rot_bonds": 11
+          }
+        }
+      ]
+    },
+    {
+      "handle": "Disulfide",
+      "trigger": "Val-Cit-PABC",
+      "payload": "cytotoxin",
+      "seed": 0,
+      "warhead_pair": "O=C1C=CC(=O)N1*|*NCc1ccccc1",
+      "cleavage_preference": "reward",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 1,
+      "best_score": 0.45,
+      "top": [
+        {
+          "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
+          "score": 0.45,
+          "subscores": {
+            "solubility": 0.75,
+            "stability": 0.85,
+            "cleavability": 0.5,
+            "synthesizability": 0.85,
+            "size": 1.0,
+            "flexibility": 0.5
+          },
+          "descriptors": {
+            "qed": 0.15,
+            "mol_wt": 273.28,
+            "logp": 1.0,
+            "tpsa": 95.0,
+            "fsp3": 0.5,
+            "aromatic_rings": 1,
+            "hbd": 2,
+            "hba": 4,
+            "rot_bonds": 11
+          }
+        }
+      ]
+    },
+    {
+      "handle": "Disulfide",
+      "trigger": "Glucuronide",
+      "payload": "cytotoxin",
+      "seed": 0,
+      "warhead_pair": "O=C1C=CC(=O)N1*|*NCc1ccccc1",
+      "cleavage_preference": "reward",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 1,
+      "best_score": 0.45,
+      "top": [
+        {
+          "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
+          "score": 0.45,
+          "subscores": {
+            "solubility": 0.75,
+            "stability": 0.85,
+            "cleavability": 0.5,
+            "synthesizability": 0.85,
+            "size": 1.0,
+            "flexibility": 0.5
+          },
+          "descriptors": {
+            "qed": 0.15,
+            "mol_wt": 273.28,
+            "logp": 1.0,
+            "tpsa": 95.0,
+            "fsp3": 0.5,
+            "aromatic_rings": 1,
+            "hbd": 2,
+            "hba": 4,
+            "rot_bonds": 11
+          }
+        }
+      ]
+    },
+    {
+      "handle": "Disulfide",
+      "trigger": "Non-cleavable",
+      "payload": "cytotoxin",
+      "seed": 0,
+      "warhead_pair": "O=C1C=CC(=O)N1*|*NCc1ccccc1",
+      "cleavage_preference": "reward",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 1,
+      "best_score": 0.45,
+      "top": [
+        {
+          "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
+          "score": 0.45,
+          "subscores": {
+            "solubility": 0.75,
+            "stability": 0.85,
+            "cleavability": 0.5,
+            "synthesizability": 0.85,
+            "size": 1.0,
+            "flexibility": 0.5
+          },
+          "descriptors": {
+            "qed": 0.15,
+            "mol_wt": 273.28,
+            "logp": 1.0,
+            "tpsa": 95.0,
+            "fsp3": 0.5,
+            "aromatic_rings": 1,
+            "hbd": 2,
+            "hba": 4,
+            "rot_bonds": 11
+          }
+        }
+      ]
+    },
+    {
+      "handle": "NHS_ester",
+      "trigger": "Val-Cit-PABC",
+      "payload": "cytotoxin",
+      "seed": 0,
+      "warhead_pair": "O=C1C=CC(=O)N1*|*NCc1ccccc1",
+      "cleavage_preference": "reward",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 1,
+      "best_score": 0.45,
+      "top": [
+        {
+          "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
+          "score": 0.45,
+          "subscores": {
+            "solubility": 0.75,
+            "stability": 0.85,
+            "cleavability": 0.5,
+            "synthesizability": 0.85,
+            "size": 1.0,
+            "flexibility": 0.5
+          },
+          "descriptors": {
+            "qed": 0.15,
+            "mol_wt": 273.28,
+            "logp": 1.0,
+            "tpsa": 95.0,
+            "fsp3": 0.5,
+            "aromatic_rings": 1,
+            "hbd": 2,
+            "hba": 4,
+            "rot_bonds": 11
+          }
+        }
+      ]
+    },
+    {
+      "handle": "NHS_ester",
+      "trigger": "Glucuronide",
+      "payload": "cytotoxin",
+      "seed": 0,
+      "warhead_pair": "O=C1C=CC(=O)N1*|*NCc1ccccc1",
+      "cleavage_preference": "reward",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 1,
+      "best_score": 0.45,
+      "top": [
+        {
+          "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
+          "score": 0.45,
+          "subscores": {
+            "solubility": 0.75,
+            "stability": 0.85,
+            "cleavability": 0.5,
+            "synthesizability": 0.85,
+            "size": 1.0,
+            "flexibility": 0.5
+          },
+          "descriptors": {
+            "qed": 0.15,
+            "mol_wt": 273.28,
+            "logp": 1.0,
+            "tpsa": 95.0,
+            "fsp3": 0.5,
+            "aromatic_rings": 1,
+            "hbd": 2,
+            "hba": 4,
+            "rot_bonds": 11
+          }
+        }
+      ]
+    },
+    {
+      "handle": "NHS_ester",
+      "trigger": "Non-cleavable",
+      "payload": "cytotoxin",
+      "seed": 0,
+      "warhead_pair": "O=C1C=CC(=O)N1*|*NCc1ccccc1",
+      "cleavage_preference": "reward",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 1,
+      "best_score": 0.45,
+      "top": [
+        {
+          "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
+          "score": 0.45,
+          "subscores": {
+            "solubility": 0.75,
+            "stability": 0.85,
+            "cleavability": 0.5,
+            "synthesizability": 0.85,
+            "size": 1.0,
+            "flexibility": 0.5
+          },
+          "descriptors": {
+            "qed": 0.15,
+            "mol_wt": 273.28,
+            "logp": 1.0,
+            "tpsa": 95.0,
+            "fsp3": 0.5,
+            "aromatic_rings": 1,
+            "hbd": 2,
+            "hba": 4,
+            "rot_bonds": 11
+          }
+        }
+      ]
+    },
+    {
+      "handle": "Oxyamine",
+      "trigger": "Val-Cit-PABC",
+      "payload": "cytotoxin",
+      "seed": 0,
+      "warhead_pair": "O=C1C=CC(=O)N1*|*NCc1ccccc1",
+      "cleavage_preference": "reward",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 1,
+      "best_score": 0.45,
+      "top": [
+        {
+          "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
+          "score": 0.45,
+          "subscores": {
+            "solubility": 0.75,
+            "stability": 0.85,
+            "cleavability": 0.5,
+            "synthesizability": 0.85,
+            "size": 1.0,
+            "flexibility": 0.5
+          },
+          "descriptors": {
+            "qed": 0.15,
+            "mol_wt": 273.28,
+            "logp": 1.0,
+            "tpsa": 95.0,
+            "fsp3": 0.5,
+            "aromatic_rings": 1,
+            "hbd": 2,
+            "hba": 4,
+            "rot_bonds": 11
+          }
+        }
+      ]
+    },
+    {
+      "handle": "Oxyamine",
+      "trigger": "Glucuronide",
+      "payload": "cytotoxin",
+      "seed": 0,
+      "warhead_pair": "O=C1C=CC(=O)N1*|*NCc1ccccc1",
+      "cleavage_preference": "reward",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 1,
+      "best_score": 0.45,
+      "top": [
+        {
+          "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
+          "score": 0.45,
+          "subscores": {
+            "solubility": 0.75,
+            "stability": 0.85,
+            "cleavability": 0.5,
+            "synthesizability": 0.85,
+            "size": 1.0,
+            "flexibility": 0.5
+          },
+          "descriptors": {
+            "qed": 0.15,
+            "mol_wt": 273.28,
+            "logp": 1.0,
+            "tpsa": 95.0,
+            "fsp3": 0.5,
+            "aromatic_rings": 1,
+            "hbd": 2,
+            "hba": 4,
+            "rot_bonds": 11
+          }
+        }
+      ]
+    },
+    {
+      "handle": "Oxyamine",
+      "trigger": "Non-cleavable",
+      "payload": "cytotoxin",
+      "seed": 0,
+      "warhead_pair": "O=C1C=CC(=O)N1*|*NCc1ccccc1",
+      "cleavage_preference": "reward",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 1,
+      "best_score": 0.45,
+      "top": [
+        {
+          "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
+          "score": 0.45,
+          "subscores": {
+            "solubility": 0.75,
+            "stability": 0.85,
+            "cleavability": 0.5,
+            "synthesizability": 0.85,
+            "size": 1.0,
+            "flexibility": 0.5
+          },
+          "descriptors": {
+            "qed": 0.15,
+            "mol_wt": 273.28,
+            "logp": 1.0,
+            "tpsa": 95.0,
+            "fsp3": 0.5,
+            "aromatic_rings": 1,
+            "hbd": 2,
+            "hba": 4,
+            "rot_bonds": 11
+          }
+        }
+      ]
+    },
+    {
+      "handle": "Tetrazine",
+      "trigger": "Val-Cit-PABC",
+      "payload": "cytotoxin",
+      "seed": 0,
+      "warhead_pair": "O=C1C=CC(=O)N1*|*NCc1ccccc1",
+      "cleavage_preference": "reward",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 1,
+      "best_score": 0.45,
+      "top": [
+        {
+          "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
+          "score": 0.45,
+          "subscores": {
+            "solubility": 0.75,
+            "stability": 0.85,
+            "cleavability": 0.5,
+            "synthesizability": 0.85,
+            "size": 1.0,
+            "flexibility": 0.5
+          },
+          "descriptors": {
+            "qed": 0.15,
+            "mol_wt": 273.28,
+            "logp": 1.0,
+            "tpsa": 95.0,
+            "fsp3": 0.5,
+            "aromatic_rings": 1,
+            "hbd": 2,
+            "hba": 4,
+            "rot_bonds": 11
+          }
+        }
+      ]
+    },
+    {
+      "handle": "Tetrazine",
+      "trigger": "Glucuronide",
+      "payload": "cytotoxin",
+      "seed": 0,
+      "warhead_pair": "O=C1C=CC(=O)N1*|*NCc1ccccc1",
+      "cleavage_preference": "reward",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 1,
+      "best_score": 0.45,
+      "top": [
+        {
+          "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
+          "score": 0.45,
+          "subscores": {
+            "solubility": 0.75,
+            "stability": 0.85,
+            "cleavability": 0.5,
+            "synthesizability": 0.85,
+            "size": 1.0,
+            "flexibility": 0.5
+          },
+          "descriptors": {
+            "qed": 0.15,
+            "mol_wt": 273.28,
+            "logp": 1.0,
+            "tpsa": 95.0,
+            "fsp3": 0.5,
+            "aromatic_rings": 1,
+            "hbd": 2,
+            "hba": 4,
+            "rot_bonds": 11
+          }
+        }
+      ]
+    },
+    {
+      "handle": "Tetrazine",
+      "trigger": "Non-cleavable",
+      "payload": "cytotoxin",
+      "seed": 0,
+      "warhead_pair": "O=C1C=CC(=O)N1*|*NCc1ccccc1",
+      "cleavage_preference": "reward",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 1,
+      "best_score": 0.45,
+      "top": [
+        {
+          "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
+          "score": 0.45,
+          "subscores": {
+            "solubility": 0.75,
+            "stability": 0.85,
+            "cleavability": 0.5,
+            "synthesizability": 0.85,
+            "size": 1.0,
+            "flexibility": 0.5
+          },
+          "descriptors": {
+            "qed": 0.15,
+            "mol_wt": 273.28,
+            "logp": 1.0,
+            "tpsa": 95.0,
+            "fsp3": 0.5,
+            "aromatic_rings": 1,
+            "hbd": 2,
+            "hba": 4,
+            "rot_bonds": 11
+          }
+        }
+      ]
+    },
+    {
+      "handle": "TCO",
+      "trigger": "Val-Cit-PABC",
+      "payload": "cytotoxin",
+      "seed": 0,
+      "warhead_pair": "O=C1C=CC(=O)N1*|*NCc1ccccc1",
+      "cleavage_preference": "reward",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 1,
+      "best_score": 0.45,
+      "top": [
+        {
+          "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
+          "score": 0.45,
+          "subscores": {
+            "solubility": 0.75,
+            "stability": 0.85,
+            "cleavability": 0.5,
+            "synthesizability": 0.85,
+            "size": 1.0,
+            "flexibility": 0.5
+          },
+          "descriptors": {
+            "qed": 0.15,
+            "mol_wt": 273.28,
+            "logp": 1.0,
+            "tpsa": 95.0,
+            "fsp3": 0.5,
+            "aromatic_rings": 1,
+            "hbd": 2,
+            "hba": 4,
+            "rot_bonds": 11
+          }
+        }
+      ]
+    },
+    {
+      "handle": "TCO",
+      "trigger": "Glucuronide",
+      "payload": "cytotoxin",
+      "seed": 0,
+      "warhead_pair": "O=C1C=CC(=O)N1*|*NCc1ccccc1",
+      "cleavage_preference": "reward",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 1,
+      "best_score": 0.45,
+      "top": [
+        {
+          "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
+          "score": 0.45,
+          "subscores": {
+            "solubility": 0.75,
+            "stability": 0.85,
+            "cleavability": 0.5,
+            "synthesizability": 0.85,
+            "size": 1.0,
+            "flexibility": 0.5
+          },
+          "descriptors": {
+            "qed": 0.15,
+            "mol_wt": 273.28,
+            "logp": 1.0,
+            "tpsa": 95.0,
+            "fsp3": 0.5,
+            "aromatic_rings": 1,
+            "hbd": 2,
+            "hba": 4,
+            "rot_bonds": 11
+          }
+        }
+      ]
+    },
+    {
+      "handle": "TCO",
+      "trigger": "Non-cleavable",
+      "payload": "cytotoxin",
+      "seed": 0,
+      "warhead_pair": "O=C1C=CC(=O)N1*|*NCc1ccccc1",
+      "cleavage_preference": "reward",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 1,
+      "best_score": 0.45,
+      "top": [
+        {
+          "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
+          "score": 0.45,
+          "subscores": {
+            "solubility": 0.75,
+            "stability": 0.85,
+            "cleavability": 0.5,
+            "synthesizability": 0.85,
+            "size": 1.0,
+            "flexibility": 0.5
+          },
+          "descriptors": {
+            "qed": 0.15,
+            "mol_wt": 273.28,
+            "logp": 1.0,
+            "tpsa": 95.0,
+            "fsp3": 0.5,
+            "aromatic_rings": 1,
+            "hbd": 2,
+            "hba": 4,
+            "rot_bonds": 11
+          }
+        }
+      ]
+    },
+    {
+      "handle": "Maleimide",
+      "trigger": "Val-Cit-PABC",
+      "payload": "oligonucleotide",
+      "seed": 0,
+      "warhead_pair": "O=C1C=CC(=O)N1*|*NCc1ccccc1",
+      "cleavage_preference": "penalize",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 1,
+      "best_score": 0.45,
+      "top": [
+        {
+          "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
+          "score": 0.45,
+          "subscores": {
+            "solubility": 0.75,
+            "stability": 0.85,
+            "cleavability": 0.5,
+            "synthesizability": 0.85,
+            "size": 1.0,
+            "flexibility": 0.5
+          },
+          "descriptors": {
+            "qed": 0.15,
+            "mol_wt": 273.28,
+            "logp": 1.0,
+            "tpsa": 95.0,
+            "fsp3": 0.5,
+            "aromatic_rings": 1,
+            "hbd": 2,
+            "hba": 4,
+            "rot_bonds": 11
+          }
+        }
+      ]
+    },
+    {
+      "handle": "Maleimide",
+      "trigger": "Val-Cit-PABC",
+      "payload": "immunomodulator",
+      "seed": 0,
+      "warhead_pair": "O=C1C=CC(=O)N1*|*NCc1ccccc1",
+      "cleavage_preference": "reward",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 1,
+      "best_score": 0.45,
+      "top": [
+        {
+          "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
+          "score": 0.45,
+          "subscores": {
+            "solubility": 0.75,
+            "stability": 0.85,
+            "cleavability": 0.5,
+            "synthesizability": 0.85,
+            "size": 1.0,
+            "flexibility": 0.5
+          },
+          "descriptors": {
+            "qed": 0.15,
+            "mol_wt": 273.28,
+            "logp": 1.0,
+            "tpsa": 95.0,
+            "fsp3": 0.5,
+            "aromatic_rings": 1,
+            "hbd": 2,
+            "hba": 4,
+            "rot_bonds": 11
+          }
+        }
+      ]
+    },
+    {
+      "handle": "Maleimide",
+      "trigger": "Non-cleavable-rigid",
+      "payload": "cytotoxin",
+      "seed": 0,
+      "warhead_pair": "O=C1C=CC(=O)N1*|*NCc1ccccc1",
+      "cleavage_preference": "reward",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 1,
+      "best_score": 0.45,
+      "top": [
+        {
+          "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
+          "score": 0.45,
+          "subscores": {
+            "solubility": 0.75,
+            "stability": 0.85,
+            "cleavability": 0.5,
+            "synthesizability": 0.85,
+            "size": 1.0,
+            "flexibility": 0.5
+          },
+          "descriptors": {
+            "qed": 0.15,
+            "mol_wt": 273.28,
+            "logp": 1.0,
+            "tpsa": 95.0,
+            "fsp3": 0.5,
+            "aromatic_rings": 1,
+            "hbd": 2,
+            "hba": 4,
+            "rot_bonds": 11
+          }
+        }
+      ]
+    },
+    {
+      "handle": "Maleimide",
+      "trigger": "Non-cleavable-rigid",
+      "payload": "oligonucleotide",
+      "seed": 0,
+      "warhead_pair": "O=C1C=CC(=O)N1*|*NCc1ccccc1",
+      "cleavage_preference": "penalize",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 1,
+      "best_score": 0.45,
+      "top": [
+        {
+          "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
+          "score": 0.45,
+          "subscores": {
+            "solubility": 0.75,
+            "stability": 0.85,
+            "cleavability": 0.5,
+            "synthesizability": 0.85,
+            "size": 1.0,
+            "flexibility": 0.5
+          },
+          "descriptors": {
+            "qed": 0.15,
+            "mol_wt": 273.28,
+            "logp": 1.0,
+            "tpsa": 95.0,
+            "fsp3": 0.5,
+            "aromatic_rings": 1,
+            "hbd": 2,
+            "hba": 4,
+            "rot_bonds": 11
+          }
+        }
+      ]
+    },
+    {
+      "handle": "Maleimide",
+      "trigger": "Non-cleavable-rigid",
+      "payload": "immunomodulator",
+      "seed": 0,
+      "warhead_pair": "O=C1C=CC(=O)N1*|*NCc1ccccc1",
+      "cleavage_preference": "reward",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 1,
+      "best_score": 0.45,
+      "top": [
+        {
+          "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
+          "score": 0.45,
+          "subscores": {
+            "solubility": 0.75,
+            "stability": 0.85,
+            "cleavability": 0.5,
+            "synthesizability": 0.85,
+            "size": 1.0,
+            "flexibility": 0.5
+          },
+          "descriptors": {
+            "qed": 0.15,
+            "mol_wt": 273.28,
+            "logp": 1.0,
+            "tpsa": 95.0,
+            "fsp3": 0.5,
+            "aromatic_rings": 1,
+            "hbd": 2,
+            "hba": 4,
+            "rot_bonds": 11
+          }
+        }
+      ]
+    },
+    {
+      "handle": "Maleimide",
+      "trigger": "Non-cleavable",
+      "payload": "oligonucleotide",
+      "seed": 0,
+      "warhead_pair": "O=C1C=CC(=O)N1*|*NCc1ccccc1",
+      "cleavage_preference": "penalize",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 1,
+      "best_score": 0.45,
+      "top": [
+        {
+          "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
+          "score": 0.45,
+          "subscores": {
+            "solubility": 0.75,
+            "stability": 0.85,
+            "cleavability": 0.5,
+            "synthesizability": 0.85,
+            "size": 1.0,
+            "flexibility": 0.5
+          },
+          "descriptors": {
+            "qed": 0.15,
+            "mol_wt": 273.28,
+            "logp": 1.0,
+            "tpsa": 95.0,
+            "fsp3": 0.5,
+            "aromatic_rings": 1,
+            "hbd": 2,
+            "hba": 4,
+            "rot_bonds": 11
+          }
+        }
+      ]
+    },
+    {
+      "handle": "Maleimide",
+      "trigger": "Non-cleavable",
+      "payload": "immunomodulator",
+      "seed": 0,
+      "warhead_pair": "O=C1C=CC(=O)N1*|*NCc1ccccc1",
+      "cleavage_preference": "reward",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 1,
+      "best_score": 0.45,
+      "top": [
+        {
+          "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
+          "score": 0.45,
+          "subscores": {
+            "solubility": 0.75,
+            "stability": 0.85,
+            "cleavability": 0.5,
+            "synthesizability": 0.85,
+            "size": 1.0,
+            "flexibility": 0.5
+          },
+          "descriptors": {
+            "qed": 0.15,
+            "mol_wt": 273.28,
+            "logp": 1.0,
+            "tpsa": 95.0,
+            "fsp3": 0.5,
+            "aromatic_rings": 1,
+            "hbd": 2,
+            "hba": 4,
+            "rot_bonds": 11
+          }
+        }
+      ]
+    },
+    {
+      "handle": "DBCO",
+      "trigger": "Val-Cit-PABC",
+      "payload": "oligonucleotide",
+      "seed": 0,
+      "warhead_pair": "O=C1C=CC(=O)N1*|*NCc1ccccc1",
+      "cleavage_preference": "penalize",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 1,
+      "best_score": 0.45,
+      "top": [
+        {
+          "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
+          "score": 0.45,
+          "subscores": {
+            "solubility": 0.75,
+            "stability": 0.85,
+            "cleavability": 0.5,
+            "synthesizability": 0.85,
+            "size": 1.0,
+            "flexibility": 0.5
+          },
+          "descriptors": {
+            "qed": 0.15,
+            "mol_wt": 273.28,
+            "logp": 1.0,
+            "tpsa": 95.0,
+            "fsp3": 0.5,
+            "aromatic_rings": 1,
+            "hbd": 2,
+            "hba": 4,
+            "rot_bonds": 11
+          }
+        }
+      ]
+    },
+    {
+      "handle": "DBCO",
+      "trigger": "Val-Cit-PABC",
+      "payload": "immunomodulator",
+      "seed": 0,
+      "warhead_pair": "O=C1C=CC(=O)N1*|*NCc1ccccc1",
+      "cleavage_preference": "reward",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 1,
+      "best_score": 0.45,
+      "top": [
+        {
+          "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
+          "score": 0.45,
+          "subscores": {
+            "solubility": 0.75,
+            "stability": 0.85,
+            "cleavability": 0.5,
+            "synthesizability": 0.85,
+            "size": 1.0,
+            "flexibility": 0.5
+          },
+          "descriptors": {
+            "qed": 0.15,
+            "mol_wt": 273.28,
+            "logp": 1.0,
+            "tpsa": 95.0,
+            "fsp3": 0.5,
+            "aromatic_rings": 1,
+            "hbd": 2,
+            "hba": 4,
+            "rot_bonds": 11
+          }
+        }
+      ]
+    },
+    {
+      "handle": "DBCO",
+      "trigger": "Non-cleavable-rigid",
+      "payload": "cytotoxin",
+      "seed": 0,
+      "warhead_pair": "O=C1C=CC(=O)N1*|*NCc1ccccc1",
+      "cleavage_preference": "reward",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 1,
+      "best_score": 0.45,
+      "top": [
+        {
+          "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
+          "score": 0.45,
+          "subscores": {
+            "solubility": 0.75,
+            "stability": 0.85,
+            "cleavability": 0.5,
+            "synthesizability": 0.85,
+            "size": 1.0,
+            "flexibility": 0.5
+          },
+          "descriptors": {
+            "qed": 0.15,
+            "mol_wt": 273.28,
+            "logp": 1.0,
+            "tpsa": 95.0,
+            "fsp3": 0.5,
+            "aromatic_rings": 1,
+            "hbd": 2,
+            "hba": 4,
+            "rot_bonds": 11
+          }
+        }
+      ]
+    },
+    {
+      "handle": "DBCO",
+      "trigger": "Non-cleavable-rigid",
+      "payload": "oligonucleotide",
+      "seed": 0,
+      "warhead_pair": "O=C1C=CC(=O)N1*|*NCc1ccccc1",
+      "cleavage_preference": "penalize",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 3,
+      "best_score": 0.88,
+      "top": [
+        {
+          "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
+          "score": 0.88,
+          "subscores": {
+            "solubility": 0.8410000000000001,
+            "stability": 0.85,
+            "cleavability": 0.15,
+            "synthesizability": 0.85,
+            "size": 1.0,
+            "flexibility": 0.5
+          },
+          "descriptors": {
+            "qed": 0.25,
+            "mol_wt": 273.28,
+            "logp": -1.73,
+            "tpsa": 252.3,
+            "fsp3": 0.5,
+            "aromatic_rings": 0,
+            "hbd": 2,
+            "hba": 4,
+            "rot_bonds": 11
+          }
+        },
+        {
+          "smiles": "O=C1C=CC(=O)N1c1ccc(CO)cc1",
+          "score": 0.88,
+          "subscores": {
+            "solubility": 0.7487,
+            "stability": 0.85,
+            "cleavability": 0.15,
+            "synthesizability": 0.85,
+            "size": 1.0,
+            "flexibility": 0.5
+          },
+          "descriptors": {
+            "qed": 0.25,
+            "mol_wt": 203.2,
+            "logp": -0.08,
+            "tpsa": 224.61,
+            "fsp3": 0.5,
+            "aromatic_rings": 1,
+            "hbd": 2,
+            "hba": 4,
+            "rot_bonds": 2
+          }
+        },
+        {
+          "smiles": "O=C1C=CC(=O)N1CCCC(=O)NC(C(C)C)C(=O)N",
+          "score": 0.8,
+          "subscores": {
+            "solubility": 0.9218999999999999,
+            "stability": 0.85,
+            "cleavability": 0.15,
+            "synthesizability": 0.65,
+            "size": 1.0,
+            "flexibility": 0.5
+          },
+          "descriptors": {
+            "qed": 0.25,
+            "mol_wt": 281.31,
+            "logp": -1.37,
+            "tpsa": 276.57,
+            "fsp3": 0.5,
+            "aromatic_rings": 0,
+            "hbd": 2,
+            "hba": 4,
+            "rot_bonds": 7
+          }
+        }
+      ]
+    },
+    {
+      "handle": "DBCO",
+      "trigger": "Non-cleavable-rigid",
+      "payload": "immunomodulator",
+      "seed": 0,
+      "warhead_pair": "O=C1C=CC(=O)N1*|*NCc1ccccc1",
+      "cleavage_preference": "reward",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 1,
+      "best_score": 0.45,
+      "top": [
+        {
+          "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
+          "score": 0.45,
+          "subscores": {
+            "solubility": 0.75,
+            "stability": 0.85,
+            "cleavability": 0.5,
+            "synthesizability": 0.85,
+            "size": 1.0,
+            "flexibility": 0.5
+          },
+          "descriptors": {
+            "qed": 0.15,
+            "mol_wt": 273.28,
+            "logp": 1.0,
+            "tpsa": 95.0,
+            "fsp3": 0.5,
+            "aromatic_rings": 1,
+            "hbd": 2,
+            "hba": 4,
+            "rot_bonds": 11
+          }
+        }
+      ]
+    },
+    {
+      "handle": "DBCO",
+      "trigger": "Non-cleavable",
+      "payload": "oligonucleotide",
+      "seed": 0,
+      "warhead_pair": "O=C1C=CC(=O)N1*|*NCc1ccccc1",
+      "cleavage_preference": "penalize",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 3,
+      "best_score": 0.88,
+      "top": [
+        {
+          "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
+          "score": 0.88,
+          "subscores": {
+            "solubility": 0.8410000000000001,
+            "stability": 0.85,
+            "cleavability": 0.15,
+            "synthesizability": 0.85,
+            "size": 1.0,
+            "flexibility": 0.5
+          },
+          "descriptors": {
+            "qed": 0.25,
+            "mol_wt": 273.28,
+            "logp": -1.73,
+            "tpsa": 252.3,
+            "fsp3": 0.5,
+            "aromatic_rings": 0,
+            "hbd": 2,
+            "hba": 4,
+            "rot_bonds": 11
+          }
+        },
+        {
+          "smiles": "O=C1C=CC(=O)N1c1ccc(CO)cc1",
+          "score": 0.88,
+          "subscores": {
+            "solubility": 0.7487,
+            "stability": 0.85,
+            "cleavability": 0.15,
+            "synthesizability": 0.85,
+            "size": 1.0,
+            "flexibility": 0.5
+          },
+          "descriptors": {
+            "qed": 0.25,
+            "mol_wt": 203.2,
+            "logp": -0.08,
+            "tpsa": 224.61,
+            "fsp3": 0.5,
+            "aromatic_rings": 1,
+            "hbd": 2,
+            "hba": 4,
+            "rot_bonds": 2
+          }
+        },
+        {
+          "smiles": "O=C1C=CC(=O)N1CCCC(=O)NC(C(C)C)C(=O)N",
+          "score": 0.8,
+          "subscores": {
+            "solubility": 0.9218999999999999,
+            "stability": 0.85,
+            "cleavability": 0.15,
+            "synthesizability": 0.65,
+            "size": 1.0,
+            "flexibility": 0.5
+          },
+          "descriptors": {
+            "qed": 0.25,
+            "mol_wt": 281.31,
+            "logp": -1.37,
+            "tpsa": 276.57,
+            "fsp3": 0.5,
+            "aromatic_rings": 0,
+            "hbd": 2,
+            "hba": 4,
+            "rot_bonds": 7
+          }
+        }
+      ]
+    },
+    {
+      "handle": "DBCO",
+      "trigger": "Non-cleavable",
+      "payload": "immunomodulator",
+      "seed": 0,
+      "warhead_pair": "O=C1C=CC(=O)N1*|*NCc1ccccc1",
+      "cleavage_preference": "reward",
+      "mock": false,
+      "ok": true,
+      "error": null,
+      "n_assembled": 1,
+      "best_score": 0.45,
+      "top": [
+        {
+          "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
+          "score": 0.45,
+          "subscores": {
+            "solubility": 0.75,
+            "stability": 0.85,
+            "cleavability": 0.5,
+            "synthesizability": 0.85,
+            "size": 1.0,
+            "flexibility": 0.5
+          },
+          "descriptors": {
+            "qed": 0.15,
+            "mol_wt": 273.28,
+            "logp": 1.0,
+            "tpsa": 95.0,
+            "fsp3": 0.5,
+            "aromatic_rings": 1,
+            "hbd": 2,
+            "hba": 4,
+            "rot_bonds": 11
+          }
+        }
+      ]
+    }
+  ]
+}
