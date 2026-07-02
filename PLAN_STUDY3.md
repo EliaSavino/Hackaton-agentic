@@ -142,6 +142,14 @@ scoring:
   ipTM does not.
 - Stretch: check **scissile-bond geometry** relative to the catalytic dyad (Cys29/His199 of
   cathepsin B) in the top complexes — a stronger recognition argument than affinity alone.
+- **Parallelise the co-fold panel (easy speedup).** Measured: a single ~260-residue co-fold
+  uses only **~3.7 GB of the 143 GB H200** (peak GPU util ~96% in a short burst; ~89 s wall,
+  most of it CPU-side prep). So **30+ co-folds fit in VRAM at once**, yet `demos/adc_study.py:
+  run_boltz_panel` currently runs them **sequentially**. Fan them out (concurrent `run_boltz_2`
+  jobs, or a batched Boltz invocation) to cut the structural-proof stage from ~15–30 min to a
+  few minutes — and it frees budget to co-fold the full shortlist rather than a top-k subset.
+  Note the CPU-side prep is the real per-job cost, so cap concurrency to keep the shared pod's
+  cores from thrashing (mirror the REINVENT `max_workers` discipline).
 
 ---
 
