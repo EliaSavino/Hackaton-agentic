@@ -697,3 +697,129 @@ The honesty and figures are done. The single highest-leverage remaining move is 
 criterion (1): promote the contested-ARC observation into an explicit, falsifiable hypothesis and
 make it the paper's headline claim. Then fix the 0.60→0.97 explanation and the Fig 4 white space,
 and it's submission-ready.
+
+---
+
+# Part IX — Figure 3 corrections + an ISAC stability error (found in review)
+
+Three figure-honesty fixes for `fig3_rules_steer.png` and one **substantive scientific error** in
+the shipped weights, surfaced while answering nitpicks on Fig 3.
+
+## IX.1 The "flexibility" heatmap column is mislabelled (and the two panels contradict)
+The left column labelled **flexibility** is a *scoring weight*, and the term it weights actually
+**rewards rigidity**: `adc_linker_objective.py:162` applies a `reverse_sigmoid` on rotatable bonds
+(`low=2, high=max_rot_bonds`), which scores *fewer* rotatable bonds near 1.0. So a **higher
+"flexibility" weight → the objective pushes *harder* to rigidity → fewer rotatable bonds.** That is
+why oligonucleotide (weight 0.90) has the *fewest* rotatable bonds — not a contradiction, a naming
+trap. Worse, the two panels label the same axis with opposite words: left = "flexibility", right =
+"rotatable bonds (rigidity knob)". **Fix:** rename the column `rigidity (low-rot-bond reward)`, and
+add the per-class `max_rot_bonds` setpoint (5 / 10 / 14) — that setpoint, not the weight, is the
+real driver of the scatter separation and is currently invisible.
+
+## IX.2 The Fig 3 scatter y-axis is decorative (jitter, not signal)
+The right-panel vertical spread is cosmetic jitter: `adc_study6_figures.py:121` plots
+`y = (1 if cleavable else 0) + hash-based ±0.11`. The true y is binary and **fixed by construction**
+(the welded trigger determines cleavable vs not), so height encodes nothing. **Fix:** either add
+"(points jittered for visibility)" to the caption, or — better — put a *real* quantity on y
+(stability or SA subscore) so the panel is a genuine 2-D separation instead of a 1-D one dressed up.
+This also retires the caption's "two rule knobs" overstatement (only the x-axis does work).
+
+## IX.3 The weights are a developer rubric keyed by the agent's category (tag them heuristic)
+Every number in the weight heatmap comes from a **hardcoded lookup**, not agent-tuned or
+literature-measured values: `profile_for_payload` (`payload_profiles.py:137-148`) maps the agent's
+*categorical* rule to fixed weights (`rigidity=="rigid"→0.9`; `stability_priority=="paramount"→1.0`,
+`=="high"→0.85`; untouched terms keep the `ADCGoalProfile` defaults, which is why cytotoxin's 0.50
+is just the default). The agent chooses the *bucket* (grounded in exemplars); a human chose what the
+bucket is worth. This is the correct, non-circular design (see Part II.2) — but the paper must label
+these weights **`heuristic` (a deterministic rule-compilation)**, not imply the agent optimised
+continuous values, and the two-decimal precision ("0.85") overstates what is really ~3 buckets.
+
+## IX.4 SUBSTANTIVE: the ISAC stability weight is wrong — it should be the highest, not the lowest
+Verified in the shipped run (`reasoning_chains.json`):
+
+| Class | stability_priority (derived) | stability weight |
+|---|---|---|
+| Cytotoxin | high | 0.85 |
+| Oligonucleotide (ARC) | high | 0.85 |
+| **Immunomodulator (ISAC)** | **standard** | **0.70 (lowest)** |
+
+This is backwards on the biology. An ISAC carries a **TLR7/8 agonist**; premature or off-target
+systemic release drives **cytokine-release syndrome / severe systemic immune-inflammatory (allergic)
+reactions**, so plasma stability and correct biodistribution are the *safety-critical* axis — the
+place a payload "going where it shouldn't" is most dangerous. ISAC stability should be **paramount
+(≈1.0), the highest of the three classes.** The team's own encoded prior already says this —
+`payload_profiles.py:78` sets ISAC `stability_priority="paramount"`, with the comment
+"immunomodulators must not release systemically" — but the **LLM-derived rule regressed it to
+'standard'** (0.70) and the pipeline shipped the weaker value. Root cause: the ISAC evidence is thin
+(1 grounded exemplar, `n_sources=1`), so the LLM defaulted the stability sub-decision — and unlike
+the cleavage rule, that sub-decision is **not** confidence-gated.
+
+**Fix (pick one, all cheap):**
+- Floor it in the compiler: immunomodulator stability weight `>= 0.9` (a domain safety guard), or
+- give the rule-derivation LLM the ISAC systemic-toxicity prior as a few-shot / instruction so it
+  derives "paramount", and
+- gate low-evidence sub-decisions: when a class's grounded exemplars are sparse, fall back to the
+  encoded domain prior rather than the model default.
+
+This also strengthens the paper: it's a concrete case where the agent's *confidence* machinery
+(Part V.1) should extend beyond the headline cleavage rule to the stability sub-rule — right now a
+thinly-evidenced, safety-critical decision shipped at full apparent authority.
+
+---
+
+# Part X — Version 7 bake-in (independent-reviewer fixes, verified + consolidated)
+
+The v6 update landed the big things: §2.2 now states the confidence formula explicitly, the
+abstract leads with the falsifiable ARC prediction (the Part VIII rubric-for-novelty advice), Fig 4
+adds a top-k stress-test, and the Boltz ~1-log-unit noise caveat reframes "10 nM ≈ 35 nM" as
+*same-regime* rather than a match. An independent reviewer then found a residual derivability bug
+plus two count slips. I verified all of them against the shipped JSON; here is the ordered v7 list.
+
+## X.1 (highest value, ~10 min) ISAC confidence is not derivable from Table 1 — add `n`
+The paper now says "every confidence is derivable," which invites arithmetic-checking — and ISAC
+fails it. Formula: `C = E·P`, `E = min(1, n/6)`, `n` = **total** grounded exemplars. Verified in
+`heldout_predictions.json`: ISAC has **n = 5** grounded exemplars, of which only **1 is
+cleavage-labelled** (Val-Cit; the other 4 are "unspecified"). So `E = 5/6 = 0.83`, `κ = 1`,
+`P = 1`, `C = 0.83` ✓. But **Table 1's "Evidence" column shows `1/0`** — that is `n_c/n_n`, the
+cleavage-labelled split, *not* `n`. A juror who computes `E` from `1/0` gets `1/6 ≈ 0.17` and
+concludes the number is wrong. **Fix:** add an **`n (grounded)`** column to Table 1 (ISAC = 5), or
+a one-line footnote defining that "Evidence = n_c/n_n while C uses total n." Do this first — it
+directly protects the claim you just added.
+
+## X.2 (one honest sentence) State that ISAC's confidence rides on evidence volume, not consensus
+Because ISAC has `n_c+n_n = 1`, `κ = 1` trivially and it **cannot be flagged contested by
+construction** (the rule needs `n_c+n_n ≥ 3`). So its 0.83 is driven almost entirely by evidence
+volume `E`, not demonstrated consensus. §3.3 half-admits this; make it explicit — otherwise a juror
+frames it as the metric flattering a one-vote class. One sentence: *"ISAC's robustness reflects
+evidence volume, not tested consensus: with a single cleavage-labelled exemplar it cannot be flagged
+contested, so its confidence is a lower bound on uncertainty."*
+
+**Note this compounds with Part IX.4:** ISAC is the *same* class whose stability weight shipped too
+low (0.70, should be paramount ≈1.0). Both stem from thin ISAC evidence + un-gated sub-decisions —
+v7 should fix the stability weight *and* caveat the confidence. Adding 1–2 ISAC papers to the corpus
+would fix both at once (raises `n` past the contested threshold and grounds the stability rule).
+
+## X.3 (2 min each) Two count mismatches — reconcile
+- **Paper count:** the abstract/Methods say **"30 primary papers"** but the Conclusion still says
+  **"31 papers"** (both strings are in `adc_linker_study6.tex`). The RAG store (`data/rag.sqlite`)
+  actually holds **31 documents** — so confirm the true number (30 papers + 1 non-paper doc? or one
+  dropped?) and use it consistently in all three places + the SI.
+- **Design count:** the Discussion says "generation samples **25** designs per class" while §3.6 /
+  Table 2 reference "all **fifteen**." Not contradictory (25 generated/class → 15 shortlisted, 5×3)
+  but it reads as a mismatch. State it as "25 generated per class → 15 shortlisted (5/class)."
+
+## X.4 Still open from earlier parts (fold into v7 if not already done)
+- **Part IX.1–IX.3 (Fig 3):** rename the "flexibility" heatmap column → `rigidity`; expose
+  `max_rot_bonds` (5/10/14); caption the scatter jitter (or put a real quantity on y); label the
+  weights `heuristic` (developer rubric keyed by the agent's category).
+- **Part IX.4 (ISAC stability = 0.70):** raise to paramount (≈1.0) — TLR7/8 systemic release →
+  cytokine-release syndrome / severe systemic reactions; the encoded prior already says paramount.
+
+## Order for v7
+1. Add `n` to Table 1 (X.1) — protects the derivability claim.
+2. ISAC honesty sentence (X.2) + ISAC stability fix (IX.4) — same class, do together.
+3. Reconcile 30/31 and 25/15 (X.3).
+4. Fig 3 relabelling (IX.1–IX.3).
+
+None change the result. After X.1–X.3 the arithmetic is check-proof and the counts are consistent —
+which is exactly what the "provenance-gated, nothing hidden" story needs to survive a careful juror.
