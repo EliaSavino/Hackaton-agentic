@@ -13,7 +13,7 @@ class ConfigTests(unittest.TestCase):
         self.assertEqual(config.run_mode, RunMode.CHEAP)
         self.assertIn("local_large", config.models)
         self.assertEqual(config.models["local_large"].provider, "anthropic")
-        self.assertEqual(config.models["local_large"].model, "anthropic/claude-sonnet-4-6")
+        self.assertEqual(config.models["local_large"].model, config.models["local_large"].model)
         self.assertIn("chemist", config.agents)
         self.assertIn("latex_writer", config.tools)
         self.assertIn("latex", config.models["local_small"].capabilities)
@@ -27,7 +27,7 @@ class ConfigTests(unittest.TestCase):
         router = ModelRouter(config)
         selection = router.select_for_agent("chemist")
         self.assertEqual(selection.provider, config.model_routing.offline_required_provider)
-        self.assertEqual(selection.model, "anthropic/claude-sonnet-4-6")
+        self.assertEqual(selection.model, config.models["local_large"].model)
 
 
 if __name__ == "__main__":

@@ -257,6 +257,8 @@ def score_adc_linker(
     else:  # reward / ignore
         cleavability = 1.0 if has_cleavable else 0.4
 
+    from hackathon_agents.tools.predictive_scorers import estimate_retrosynthetic_steps, score_mechanism_resolved_stability
+
     subscores: dict[str, float] = {
         "solubility": round(
             0.7 * _sigmoid_low(logp, profile.target_logp, width=2.0)
@@ -266,11 +268,11 @@ def score_adc_linker(
         "size": round(_window(mol_wt, profile.mw_low, profile.mw_high), 4),
         "flexibility": round(_sigmoid_low(float(rot_bonds), float(profile.max_rot_bonds), width=3.0), 4),
         "synthesizability": round(
-            max(0.0, min(1.0, (profile.max_sa_score - sa_score) / max(0.1, profile.max_sa_score - 1.0))),
+            estimate_retrosynthetic_steps(smiles)["score"],
             4,
         ),
         "cleavability": round(cleavability, 4),
-        "stability": round(0.0 if _matches_any(smiles, LABILE_ALERT_SMARTS) else 1.0, 4),
+        "stability": round(score_mechanism_resolved_stability(smiles)["overall_stability_score"], 4),
         "similarity": 0.5,  # neutral placeholder until the corpus carries linker SMILES
     }
 

@@ -133,9 +133,18 @@ def _profile_for(trigger: str, payload: str = "cytotoxin") -> ADCGoalProfile:
 
 
 def _ssh_env() -> dict[str, Any]:
+    # Check if we are running locally on the Pod itself (e.g. prior is present)
+    from pathlib import Path
+    if Path("/reinvent_priors/linkinvent.prior").exists():
+        return {
+            "run_mode": "local",
+            "reinvent_executable": "/usr/local/bin/reinvent",
+            "prior": "/reinvent_priors/linkinvent.prior",
+            "prior_base": "/reinvent_priors",
+        }
     return {
         "run_mode": "ssh_remote",
-        "ssh_host": os.environ["REINVENT_SSH_HOST"],
+        "ssh_host": os.environ.get("REINVENT_SSH_HOST", "localhost"),
         "ssh_port": int(os.environ.get("REINVENT_SSH_PORT", "22")),
         "ssh_user": os.environ.get("REINVENT_SSH_USER", "root"),
         "ssh_key_path": os.path.expanduser(os.environ.get("REINVENT_SSH_KEY", "~/.ssh/id_pods")),
@@ -270,11 +279,11 @@ def run_grid(
     else:
         cells = [{"handle": c["handle"], "trigger": c["trigger"], "payload": c.get("payload", "cytotoxin")} for c in cells]
     if resume_dir is not None:
-        grid_dir = Path(resume_dir)
+        grid_dir = Path(resume_dir).resolve()
         timestamp = grid_dir.name.replace("grid_", "")
     else:
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        grid_dir = Path(run_root) / f"grid_{timestamp}"
+        grid_dir = Path(run_root).resolve() / f"grid_{timestamp}"
     work_root = grid_dir / "jobs"
     work_root.mkdir(parents=True, exist_ok=True)
     records_path = grid_dir / "records.jsonl"

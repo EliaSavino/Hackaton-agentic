@@ -5,14 +5,14 @@
       "smiles": "O=C1C=CC(=O)N1CCCCCC(=O)NC(C(C)C)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
       "class": "protease-cleavable (maleimide/Cys)",
       "adc": "brentuximab vedotin (Adcetris)",
-      "score": 0.5241,
+      "score": 0.3661,
       "subscores": {
         "solubility": 0.7617,
         "size": 1.0,
         "flexibility": 0.0884,
-        "synthesizability": 0.3924,
+        "synthesizability": 0.15,
         "cleavability": 0.4,
-        "stability": 1.0,
+        "stability": 0.85,
         "similarity": 0.5
       },
       "physchem": {
@@ -32,14 +32,14 @@
       "smiles": "O=C1C=CC(=O)N1CCCCCC(=O)NC(C(C)C)C(=O)NC(C)C(=O)Nc1ccc(CO)cc1",
       "class": "protease-cleavable (maleimide/Cys)",
       "adc": "Val-Ala class",
-      "score": 0.586,
+      "score": 0.3985,
       "subscores": {
         "solubility": 0.715,
         "size": 1.0,
         "flexibility": 0.2689,
-        "synthesizability": 0.4562,
+        "synthesizability": 0.15,
         "cleavability": 0.4,
-        "stability": 1.0,
+        "stability": 0.85,
         "similarity": 0.5
       },
       "physchem": {
@@ -59,14 +59,14 @@
       "smiles": "O=C1C=CC(=O)N1CCCCCC(=O)NCC(=O)NCC(=O)NC(Cc1ccccc1)C(=O)NCC(=O)O",
       "class": "protease-cleavable tetrapeptide",
       "adc": "trastuzumab deruxtecan (Enhertu)",
-      "score": 0.5816,
+      "score": 0.3892,
       "subscores": {
         "solubility": 0.8904,
         "size": 1.0,
         "flexibility": 0.1192,
-        "synthesizability": 0.4993,
+        "synthesizability": 0.15,
         "cleavability": 0.4,
-        "stability": 1.0,
+        "stability": 0.85,
         "similarity": 0.5
       },
       "physchem": {
@@ -86,14 +86,14 @@
       "smiles": "O=C(O)C1CCC(CN2C(=O)C=CC2=O)CC1",
       "class": "non-cleavable thioether",
       "adc": "trastuzumab emtansine (Kadcyla)",
-      "score": 0.6733,
+      "score": 0.5896,
       "subscores": {
         "solubility": 0.6385,
         "size": 1.0,
         "flexibility": 0.9116,
-        "synthesizability": 0.6232,
+        "synthesizability": 0.85,
         "cleavability": 0.4,
-        "stability": 1.0,
+        "stability": 0.85,
         "similarity": 0.5
       },
       "physchem": {
@@ -113,14 +113,14 @@
       "smiles": "O=C(O)CCCSSc1ccccn1",
       "class": "redox-cleavable disulfide",
       "adc": "mirvetuximab soravtansine (Elahere)",
-      "score": 0.7449,
+      "score": 0.6171,
       "subscores": {
         "solubility": 0.416,
         "size": 1.0,
         "flexibility": 0.7914,
-        "synthesizability": 0.6418,
+        "synthesizability": 0.95,
         "cleavability": 1.0,
-        "stability": 1.0,
+        "stability": 0.8,
         "similarity": 0.5
       },
       "physchem": {
@@ -140,14 +140,14 @@
       "smiles": "O=C(O)C(CCSSc1ccccn1)S(=O)(=O)O",
       "class": "redox-cleavable disulfide (hydrophilic)",
       "adc": "hindered disulfide class",
-      "score": 0.7567,
+      "score": 0.6635,
       "subscores": {
         "solubility": 0.6504,
         "size": 1.0,
         "flexibility": 0.7311,
-        "synthesizability": 0.4173,
+        "synthesizability": 0.85,
         "cleavability": 1.0,
-        "stability": 1.0,
+        "stability": 0.8,
         "similarity": 0.5
       },
       "physchem": {
@@ -172,7 +172,7 @@
         "solubility": 0.596,
         "size": 1.0,
         "flexibility": 0.7914,
-        "synthesizability": 0.742,
+        "synthesizability": 0.95,
         "cleavability": 0.4,
         "stability": 0.0,
         "similarity": 0.5
@@ -199,7 +199,7 @@
         "solubility": 0.8788,
         "size": 1.0,
         "flexibility": 0.4174,
-        "synthesizability": 0.2489,
+        "synthesizability": 0.15,
         "cleavability": 0.4,
         "stability": 0.0,
         "similarity": 0.5
@@ -221,14 +221,14 @@
       "smiles": "O=C1C=CC(=O)N1CCCCCC(=O)O",
       "class": "conjugation spacer only",
       "adc": "mc handle",
-      "score": 0.6806,
+      "score": 0.5861,
       "subscores": {
         "solubility": 0.6578,
         "size": 1.0,
         "flexibility": 0.7914,
-        "synthesizability": 0.6848,
+        "synthesizability": 0.85,
         "cleavability": 0.4,
-        "stability": 1.0,
+        "stability": 0.85,
         "similarity": 0.5
       },
       "physchem": {
@@ -257,1426 +257,1066 @@
         "class": "redox disulfide",
         "smiles": "O=C(O)CCCSSc1ccccn1",
         "expected_stability": "intermediate",
-        "stability": 1.0,
-        "composite": 0.7449
+        "stability": 0.8,
+        "composite": 0.6171
       },
       {
         "class": "protease dipeptide",
         "smiles": "O=C1C=CC(=O)N1CCCCCC(=O)NC(C(C)C)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
         "expected_stability": "high",
-        "stability": 1.0,
-        "composite": 0.5241
+        "stability": 0.85,
+        "composite": 0.3661
       },
       {
         "class": "non-cleavable thioether",
         "smiles": "O=C(O)C1CCC(CN2C(=O)C=CC2=O)CC1",
         "expected_stability": "high",
-        "stability": 1.0,
-        "composite": 0.6733
+        "stability": 0.85,
+        "composite": 0.5896
       }
     ],
     "passes": true
   },
   "designed": [
     {
-      "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
-      "score": 0.88,
+      "smiles": "O=C(Cn1c(=O)[nH]c(=O)n(CCN2C(=O)C=CC2=O)c1=O)NCc1ccccc1",
+      "score": 0.7466,
       "subscores": {
-        "solubility": 0.8235333333333333,
-        "stability": 0.85,
-        "cleavability": 0.85,
-        "synthesizability": 0.85,
+        "solubility": 0.9187,
         "size": 1.0,
-        "flexibility": 0.5
+        "flexibility": 0.7311,
+        "synthesizability": 0.85,
+        "cleavability": 0.4,
+        "stability": 0.85,
+        "similarity": 0.5
       },
-      "descriptors": {
-        "qed": 0.25,
-        "mol_wt": 273.28,
-        "logp": 2.93,
-        "tpsa": 247.06,
-        "fsp3": 0.5,
-        "aromatic_rings": 1,
-        "hbd": 2,
-        "hba": 4,
-        "rot_bonds": 11
-      },
+      "descriptors": {},
       "physchem": {
-        "qed": 0.3819,
-        "mol_wt": 273.3,
-        "logp": -1.05,
-        "tpsa": 85.3,
-        "fsp3": 0.667,
-        "aromatic_rings": 0,
-        "hbd": 1,
-        "hba": 6,
-        "rot_bonds": 11
-      },
-      "novelty_nn_tanimoto": 0.3889
-    },
-    {
-      "smiles": "O=C1C=CC(=O)N1c1ccc(CO)cc1",
-      "score": 0.88,
-      "subscores": {
-        "solubility": 0.7312333333333334,
-        "stability": 0.85,
-        "cleavability": 0.85,
-        "synthesizability": 0.85,
-        "size": 1.0,
-        "flexibility": 0.5
-      },
-      "descriptors": {
-        "qed": 0.25,
-        "mol_wt": 203.2,
-        "logp": 4.59,
-        "tpsa": 219.37,
-        "fsp3": 0.5,
+        "qed": 0.5126,
+        "mol_wt": 399.4,
+        "logp": -2.06,
+        "tpsa": 143.3,
+        "fsp3": 0.222,
         "aromatic_rings": 2,
         "hbd": 2,
-        "hba": 4,
-        "rot_bonds": 2
+        "hba": 6,
+        "rot_bonds": 7
       },
-      "physchem": {
-        "qed": 0.7162,
-        "mol_wt": 203.2,
-        "logp": 0.61,
-        "tpsa": 57.6,
-        "fsp3": 0.091,
-        "aromatic_rings": 1,
-        "hbd": 1,
-        "hba": 3,
-        "rot_bonds": 2
-      },
-      "novelty_nn_tanimoto": 0.2931
+      "novelty_nn_tanimoto": 0.3478
     },
     {
-      "smiles": "O=C1C=CC(=O)N1CCCC(=O)NC(C(C)C)C(=O)N",
-      "score": 0.8,
+      "smiles": "Nc1nc(NCc2ccccc2)nc(NC(=O)CN2C(=O)C=CC2=O)n1",
+      "score": 0.7285,
       "subscores": {
-        "solubility": 0.9044333333333333,
+        "solubility": 0.8166,
+        "size": 1.0,
+        "flexibility": 0.7914,
+        "synthesizability": 0.85,
+        "cleavability": 0.4,
         "stability": 0.85,
-        "cleavability": 0.85,
+        "similarity": 0.5
+      },
+      "descriptors": {},
+      "physchem": {
+        "qed": 0.6124,
+        "mol_wt": 353.3,
+        "logp": -0.07,
+        "tpsa": 143.2,
+        "fsp3": 0.125,
+        "aromatic_rings": 2,
+        "hbd": 3,
+        "hba": 8,
+        "rot_bonds": 6
+      },
+      "novelty_nn_tanimoto": 0.2917
+    },
+    {
+      "smiles": "Nc1nc(NCc2ccccc2)nc(NCCN2C(=O)C=CC2=O)c(=O)n1",
+      "score": 0.7247,
+      "subscores": {
+        "solubility": 0.8276,
+        "size": 1.0,
+        "flexibility": 0.7311,
+        "synthesizability": 0.85,
+        "cleavability": 0.4,
+        "stability": 0.85,
+        "similarity": 0.5
+      },
+      "descriptors": {},
+      "physchem": {
+        "qed": 0.5649,
+        "mol_wt": 367.4,
+        "logp": -0.24,
+        "tpsa": 143.2,
+        "fsp3": 0.176,
+        "aromatic_rings": 2,
+        "hbd": 3,
+        "hba": 9,
+        "rot_bonds": 7
+      },
+      "novelty_nn_tanimoto": 0.2703
+    },
+    {
+      "smiles": "O=C(Cn1c(=O)[nH]c(=O)n(CC(=O)N2C(=O)C=CC2=O)c1=O)NCc1ccccc1",
+      "score": 0.712,
+      "subscores": {
+        "solubility": 0.9343,
+        "size": 1.0,
+        "flexibility": 0.7914,
         "synthesizability": 0.65,
-        "size": 1.0,
-        "flexibility": 0.5
+        "cleavability": 0.4,
+        "stability": 0.85,
+        "similarity": 0.5
       },
-      "descriptors": {
-        "qed": 0.25,
-        "mol_wt": 281.31,
-        "logp": 3.3,
-        "tpsa": 271.33,
-        "fsp3": 0.5,
-        "aromatic_rings": 1,
-        "hbd": 2,
-        "hba": 4,
-        "rot_bonds": 7
-      },
+      "descriptors": {},
       "physchem": {
-        "qed": 0.6022,
-        "mol_wt": 281.3,
-        "logp": -0.68,
-        "tpsa": 109.6,
-        "fsp3": 0.538,
-        "aromatic_rings": 0,
+        "qed": 0.4936,
+        "mol_wt": 413.3,
+        "logp": -2.53,
+        "tpsa": 160.4,
+        "fsp3": 0.167,
+        "aromatic_rings": 2,
         "hbd": 2,
-        "hba": 4,
-        "rot_bonds": 7
+        "hba": 7,
+        "rot_bonds": 6
       },
-      "novelty_nn_tanimoto": 0.5172
+      "novelty_nn_tanimoto": 0.2778
     },
     {
-      "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
-      "score": 0.45,
+      "smiles": "Cn1c(=O)n(CC(=O)NCc2ccccc2)c(=O)n(CC(=O)N2C(=O)C=CC2=O)c1=O",
+      "score": 0.712,
       "subscores": {
-        "solubility": 0.75,
-        "stability": 0.85,
-        "cleavability": 0.5,
-        "synthesizability": 0.85,
+        "solubility": 0.934,
         "size": 1.0,
-        "flexibility": 0.5
-      },
-      "descriptors": {
-        "qed": 0.15,
-        "mol_wt": 273.28,
-        "logp": 1.0,
-        "tpsa": 95.0,
-        "fsp3": 0.5,
-        "aromatic_rings": 1,
-        "hbd": 2,
-        "hba": 4,
-        "rot_bonds": 11
-      },
-      "physchem": {
-        "qed": 0.3819,
-        "mol_wt": 273.3,
-        "logp": -1.05,
-        "tpsa": 85.3,
-        "fsp3": 0.667,
-        "aromatic_rings": 0,
-        "hbd": 1,
-        "hba": 6,
-        "rot_bonds": 11
-      },
-      "novelty_nn_tanimoto": 0.3889
-    },
-    {
-      "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
-      "score": 0.45,
-      "subscores": {
-        "solubility": 0.75,
-        "stability": 0.85,
-        "cleavability": 0.5,
-        "synthesizability": 0.85,
-        "size": 1.0,
-        "flexibility": 0.5
-      },
-      "descriptors": {
-        "qed": 0.15,
-        "mol_wt": 273.28,
-        "logp": 1.0,
-        "tpsa": 95.0,
-        "fsp3": 0.5,
-        "aromatic_rings": 1,
-        "hbd": 2,
-        "hba": 4,
-        "rot_bonds": 11
-      },
-      "physchem": {
-        "qed": 0.3819,
-        "mol_wt": 273.3,
-        "logp": -1.05,
-        "tpsa": 85.3,
-        "fsp3": 0.667,
-        "aromatic_rings": 0,
-        "hbd": 1,
-        "hba": 6,
-        "rot_bonds": 11
-      },
-      "novelty_nn_tanimoto": 0.3889
-    },
-    {
-      "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
-      "score": 0.45,
-      "subscores": {
-        "solubility": 0.75,
-        "stability": 0.85,
-        "cleavability": 0.5,
-        "synthesizability": 0.85,
-        "size": 1.0,
-        "flexibility": 0.5
-      },
-      "descriptors": {
-        "qed": 0.15,
-        "mol_wt": 273.28,
-        "logp": 1.0,
-        "tpsa": 95.0,
-        "fsp3": 0.5,
-        "aromatic_rings": 1,
-        "hbd": 2,
-        "hba": 4,
-        "rot_bonds": 11
-      },
-      "physchem": {
-        "qed": 0.3819,
-        "mol_wt": 273.3,
-        "logp": -1.05,
-        "tpsa": 85.3,
-        "fsp3": 0.667,
-        "aromatic_rings": 0,
-        "hbd": 1,
-        "hba": 6,
-        "rot_bonds": 11
-      },
-      "novelty_nn_tanimoto": 0.3889
-    },
-    {
-      "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
-      "score": 0.45,
-      "subscores": {
-        "solubility": 0.75,
-        "stability": 0.85,
-        "cleavability": 0.5,
-        "synthesizability": 0.85,
-        "size": 1.0,
-        "flexibility": 0.5
-      },
-      "descriptors": {
-        "qed": 0.15,
-        "mol_wt": 273.28,
-        "logp": 1.0,
-        "tpsa": 95.0,
-        "fsp3": 0.5,
-        "aromatic_rings": 1,
-        "hbd": 2,
-        "hba": 4,
-        "rot_bonds": 11
-      },
-      "physchem": {
-        "qed": 0.3819,
-        "mol_wt": 273.3,
-        "logp": -1.05,
-        "tpsa": 85.3,
-        "fsp3": 0.667,
-        "aromatic_rings": 0,
-        "hbd": 1,
-        "hba": 6,
-        "rot_bonds": 11
-      },
-      "novelty_nn_tanimoto": 0.3889
-    },
-    {
-      "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
-      "score": 0.45,
-      "subscores": {
-        "solubility": 0.75,
-        "stability": 0.85,
-        "cleavability": 0.5,
-        "synthesizability": 0.85,
-        "size": 1.0,
-        "flexibility": 0.5
-      },
-      "descriptors": {
-        "qed": 0.15,
-        "mol_wt": 273.28,
-        "logp": 1.0,
-        "tpsa": 95.0,
-        "fsp3": 0.5,
-        "aromatic_rings": 1,
-        "hbd": 2,
-        "hba": 4,
-        "rot_bonds": 11
-      },
-      "physchem": {
-        "qed": 0.3819,
-        "mol_wt": 273.3,
-        "logp": -1.05,
-        "tpsa": 85.3,
-        "fsp3": 0.667,
-        "aromatic_rings": 0,
-        "hbd": 1,
-        "hba": 6,
-        "rot_bonds": 11
-      },
-      "novelty_nn_tanimoto": 0.3889
-    },
-    {
-      "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
-      "score": 0.45,
-      "subscores": {
-        "solubility": 0.75,
-        "stability": 0.85,
-        "cleavability": 0.5,
-        "synthesizability": 0.85,
-        "size": 1.0,
-        "flexibility": 0.5
-      },
-      "descriptors": {
-        "qed": 0.15,
-        "mol_wt": 273.28,
-        "logp": 1.0,
-        "tpsa": 95.0,
-        "fsp3": 0.5,
-        "aromatic_rings": 1,
-        "hbd": 2,
-        "hba": 4,
-        "rot_bonds": 11
-      },
-      "physchem": {
-        "qed": 0.3819,
-        "mol_wt": 273.3,
-        "logp": -1.05,
-        "tpsa": 85.3,
-        "fsp3": 0.667,
-        "aromatic_rings": 0,
-        "hbd": 1,
-        "hba": 6,
-        "rot_bonds": 11
-      },
-      "novelty_nn_tanimoto": 0.3889
-    },
-    {
-      "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
-      "score": 0.45,
-      "subscores": {
-        "solubility": 0.75,
-        "stability": 0.85,
-        "cleavability": 0.5,
-        "synthesizability": 0.85,
-        "size": 1.0,
-        "flexibility": 0.5
-      },
-      "descriptors": {
-        "qed": 0.15,
-        "mol_wt": 273.28,
-        "logp": 1.0,
-        "tpsa": 95.0,
-        "fsp3": 0.5,
-        "aromatic_rings": 1,
-        "hbd": 2,
-        "hba": 4,
-        "rot_bonds": 11
-      },
-      "physchem": {
-        "qed": 0.3819,
-        "mol_wt": 273.3,
-        "logp": -1.05,
-        "tpsa": 85.3,
-        "fsp3": 0.667,
-        "aromatic_rings": 0,
-        "hbd": 1,
-        "hba": 6,
-        "rot_bonds": 11
-      },
-      "novelty_nn_tanimoto": 0.3889
-    },
-    {
-      "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
-      "score": 0.45,
-      "subscores": {
-        "solubility": 0.75,
-        "stability": 0.85,
-        "cleavability": 0.5,
-        "synthesizability": 0.85,
-        "size": 1.0,
-        "flexibility": 0.5
-      },
-      "descriptors": {
-        "qed": 0.15,
-        "mol_wt": 273.28,
-        "logp": 1.0,
-        "tpsa": 95.0,
-        "fsp3": 0.5,
-        "aromatic_rings": 1,
-        "hbd": 2,
-        "hba": 4,
-        "rot_bonds": 11
-      },
-      "physchem": {
-        "qed": 0.3819,
-        "mol_wt": 273.3,
-        "logp": -1.05,
-        "tpsa": 85.3,
-        "fsp3": 0.667,
-        "aromatic_rings": 0,
-        "hbd": 1,
-        "hba": 6,
-        "rot_bonds": 11
-      },
-      "novelty_nn_tanimoto": 0.3889
-    },
-    {
-      "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
-      "score": 0.45,
-      "subscores": {
-        "solubility": 0.75,
-        "stability": 0.85,
-        "cleavability": 0.5,
-        "synthesizability": 0.85,
-        "size": 1.0,
-        "flexibility": 0.5
-      },
-      "descriptors": {
-        "qed": 0.15,
-        "mol_wt": 273.28,
-        "logp": 1.0,
-        "tpsa": 95.0,
-        "fsp3": 0.5,
-        "aromatic_rings": 1,
-        "hbd": 2,
-        "hba": 4,
-        "rot_bonds": 11
-      },
-      "physchem": {
-        "qed": 0.3819,
-        "mol_wt": 273.3,
-        "logp": -1.05,
-        "tpsa": 85.3,
-        "fsp3": 0.667,
-        "aromatic_rings": 0,
-        "hbd": 1,
-        "hba": 6,
-        "rot_bonds": 11
-      },
-      "novelty_nn_tanimoto": 0.3889
-    },
-    {
-      "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
-      "score": 0.45,
-      "subscores": {
-        "solubility": 0.75,
-        "stability": 0.85,
-        "cleavability": 0.5,
-        "synthesizability": 0.85,
-        "size": 1.0,
-        "flexibility": 0.5
-      },
-      "descriptors": {
-        "qed": 0.15,
-        "mol_wt": 273.28,
-        "logp": 1.0,
-        "tpsa": 95.0,
-        "fsp3": 0.5,
-        "aromatic_rings": 1,
-        "hbd": 2,
-        "hba": 4,
-        "rot_bonds": 11
-      },
-      "physchem": {
-        "qed": 0.3819,
-        "mol_wt": 273.3,
-        "logp": -1.05,
-        "tpsa": 85.3,
-        "fsp3": 0.667,
-        "aromatic_rings": 0,
-        "hbd": 1,
-        "hba": 6,
-        "rot_bonds": 11
-      },
-      "novelty_nn_tanimoto": 0.3889
-    },
-    {
-      "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
-      "score": 0.45,
-      "subscores": {
-        "solubility": 0.75,
-        "stability": 0.85,
-        "cleavability": 0.5,
-        "synthesizability": 0.85,
-        "size": 1.0,
-        "flexibility": 0.5
-      },
-      "descriptors": {
-        "qed": 0.15,
-        "mol_wt": 273.28,
-        "logp": 1.0,
-        "tpsa": 95.0,
-        "fsp3": 0.5,
-        "aromatic_rings": 1,
-        "hbd": 2,
-        "hba": 4,
-        "rot_bonds": 11
-      },
-      "physchem": {
-        "qed": 0.3819,
-        "mol_wt": 273.3,
-        "logp": -1.05,
-        "tpsa": 85.3,
-        "fsp3": 0.667,
-        "aromatic_rings": 0,
-        "hbd": 1,
-        "hba": 6,
-        "rot_bonds": 11
-      },
-      "novelty_nn_tanimoto": 0.3889
-    },
-    {
-      "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
-      "score": 0.45,
-      "subscores": {
-        "solubility": 0.75,
-        "stability": 0.85,
-        "cleavability": 0.5,
-        "synthesizability": 0.85,
-        "size": 1.0,
-        "flexibility": 0.5
-      },
-      "descriptors": {
-        "qed": 0.15,
-        "mol_wt": 273.28,
-        "logp": 1.0,
-        "tpsa": 95.0,
-        "fsp3": 0.5,
-        "aromatic_rings": 1,
-        "hbd": 2,
-        "hba": 4,
-        "rot_bonds": 11
-      },
-      "physchem": {
-        "qed": 0.3819,
-        "mol_wt": 273.3,
-        "logp": -1.05,
-        "tpsa": 85.3,
-        "fsp3": 0.667,
-        "aromatic_rings": 0,
-        "hbd": 1,
-        "hba": 6,
-        "rot_bonds": 11
-      },
-      "novelty_nn_tanimoto": 0.3889
-    },
-    {
-      "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
-      "score": 0.45,
-      "subscores": {
-        "solubility": 0.75,
-        "stability": 0.85,
-        "cleavability": 0.5,
-        "synthesizability": 0.85,
-        "size": 1.0,
-        "flexibility": 0.5
-      },
-      "descriptors": {
-        "qed": 0.15,
-        "mol_wt": 273.28,
-        "logp": 1.0,
-        "tpsa": 95.0,
-        "fsp3": 0.5,
-        "aromatic_rings": 1,
-        "hbd": 2,
-        "hba": 4,
-        "rot_bonds": 11
-      },
-      "physchem": {
-        "qed": 0.3819,
-        "mol_wt": 273.3,
-        "logp": -1.05,
-        "tpsa": 85.3,
-        "fsp3": 0.667,
-        "aromatic_rings": 0,
-        "hbd": 1,
-        "hba": 6,
-        "rot_bonds": 11
-      },
-      "novelty_nn_tanimoto": 0.3889
-    },
-    {
-      "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
-      "score": 0.45,
-      "subscores": {
-        "solubility": 0.75,
-        "stability": 0.85,
-        "cleavability": 0.5,
-        "synthesizability": 0.85,
-        "size": 1.0,
-        "flexibility": 0.5
-      },
-      "descriptors": {
-        "qed": 0.15,
-        "mol_wt": 273.28,
-        "logp": 1.0,
-        "tpsa": 95.0,
-        "fsp3": 0.5,
-        "aromatic_rings": 1,
-        "hbd": 2,
-        "hba": 4,
-        "rot_bonds": 11
-      },
-      "physchem": {
-        "qed": 0.3819,
-        "mol_wt": 273.3,
-        "logp": -1.05,
-        "tpsa": 85.3,
-        "fsp3": 0.667,
-        "aromatic_rings": 0,
-        "hbd": 1,
-        "hba": 6,
-        "rot_bonds": 11
-      },
-      "novelty_nn_tanimoto": 0.3889
-    },
-    {
-      "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
-      "score": 0.45,
-      "subscores": {
-        "solubility": 0.75,
-        "stability": 0.85,
-        "cleavability": 0.5,
-        "synthesizability": 0.85,
-        "size": 1.0,
-        "flexibility": 0.5
-      },
-      "descriptors": {
-        "qed": 0.15,
-        "mol_wt": 273.28,
-        "logp": 1.0,
-        "tpsa": 95.0,
-        "fsp3": 0.5,
-        "aromatic_rings": 1,
-        "hbd": 2,
-        "hba": 4,
-        "rot_bonds": 11
-      },
-      "physchem": {
-        "qed": 0.3819,
-        "mol_wt": 273.3,
-        "logp": -1.05,
-        "tpsa": 85.3,
-        "fsp3": 0.667,
-        "aromatic_rings": 0,
-        "hbd": 1,
-        "hba": 6,
-        "rot_bonds": 11
-      },
-      "novelty_nn_tanimoto": 0.3889
-    },
-    {
-      "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
-      "score": 0.45,
-      "subscores": {
-        "solubility": 0.75,
-        "stability": 0.85,
-        "cleavability": 0.5,
-        "synthesizability": 0.85,
-        "size": 1.0,
-        "flexibility": 0.5
-      },
-      "descriptors": {
-        "qed": 0.15,
-        "mol_wt": 273.28,
-        "logp": 1.0,
-        "tpsa": 95.0,
-        "fsp3": 0.5,
-        "aromatic_rings": 1,
-        "hbd": 2,
-        "hba": 4,
-        "rot_bonds": 11
-      },
-      "physchem": {
-        "qed": 0.3819,
-        "mol_wt": 273.3,
-        "logp": -1.05,
-        "tpsa": 85.3,
-        "fsp3": 0.667,
-        "aromatic_rings": 0,
-        "hbd": 1,
-        "hba": 6,
-        "rot_bonds": 11
-      },
-      "novelty_nn_tanimoto": 0.3889
-    },
-    {
-      "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
-      "score": 0.45,
-      "subscores": {
-        "solubility": 0.75,
-        "stability": 0.85,
-        "cleavability": 0.5,
-        "synthesizability": 0.85,
-        "size": 1.0,
-        "flexibility": 0.5
-      },
-      "descriptors": {
-        "qed": 0.15,
-        "mol_wt": 273.28,
-        "logp": 1.0,
-        "tpsa": 95.0,
-        "fsp3": 0.5,
-        "aromatic_rings": 1,
-        "hbd": 2,
-        "hba": 4,
-        "rot_bonds": 11
-      },
-      "physchem": {
-        "qed": 0.3819,
-        "mol_wt": 273.3,
-        "logp": -1.05,
-        "tpsa": 85.3,
-        "fsp3": 0.667,
-        "aromatic_rings": 0,
-        "hbd": 1,
-        "hba": 6,
-        "rot_bonds": 11
-      },
-      "novelty_nn_tanimoto": 0.3889
-    },
-    {
-      "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
-      "score": 0.45,
-      "subscores": {
-        "solubility": 0.75,
-        "stability": 0.85,
-        "cleavability": 0.5,
-        "synthesizability": 0.85,
-        "size": 1.0,
-        "flexibility": 0.5
-      },
-      "descriptors": {
-        "qed": 0.15,
-        "mol_wt": 273.28,
-        "logp": 1.0,
-        "tpsa": 95.0,
-        "fsp3": 0.5,
-        "aromatic_rings": 1,
-        "hbd": 2,
-        "hba": 4,
-        "rot_bonds": 11
-      },
-      "physchem": {
-        "qed": 0.3819,
-        "mol_wt": 273.3,
-        "logp": -1.05,
-        "tpsa": 85.3,
-        "fsp3": 0.667,
-        "aromatic_rings": 0,
-        "hbd": 1,
-        "hba": 6,
-        "rot_bonds": 11
-      },
-      "novelty_nn_tanimoto": 0.3889
-    },
-    {
-      "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
-      "score": 0.45,
-      "subscores": {
-        "solubility": 0.75,
-        "stability": 0.85,
-        "cleavability": 0.5,
-        "synthesizability": 0.85,
-        "size": 1.0,
-        "flexibility": 0.5
-      },
-      "descriptors": {
-        "qed": 0.15,
-        "mol_wt": 273.28,
-        "logp": 1.0,
-        "tpsa": 95.0,
-        "fsp3": 0.5,
-        "aromatic_rings": 1,
-        "hbd": 2,
-        "hba": 4,
-        "rot_bonds": 11
-      },
-      "physchem": {
-        "qed": 0.3819,
-        "mol_wt": 273.3,
-        "logp": -1.05,
-        "tpsa": 85.3,
-        "fsp3": 0.667,
-        "aromatic_rings": 0,
-        "hbd": 1,
-        "hba": 6,
-        "rot_bonds": 11
-      },
-      "novelty_nn_tanimoto": 0.3889
-    },
-    {
-      "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
-      "score": 0.45,
-      "subscores": {
-        "solubility": 0.75,
-        "stability": 0.85,
-        "cleavability": 0.5,
-        "synthesizability": 0.85,
-        "size": 1.0,
-        "flexibility": 0.5
-      },
-      "descriptors": {
-        "qed": 0.15,
-        "mol_wt": 273.28,
-        "logp": 1.0,
-        "tpsa": 95.0,
-        "fsp3": 0.5,
-        "aromatic_rings": 1,
-        "hbd": 2,
-        "hba": 4,
-        "rot_bonds": 11
-      },
-      "physchem": {
-        "qed": 0.3819,
-        "mol_wt": 273.3,
-        "logp": -1.05,
-        "tpsa": 85.3,
-        "fsp3": 0.667,
-        "aromatic_rings": 0,
-        "hbd": 1,
-        "hba": 6,
-        "rot_bonds": 11
-      },
-      "novelty_nn_tanimoto": 0.3889
-    },
-    {
-      "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
-      "score": 0.45,
-      "subscores": {
-        "solubility": 0.75,
-        "stability": 0.85,
-        "cleavability": 0.5,
-        "synthesizability": 0.85,
-        "size": 1.0,
-        "flexibility": 0.5
-      },
-      "descriptors": {
-        "qed": 0.15,
-        "mol_wt": 273.28,
-        "logp": 1.0,
-        "tpsa": 95.0,
-        "fsp3": 0.5,
-        "aromatic_rings": 1,
-        "hbd": 2,
-        "hba": 4,
-        "rot_bonds": 11
-      },
-      "physchem": {
-        "qed": 0.3819,
-        "mol_wt": 273.3,
-        "logp": -1.05,
-        "tpsa": 85.3,
-        "fsp3": 0.667,
-        "aromatic_rings": 0,
-        "hbd": 1,
-        "hba": 6,
-        "rot_bonds": 11
-      },
-      "novelty_nn_tanimoto": 0.3889
-    },
-    {
-      "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
-      "score": 0.45,
-      "subscores": {
-        "solubility": 0.75,
-        "stability": 0.85,
-        "cleavability": 0.5,
-        "synthesizability": 0.85,
-        "size": 1.0,
-        "flexibility": 0.5
-      },
-      "descriptors": {
-        "qed": 0.15,
-        "mol_wt": 273.28,
-        "logp": 1.0,
-        "tpsa": 95.0,
-        "fsp3": 0.5,
-        "aromatic_rings": 1,
-        "hbd": 2,
-        "hba": 4,
-        "rot_bonds": 11
-      },
-      "physchem": {
-        "qed": 0.3819,
-        "mol_wt": 273.3,
-        "logp": -1.05,
-        "tpsa": 85.3,
-        "fsp3": 0.667,
-        "aromatic_rings": 0,
-        "hbd": 1,
-        "hba": 6,
-        "rot_bonds": 11
-      },
-      "novelty_nn_tanimoto": 0.3889
-    },
-    {
-      "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
-      "score": 0.45,
-      "subscores": {
-        "solubility": 0.75,
-        "stability": 0.85,
-        "cleavability": 0.5,
-        "synthesizability": 0.85,
-        "size": 1.0,
-        "flexibility": 0.5
-      },
-      "descriptors": {
-        "qed": 0.15,
-        "mol_wt": 273.28,
-        "logp": 1.0,
-        "tpsa": 95.0,
-        "fsp3": 0.5,
-        "aromatic_rings": 1,
-        "hbd": 2,
-        "hba": 4,
-        "rot_bonds": 11
-      },
-      "physchem": {
-        "qed": 0.3819,
-        "mol_wt": 273.3,
-        "logp": -1.05,
-        "tpsa": 85.3,
-        "fsp3": 0.667,
-        "aromatic_rings": 0,
-        "hbd": 1,
-        "hba": 6,
-        "rot_bonds": 11
-      },
-      "novelty_nn_tanimoto": 0.3889
-    },
-    {
-      "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
-      "score": 0.45,
-      "subscores": {
-        "solubility": 0.75,
-        "stability": 0.85,
-        "cleavability": 0.5,
-        "synthesizability": 0.85,
-        "size": 1.0,
-        "flexibility": 0.5
-      },
-      "descriptors": {
-        "qed": 0.15,
-        "mol_wt": 273.28,
-        "logp": 1.0,
-        "tpsa": 95.0,
-        "fsp3": 0.5,
-        "aromatic_rings": 1,
-        "hbd": 2,
-        "hba": 4,
-        "rot_bonds": 11
-      },
-      "physchem": {
-        "qed": 0.3819,
-        "mol_wt": 273.3,
-        "logp": -1.05,
-        "tpsa": 85.3,
-        "fsp3": 0.667,
-        "aromatic_rings": 0,
-        "hbd": 1,
-        "hba": 6,
-        "rot_bonds": 11
-      },
-      "novelty_nn_tanimoto": 0.3889
-    },
-    {
-      "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
-      "score": 0.45,
-      "subscores": {
-        "solubility": 0.75,
-        "stability": 0.85,
-        "cleavability": 0.5,
-        "synthesizability": 0.85,
-        "size": 1.0,
-        "flexibility": 0.5
-      },
-      "descriptors": {
-        "qed": 0.15,
-        "mol_wt": 273.28,
-        "logp": 1.0,
-        "tpsa": 95.0,
-        "fsp3": 0.5,
-        "aromatic_rings": 1,
-        "hbd": 2,
-        "hba": 4,
-        "rot_bonds": 11
-      },
-      "physchem": {
-        "qed": 0.3819,
-        "mol_wt": 273.3,
-        "logp": -1.05,
-        "tpsa": 85.3,
-        "fsp3": 0.667,
-        "aromatic_rings": 0,
-        "hbd": 1,
-        "hba": 6,
-        "rot_bonds": 11
-      },
-      "novelty_nn_tanimoto": 0.3889
-    },
-    {
-      "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
-      "score": 0.45,
-      "subscores": {
-        "solubility": 0.75,
-        "stability": 0.85,
-        "cleavability": 0.5,
-        "synthesizability": 0.85,
-        "size": 1.0,
-        "flexibility": 0.5
-      },
-      "descriptors": {
-        "qed": 0.15,
-        "mol_wt": 273.28,
-        "logp": 1.0,
-        "tpsa": 95.0,
-        "fsp3": 0.5,
-        "aromatic_rings": 1,
-        "hbd": 2,
-        "hba": 4,
-        "rot_bonds": 11
-      },
-      "physchem": {
-        "qed": 0.3819,
-        "mol_wt": 273.3,
-        "logp": -1.05,
-        "tpsa": 85.3,
-        "fsp3": 0.667,
-        "aromatic_rings": 0,
-        "hbd": 1,
-        "hba": 6,
-        "rot_bonds": 11
-      },
-      "novelty_nn_tanimoto": 0.3889
-    },
-    {
-      "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
-      "score": 0.45,
-      "subscores": {
-        "solubility": 0.75,
-        "stability": 0.85,
-        "cleavability": 0.5,
-        "synthesizability": 0.85,
-        "size": 1.0,
-        "flexibility": 0.5
-      },
-      "descriptors": {
-        "qed": 0.15,
-        "mol_wt": 273.28,
-        "logp": 1.0,
-        "tpsa": 95.0,
-        "fsp3": 0.5,
-        "aromatic_rings": 1,
-        "hbd": 2,
-        "hba": 4,
-        "rot_bonds": 11
-      },
-      "physchem": {
-        "qed": 0.3819,
-        "mol_wt": 273.3,
-        "logp": -1.05,
-        "tpsa": 85.3,
-        "fsp3": 0.667,
-        "aromatic_rings": 0,
-        "hbd": 1,
-        "hba": 6,
-        "rot_bonds": 11
-      },
-      "novelty_nn_tanimoto": 0.3889
-    },
-    {
-      "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
-      "score": 0.45,
-      "subscores": {
-        "solubility": 0.75,
-        "stability": 0.85,
-        "cleavability": 0.5,
-        "synthesizability": 0.85,
-        "size": 1.0,
-        "flexibility": 0.5
-      },
-      "descriptors": {
-        "qed": 0.15,
-        "mol_wt": 273.28,
-        "logp": 1.0,
-        "tpsa": 95.0,
-        "fsp3": 0.5,
-        "aromatic_rings": 1,
-        "hbd": 2,
-        "hba": 4,
-        "rot_bonds": 11
-      },
-      "physchem": {
-        "qed": 0.3819,
-        "mol_wt": 273.3,
-        "logp": -1.05,
-        "tpsa": 85.3,
-        "fsp3": 0.667,
-        "aromatic_rings": 0,
-        "hbd": 1,
-        "hba": 6,
-        "rot_bonds": 11
-      },
-      "novelty_nn_tanimoto": 0.3889
-    },
-    {
-      "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
-      "score": 0.45,
-      "subscores": {
-        "solubility": 0.75,
-        "stability": 0.85,
-        "cleavability": 0.5,
-        "synthesizability": 0.85,
-        "size": 1.0,
-        "flexibility": 0.5
-      },
-      "descriptors": {
-        "qed": 0.15,
-        "mol_wt": 273.28,
-        "logp": 1.0,
-        "tpsa": 95.0,
-        "fsp3": 0.5,
-        "aromatic_rings": 1,
-        "hbd": 2,
-        "hba": 4,
-        "rot_bonds": 11
-      },
-      "physchem": {
-        "qed": 0.3819,
-        "mol_wt": 273.3,
-        "logp": -1.05,
-        "tpsa": 85.3,
-        "fsp3": 0.667,
-        "aromatic_rings": 0,
-        "hbd": 1,
-        "hba": 6,
-        "rot_bonds": 11
-      },
-      "novelty_nn_tanimoto": 0.3889
-    },
-    {
-      "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
-      "score": 0.45,
-      "subscores": {
-        "solubility": 0.75,
-        "stability": 0.85,
-        "cleavability": 0.5,
-        "synthesizability": 0.85,
-        "size": 1.0,
-        "flexibility": 0.5
-      },
-      "descriptors": {
-        "qed": 0.15,
-        "mol_wt": 273.28,
-        "logp": 1.0,
-        "tpsa": 95.0,
-        "fsp3": 0.5,
-        "aromatic_rings": 1,
-        "hbd": 2,
-        "hba": 4,
-        "rot_bonds": 11
-      },
-      "physchem": {
-        "qed": 0.3819,
-        "mol_wt": 273.3,
-        "logp": -1.05,
-        "tpsa": 85.3,
-        "fsp3": 0.667,
-        "aromatic_rings": 0,
-        "hbd": 1,
-        "hba": 6,
-        "rot_bonds": 11
-      },
-      "novelty_nn_tanimoto": 0.3889
-    },
-    {
-      "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
-      "score": 0.45,
-      "subscores": {
-        "solubility": 0.75,
-        "stability": 0.85,
-        "cleavability": 0.5,
-        "synthesizability": 0.85,
-        "size": 1.0,
-        "flexibility": 0.5
-      },
-      "descriptors": {
-        "qed": 0.15,
-        "mol_wt": 273.28,
-        "logp": 1.0,
-        "tpsa": 95.0,
-        "fsp3": 0.5,
-        "aromatic_rings": 1,
-        "hbd": 2,
-        "hba": 4,
-        "rot_bonds": 11
-      },
-      "physchem": {
-        "qed": 0.3819,
-        "mol_wt": 273.3,
-        "logp": -1.05,
-        "tpsa": 85.3,
-        "fsp3": 0.667,
-        "aromatic_rings": 0,
-        "hbd": 1,
-        "hba": 6,
-        "rot_bonds": 11
-      },
-      "novelty_nn_tanimoto": 0.3889
-    },
-    {
-      "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
-      "score": 0.45,
-      "subscores": {
-        "solubility": 0.75,
-        "stability": 0.85,
-        "cleavability": 0.5,
-        "synthesizability": 0.85,
-        "size": 1.0,
-        "flexibility": 0.5
-      },
-      "descriptors": {
-        "qed": 0.15,
-        "mol_wt": 273.28,
-        "logp": 1.0,
-        "tpsa": 95.0,
-        "fsp3": 0.5,
-        "aromatic_rings": 1,
-        "hbd": 2,
-        "hba": 4,
-        "rot_bonds": 11
-      },
-      "physchem": {
-        "qed": 0.3819,
-        "mol_wt": 273.3,
-        "logp": -1.05,
-        "tpsa": 85.3,
-        "fsp3": 0.667,
-        "aromatic_rings": 0,
-        "hbd": 1,
-        "hba": 6,
-        "rot_bonds": 11
-      },
-      "novelty_nn_tanimoto": 0.3889
-    },
-    {
-      "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
-      "score": 0.45,
-      "subscores": {
-        "solubility": 0.75,
-        "stability": 0.85,
-        "cleavability": 0.5,
-        "synthesizability": 0.85,
-        "size": 1.0,
-        "flexibility": 0.5
-      },
-      "descriptors": {
-        "qed": 0.15,
-        "mol_wt": 273.28,
-        "logp": 1.0,
-        "tpsa": 95.0,
-        "fsp3": 0.5,
-        "aromatic_rings": 1,
-        "hbd": 2,
-        "hba": 4,
-        "rot_bonds": 11
-      },
-      "physchem": {
-        "qed": 0.3819,
-        "mol_wt": 273.3,
-        "logp": -1.05,
-        "tpsa": 85.3,
-        "fsp3": 0.667,
-        "aromatic_rings": 0,
-        "hbd": 1,
-        "hba": 6,
-        "rot_bonds": 11
-      },
-      "novelty_nn_tanimoto": 0.3889
-    },
-    {
-      "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
-      "score": 0.88,
-      "subscores": {
-        "solubility": 0.8410000000000001,
-        "stability": 0.85,
-        "cleavability": 0.15,
-        "synthesizability": 0.85,
-        "size": 1.0,
-        "flexibility": 0.5
-      },
-      "descriptors": {
-        "qed": 0.25,
-        "mol_wt": 273.28,
-        "logp": -1.73,
-        "tpsa": 252.3,
-        "fsp3": 0.5,
-        "aromatic_rings": 0,
-        "hbd": 2,
-        "hba": 4,
-        "rot_bonds": 11
-      },
-      "physchem": {
-        "qed": 0.3819,
-        "mol_wt": 273.3,
-        "logp": -1.05,
-        "tpsa": 85.3,
-        "fsp3": 0.667,
-        "aromatic_rings": 0,
-        "hbd": 1,
-        "hba": 6,
-        "rot_bonds": 11
-      },
-      "novelty_nn_tanimoto": 0.3889
-    },
-    {
-      "smiles": "O=C1C=CC(=O)N1c1ccc(CO)cc1",
-      "score": 0.88,
-      "subscores": {
-        "solubility": 0.7487,
-        "stability": 0.85,
-        "cleavability": 0.15,
-        "synthesizability": 0.85,
-        "size": 1.0,
-        "flexibility": 0.5
-      },
-      "descriptors": {
-        "qed": 0.25,
-        "mol_wt": 203.2,
-        "logp": -0.08,
-        "tpsa": 224.61,
-        "fsp3": 0.5,
-        "aromatic_rings": 1,
-        "hbd": 2,
-        "hba": 4,
-        "rot_bonds": 2
-      },
-      "physchem": {
-        "qed": 0.7162,
-        "mol_wt": 203.2,
-        "logp": 0.61,
-        "tpsa": 57.6,
-        "fsp3": 0.091,
-        "aromatic_rings": 1,
-        "hbd": 1,
-        "hba": 3,
-        "rot_bonds": 2
-      },
-      "novelty_nn_tanimoto": 0.2931
-    },
-    {
-      "smiles": "O=C1C=CC(=O)N1CCCC(=O)NC(C(C)C)C(=O)N",
-      "score": 0.8,
-      "subscores": {
-        "solubility": 0.9218999999999999,
-        "stability": 0.85,
-        "cleavability": 0.15,
+        "flexibility": 0.7914,
         "synthesizability": 0.65,
-        "size": 1.0,
-        "flexibility": 0.5
+        "cleavability": 0.4,
+        "stability": 0.85,
+        "similarity": 0.5
       },
-      "descriptors": {
-        "qed": 0.25,
-        "mol_wt": 281.31,
-        "logp": -1.37,
-        "tpsa": 276.57,
-        "fsp3": 0.5,
-        "aromatic_rings": 0,
-        "hbd": 2,
-        "hba": 4,
-        "rot_bonds": 7
-      },
+      "descriptors": {},
       "physchem": {
-        "qed": 0.6022,
-        "mol_wt": 281.3,
-        "logp": -0.68,
-        "tpsa": 109.6,
-        "fsp3": 0.538,
-        "aromatic_rings": 0,
-        "hbd": 2,
-        "hba": 4,
-        "rot_bonds": 7
+        "qed": 0.4999,
+        "mol_wt": 427.4,
+        "logp": -2.52,
+        "tpsa": 149.5,
+        "fsp3": 0.211,
+        "aromatic_rings": 2,
+        "hbd": 1,
+        "hba": 7,
+        "rot_bonds": 6
       },
-      "novelty_nn_tanimoto": 0.5172
+      "novelty_nn_tanimoto": 0.2917
     },
     {
-      "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
-      "score": 0.45,
+      "smiles": "O=C(CNC(=O)C(=O)N1C(=O)C=CC1=O)NC(=O)NC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O",
+      "score": 0.0811,
       "subscores": {
-        "solubility": 0.75,
-        "stability": 0.85,
-        "cleavability": 0.5,
-        "synthesizability": 0.85,
+        "solubility": 0.9764,
         "size": 1.0,
-        "flexibility": 0.5
+        "flexibility": 0.7914,
+        "synthesizability": 0.15,
+        "cleavability": 1.0,
+        "stability": 0.0,
+        "similarity": 0.5
       },
-      "descriptors": {
-        "qed": 0.15,
-        "mol_wt": 273.28,
-        "logp": 1.0,
-        "tpsa": 95.0,
-        "fsp3": 0.5,
-        "aromatic_rings": 1,
-        "hbd": 2,
-        "hba": 4,
-        "rot_bonds": 11
-      },
+      "descriptors": {},
       "physchem": {
-        "qed": 0.3819,
-        "mol_wt": 273.3,
-        "logp": -1.05,
-        "tpsa": 85.3,
-        "fsp3": 0.667,
-        "aromatic_rings": 0,
-        "hbd": 1,
-        "hba": 6,
-        "rot_bonds": 11
+        "qed": 0.1299,
+        "mol_wt": 550.4,
+        "logp": -4.71,
+        "tpsa": 258.2,
+        "fsp3": 0.318,
+        "aromatic_rings": 1,
+        "hbd": 7,
+        "hba": 13,
+        "rot_bonds": 6
       },
-      "novelty_nn_tanimoto": 0.3889
+      "novelty_nn_tanimoto": 0.3929
+    },
+    {
+      "smiles": "O=C(CNC(=O)NC(=O)C(=O)N1C(=O)C=CC1=O)NC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O",
+      "score": 0.0811,
+      "subscores": {
+        "solubility": 0.9764,
+        "size": 1.0,
+        "flexibility": 0.7914,
+        "synthesizability": 0.15,
+        "cleavability": 1.0,
+        "stability": 0.0,
+        "similarity": 0.5
+      },
+      "descriptors": {},
+      "physchem": {
+        "qed": 0.1299,
+        "mol_wt": 550.4,
+        "logp": -4.71,
+        "tpsa": 258.2,
+        "fsp3": 0.318,
+        "aromatic_rings": 1,
+        "hbd": 7,
+        "hba": 13,
+        "rot_bonds": 6
+      },
+      "novelty_nn_tanimoto": 0.3929
+    },
+    {
+      "smiles": "O=C(NC(=O)C(CO)NC(=O)N1C(=O)C=CC1=O)NC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O",
+      "score": 0.0804,
+      "subscores": {
+        "solubility": 0.9711,
+        "size": 1.0,
+        "flexibility": 0.7311,
+        "synthesizability": 0.15,
+        "cleavability": 1.0,
+        "stability": 0.0,
+        "similarity": 0.5
+      },
+      "descriptors": {},
+      "physchem": {
+        "qed": 0.1491,
+        "mol_wt": 552.4,
+        "logp": -4.29,
+        "tpsa": 261.4,
+        "fsp3": 0.364,
+        "aromatic_rings": 1,
+        "hbd": 8,
+        "hba": 13,
+        "rot_bonds": 7
+      },
+      "novelty_nn_tanimoto": 0.3765
+    },
+    {
+      "smiles": "O=C(NC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O)NC(CO)C(=O)NC(=O)N1C(=O)C=CC1=O",
+      "score": 0.0804,
+      "subscores": {
+        "solubility": 0.9711,
+        "size": 1.0,
+        "flexibility": 0.7311,
+        "synthesizability": 0.15,
+        "cleavability": 1.0,
+        "stability": 0.0,
+        "similarity": 0.5
+      },
+      "descriptors": {},
+      "physchem": {
+        "qed": 0.1491,
+        "mol_wt": 552.4,
+        "logp": -4.29,
+        "tpsa": 261.4,
+        "fsp3": 0.364,
+        "aromatic_rings": 1,
+        "hbd": 8,
+        "hba": 13,
+        "rot_bonds": 7
+      },
+      "novelty_nn_tanimoto": 0.3721
+    },
+    {
+      "smiles": "O=C(NC(=O)NC(CO)C(=O)N1C(=O)C=CC1=O)NC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O",
+      "score": 0.0804,
+      "subscores": {
+        "solubility": 0.9711,
+        "size": 1.0,
+        "flexibility": 0.7311,
+        "synthesizability": 0.15,
+        "cleavability": 1.0,
+        "stability": 0.0,
+        "similarity": 0.5
+      },
+      "descriptors": {},
+      "physchem": {
+        "qed": 0.1491,
+        "mol_wt": 552.4,
+        "logp": -4.29,
+        "tpsa": 261.4,
+        "fsp3": 0.364,
+        "aromatic_rings": 1,
+        "hbd": 8,
+        "hba": 13,
+        "rot_bonds": 7
+      },
+      "novelty_nn_tanimoto": 0.3721
+    },
+    {
+      "smiles": "O=C(NC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O)c1cnc(C(=O)NCC(=O)N2C(=O)C=CC2=O)c(O)c1",
+      "score": 0.0794,
+      "subscores": {
+        "solubility": 0.9558,
+        "size": 0.9989,
+        "flexibility": 0.6608,
+        "synthesizability": 0.15,
+        "cleavability": 1.0,
+        "stability": 0.0,
+        "similarity": 0.5
+      },
+      "descriptors": {},
+      "physchem": {
+        "qed": 0.1458,
+        "mol_wt": 600.5,
+        "logp": -3.4,
+        "tpsa": 262.2,
+        "fsp3": 0.269,
+        "aromatic_rings": 2,
+        "hbd": 7,
+        "hba": 14,
+        "rot_bonds": 8
+      },
+      "novelty_nn_tanimoto": 0.3474
+    },
+    {
+      "smiles": "O=C(NC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O)c1ccc(O)c(C(=O)NCC(=O)N2C(=O)C=CC2=O)n1",
+      "score": 0.0794,
+      "subscores": {
+        "solubility": 0.9558,
+        "size": 0.9989,
+        "flexibility": 0.6608,
+        "synthesizability": 0.15,
+        "cleavability": 1.0,
+        "stability": 0.0,
+        "similarity": 0.5
+      },
+      "descriptors": {},
+      "physchem": {
+        "qed": 0.1458,
+        "mol_wt": 600.5,
+        "logp": -3.4,
+        "tpsa": 262.2,
+        "fsp3": 0.269,
+        "aromatic_rings": 2,
+        "hbd": 7,
+        "hba": 14,
+        "rot_bonds": 8
+      },
+      "novelty_nn_tanimoto": 0.3404
+    },
+    {
+      "smiles": "O=C(NCC(=O)N1C(=O)C=CC1=O)c1cc(C(=O)NC(=O)C2OC(Oc3ccc(CO)cc3)C(O)C(O)C2O)c(O)cc1O",
+      "score": 0.0789,
+      "subscores": {
+        "solubility": 0.949,
+        "size": 0.9655,
+        "flexibility": 0.6608,
+        "synthesizability": 0.15,
+        "cleavability": 1.0,
+        "stability": 0.0,
+        "similarity": 0.5
+      },
+      "descriptors": {},
+      "physchem": {
+        "qed": 0.1369,
+        "mol_wt": 615.5,
+        "logp": -3.09,
+        "tpsa": 269.6,
+        "fsp3": 0.259,
+        "aromatic_rings": 2,
+        "hbd": 8,
+        "hba": 14,
+        "rot_bonds": 8
+      },
+      "novelty_nn_tanimoto": 0.3708
+    },
+    {
+      "smiles": "NC(CC(=O)NC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O)C(=O)NCC(=O)N1C(=O)C=CC1=O",
+      "score": 0.0789,
+      "subscores": {
+        "solubility": 0.9764,
+        "size": 1.0,
+        "flexibility": 0.5826,
+        "synthesizability": 0.15,
+        "cleavability": 1.0,
+        "stability": 0.0,
+        "similarity": 0.5
+      },
+      "descriptors": {},
+      "physchem": {
+        "qed": 0.1428,
+        "mol_wt": 550.5,
+        "logp": -4.71,
+        "tpsa": 255.1,
+        "fsp3": 0.391,
+        "aromatic_rings": 1,
+        "hbd": 7,
+        "hba": 13,
+        "rot_bonds": 9
+      },
+      "novelty_nn_tanimoto": 0.3708
+    },
+    {
+      "smiles": "NC(CC(=O)NCC(=O)NC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O)C(=O)N1C(=O)C=CC1=O",
+      "score": 0.0789,
+      "subscores": {
+        "solubility": 0.9764,
+        "size": 1.0,
+        "flexibility": 0.5826,
+        "synthesizability": 0.15,
+        "cleavability": 1.0,
+        "stability": 0.0,
+        "similarity": 0.5
+      },
+      "descriptors": {},
+      "physchem": {
+        "qed": 0.1428,
+        "mol_wt": 550.5,
+        "logp": -4.71,
+        "tpsa": 255.1,
+        "fsp3": 0.391,
+        "aromatic_rings": 1,
+        "hbd": 7,
+        "hba": 13,
+        "rot_bonds": 9
+      },
+      "novelty_nn_tanimoto": 0.375
+    },
+    {
+      "smiles": "CC(C)C(NC(=O)C(=O)NC(=O)NC(=O)CN1C(=O)C=CC1=O)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+      "score": 0.5136,
+      "subscores": {
+        "solubility": 0.9342,
+        "size": 0.932,
+        "flexibility": 0.2689,
+        "synthesizability": 0.15,
+        "cleavability": 1.0,
+        "stability": 0.85,
+        "similarity": 0.5
+      },
+      "descriptors": {},
+      "physchem": {
+        "qed": 0.0643,
+        "mol_wt": 630.6,
+        "logp": -2.53,
+        "tpsa": 275.3,
+        "fsp3": 0.37,
+        "aromatic_rings": 1,
+        "hbd": 8,
+        "hba": 10,
+        "rot_bonds": 13
+      },
+      "novelty_nn_tanimoto": 0.6974
+    },
+    {
+      "smiles": "CC(C)C(NC(=O)C(=O)NC(=O)CNC(=O)N1C(=O)C=CC1=O)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+      "score": 0.5136,
+      "subscores": {
+        "solubility": 0.9342,
+        "size": 0.932,
+        "flexibility": 0.2689,
+        "synthesizability": 0.15,
+        "cleavability": 1.0,
+        "stability": 0.85,
+        "similarity": 0.5
+      },
+      "descriptors": {},
+      "physchem": {
+        "qed": 0.0643,
+        "mol_wt": 630.6,
+        "logp": -2.53,
+        "tpsa": 275.3,
+        "fsp3": 0.37,
+        "aromatic_rings": 1,
+        "hbd": 8,
+        "hba": 10,
+        "rot_bonds": 13
+      },
+      "novelty_nn_tanimoto": 0.6538
+    },
+    {
+      "smiles": "CC(C)C(NC(=O)NC(=O)NC(=O)CNC(=O)N1C(=O)C=CC1=O)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+      "score": 0.5078,
+      "subscores": {
+        "solubility": 0.9071,
+        "size": 0.8986,
+        "flexibility": 0.2689,
+        "synthesizability": 0.15,
+        "cleavability": 1.0,
+        "stability": 0.85,
+        "similarity": 0.5
+      },
+      "descriptors": {},
+      "physchem": {
+        "qed": 0.086,
+        "mol_wt": 645.6,
+        "logp": -1.75,
+        "tpsa": 287.3,
+        "fsp3": 0.37,
+        "aromatic_rings": 1,
+        "hbd": 9,
+        "hba": 10,
+        "rot_bonds": 13
+      },
+      "novelty_nn_tanimoto": 0.6456
+    },
+    {
+      "smiles": "CC(C)C(NC(=O)C(=O)NC(=O)CNC(=O)CN1C(=O)C=CC1=O)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+      "score": 0.4897,
+      "subscores": {
+        "solubility": 0.9499,
+        "size": 0.9008,
+        "flexibility": 0.1589,
+        "synthesizability": 0.15,
+        "cleavability": 1.0,
+        "stability": 0.85,
+        "similarity": 0.5
+      },
+      "descriptors": {},
+      "physchem": {
+        "qed": 0.054,
+        "mol_wt": 644.6,
+        "logp": -3.12,
+        "tpsa": 275.3,
+        "fsp3": 0.393,
+        "aromatic_rings": 1,
+        "hbd": 8,
+        "hba": 10,
+        "rot_bonds": 15
+      },
+      "novelty_nn_tanimoto": 0.6883
+    },
+    {
+      "smiles": "CC(C)C(NC(=O)CC(=O)NC(=O)NC(=O)CN1C(=O)C=CC1=O)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+      "score": 0.4864,
+      "subscores": {
+        "solubility": 0.9216,
+        "size": 0.9008,
+        "flexibility": 0.1589,
+        "synthesizability": 0.15,
+        "cleavability": 1.0,
+        "stability": 0.85,
+        "similarity": 0.5
+      },
+      "descriptors": {},
+      "physchem": {
+        "qed": 0.0583,
+        "mol_wt": 644.6,
+        "logp": -2.14,
+        "tpsa": 275.3,
+        "fsp3": 0.393,
+        "aromatic_rings": 1,
+        "hbd": 8,
+        "hba": 10,
+        "rot_bonds": 15
+      },
+      "novelty_nn_tanimoto": 0.7297
+    },
+    {
+      "smiles": "CC(C)C(NC(=O)NC(=O)C(=O)NCC(=O)N1C(=O)C=CC1=O)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+      "score": 0.5136,
+      "subscores": {
+        "solubility": 0.9342,
+        "size": 0.932,
+        "flexibility": 0.2689,
+        "synthesizability": 0.15,
+        "cleavability": 1.0,
+        "stability": 0.85,
+        "similarity": 0.5
+      },
+      "descriptors": {},
+      "physchem": {
+        "qed": 0.0643,
+        "mol_wt": 630.6,
+        "logp": -2.53,
+        "tpsa": 275.3,
+        "fsp3": 0.37,
+        "aromatic_rings": 1,
+        "hbd": 8,
+        "hba": 10,
+        "rot_bonds": 13
+      },
+      "novelty_nn_tanimoto": 0.6329
+    },
+    {
+      "smiles": "CC(C)C(NC(=O)C(=O)NC(=O)NCC(=O)N1C(=O)C=CC1=O)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+      "score": 0.5136,
+      "subscores": {
+        "solubility": 0.9342,
+        "size": 0.932,
+        "flexibility": 0.2689,
+        "synthesizability": 0.15,
+        "cleavability": 1.0,
+        "stability": 0.85,
+        "similarity": 0.5
+      },
+      "descriptors": {},
+      "physchem": {
+        "qed": 0.0643,
+        "mol_wt": 630.6,
+        "logp": -2.53,
+        "tpsa": 275.3,
+        "fsp3": 0.37,
+        "aromatic_rings": 1,
+        "hbd": 8,
+        "hba": 10,
+        "rot_bonds": 13
+      },
+      "novelty_nn_tanimoto": 0.6329
+    },
+    {
+      "smiles": "CC(C)C(NC(=O)NCC(=O)NC(=O)C(=O)N1C(=O)C=CC1=O)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+      "score": 0.5136,
+      "subscores": {
+        "solubility": 0.9342,
+        "size": 0.932,
+        "flexibility": 0.2689,
+        "synthesizability": 0.15,
+        "cleavability": 1.0,
+        "stability": 0.85,
+        "similarity": 0.5
+      },
+      "descriptors": {},
+      "physchem": {
+        "qed": 0.0643,
+        "mol_wt": 630.6,
+        "logp": -2.53,
+        "tpsa": 275.3,
+        "fsp3": 0.37,
+        "aromatic_rings": 1,
+        "hbd": 8,
+        "hba": 10,
+        "rot_bonds": 13
+      },
+      "novelty_nn_tanimoto": 0.6456
+    },
+    {
+      "smiles": "CC(C)C(NC(=O)C(=O)NC(=O)C(=O)NCC(=O)N1C(=O)C=CC1=O)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+      "score": 0.5119,
+      "subscores": {
+        "solubility": 0.9598,
+        "size": 0.8697,
+        "flexibility": 0.2689,
+        "synthesizability": 0.15,
+        "cleavability": 1.0,
+        "stability": 0.85,
+        "similarity": 0.5
+      },
+      "descriptors": {},
+      "physchem": {
+        "qed": 0.0582,
+        "mol_wt": 658.6,
+        "logp": -3.6,
+        "tpsa": 292.4,
+        "fsp3": 0.357,
+        "aromatic_rings": 1,
+        "hbd": 8,
+        "hba": 11,
+        "rot_bonds": 13
+      },
+      "novelty_nn_tanimoto": 0.641
+    },
+    {
+      "smiles": "CC(C)C(NC(=O)NC(=O)NC(=O)NCC(=O)N1C(=O)C=CC1=O)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+      "score": 0.5078,
+      "subscores": {
+        "solubility": 0.9071,
+        "size": 0.8986,
+        "flexibility": 0.2689,
+        "synthesizability": 0.15,
+        "cleavability": 1.0,
+        "stability": 0.85,
+        "similarity": 0.5
+      },
+      "descriptors": {},
+      "physchem": {
+        "qed": 0.086,
+        "mol_wt": 645.6,
+        "logp": -1.75,
+        "tpsa": 287.3,
+        "fsp3": 0.37,
+        "aromatic_rings": 1,
+        "hbd": 9,
+        "hba": 10,
+        "rot_bonds": 13
+      },
+      "novelty_nn_tanimoto": 0.641
+    },
+    {
+      "smiles": "Nn1c(SCC(=O)N2C(=O)C=CC2=O)nnc(C(=O)NCc2ccccc2)c1=O",
+      "score": 0.7002,
+      "subscores": {
+        "solubility": 0.8811,
+        "size": 1.0,
+        "flexibility": 0.7914,
+        "synthesizability": 0.65,
+        "cleavability": 0.4,
+        "stability": 0.85,
+        "similarity": 0.5
+      },
+      "descriptors": {},
+      "physchem": {
+        "qed": 0.3373,
+        "mol_wt": 414.4,
+        "logp": -1.17,
+        "tpsa": 157.3,
+        "fsp3": 0.118,
+        "aromatic_rings": 2,
+        "hbd": 2,
+        "hba": 9,
+        "rot_bonds": 6
+      },
+      "novelty_nn_tanimoto": 0.2346
+    },
+    {
+      "smiles": "O=C(Cn1c(=O)[nH]c2cc(S(=O)(=O)N3C(=O)C=CC3=O)ccc2c1=O)NCc1ccccc1",
+      "score": 0.6899,
+      "subscores": {
+        "solubility": 0.8367,
+        "size": 1.0,
+        "flexibility": 0.7914,
+        "synthesizability": 0.65,
+        "cleavability": 0.4,
+        "stability": 0.85,
+        "similarity": 0.5
+      },
+      "descriptors": {},
+      "physchem": {
+        "qed": 0.4673,
+        "mol_wt": 468.4,
+        "logp": -0.38,
+        "tpsa": 155.5,
+        "fsp3": 0.095,
+        "aromatic_rings": 3,
+        "hbd": 2,
+        "hba": 7,
+        "rot_bonds": 6
+      },
+      "novelty_nn_tanimoto": 0.2561
+    },
+    {
+      "smiles": "O=C(Cn1c(=O)[nH]c(=O)c2cc(S(=O)(=O)N3C(=O)C=CC3=O)ccc21)NCc1ccccc1",
+      "score": 0.6899,
+      "subscores": {
+        "solubility": 0.8367,
+        "size": 1.0,
+        "flexibility": 0.7914,
+        "synthesizability": 0.65,
+        "cleavability": 0.4,
+        "stability": 0.85,
+        "similarity": 0.5
+      },
+      "descriptors": {},
+      "physchem": {
+        "qed": 0.4673,
+        "mol_wt": 468.4,
+        "logp": -0.38,
+        "tpsa": 155.5,
+        "fsp3": 0.095,
+        "aromatic_rings": 3,
+        "hbd": 2,
+        "hba": 7,
+        "rot_bonds": 6
+      },
+      "novelty_nn_tanimoto": 0.2561
+    },
+    {
+      "smiles": "Nc1nc(NCc2ccccc2)nnc1C(=O)OCC(=O)N1C(=O)C=CC1=O",
+      "score": 0.6891,
+      "subscores": {
+        "solubility": 0.8333,
+        "size": 1.0,
+        "flexibility": 0.7914,
+        "synthesizability": 0.65,
+        "cleavability": 0.4,
+        "stability": 0.85,
+        "similarity": 0.5
+      },
+      "descriptors": {},
+      "physchem": {
+        "qed": 0.5006,
+        "mol_wt": 382.3,
+        "logp": -0.33,
+        "tpsa": 157.5,
+        "fsp3": 0.118,
+        "aromatic_rings": 2,
+        "hbd": 2,
+        "hba": 10,
+        "rot_bonds": 6
+      },
+      "novelty_nn_tanimoto": 0.225
+    },
+    {
+      "smiles": "Nc1nc2c(cnn2CC(=O)NCc2ccccc2)c(=O)n1CCN1C(=O)C=CC1=O",
+      "score": 0.6866,
+      "subscores": {
+        "solubility": 0.8491,
+        "size": 1.0,
+        "flexibility": 0.7311,
+        "synthesizability": 0.65,
+        "cleavability": 0.4,
+        "stability": 0.85,
+        "similarity": 0.5
+      },
+      "descriptors": {},
+      "physchem": {
+        "qed": 0.4854,
+        "mol_wt": 421.4,
+        "logp": -0.58,
+        "tpsa": 145.2,
+        "fsp3": 0.2,
+        "aromatic_rings": 3,
+        "hbd": 2,
+        "hba": 7,
+        "rot_bonds": 7
+      },
+      "novelty_nn_tanimoto": 0.3165
+    },
+    {
+      "smiles": "O=C(CBr)NS(=O)(=O)NC(=O)CCS(=O)(=O)NCc1ccccc1",
+      "score": 0.8653,
+      "subscores": {
+        "solubility": 0.8519,
+        "size": 1.0,
+        "flexibility": 0.5826,
+        "synthesizability": 0.85,
+        "cleavability": 0.4,
+        "stability": 1.0,
+        "similarity": 0.5
+      },
+      "descriptors": {},
+      "physchem": {
+        "qed": 0.4355,
+        "mol_wt": 442.3,
+        "logp": -0.63,
+        "tpsa": 138.5,
+        "fsp3": 0.333,
+        "aromatic_rings": 1,
+        "hbd": 3,
+        "hba": 6,
+        "rot_bonds": 9
+      },
+      "novelty_nn_tanimoto": 0.2055
+    },
+    {
+      "smiles": "O=C(CBr)NS(=O)(=O)c1cnccc1C(=O)NS(=O)(=O)NCc1ccccc1",
+      "score": 0.8649,
+      "subscores": {
+        "solubility": 0.8086,
+        "size": 1.0,
+        "flexibility": 0.6608,
+        "synthesizability": 0.85,
+        "cleavability": 0.4,
+        "stability": 1.0,
+        "similarity": 0.5
+      },
+      "descriptors": {},
+      "physchem": {
+        "qed": 0.4415,
+        "mol_wt": 491.3,
+        "logp": 0.05,
+        "tpsa": 151.4,
+        "fsp3": 0.133,
+        "aromatic_rings": 2,
+        "hbd": 3,
+        "hba": 7,
+        "rot_bonds": 8
+      },
+      "novelty_nn_tanimoto": 0.2
+    },
+    {
+      "smiles": "O=C(CBr)NS(=O)(=O)c1ccc(S(=O)(=O)NCc2ccccc2)cc1S(=O)(=O)O",
+      "score": 0.8518,
+      "subscores": {
+        "solubility": 0.7668,
+        "size": 1.0,
+        "flexibility": 0.6608,
+        "synthesizability": 0.85,
+        "cleavability": 0.4,
+        "stability": 1.0,
+        "similarity": 0.5
+      },
+      "descriptors": {},
+      "physchem": {
+        "qed": 0.3321,
+        "mol_wt": 527.4,
+        "logp": 0.61,
+        "tpsa": 163.8,
+        "fsp3": 0.133,
+        "aromatic_rings": 2,
+        "hbd": 3,
+        "hba": 7,
+        "rot_bonds": 8
+      },
+      "novelty_nn_tanimoto": 0.194
+    },
+    {
+      "smiles": "O=C(CBr)NS(=O)(=O)c1ccc(S(=O)(=O)O)c(S(=O)(=O)NCc2ccccc2)c1",
+      "score": 0.8518,
+      "subscores": {
+        "solubility": 0.7668,
+        "size": 1.0,
+        "flexibility": 0.6608,
+        "synthesizability": 0.85,
+        "cleavability": 0.4,
+        "stability": 1.0,
+        "similarity": 0.5
+      },
+      "descriptors": {},
+      "physchem": {
+        "qed": 0.3321,
+        "mol_wt": 527.4,
+        "logp": 0.61,
+        "tpsa": 163.8,
+        "fsp3": 0.133,
+        "aromatic_rings": 2,
+        "hbd": 3,
+        "hba": 7,
+        "rot_bonds": 8
+      },
+      "novelty_nn_tanimoto": 0.1912
+    },
+    {
+      "smiles": "O=C(CBr)NS(=O)(=O)Nc1ccncc1S(=O)(=O)NCc1ccccc1",
+      "score": 0.8489,
+      "subscores": {
+        "solubility": 0.7577,
+        "size": 1.0,
+        "flexibility": 0.6608,
+        "synthesizability": 0.85,
+        "cleavability": 0.4,
+        "stability": 1.0,
+        "similarity": 0.5
+      },
+      "descriptors": {},
+      "physchem": {
+        "qed": 0.4945,
+        "mol_wt": 463.3,
+        "logp": 0.73,
+        "tpsa": 134.3,
+        "fsp3": 0.143,
+        "aromatic_rings": 2,
+        "hbd": 3,
+        "hba": 6,
+        "rot_bonds": 8
+      },
+      "novelty_nn_tanimoto": 0.2
+    },
+    {
+      "smiles": "O=C(CBr)NC(=O)NNC(=O)C(=O)NCC(=O)NC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O",
+      "score": 0.0803,
+      "subscores": {
+        "solubility": 0.9754,
+        "size": 0.9859,
+        "flexibility": 0.7311,
+        "synthesizability": 0.15,
+        "cleavability": 1.0,
+        "stability": 0.0,
+        "similarity": 0.5
+      },
+      "descriptors": {},
+      "physchem": {
+        "qed": 0.0807,
+        "mol_wt": 606.3,
+        "logp": -4.62,
+        "tpsa": 261.9,
+        "fsp3": 0.4,
+        "aromatic_rings": 1,
+        "hbd": 9,
+        "hba": 12,
+        "rot_bonds": 7
+      },
+      "novelty_nn_tanimoto": 0.3333
+    },
+    {
+      "smiles": "CC(NC(=O)C(=O)NC(=O)CBr)C(=O)NC(=O)NC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O",
+      "score": 0.0801,
+      "subscores": {
+        "solubility": 0.9624,
+        "size": 0.9881,
+        "flexibility": 0.7311,
+        "synthesizability": 0.15,
+        "cleavability": 1.0,
+        "stability": 0.0,
+        "similarity": 0.5
+      },
+      "descriptors": {},
+      "physchem": {
+        "qed": 0.1104,
+        "mol_wt": 605.4,
+        "logp": -3.74,
+        "tpsa": 249.9,
+        "fsp3": 0.429,
+        "aromatic_rings": 1,
+        "hbd": 8,
+        "hba": 12,
+        "rot_bonds": 7
+      },
+      "novelty_nn_tanimoto": 0.3077
+    },
+    {
+      "smiles": "CN(C(=O)NC(=O)CNC(=O)NC(=O)CBr)C(=O)NC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O",
+      "score": 0.0795,
+      "subscores": {
+        "solubility": 0.9471,
+        "size": 0.9547,
+        "flexibility": 0.7311,
+        "synthesizability": 0.15,
+        "cleavability": 1.0,
+        "stability": 0.0,
+        "similarity": 0.5
+      },
+      "descriptors": {},
+      "physchem": {
+        "qed": 0.142,
+        "mol_wt": 620.4,
+        "logp": -3.01,
+        "tpsa": 253.2,
+        "fsp3": 0.429,
+        "aromatic_rings": 1,
+        "hbd": 8,
+        "hba": 12,
+        "rot_bonds": 7
+      },
+      "novelty_nn_tanimoto": 0.3295
+    },
+    {
+      "smiles": "CC(NC(=O)NC(=O)NC(=O)NC(=O)CBr)C(=O)NC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O",
+      "score": 0.0794,
+      "subscores": {
+        "solubility": 0.946,
+        "size": 0.9547,
+        "flexibility": 0.7311,
+        "synthesizability": 0.15,
+        "cleavability": 1.0,
+        "stability": 0.0,
+        "similarity": 0.5
+      },
+      "descriptors": {},
+      "physchem": {
+        "qed": 0.1385,
+        "mol_wt": 620.4,
+        "logp": -2.96,
+        "tpsa": 261.9,
+        "fsp3": 0.429,
+        "aromatic_rings": 1,
+        "hbd": 9,
+        "hba": 12,
+        "rot_bonds": 7
+      },
+      "novelty_nn_tanimoto": 0.3182
+    },
+    {
+      "smiles": "O=C(CBr)NC(=O)CNC(=O)C(=O)NCC(=O)NC(=O)C1OC(Oc2ccc(CO)cc2)C(O)C(O)C1O",
+      "score": 0.0788,
+      "subscores": {
+        "solubility": 0.9765,
+        "size": 0.9881,
+        "flexibility": 0.5826,
+        "synthesizability": 0.15,
+        "cleavability": 1.0,
+        "stability": 0.0,
+        "similarity": 0.5
+      },
+      "descriptors": {},
+      "physchem": {
+        "qed": 0.0977,
+        "mol_wt": 605.4,
+        "logp": -4.72,
+        "tpsa": 249.9,
+        "fsp3": 0.429,
+        "aromatic_rings": 1,
+        "hbd": 8,
+        "hba": 12,
+        "rot_bonds": 9
+      },
+      "novelty_nn_tanimoto": 0.3537
     }
   ]
 }

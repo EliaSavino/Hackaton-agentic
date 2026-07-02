@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.7.2)  2 JUL 2026 13:05
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.7.2)  2 JUL 2026 14:48
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -501,10 +501,47 @@ LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 1
 (/usr/share/texlive/texmf-dist/tex/latex/base/t1cmtt.fd
 File: t1cmtt.fd 2023/04/13 v2.5m Standard LaTeX font definitions
 )
-Overfull \vbox (262.11871pt too high) has occurred while \output is active []
+Overfull \hbox (16.85855pt too wide) in paragraph at lines 107--108
+[]|\T1/cmtt/m/n/10 CC(=O)NC(=O)c1c(C(=O)NCc2ccccc2)[nH]c(=O)n(CCON)c1=O| 
+ []
 
 
-[2 <./figures/fig_context_bars.png>] [3 <./figures/fig_novelty.png>]
+Overfull \hbox (16.85855pt too wide) in paragraph at lines 118--119
+[]|\T1/cmtt/m/n/10 Cc1nnc(Nc2ccc(S(=O)(=O)NC(=O)C(=O)NCc3ccccc3)cc2)nn1| 
+ []
+
+
+Overfull \hbox (11.60983pt too wide) in paragraph at lines 119--120
+[]|\T1/cmtt/m/n/10 Cc1nnc(Nc2ccc(S(=O)(=O)NS(=O)(=O)NCc3ccccc3)cc2)nn1| 
+ []
+
+
+Overfull \hbox (22.10727pt too wide) in paragraph at lines 120--121
+[]|\T1/cmtt/m/n/10 Cc1nnc(Nc2cc(S(=O)(=O)O)cc(S(=O)(=O)NCc3ccccc3)c2)nn1| 
+ []
+
+
+Overfull \hbox (22.10727pt too wide) in paragraph at lines 121--122
+[]|\T1/cmtt/m/n/10 Cc1nnc(Nc2ccc(S(=O)(=O)O)c(S(=O)(=O)NCc3ccccc3)c2)nn1| 
+ []
+
+
+Overfull \hbox (11.60983pt too wide) in paragraph at lines 124--125
+[]|\T1/cmtt/m/n/10 O=C(CBr)NS(=O)(=O)c1cnccc1C(=O)NS(=O)(=O)NCc1ccccc1| 
+ []
+
+
+Overfull \hbox (43.10214pt too wide) in paragraph at lines 125--126
+[]|\T1/cmtt/m/n/10 O=C(CBr)NS(=O)(=O)c1ccc(S(=O)(=O)NCc2ccccc2)cc1S(=O)(=O)O| 
+ []
+
+
+Overfull \hbox (53.59958pt too wide) in paragraph at lines 126--127
+[]|\T1/cmtt/m/n/10 O=C(CBr)NS(=O)(=O)c1ccc(S(=O)(=O)O)c(S(=O)(=O)NCc2ccccc2)c1|
+ 
+ []
+
+[2 <./figures/fig_context_bars.png>] [3] [4 <./figures/fig_novelty.png>]
 (./adc_linker_study3_supp.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
@@ -515,13 +552,13 @@ Package rerunfilecheck Info: File `adc_linker_study3_supp.out' has not changed.
 (rerunfilecheck)             Checksum: 8FAE1914198E6B65843982543FF0ED28;1697.
  ) 
 Here is how much of TeX's memory you used:
- 12222 strings out of 476182
- 189342 string characters out of 5795596
+ 12223 strings out of 476182
+ 189348 string characters out of 5795596
  1965975 words of memory out of 5000000
  34056 multiletter control sequences out of 15000+600000
  570884 words of font info for 75 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 75i,8n,79p,420b,547s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 75i,8n,79p,420b,567s stack positions out of 10000i,1000n,20000p,200000b,200000s
  </root/.texlive2023/texmf-var/fonts/pk/ljfour/jknappen/ec/ectt1000.600pk> </
 root/.texlive2023/texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm0900.600pk> </root/
 .texlive2023/texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1000.600pk> </root/.texl
@@ -533,10 +570,10 @@ s/type1/public/amsfonts/cm/cmmi9.pfb></usr/share/texlive/texmf-dist/fonts/type1
 /public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/
 amsfonts/cm/cmr9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts
 /cm/cmsy9.pfb>
-Output written on adc_linker_study3_supp.pdf (3 pages, 213832 bytes).
+Output written on adc_linker_study3_supp.pdf (4 pages, 223927 bytes).
 PDF statistics:
- 328 PDF objects out of 1000 (max. 8388607)
- 90 compressed objects within 1 object stream
- 17 named destinations out of 1000 (max. 500000)
+ 343 PDF objects out of 1000 (max. 8388607)
+ 93 compressed objects within 1 object stream
+ 18 named destinations out of 1000 (max. 500000)
  59 words of extra memory for PDF output out of 10000 (max. 10000000)
 

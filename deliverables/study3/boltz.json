@@ -1,74 +1,24 @@
 [
   {
-    "label": "Cytotoxin_cand",
+    "label": "Maleimide/Val-Cit-PABC",
     "kind": "designed",
-    "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
+    "smiles": "CC(C)C(NC(=O)C(=O)NC(=O)NC(=O)CN1C(=O)C=CC1=O)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
     "ok": true,
     "status": "completed",
     "iptm": 0.85,
-    "plddt": 85.0,
     "binding_affinity_kd_nm": 45.0,
-    "binding_energy_kcal_mol": -10.0,
+    "binding_energy_kcal_mol": -11.0,
     "error": null
   },
   {
-    "label": "Cytotoxin_cand",
-    "kind": "designed",
-    "smiles": "O=C1C=CC(=O)N1c1ccc(CO)cc1",
-    "ok": true,
-    "status": "completed",
-    "iptm": 0.85,
-    "plddt": 85.0,
-    "binding_affinity_kd_nm": 45.0,
-    "binding_energy_kcal_mol": -10.0,
-    "error": null
-  },
-  {
-    "label": "Oligonucleotide_cand",
-    "kind": "designed",
-    "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
-    "ok": true,
-    "status": "completed",
-    "iptm": 0.25,
-    "plddt": 85.0,
-    "binding_affinity_kd_nm": 999.0,
-    "binding_energy_kcal_mol": -10.0,
-    "error": null
-  },
-  {
-    "label": "Oligonucleotide_cand",
+    "label": "Maleimide/Non-cleavable-rigid",
     "kind": "designed",
     "smiles": "O=C1C=CC(=O)N1c1ccc(CO)cc1",
     "ok": true,
     "status": "completed",
     "iptm": 0.25,
-    "plddt": 85.0,
     "binding_affinity_kd_nm": 999.0,
-    "binding_energy_kcal_mol": -10.0,
-    "error": null
-  },
-  {
-    "label": "Immunomodulator_cand",
-    "kind": "designed",
-    "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
-    "ok": true,
-    "status": "completed",
-    "iptm": 0.85,
-    "plddt": 85.0,
-    "binding_affinity_kd_nm": 45.0,
-    "binding_energy_kcal_mol": -10.0,
-    "error": null
-  },
-  {
-    "label": "Immunomodulator_cand",
-    "kind": "designed",
-    "smiles": "O=C1C=CC(=O)N1c1ccc(CO)cc1",
-    "ok": true,
-    "status": "completed",
-    "iptm": 0.85,
-    "plddt": 85.0,
-    "binding_affinity_kd_nm": 45.0,
-    "binding_energy_kcal_mol": -10.0,
+    "binding_energy_kcal_mol": -4.0,
     "error": null
   }
 ]

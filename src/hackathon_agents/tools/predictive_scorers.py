@@ -119,9 +119,9 @@ def score_mechanism_resolved_stability(smiles: str) -> dict[str, Any]:
     score = 1.0
     
     if "hydrazone_acid_hydrolysis" in liabilities:
-        score -= 0.50  # severe plasma instability
+        score -= 1.0  # severe plasma instability (zeroes out)
     if "acetal_hydrolysis" in liabilities:
-        score -= 0.40  # severe plasma instability
+        score -= 1.0  # severe plasma instability (zeroes out)
     if "disulfide_reduction" in liabilities:
         score -= 0.20  # moderate redox-lability in plasma
     if "maleimide_deconjugation" in liabilities:
