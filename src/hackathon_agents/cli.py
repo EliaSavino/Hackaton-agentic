@@ -214,6 +214,61 @@ try:
             typer.echo(f"Paper: {state.metadata['adc_paper_path']}")
         typer.echo(f"Iterations: {state.iteration}")
 
+    @app.command("design-adc-study3")
+    def design_adc_study3_command(
+        request: str = typer.Argument(
+            "Design a next-generation ADC/ARC/ISAC linker matching clinical payload classes "
+            "with precise retrosynthetic routes and mechanism-resolved chemical stability.",
+        ),
+        run_mode: RunMode = typer.Option(RunMode.CHEAP, "--run-mode", "-m"),
+        run_root: Path = typer.Option(Path("runs"), "--run-root"),
+        device: str = typer.Option("cpu", "--device"),
+        reinvent_steps: int = typer.Option(60, "--reinvent-steps", min=1),
+        reinvent_batch: int = typer.Option(64, "--reinvent-batch", min=1, max=1024),
+        max_iterations: int = typer.Option(3, "--max-iterations", min=1, max=20),
+        run_reinvent: bool = typer.Option(True, "--run/--mock", help="Actually run REINVENT vs mock."),
+        compile_pdf: bool = typer.Option(True, "--compile/--no-compile", help="Compile the paper to PDF with pdflatex."),
+    ) -> None:
+        """Run the advanced Study 3 multi-agent autonomous scientist campaign.
+
+        Phases: Literature Extraction -> Rule Derivation -> Custom Scorer Compile ->
+        Generative LinkInvent -> Retrosynthesis & Stability -> Non-encoded Validation ->
+        Shortlists & LaTeX Manuscript.
+        """
+
+        import subprocess
+        from hackathon_agents.demos.adc_study3 import run_study3_workflow
+
+        result = run_study3_workflow(
+            request,
+            run_mode=run_mode,
+            run_root=run_root,
+            device=device,
+            reinvent_steps=reinvent_steps,
+            reinvent_batch=reinvent_batch,
+            max_iterations=max_iterations,
+            run_reinvent=run_reinvent,
+        )
+        campaign_dir = Path(result["campaign_dir"])
+        tex_path = Path(result["paper_tex"])
+
+        typer.echo(f"Study 3 Campaign directory: {campaign_dir}")
+        typer.echo(f"Dossier output generated: {campaign_dir / 'campaign_clean.json'}")
+        typer.echo(f"LaTeX Paper: {tex_path}")
+
+        if compile_pdf:
+            try:
+                for _ in range(2):
+                    subprocess.run(
+                        ["pdflatex", "-interaction=nonstopmode", "-halt-on-error", tex_path.name],
+                        cwd=tex_path.parent,
+                        check=True,
+                        capture_output=True,
+                    )
+                typer.echo(f"Paper (PDF): {tex_path.with_suffix('.pdf')}")
+            except Exception as exc:
+                typer.echo(f"PDF compile skipped ({exc}); .tex is ready.")
+
     @app.command("design-adc-campaign")
     def design_adc_campaign_command(
         request: str = typer.Argument(
