@@ -220,7 +220,8 @@ def run_study3_workflow(
     tex_path = campaign_dir / "paper" / "study3_manuscript.tex"
     tex_path.parent.mkdir(parents=True, exist_ok=True)
     
-    write_study3_latex(campaign_results, tex_path)
+    from hackathon_agents.tools.adc_study3_paper import build_study3_paper
+    build_study3_paper(results_path, tex_path)
     
     return {
         "campaign_dir": str(campaign_dir),
