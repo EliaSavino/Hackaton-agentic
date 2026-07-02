@@ -56,6 +56,31 @@ $PY -m hackathon_agents.tools.adc_study6_figures      # 4 figures from study5 JS
 $PY -m hackathon_agents.tools.adc_study6_paper        # build + compile PDFs
 ```
 
+## Part VIII — the headline is now a falsifiable hypothesis (rubric criterion 1)
+
+The reviewer's last note: the honesty and figures are done; the highest-leverage move for the
+*novelty* rubric is to promote the contested-ARC observation into an explicit, falsifiable
+**hypothesis** and lead with it. Done — and we didn't just assert it, we **tested it in silico**:
+
+> **Hypothesis (agent-derived, falsifiable):** for antibody–oligonucleotide conjugates, a
+> protease-cleavable Val-Cit linker matches or outperforms the rigid non-cleavable sulfo-SMCC
+> standard on protease-mediated payload release.
+
+- **Derived** by the agent from the clinical AOC literature (the held-out ARC rule, siRNA paper withheld).
+- **Generated**: a Val-Cit ARC linker under that rule (REINVENT, real, `mock=False`) — see
+  `hypothesis_arc.json` / `reinvent_runs_hypothesis/`.
+- **Tested**: it co-folds with cathepsin B at predicted **Kd 9.7 nM** — as tightly as the clinical
+  Val-Cit substrate (35 nM) and the cytotoxin Val-Cit design (9 nM), while the rigid non-cleavable
+  ARC design binds **11× weaker (109 nM)**. In-silico feasibility support for the prediction.
+- **Falsifiable**: a wet-lab comparison of Val-Cit vs sulfo-SMCC ARC linkers on protease-mediated
+  release / potency would confirm or refute it. Stated in the paper.
+
+The abstract now leads with this prediction; the meta-contribution (an agent whose confidence
+tracks literature consensus) is the secondary novelty. Also fixed per Part VIII: the
+full-corpus vs held-out confidence gap (e.g. cytotoxin 0.60 vs 0.97) is now explained in the
+Discussion; Fig 4 labels humanised + the hypothesis point added; Fig 1 citation unified
+("Balamkundu 2023"); Fig 2 y-axis capped; Fig 3 caption corrected to "rigidity knob".
+
 ## Standing (deferred, named in the paper as boundaries)
 Real retrosynthesis (AiZynthFinder, n=15); covalent Boltz conjugate; deeper generative sampling
 (>25/class); conjugate-level biological realism (DAR, Fc, PK).

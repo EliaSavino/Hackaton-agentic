@@ -48,7 +48,7 @@ def fig2_heldout_composition(chains, heldout, out: Path) -> Path:
     ax1.bar(x - w / 2, full_conf, w, label="full-corpus confidence", color="#9db8d9", edgecolor="black", lw=0.5)
     hc = ["#5aa469" if v == "agree" else "#d1495b" for v in verdict]
     ax1.bar(x + w / 2, held_conf, w, label="held-out confidence", color=hc, edgecolor="black", lw=0.5)
-    ax1.set_ylabel("derived-rule confidence\n(disagreement-aware)"); ax1.set_ylim(0, 1.42); ax1.set_xlim(-0.7, 2.7)
+    ax1.set_ylabel("derived-rule confidence\n(disagreement-aware)"); ax1.set_ylim(0, 1.22); ax1.set_xlim(-0.7, 2.7)
     for i in range(len(classes)):
         ax1.text(x[i] - w / 2, full_conf[i] + 0.02, f"{full_dir[i]}\n{full_conf[i]:.2f}",
                  ha="center", va="bottom", fontsize=7, color="#555")
@@ -131,24 +131,49 @@ def fig3_rules_steer(designs, out: Path) -> Path:
 
 
 # --------------------------------------------------------------------------- #
-def fig4_cofold_kd(boltz, out: Path) -> Path:
-    """Cathepsin-B recognition: predicted Kd dot plot (log). Affinity != cleavage."""
+_KD_LABELS = {
+    "cyto-Maleim": ("Val-Cit cytotoxin design", "#3b7dd8", "o"),
+    "immu-Maleim": ("Val-Ala ISAC design", "#8a4fbf", "^"),
+    "olig-DBCO": ("rigid non-cleavable ARC design", "#5aa469", "s"),
+    "clinical": ("clinical Val-Cit substrate", "#d1495b", "*"),
+    "arc-ValCit": ("cleavable Val-Cit ARC design\n(hypothesis)", "#e08a3c", "D"),
+}
+
+
+def _kd_label(raw: str):
+    for k, v in _KD_LABELS.items():
+        if k in raw:
+            return v
+    return (raw[:16], "#666", "o")
+
+
+def fig4_cofold_kd(boltz, out: Path, hypothesis: dict | None = None) -> Path:
+    """Cathepsin-B recognition: predicted Kd dot plot (log), humanised labels. Affinity != cleavage.
+
+    If `hypothesis` (a co-fold record for the cleavable Val-Cit ARC design) is supplied, it is
+    added — the in-silico feasibility point for the falsifiable ARC prediction.
+    """
     import matplotlib; matplotlib.use("Agg")
     import matplotlib.pyplot as plt
 
     rows = [r for r in boltz if r.get("binding_affinity_kd_nm")]
-    style = {"designed_conjugate": ("#3b7dd8", "o"), "negative_conjugate": ("#5aa469", "s"),
-             "commercial_conjugate": ("#d1495b", "*")}
-    fig, ax = plt.subplots(figsize=(7.6, 2.9))
-    for r in rows:
-        col, mk = style.get(r.get("kind"), ("#666", "o"))
-        ax.scatter(r["binding_affinity_kd_nm"], 0, s=150, marker=mk, color=col, edgecolor="black", lw=0.6, zorder=3)
-        ax.annotate(f"{r.get('label','')[:14]}\n{r['binding_affinity_kd_nm']:.0f} nM",
-                    (r["binding_affinity_kd_nm"], 0), fontsize=7, ha="center",
-                    xytext=(0, 14 if rows.index(r) % 2 == 0 else -26), textcoords="offset points")
-    ax.set_xscale("log"); ax.set_yticks([]); ax.set_ylim(-0.5, 0.5)
-    ax.set_xlabel("predicted $K_\\mathrm{d}$ vs cathepsin B (nM, log) — tighter = better recognition, NOT cleavage")
-    ax.set_title("Rule-generated Val-Cit design is recognised like the clinical substrate;\nthe rigid non-cleavable ARC design is not", fontsize=9)
+    if hypothesis and hypothesis.get("binding_affinity_kd_nm"):
+        rows = rows + [hypothesis]
+    rows = sorted(rows, key=lambda r: r["binding_affinity_kd_nm"])
+    fig, ax = plt.subplots(figsize=(8.0, 3.4))
+    for i, r in enumerate(rows):
+        name, col, mk = _kd_label(r.get("label", ""))
+        ax.scatter(r["binding_affinity_kd_nm"], 0, s=190, marker=mk, color=col, edgecolor="black", lw=0.7, zorder=3)
+        ax.annotate(f"{name}\n{r['binding_affinity_kd_nm']:.0f} nM",
+                    (r["binding_affinity_kd_nm"], 0), fontsize=7.4, ha="center", fontweight="bold" if "hypothesis" in name else "normal",
+                    xytext=(0, 20 if i % 2 == 0 else -34), textcoords="offset points",
+                    arrowprops=dict(arrowstyle="-", lw=0.4, color="#999"))
+    ax.set_xscale("log"); ax.set_yticks([]); ax.set_ylim(-0.9, 0.9)
+    ax.set_xlabel("predicted $K_\\mathrm{d}$ vs cathepsin B (nM, log) $-$ tighter = better recognition, not cleavage", fontsize=9)
+    ttl = "Cleavable Val-Cit designs are recognised like the clinical substrate; the rigid ARC design is not"
+    if hypothesis:
+        ttl += ".\nThe cleavable ARC design (derived from clinical AOC literature) is recognised too $-$ the hypothesis proof-point."
+    ax.set_title(ttl, fontsize=8.8)
     ax.grid(axis="x", ls=":", alpha=0.5)
     fig.tight_layout()
     out.parent.mkdir(parents=True, exist_ok=True); fig.savefig(out, dpi=200); plt.close(fig)
@@ -164,10 +189,14 @@ def fig1_journey(chains, designs, boltz, out: Path, out_struct: Path) -> Path:
     from hackathon_agents.tools.draw_linker_constructs import draw_construct
 
     import textwrap
+    _CITE = {"biomedicines-11-03080": "Balamkundu 2023"}
     ch = chains["cytotoxin"]; rule = ch["rule"]
     grounded = [e for e in ch["exemplars"] if e.get("grounded")]
     ex = next((e for e in grounded if e.get("evidence")), grounded[0])
     quote = "\n".join(textwrap.wrap((ex.get("evidence") or "")[:90], 24))
+    cite = _CITE.get(ex.get("source", ""), ex.get("source", "?")[:18])
+    rule_txt = (f"{rule.get('cleavage_preference','?')},\n{rule.get('rigidity','?')}\n"
+                r"$\rightarrow$ objective")
     smi = designs["cytotoxin"]["top"][0]["smiles"]
     kd = next((r["binding_affinity_kd_nm"] for r in boltz if "cyto" in r.get("label", "")), None)
 
@@ -175,9 +204,9 @@ def fig1_journey(chains, designs, boltz, out: Path, out_struct: Path) -> Path:
 
     fig, ax = plt.subplots(figsize=(10.2, 2.7)); ax.axis("off"); ax.set_xlim(0, 10); ax.set_ylim(0, 1)
     stages = [
-        ("REAL QUOTE", f'"{quote}..."\n[{ex.get("source","?")[:20]}]', "#6a6a6a"),
+        ("REAL QUOTE", f'"{quote}..."\n[{cite}]', "#6a6a6a"),
         ("GROUNDED EXEMPLAR", f"{ex.get('payload','?')}\n{ex.get('linker','?')}\n(cited PDF)", "#3b7dd8"),
-        ("DERIVED RULE", f"cleave={rule.get('cleavage_preference','?')}\nrigid={rule.get('rigidity','?')}\n-> objective", "#5aa469"),
+        ("DERIVED RULE", rule_txt, "#5aa469"),
         ("GENERATED", None, "#d18a3c"),  # structure image slot
         ("CO-FOLD", f"cathepsin B\n$K_d$ = {kd:.0f} nM\n(recognition)" if kd else "cathepsin B", "#d1495b"),
     ]
@@ -218,11 +247,17 @@ def render_study6_figures(src="deliverables/study5", out_dir="deliverables/study
     heldout = json.loads((src / "heldout_predictions.json").read_text())
     designs = json.loads((src / "generated_designs.json").read_text())
     boltz = json.loads((src / "boltz.json").read_text())
+    # the Val-Cit ARC hypothesis co-fold, if it has been run
+    hyp_path = Path(out_dir).parent / "hypothesis_arc.json"
+    hypothesis = None
+    if hyp_path.exists():
+        hyp = json.loads(hyp_path.read_text())
+        hypothesis = hyp.get("cofold")
     return {
         "fig1": fig1_journey(chains, designs, boltz, out / "fig1_journey.png", out / "_struct_cyto.png"),
         "fig2": fig2_heldout_composition(chains, heldout, out / "fig2_heldout.png"),
         "fig3": fig3_rules_steer(designs, out / "fig3_rules_steer.png"),
-        "fig4": fig4_cofold_kd(boltz, out / "fig4_cofold.png"),
+        "fig4": fig4_cofold_kd(boltz, out / "fig4_cofold.png", hypothesis=hypothesis),
     }
 
 

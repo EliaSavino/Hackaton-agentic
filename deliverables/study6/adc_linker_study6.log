@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.5.31)  2 JUL 2026 21:43
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.5.31)  2 JUL 2026 22:43
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -352,32 +352,40 @@ Package: titlesec 2021/07/05 v2.14 Sectioning titles
 \titlewidthlast=\dimen190
 \titlewidthfirst=\dimen191
 )
+(/usr/local/texlive/2023/texmf-dist/tex/latex/preprint/authblk.sty
+Package: authblk 2001/02/27 1.3 (PWD)
+\affilsep=\skip58
+\@affilsep=\skip59
+\c@Maxaffil=\count291
+\c@authors=\count292
+\c@affil=\count293
+)
 (/usr/local/texlive/2023/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
 File: l3backend-pdftex.def 2023-01-16 L3 backend support: PDF output (pdfTeX)
-\l__color_backend_stack_int=\count291
+\l__color_backend_stack_int=\count294
 \l__pdf_internal_box=\box56
 )
 (./adc_linker_study6.aux)
 \openout1 = `adc_linker_study6.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 22.
-LaTeX Font Info:    ... okay on input line 22.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 22.
-LaTeX Font Info:    ... okay on input line 22.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 22.
-LaTeX Font Info:    ... okay on input line 22.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 22.
-LaTeX Font Info:    ... okay on input line 22.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 22.
-LaTeX Font Info:    ... okay on input line 22.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 22.
-LaTeX Font Info:    ... okay on input line 22.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 22.
-LaTeX Font Info:    ... okay on input line 22.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 22.
-LaTeX Font Info:    ... okay on input line 22.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 22.
-LaTeX Font Info:    ... okay on input line 22.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 35.
+LaTeX Font Info:    ... okay on input line 35.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 35.
+LaTeX Font Info:    ... okay on input line 35.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 35.
+LaTeX Font Info:    ... okay on input line 35.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 35.
+LaTeX Font Info:    ... okay on input line 35.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 35.
+LaTeX Font Info:    ... okay on input line 35.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 35.
+LaTeX Font Info:    ... okay on input line 35.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 35.
+LaTeX Font Info:    ... okay on input line 35.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 35.
+LaTeX Font Info:    ... okay on input line 35.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 35.
+LaTeX Font Info:    ... okay on input line 35.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -415,16 +423,16 @@ LaTeX Font Info:    ... okay on input line 22.
 
 (/usr/local/texlive/2023/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count292
+\scratchcounter=\count295
 \scratchdimen=\dimen192
 \scratchbox=\box57
-\nofMPsegments=\count293
-\nofMParguments=\count294
+\nofMPsegments=\count296
+\nofMParguments=\count297
 \everyMPshowfont=\toks27
-\MPscratchCnt=\count295
+\MPscratchCnt=\count298
 \MPscratchDim=\dimen193
-\MPnumerator=\count296
-\makeMPintoPDFobject=\count297
+\MPnumerator=\count299
+\makeMPintoPDFobject=\count300
 \everyMPtoPDFconversion=\toks28
 ) (/usr/local/texlive/2023/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
@@ -438,94 +446,86 @@ e
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: hyperref package is loaded.
 Package caption Info: End \AtBeginDocument code.
-Package hyperref Info: Link coloring OFF on input line 22.
+Package hyperref Info: Link coloring OFF on input line 35.
 
 (./adc_linker_study6.out) (./adc_linker_study6.out)
 \@outlinefile=\write3
 \openout3 = `adc_linker_study6.out'.
 
-LaTeX Font Info:    Trying to load font information for U+msa on input line 24.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 36.
 
 
 (/usr/local/texlive/2023/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 24.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 36.
 
 
 (/usr/local/texlive/2023/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-Overfull \hbox (93.43654pt too wide) in paragraph at lines 24--24
- [][] 
- []
-
-<figures//fig1_journey.png, id=52, 585.74835pt x 177.7842pt>
+<figures//fig1_journey.png, id=56, 585.74835pt x 177.7842pt>
 File: figures//fig1_journey.png Graphic file (type png)
 <use figures//fig1_journey.png>
-Package pdftex.def Info: figures//fig1_journey.png  used on input line 26.
+Package pdftex.def Info: figures//fig1_journey.png  used on input line 38.
 (pdftex.def)             Requested size: 502.8529pt x 152.63098pt.
-[1
+ [1
 
 {/usr/local/texlive/2023/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{/usr/loc
-al/texlive/2023/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}]
-Overfull \hbox (50.49199pt too wide) in paragraph at lines 43--48
- [][] 
- []
-
-<figures//fig2_heldout.png, id=95, 635.976pt x 476.982pt>
+al/texlive/2023/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}] [2 <./fig
+ures//fig1_journey.png>]
+<figures//fig2_heldout.png, id=108, 635.976pt x 476.982pt>
 File: figures//fig2_heldout.png Graphic file (type png)
 <use figures//fig2_heldout.png>
-Package pdftex.def Info: figures//fig2_heldout.png  used on input line 55.
+Package pdftex.def Info: figures//fig2_heldout.png  used on input line 73.
 (pdftex.def)             Requested size: 441.28131pt x 330.95929pt.
-<figures//fig3_rules_steer.png, id=96, 693.792pt x 281.853pt>
+<figures//fig3_rules_steer.png, id=109, 693.792pt x 281.853pt>
 File: figures//fig3_rules_steer.png Graphic file (type png)
 <use figures//fig3_rules_steer.png>
-Package pdftex.def Info: figures//fig3_rules_steer.png  used on input line 56.
+Package pdftex.def Info: figures//fig3_rules_steer.png  used on input line 74.
 (pdftex.def)             Requested size: 502.8529pt x 204.28442pt.
-<figures//fig4_cofold.png, id=97, 549.252pt x 209.583pt>
+<figures//fig4_cofold.png, id=110, 578.16pt x 245.718pt>
 File: figures//fig4_cofold.png Graphic file (type png)
 <use figures//fig4_cofold.png>
-Package pdftex.def Info: figures//fig4_cofold.png  used on input line 57.
-(pdftex.def)             Requested size: 369.44518pt x 140.96992pt.
-LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 6
-1.
-(/usr/local/texlive/2023/texmf-dist/tex/latex/base/t1cmtt.fd
+Package pdftex.def Info: figures//fig4_cofold.png  used on input line 75.
+(pdftex.def)             Requested size: 441.28131pt x 187.54247pt.
+LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 7
+9.
+ (/usr/local/texlive/2023/texmf-dist/tex/latex/base/t1cmtt.fd
 File: t1cmtt.fd 2022/07/10 v2.5l Standard LaTeX font definitions
-) [2 <./figures//fig1_journey.png>] [3 <./figures//fig2_heldout.png>] [4 <./fig
-ures//fig3_rules_steer.png> <./figures//fig4_cofold.png>] [5] (./adc_linker_stu
-dy6.aux)
+)
+[3 <./figures//fig2_heldout.png>] [4 <./figures//fig3_rules_steer.png>]
+[5 <./figures//fig4_cofold.png>] (./adc_linker_study6.aux)
 Package rerunfilecheck Info: File `adc_linker_study6.out' has not changed.
-(rerunfilecheck)             Checksum: 790BEF8C0BCD78A0CA60E6724D3D4376;2029.
+(rerunfilecheck)             Checksum: A56A5635E7B9830564312A486823B897;2327.
  ) 
 Here is how much of TeX's memory you used:
- 11966 strings out of 476025
- 190374 string characters out of 5790017
- 1868388 words of memory out of 5000000
- 32228 multiletter control sequences out of 15000+600000
- 528104 words of font info for 75 fonts, out of 8000000 for 9000
+ 12058 strings out of 476025
+ 191686 string characters out of 5790017
+ 1867388 words of memory out of 5000000
+ 32314 multiletter control sequences out of 15000+600000
+ 528698 words of font info for 72 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 75i,9n,76p,1515b,556s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 75i,9n,76p,1564b,558s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb
-></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb><
-/usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb></u
-sr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/
-local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/loc
-al/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/
-texlive/2023/texmf-dist/fonts/type1/public/cm-super/sfbx0900.pfb></usr/local/te
-xlive/2023/texmf-dist/fonts/type1/public/cm-super/sfbx1000.pfb></usr/local/texl
-ive/2023/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb></usr/local/texliv
-e/2023/texmf-dist/fonts/type1/public/cm-super/sfbx1728.pfb></usr/local/texlive/
-2023/texmf-dist/fonts/type1/public/cm-super/sfrm0800.pfb></usr/local/texlive/20
-23/texmf-dist/fonts/type1/public/cm-super/sfrm0900.pfb></usr/local/texlive/2023
-/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb></usr/local/texlive/2023/t
-exmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb></usr/local/texlive/2023/tex
-mf-dist/fonts/type1/public/cm-super/sfti1000.pfb></usr/local/texlive/2023/texmf
--dist/fonts/type1/public/cm-super/sftt0900.pfb>
-Output written on adc_linker_study6.pdf (5 pages, 634508 bytes).
+></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb><
+/usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></us
+r/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/l
+ocal/texlive/2023/texmf-dist/fonts/type1/public/cm-super/sfbx0900.pfb></usr/loc
+al/texlive/2023/texmf-dist/fonts/type1/public/cm-super/sfbx1000.pfb></usr/local
+/texlive/2023/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb></usr/local/t
+exlive/2023/texmf-dist/fonts/type1/public/cm-super/sfbx1728.pfb></usr/local/tex
+live/2023/texmf-dist/fonts/type1/public/cm-super/sfrm0600.pfb></usr/local/texli
+ve/2023/texmf-dist/fonts/type1/public/cm-super/sfrm0800.pfb></usr/local/texlive
+/2023/texmf-dist/fonts/type1/public/cm-super/sfrm0900.pfb></usr/local/texlive/2
+023/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb></usr/local/texlive/202
+3/texmf-dist/fonts/type1/public/cm-super/sfti0800.pfb></usr/local/texlive/2023/
+texmf-dist/fonts/type1/public/cm-super/sfti1000.pfb></usr/local/texlive/2023/te
+xmf-dist/fonts/type1/public/cm-super/sftt0900.pfb>
+Output written on adc_linker_study6.pdf (5 pages, 673607 bytes).
 PDF statistics:
  204 PDF objects out of 1000 (max. 8388607)
- 155 compressed objects within 2 object streams
- 32 named destinations out of 1000 (max. 500000)
- 117 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 157 compressed objects within 2 object streams
+ 33 named destinations out of 1000 (max. 500000)
+ 125 words of extra memory for PDF output out of 10000 (max. 10000000)
 

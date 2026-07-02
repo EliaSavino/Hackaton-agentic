@@ -1,0 +1,128 @@
+{
+  "hypothesis": "A protease-cleavable Val-Cit ARC linker is recognised by cathepsin B, unlike the rigid non-cleavable sulfo-SMCC standard.",
+  "derived_from": "held-out ARC rule (clinical AOC literature, siRNA paper withheld)",
+  "arc_rule": {
+    "cleavage_preference": "protease-cleavable",
+    "rigidity": "semi-rigid",
+    "stability_priority": "high",
+    "conjugation_recommendation": [
+      "maleimide",
+      "site-specific engineered cysteine (thiomab)",
+      "Val-Cit dipeptide"
+    ],
+    "solubilizing_requirements": [
+      "hydrophilic linker spacers to accommodate large hydrophilic oligonucleotide payloads",
+      "shorter linker lengths preferred over extended analogs for plasma stability"
+    ],
+    "rationale": "Among the exemplars, Val-Cit protease-cleavable linkers consistently enabled efficacious delivery of both siRNA and PMO payloads (DYNE-101, DYNE-251), while the Val-Arg variant failed, suggesting dipeptide identity matters and Val-Cit is preferred. Non-cleavable linkers (SMCC, maleimide) also showed activity (AOC-1001 achieving 80% knockdown, MALAT1 ASO OTV), indicating oligonucleotide payloads can tolerate both cleavable and non-cleavable strategies, but protease-cleavable Val-Cit linkers appear most broadly validated. Shorter disulfide linkers demonstrated improved whole-blood stability over extended analogs, reinforcing that compact linker architecture and high plasma stability are critical design priorities for oligonucleotide ADCs.",
+    "self_confidence": 0.55
+  },
+  "generation": {
+    "ok": true,
+    "mock": false,
+    "n_assembled": 25,
+    "best_score": 0.7047,
+    "warhead_pair": "*N1Cc2ccccc2C#Cc2ccccc21|CC(C)[C@@H](C(=O)N[C@@H](CCCNC(=O)N)C(=O)Nc1ccc(CO)cc1)N*",
+    "top": [
+      {
+        "smiles": "CC(C)C(NC(=O)NC(=O)CNC(=O)C(=O)N1Cc2ccccc2C#Cc2ccccc21)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+        "score": 0.7047,
+        "subscores": {
+          "solubility": 0.7387,
+          "size": 0.6916,
+          "flexibility": 0.2689,
+          "synthesizability": 0.5804,
+          "cleavability": 1.0,
+          "stability": 1.0,
+          "similarity": 0.5
+        },
+        "descriptors": {}
+      },
+      {
+        "smiles": "CC(C)C(NC(=O)C(=O)NCC(=O)NC(=O)N1Cc2ccccc2C#Cc2ccccc21)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+        "score": 0.7047,
+        "subscores": {
+          "solubility": 0.7387,
+          "size": 0.6916,
+          "flexibility": 0.2689,
+          "synthesizability": 0.5804,
+          "cleavability": 1.0,
+          "stability": 1.0,
+          "similarity": 0.5
+        },
+        "descriptors": {}
+      },
+      {
+        "smiles": "CC(C)C(NC(=O)C(=O)NC(=O)CNC(=O)N1Cc2ccccc2C#Cc2ccccc21)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+        "score": 0.7043,
+        "subscores": {
+          "solubility": 0.7387,
+          "size": 0.6916,
+          "flexibility": 0.2689,
+          "synthesizability": 0.5785,
+          "cleavability": 1.0,
+          "stability": 1.0,
+          "similarity": 0.5
+        },
+        "descriptors": {}
+      },
+      {
+        "smiles": "CC(C)C(NC(=O)NCC(=O)NC(=O)C(=O)N1Cc2ccccc2C#Cc2ccccc21)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+        "score": 0.7037,
+        "subscores": {
+          "solubility": 0.7387,
+          "size": 0.6916,
+          "flexibility": 0.2689,
+          "synthesizability": 0.5758,
+          "cleavability": 1.0,
+          "stability": 1.0,
+          "similarity": 0.5
+        },
+        "descriptors": {}
+      },
+      {
+        "smiles": "CC(C)C(NC(=O)C(=O)NCC(=O)NC(=O)C(=O)N1Cc2ccccc2C#Cc2ccccc21)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+        "score": 0.7027,
+        "subscores": {
+          "solubility": 0.8187,
+          "size": 0.6293,
+          "flexibility": 0.2689,
+          "synthesizability": 0.5668,
+          "cleavability": 1.0,
+          "stability": 1.0,
+          "similarity": 0.5
+        },
+        "descriptors": {}
+      },
+      {
+        "smiles": "CC(C)C(NC(=O)C(=O)NC(=O)CNC(=O)C(=O)N1Cc2ccccc2C#Cc2ccccc21)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+        "score": 0.7027,
+        "subscores": {
+          "solubility": 0.8187,
+          "size": 0.6293,
+          "flexibility": 0.2689,
+          "synthesizability": 0.5668,
+          "cleavability": 1.0,
+          "stability": 1.0,
+          "similarity": 0.5
+        },
+        "descriptors": {}
+      }
+    ]
+  },
+  "cleavable_arc_design": "CC(C)C(NC(=O)NC(=O)CNC(=O)C(=O)N1Cc2ccccc2C#Cc2ccccc21)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+  "cofold": {
+    "label": "arc-ValCit-hypothesis",
+    "kind": "designed_conjugate",
+    "linker_smiles": "CC(C)C(NC(=O)NC(=O)CNC(=O)C(=O)N1Cc2ccccc2C#Cc2ccccc21)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+    "payload_smiles": "COP(=O)(O)OCC1OC(N)C(O)C1OP(=O)(O)OCC",
+    "whole_conjugate": true,
+    "ok": true,
+    "status": "completed",
+    "iptm": 0.839,
+    "plddt": 81.54,
+    "binding_affinity_kd_nm": 9.74,
+    "binding_energy_kcal_mol": -10.93,
+    "error": null
+  }
+}

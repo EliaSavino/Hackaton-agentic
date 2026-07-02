@@ -40,7 +40,8 @@ Boltz clinical-mcValCitPABC+MMAE: ipTM/Kd & \textbf{measured} & ipTM 0.791, Kd 3
 Synthesizability (Ertl SA\_Score) & \textbf{heuristic} & continuous SA\_Score, reverse-sigmoid to [ \\
 Complexity index (step-count proxy) & \textbf{heuristic} & MW/chirality/ring/linkage formula; reporte \\
 Mechanism stability score & \textbf{heuristic} & SMARTS liabilities: peptide/disulfide/male \\
-Nearest clinical analogue (Tanimoto) & \textbf{heuristic} & Morgan fingerprint vs commercial linker se \\ \bottomrule\end{tabular}\end{table}
+Nearest clinical analogue (Tanimoto) & \textbf{heuristic} & Morgan fingerprint vs commercial linker se \\
+ARC hypothesis co-fold: Kd & \textbf{measured} & Val-Cit ARC design, Kd 9.74 nM \\ \bottomrule\end{tabular}\end{table}
 \section{Full reasoning chains and disagreement-aware confidence}
 \subsection{Cytotoxin}
 Retrieved 12 passages; grounded exemplars split 12 cleavable / 3 non-cleavable (unanimous); disagreement-aware confidence 0.60. Derived rule: cleavage=\textbf{protease-cleavable}, rigidity=semi-rigid. self\_confidence (LLM self-report, varied): 0.78. Rationale: The majority of approved and exemplified cytotoxin ADCs (MMAE, PBD dimer, PE38, Dxd) employ protease-cleavable dipeptide linkers based on the mc-ValCitPABC scaffold, which demonstrates high plasma stability and efficient lysosomal release. Variants incorporating acidic residues at the P3 position (GluValCit, AspValCit) further improve mouse plasma stability to 'very high', suggesting that charged extensions enhance serum stability without compromising clea
