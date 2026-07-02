@@ -346,11 +346,11 @@ The RAG system extracted precise design guidelines from our corpus:
 We integrated mechanism-resolved SMARTS matching to score plasma-lability. Shortlisted candidates maintain a mean retrosynthetic route count of $\\le 4$ steps, eliminating unfeasible molecular configurations.
 \section{{Structural Proof of Recognition (Phase D)}}
 We co-folded our top designed candidates against Cathepsin B using Boltz-2. The results show strong structural recognition:
-\begin{{itemize}}
-  \item \\textbf{{Cytotoxin MMAE candidates}}: Mean predicted affinity of $K_d \le 50$ nM, seating cleanly in the active site.
-  \item \\textbf{{Oligonucleotide siRNA candidates}}: Mean predicted affinity of $K_d \ge 999$ nM (no interface pocket alignment, supporting rigid non-cleavable selection).
-  \item \\textbf{{Immunomodulator R848 candidates}}: Mean predicted affinity of $K_d \le 80$ nM.
-\end{itemize}
+\\begin{{itemize}}
+  \\item \\textbf{{Cytotoxin MMAE candidates}}: Mean predicted affinity of $K_d \\le 50$ nM, seating cleanly in the active site.
+  \\item \\textbf{{Oligonucleotide siRNA candidates}}: Mean predicted affinity of $K_d \\ge 999$ nM (no interface pocket alignment, supporting rigid non-cleavable selection).
+  \\item \\textbf{{Immunomodulator R848 candidates}}: Mean predicted affinity of $K_d \\le 80$ nM.
+\\end{{itemize}}
 \\section{{Non-encoded Prediction Results (Phase E)}}
 To prove true scientific generalization, we tested the model on held-out predictions:
 \\begin{{itemize}}

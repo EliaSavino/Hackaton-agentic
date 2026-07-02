@@ -1,0 +1,968 @@
+{
+  "campaign_dir": "/workspace/Hackaton-agentic/runs/campaign_study3_20260702_104014",
+  "derived_rules": {
+    "cytotoxin": {
+      "payload_class": "cytotoxin",
+      "exemplars": [
+        {
+          "payload": "MMAE",
+          "linker": "Val-Cit-PABC",
+          "conjugation": "maleimide",
+          "cleavage": "protease-cleavable",
+          "plasma_stability": "high",
+          "trigger": "cathepsin-B",
+          "citation": "Internal Reference"
+        },
+        {
+          "payload": "DM1",
+          "linker": "SMCC",
+          "conjugation": "maleimide thioether",
+          "cleavage": "non-cleavable",
+          "plasma_stability": "very high",
+          "trigger": "lysosomal catabolism",
+          "citation": "Internal Reference"
+        }
+      ],
+      "rules": {
+        "cleavage_preference": "protease-cleavable",
+        "rigidity": "semi-rigid",
+        "stability_priority": "high",
+        "conjugation_recommendation": [
+          "maleimide"
+        ],
+        "solubilizing_requirements": [
+          "PEG"
+        ],
+        "rationale": "Cytotoxins generally require rapid, traceless lysosomal release (e.g. Val-Cit-PABC) to ensure robust cell killing, balanced with moderate hydrophilicity to reduce aggregation."
+      },
+      "retrieved_evidence": "[1] biomedicines-11-03080 (data/biomedicines-11-03080.pdf, chunk 4, score 1.113)\nsitting in the S2 binding pocket. Encouraged from the crys- tal structure results, they went on to synthesize the ADCs, anti-Her2-mc-cBuCitPABC-MMAE, and anti-Her2-mc-ValCitPABC-MMAE (Figure 3B), using an engineered cysteine strategy with DAR between 1.8 and 2.0. When these ADCs were evaluated against Her-2-expressing SKBR-3 cells, both ADCs showed almost similar antigen dependent anti-cancer activity and were equally stable in thein vivo mouse models. When incubating the ValCit and cBuCit ADCs with inhibitors of cathepsin B, they found that cBuCit cleavage activity was reduced by 90% vs. 50% for ValCit, demonstrating the high specificity of the cBuCit linker towards cathepsin B. Biomedicines 2023, 11, 3080 6 of 14 Biomedicines 2023, 10, x FOR PEER REVIEW 6 of 15 90% vs. 50% for ValCit, demonstrating the high specificity of the cBuCit linker towards cathepsin B. Figure 2. Various Linker payload designs for..."
+    },
+    "oligonucleotide": {
+      "payload_class": "oligonucleotide",
+      "exemplars": [
+        {
+          "payload": "siRNA",
+          "linker": "sulfo-SMCC",
+          "conjugation": "ThioMab cysteine",
+          "cleavage": "non-cleavable",
+          "plasma_stability": "extremely high",
+          "trigger": "none (intracellular active as intact)",
+          "citation": "siRNA.pdf"
+        }
+      ],
+      "rules": {
+        "cleavage_preference": "non-cleavable-rigid",
+        "rigidity": "rigid",
+        "stability_priority": "maximum",
+        "conjugation_recommendation": [
+          "ThioMab click"
+        ],
+        "solubilizing_requirements": [
+          "PEG",
+          "sulfo"
+        ],
+        "rationale": "Oligonucleotides are large, highly anionic, and stable. Literature (siRNA.pdf) shows that rigid non-cleavable linkers like sulfo-SMCC outperform flexible ones by maintaining structural integrity and preventing premature systemic loss."
+      },
+      "retrieved_evidence": "[1] biomedicines-11-03080 (data/biomedicines-11-03080.pdf, chunk 4, score 1.113)\nsitting in the S2 binding pocket. Encouraged from the crys- tal structure results, they went on to synthesize the ADCs, anti-Her2-mc-cBuCitPABC-MMAE, and anti-Her2-mc-ValCitPABC-MMAE (Figure 3B), using an engineered cysteine strategy with DAR between 1.8 and 2.0. When these ADCs were evaluated against Her-2-expressing SKBR-3 cells, both ADCs showed almost similar antigen dependent anti-cancer activity and were equally stable in thein vivo mouse models. When incubating the ValCit and cBuCit ADCs with inhibitors of cathepsin B, they found that cBuCit cleavage activity was reduced by 90% vs. 50% for ValCit, demonstrating the high specificity of the cBuCit linker towards cathepsin B. Biomedicines 2023, 11, 3080 6 of 14 Biomedicines 2023, 10, x FOR PEER REVIEW 6 of 15 90% vs. 50% for ValCit, demonstrating the high specificity of the cBuCit linker towards cathepsin B. Figure 2. Various Linker payload designs for..."
+    },
+    "immunomodulator": {
+      "payload_class": "immunomodulator",
+      "exemplars": [
+        {
+          "payload": "R848 (imidazoquinoline)",
+          "linker": "Val-Ala-PAB",
+          "conjugation": "DBCO",
+          "cleavage": "protease-cleavable",
+          "plasma_stability": "very high",
+          "trigger": "cathepsin-B",
+          "citation": "Internal Reference"
+        }
+      ],
+      "rules": {
+        "cleavage_preference": "protease-cleavable",
+        "rigidity": "semi-rigid",
+        "stability_priority": "maximum",
+        "conjugation_recommendation": [
+          "DBCO",
+          "maleimide"
+        ],
+        "solubilizing_requirements": [
+          "PEG"
+        ],
+        "rationale": "Immunomodulators require highly plasma-stable triggers such as Val-Ala-PABC to avoid systemic cytokine storm, demanding slow but clean intracellular release."
+      },
+      "retrieved_evidence": "[1] biomedicines-11-03080 (data/biomedicines-11-03080.pdf, chunk 4, score 1.113)\nsitting in the S2 binding pocket. Encouraged from the crys- tal structure results, they went on to synthesize the ADCs, anti-Her2-mc-cBuCitPABC-MMAE, and anti-Her2-mc-ValCitPABC-MMAE (Figure 3B), using an engineered cysteine strategy with DAR between 1.8 and 2.0. When these ADCs were evaluated against Her-2-expressing SKBR-3 cells, both ADCs showed almost similar antigen dependent anti-cancer activity and were equally stable in thein vivo mouse models. When incubating the ValCit and cBuCit ADCs with inhibitors of cathepsin B, they found that cBuCit cleavage activity was reduced by 90% vs. 50% for ValCit, demonstrating the high specificity of the cBuCit linker towards cathepsin B. Biomedicines 2023, 11, 3080 6 of 14 Biomedicines 2023, 10, x FOR PEER REVIEW 6 of 15 90% vs. 50% for ValCit, demonstrating the high specificity of the cBuCit linker towards cathepsin B. Figure 2. Various Linker payload designs for..."
+    }
+  },
+  "runs": [
+    {
+      "payload_class": "cytotoxin",
+      "payload_name": "MMAE",
+      "handle": "Maleimide",
+      "trigger": "Val-Cit-PABC",
+      "candidates": [
+        {
+          "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
+          "overall_score": 0.88,
+          "retrosynthesis": {
+            "step_count": 4,
+            "score": 0.85,
+            "is_feasible": true,
+            "reason": "Standard coupling steps",
+            "descriptors": {
+              "mw": 273.28,
+              "chiral_centers": 0,
+              "ring_count": 1,
+              "rotatable_bonds": 11,
+              "amides": 2,
+              "disulfides": 0,
+              "esters": 0,
+              "triazoles": 0
+            }
+          },
+          "stability": {
+            "overall_stability_score": 0.85,
+            "liabilities": [
+              "maleimide_deconjugation"
+            ],
+            "is_protease_cleavable": false,
+            "is_disulfide": false,
+            "is_maleimide": true,
+            "is_hydrazone": false
+          },
+          "assembled_construct": {
+            "assembled_smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO.CC[C@H](C)[C@@H]([C@@H](CC(=O)N1CCC[C@H]1[C@@H]([C@@H](C(C)C)OC)N(C)C(=O)[C@@H](NC(=O)[C@H](C)NC)C(C)C)OC)OC(=O)OCc1ccc(N)cc1",
+            "status": "success",
+            "payload_class": "cytotoxin",
+            "target_dar": 4,
+            "conjugation_site": "Cys",
+            "descriptors": {
+              "assembled_mw": 979.22,
+              "assembled_logp": 2.93,
+              "assembled_tpsa": 247.06,
+              "aromatic_rings": 1
+            }
+          }
+        },
+        {
+          "smiles": "O=C1C=CC(=O)N1c1ccc(CO)cc1",
+          "overall_score": 0.88,
+          "retrosynthesis": {
+            "step_count": 4,
+            "score": 0.85,
+            "is_feasible": true,
+            "reason": "Standard coupling steps",
+            "descriptors": {
+              "mw": 203.2,
+              "chiral_centers": 0,
+              "ring_count": 2,
+              "rotatable_bonds": 2,
+              "amides": 2,
+              "disulfides": 0,
+              "esters": 0,
+              "triazoles": 0
+            }
+          },
+          "stability": {
+            "overall_stability_score": 0.85,
+            "liabilities": [
+              "maleimide_deconjugation"
+            ],
+            "is_protease_cleavable": false,
+            "is_disulfide": false,
+            "is_maleimide": true,
+            "is_hydrazone": false
+          },
+          "assembled_construct": {
+            "assembled_smiles": "O=C1C=CC(=O)N1c1ccc(CO)cc1.CC[C@H](C)[C@@H]([C@@H](CC(=O)N1CCC[C@H]1[C@@H]([C@@H](C(C)C)OC)N(C)C(=O)[C@@H](NC(=O)[C@H](C)NC)C(C)C)OC)OC(=O)OCc1ccc(N)cc1",
+            "status": "success",
+            "payload_class": "cytotoxin",
+            "target_dar": 4,
+            "conjugation_site": "Cys",
+            "descriptors": {
+              "assembled_mw": 909.13,
+              "assembled_logp": 4.59,
+              "assembled_tpsa": 219.37,
+              "aromatic_rings": 2
+            }
+          }
+        },
+        {
+          "smiles": "O=C1C=CC(=O)N1CCCC(=O)NC(C(C)C)C(=O)N",
+          "overall_score": 0.8,
+          "retrosynthesis": {
+            "step_count": 7,
+            "score": 0.65,
+            "is_feasible": true,
+            "reason": "Standard coupling steps",
+            "descriptors": {
+              "mw": 281.31,
+              "chiral_centers": 1,
+              "ring_count": 1,
+              "rotatable_bonds": 7,
+              "amides": 4,
+              "disulfides": 0,
+              "esters": 0,
+              "triazoles": 0
+            }
+          },
+          "stability": {
+            "overall_stability_score": 0.85,
+            "liabilities": [
+              "maleimide_deconjugation"
+            ],
+            "is_protease_cleavable": false,
+            "is_disulfide": false,
+            "is_maleimide": true,
+            "is_hydrazone": false
+          },
+          "assembled_construct": {
+            "assembled_smiles": "O=C1C=CC(=O)N1CCCC(=O)NC(C(C)C)C(=O)N.CC[C@H](C)[C@@H]([C@@H](CC(=O)N1CCC[C@H]1[C@@H]([C@@H](C(C)C)OC)N(C)C(=O)[C@@H](NC(=O)[C@H](C)NC)C(C)C)OC)OC(=O)OCc1ccc(N)cc1",
+            "status": "success",
+            "payload_class": "cytotoxin",
+            "target_dar": 4,
+            "conjugation_site": "Cys",
+            "descriptors": {
+              "assembled_mw": 987.25,
+              "assembled_logp": 3.3,
+              "assembled_tpsa": 271.33,
+              "aromatic_rings": 1
+            }
+          }
+        }
+      ]
+    },
+    {
+      "payload_class": "oligonucleotide",
+      "payload_name": "siRNA",
+      "handle": "DBCO",
+      "trigger": "Non-cleavable-rigid",
+      "candidates": [
+        {
+          "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
+          "overall_score": 0.88,
+          "retrosynthesis": {
+            "step_count": 4,
+            "score": 0.85,
+            "is_feasible": true,
+            "reason": "Standard coupling steps",
+            "descriptors": {
+              "mw": 273.28,
+              "chiral_centers": 0,
+              "ring_count": 1,
+              "rotatable_bonds": 11,
+              "amides": 2,
+              "disulfides": 0,
+              "esters": 0,
+              "triazoles": 0
+            }
+          },
+          "stability": {
+            "overall_stability_score": 0.85,
+            "liabilities": [
+              "maleimide_deconjugation"
+            ],
+            "is_protease_cleavable": false,
+            "is_disulfide": false,
+            "is_maleimide": true,
+            "is_hydrazone": false
+          },
+          "assembled_construct": {
+            "assembled_smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO.COP(=O)(O)OCC1OC(N)C(O)C1OP(=O)(O)OCC",
+            "status": "success",
+            "payload_class": "oligonucleotide",
+            "target_dar": 2,
+            "conjugation_site": "engineered Cys / HC-A118C",
+            "descriptors": {
+              "assembled_mw": 624.47,
+              "assembled_logp": -1.73,
+              "assembled_tpsa": 252.3,
+              "aromatic_rings": 0
+            }
+          }
+        },
+        {
+          "smiles": "O=C1C=CC(=O)N1c1ccc(CO)cc1",
+          "overall_score": 0.88,
+          "retrosynthesis": {
+            "step_count": 4,
+            "score": 0.85,
+            "is_feasible": true,
+            "reason": "Standard coupling steps",
+            "descriptors": {
+              "mw": 203.2,
+              "chiral_centers": 0,
+              "ring_count": 2,
+              "rotatable_bonds": 2,
+              "amides": 2,
+              "disulfides": 0,
+              "esters": 0,
+              "triazoles": 0
+            }
+          },
+          "stability": {
+            "overall_stability_score": 0.85,
+            "liabilities": [
+              "maleimide_deconjugation"
+            ],
+            "is_protease_cleavable": false,
+            "is_disulfide": false,
+            "is_maleimide": true,
+            "is_hydrazone": false
+          },
+          "assembled_construct": {
+            "assembled_smiles": "O=C1C=CC(=O)N1c1ccc(CO)cc1.COP(=O)(O)OCC1OC(N)C(O)C1OP(=O)(O)OCC",
+            "status": "success",
+            "payload_class": "oligonucleotide",
+            "target_dar": 2,
+            "conjugation_site": "engineered Cys / HC-A118C",
+            "descriptors": {
+              "assembled_mw": 554.38,
+              "assembled_logp": -0.08,
+              "assembled_tpsa": 224.61,
+              "aromatic_rings": 1
+            }
+          }
+        },
+        {
+          "smiles": "O=C1C=CC(=O)N1CCCC(=O)NC(C(C)C)C(=O)N",
+          "overall_score": 0.8,
+          "retrosynthesis": {
+            "step_count": 7,
+            "score": 0.65,
+            "is_feasible": true,
+            "reason": "Standard coupling steps",
+            "descriptors": {
+              "mw": 281.31,
+              "chiral_centers": 1,
+              "ring_count": 1,
+              "rotatable_bonds": 7,
+              "amides": 4,
+              "disulfides": 0,
+              "esters": 0,
+              "triazoles": 0
+            }
+          },
+          "stability": {
+            "overall_stability_score": 0.85,
+            "liabilities": [
+              "maleimide_deconjugation"
+            ],
+            "is_protease_cleavable": false,
+            "is_disulfide": false,
+            "is_maleimide": true,
+            "is_hydrazone": false
+          },
+          "assembled_construct": {
+            "assembled_smiles": "O=C1C=CC(=O)N1CCCC(=O)NC(C(C)C)C(=O)N.COP(=O)(O)OCC1OC(N)C(O)C1OP(=O)(O)OCC",
+            "status": "success",
+            "payload_class": "oligonucleotide",
+            "target_dar": 2,
+            "conjugation_site": "engineered Cys / HC-A118C",
+            "descriptors": {
+              "assembled_mw": 632.5,
+              "assembled_logp": -1.37,
+              "assembled_tpsa": 276.57,
+              "aromatic_rings": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "payload_class": "immunomodulator",
+      "payload_name": "R848",
+      "handle": "DBCO",
+      "trigger": "Val-Ala-PABC",
+      "candidates": [
+        {
+          "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
+          "overall_score": 0.88,
+          "retrosynthesis": {
+            "step_count": 4,
+            "score": 0.85,
+            "is_feasible": true,
+            "reason": "Standard coupling steps",
+            "descriptors": {
+              "mw": 273.28,
+              "chiral_centers": 0,
+              "ring_count": 1,
+              "rotatable_bonds": 11,
+              "amides": 2,
+              "disulfides": 0,
+              "esters": 0,
+              "triazoles": 0
+            }
+          },
+          "stability": {
+            "overall_stability_score": 0.85,
+            "liabilities": [
+              "maleimide_deconjugation"
+            ],
+            "is_protease_cleavable": false,
+            "is_disulfide": false,
+            "is_maleimide": true,
+            "is_hydrazone": false
+          },
+          "assembled_construct": {
+            "assembled_smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO.CC(C)COCc1cnc2c(n1)n(cn2)CCO",
+            "status": "success",
+            "payload_class": "immunomodulator",
+            "target_dar": 8,
+            "conjugation_site": "Lys",
+            "descriptors": {
+              "assembled_mw": 523.59,
+              "assembled_logp": -0.06,
+              "assembled_tpsa": 158.36,
+              "aromatic_rings": 2
+            }
+          }
+        },
+        {
+          "smiles": "O=C1C=CC(=O)N1c1ccc(CO)cc1",
+          "overall_score": 0.88,
+          "retrosynthesis": {
+            "step_count": 4,
+            "score": 0.85,
+            "is_feasible": true,
+            "reason": "Standard coupling steps",
+            "descriptors": {
+              "mw": 203.2,
+              "chiral_centers": 0,
+              "ring_count": 2,
+              "rotatable_bonds": 2,
+              "amides": 2,
+              "disulfides": 0,
+              "esters": 0,
+              "triazoles": 0
+            }
+          },
+          "stability": {
+            "overall_stability_score": 0.85,
+            "liabilities": [
+              "maleimide_deconjugation"
+            ],
+            "is_protease_cleavable": false,
+            "is_disulfide": false,
+            "is_maleimide": true,
+            "is_hydrazone": false
+          },
+          "assembled_construct": {
+            "assembled_smiles": "O=C1C=CC(=O)N1c1ccc(CO)cc1.CC(C)COCc1cnc2c(n1)n(cn2)CCO",
+            "status": "success",
+            "payload_class": "immunomodulator",
+            "target_dar": 8,
+            "conjugation_site": "Lys",
+            "descriptors": {
+              "assembled_mw": 453.5,
+              "assembled_logp": 1.6,
+              "assembled_tpsa": 130.67,
+              "aromatic_rings": 3
+            }
+          }
+        },
+        {
+          "smiles": "O=C1C=CC(=O)N1CCCC(=O)NC(C(C)C)C(=O)N",
+          "overall_score": 0.8,
+          "retrosynthesis": {
+            "step_count": 7,
+            "score": 0.65,
+            "is_feasible": true,
+            "reason": "Standard coupling steps",
+            "descriptors": {
+              "mw": 281.31,
+              "chiral_centers": 1,
+              "ring_count": 1,
+              "rotatable_bonds": 7,
+              "amides": 4,
+              "disulfides": 0,
+              "esters": 0,
+              "triazoles": 0
+            }
+          },
+          "stability": {
+            "overall_stability_score": 0.85,
+            "liabilities": [
+              "maleimide_deconjugation"
+            ],
+            "is_protease_cleavable": false,
+            "is_disulfide": false,
+            "is_maleimide": true,
+            "is_hydrazone": false
+          },
+          "assembled_construct": {
+            "assembled_smiles": "O=C1C=CC(=O)N1CCCC(=O)NC(C(C)C)C(=O)N.CC(C)COCc1cnc2c(n1)n(cn2)CCO",
+            "status": "success",
+            "payload_class": "immunomodulator",
+            "target_dar": 8,
+            "conjugation_site": "Lys",
+            "descriptors": {
+              "assembled_mw": 531.61,
+              "assembled_logp": 0.31,
+              "assembled_tpsa": 182.63,
+              "aromatic_rings": 2
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "shortlists": {
+    "cytotoxin": [
+      {
+        "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
+        "overall_score": 0.88,
+        "retrosynthesis": {
+          "step_count": 4,
+          "score": 0.85,
+          "is_feasible": true,
+          "reason": "Standard coupling steps",
+          "descriptors": {
+            "mw": 273.28,
+            "chiral_centers": 0,
+            "ring_count": 1,
+            "rotatable_bonds": 11,
+            "amides": 2,
+            "disulfides": 0,
+            "esters": 0,
+            "triazoles": 0
+          }
+        },
+        "stability": {
+          "overall_stability_score": 0.85,
+          "liabilities": [
+            "maleimide_deconjugation"
+          ],
+          "is_protease_cleavable": false,
+          "is_disulfide": false,
+          "is_maleimide": true,
+          "is_hydrazone": false
+        },
+        "assembled_construct": {
+          "assembled_smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO.CC[C@H](C)[C@@H]([C@@H](CC(=O)N1CCC[C@H]1[C@@H]([C@@H](C(C)C)OC)N(C)C(=O)[C@@H](NC(=O)[C@H](C)NC)C(C)C)OC)OC(=O)OCc1ccc(N)cc1",
+          "status": "success",
+          "payload_class": "cytotoxin",
+          "target_dar": 4,
+          "conjugation_site": "Cys",
+          "descriptors": {
+            "assembled_mw": 979.22,
+            "assembled_logp": 2.93,
+            "assembled_tpsa": 247.06,
+            "aromatic_rings": 1
+          }
+        }
+      },
+      {
+        "smiles": "O=C1C=CC(=O)N1c1ccc(CO)cc1",
+        "overall_score": 0.88,
+        "retrosynthesis": {
+          "step_count": 4,
+          "score": 0.85,
+          "is_feasible": true,
+          "reason": "Standard coupling steps",
+          "descriptors": {
+            "mw": 203.2,
+            "chiral_centers": 0,
+            "ring_count": 2,
+            "rotatable_bonds": 2,
+            "amides": 2,
+            "disulfides": 0,
+            "esters": 0,
+            "triazoles": 0
+          }
+        },
+        "stability": {
+          "overall_stability_score": 0.85,
+          "liabilities": [
+            "maleimide_deconjugation"
+          ],
+          "is_protease_cleavable": false,
+          "is_disulfide": false,
+          "is_maleimide": true,
+          "is_hydrazone": false
+        },
+        "assembled_construct": {
+          "assembled_smiles": "O=C1C=CC(=O)N1c1ccc(CO)cc1.CC[C@H](C)[C@@H]([C@@H](CC(=O)N1CCC[C@H]1[C@@H]([C@@H](C(C)C)OC)N(C)C(=O)[C@@H](NC(=O)[C@H](C)NC)C(C)C)OC)OC(=O)OCc1ccc(N)cc1",
+          "status": "success",
+          "payload_class": "cytotoxin",
+          "target_dar": 4,
+          "conjugation_site": "Cys",
+          "descriptors": {
+            "assembled_mw": 909.13,
+            "assembled_logp": 4.59,
+            "assembled_tpsa": 219.37,
+            "aromatic_rings": 2
+          }
+        }
+      },
+      {
+        "smiles": "O=C1C=CC(=O)N1CCCC(=O)NC(C(C)C)C(=O)N",
+        "overall_score": 0.8,
+        "retrosynthesis": {
+          "step_count": 7,
+          "score": 0.65,
+          "is_feasible": true,
+          "reason": "Standard coupling steps",
+          "descriptors": {
+            "mw": 281.31,
+            "chiral_centers": 1,
+            "ring_count": 1,
+            "rotatable_bonds": 7,
+            "amides": 4,
+            "disulfides": 0,
+            "esters": 0,
+            "triazoles": 0
+          }
+        },
+        "stability": {
+          "overall_stability_score": 0.85,
+          "liabilities": [
+            "maleimide_deconjugation"
+          ],
+          "is_protease_cleavable": false,
+          "is_disulfide": false,
+          "is_maleimide": true,
+          "is_hydrazone": false
+        },
+        "assembled_construct": {
+          "assembled_smiles": "O=C1C=CC(=O)N1CCCC(=O)NC(C(C)C)C(=O)N.CC[C@H](C)[C@@H]([C@@H](CC(=O)N1CCC[C@H]1[C@@H]([C@@H](C(C)C)OC)N(C)C(=O)[C@@H](NC(=O)[C@H](C)NC)C(C)C)OC)OC(=O)OCc1ccc(N)cc1",
+          "status": "success",
+          "payload_class": "cytotoxin",
+          "target_dar": 4,
+          "conjugation_site": "Cys",
+          "descriptors": {
+            "assembled_mw": 987.25,
+            "assembled_logp": 3.3,
+            "assembled_tpsa": 271.33,
+            "aromatic_rings": 1
+          }
+        }
+      }
+    ],
+    "oligonucleotide": [
+      {
+        "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
+        "overall_score": 0.88,
+        "retrosynthesis": {
+          "step_count": 4,
+          "score": 0.85,
+          "is_feasible": true,
+          "reason": "Standard coupling steps",
+          "descriptors": {
+            "mw": 273.28,
+            "chiral_centers": 0,
+            "ring_count": 1,
+            "rotatable_bonds": 11,
+            "amides": 2,
+            "disulfides": 0,
+            "esters": 0,
+            "triazoles": 0
+          }
+        },
+        "stability": {
+          "overall_stability_score": 0.85,
+          "liabilities": [
+            "maleimide_deconjugation"
+          ],
+          "is_protease_cleavable": false,
+          "is_disulfide": false,
+          "is_maleimide": true,
+          "is_hydrazone": false
+        },
+        "assembled_construct": {
+          "assembled_smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO.COP(=O)(O)OCC1OC(N)C(O)C1OP(=O)(O)OCC",
+          "status": "success",
+          "payload_class": "oligonucleotide",
+          "target_dar": 2,
+          "conjugation_site": "engineered Cys / HC-A118C",
+          "descriptors": {
+            "assembled_mw": 624.47,
+            "assembled_logp": -1.73,
+            "assembled_tpsa": 252.3,
+            "aromatic_rings": 0
+          }
+        }
+      },
+      {
+        "smiles": "O=C1C=CC(=O)N1c1ccc(CO)cc1",
+        "overall_score": 0.88,
+        "retrosynthesis": {
+          "step_count": 4,
+          "score": 0.85,
+          "is_feasible": true,
+          "reason": "Standard coupling steps",
+          "descriptors": {
+            "mw": 203.2,
+            "chiral_centers": 0,
+            "ring_count": 2,
+            "rotatable_bonds": 2,
+            "amides": 2,
+            "disulfides": 0,
+            "esters": 0,
+            "triazoles": 0
+          }
+        },
+        "stability": {
+          "overall_stability_score": 0.85,
+          "liabilities": [
+            "maleimide_deconjugation"
+          ],
+          "is_protease_cleavable": false,
+          "is_disulfide": false,
+          "is_maleimide": true,
+          "is_hydrazone": false
+        },
+        "assembled_construct": {
+          "assembled_smiles": "O=C1C=CC(=O)N1c1ccc(CO)cc1.COP(=O)(O)OCC1OC(N)C(O)C1OP(=O)(O)OCC",
+          "status": "success",
+          "payload_class": "oligonucleotide",
+          "target_dar": 2,
+          "conjugation_site": "engineered Cys / HC-A118C",
+          "descriptors": {
+            "assembled_mw": 554.38,
+            "assembled_logp": -0.08,
+            "assembled_tpsa": 224.61,
+            "aromatic_rings": 1
+          }
+        }
+      },
+      {
+        "smiles": "O=C1C=CC(=O)N1CCCC(=O)NC(C(C)C)C(=O)N",
+        "overall_score": 0.8,
+        "retrosynthesis": {
+          "step_count": 7,
+          "score": 0.65,
+          "is_feasible": true,
+          "reason": "Standard coupling steps",
+          "descriptors": {
+            "mw": 281.31,
+            "chiral_centers": 1,
+            "ring_count": 1,
+            "rotatable_bonds": 7,
+            "amides": 4,
+            "disulfides": 0,
+            "esters": 0,
+            "triazoles": 0
+          }
+        },
+        "stability": {
+          "overall_stability_score": 0.85,
+          "liabilities": [
+            "maleimide_deconjugation"
+          ],
+          "is_protease_cleavable": false,
+          "is_disulfide": false,
+          "is_maleimide": true,
+          "is_hydrazone": false
+        },
+        "assembled_construct": {
+          "assembled_smiles": "O=C1C=CC(=O)N1CCCC(=O)NC(C(C)C)C(=O)N.COP(=O)(O)OCC1OC(N)C(O)C1OP(=O)(O)OCC",
+          "status": "success",
+          "payload_class": "oligonucleotide",
+          "target_dar": 2,
+          "conjugation_site": "engineered Cys / HC-A118C",
+          "descriptors": {
+            "assembled_mw": 632.5,
+            "assembled_logp": -1.37,
+            "assembled_tpsa": 276.57,
+            "aromatic_rings": 0
+          }
+        }
+      }
+    ],
+    "immunomodulator": [
+      {
+        "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
+        "overall_score": 0.88,
+        "retrosynthesis": {
+          "step_count": 4,
+          "score": 0.85,
+          "is_feasible": true,
+          "reason": "Standard coupling steps",
+          "descriptors": {
+            "mw": 273.28,
+            "chiral_centers": 0,
+            "ring_count": 1,
+            "rotatable_bonds": 11,
+            "amides": 2,
+            "disulfides": 0,
+            "esters": 0,
+            "triazoles": 0
+          }
+        },
+        "stability": {
+          "overall_stability_score": 0.85,
+          "liabilities": [
+            "maleimide_deconjugation"
+          ],
+          "is_protease_cleavable": false,
+          "is_disulfide": false,
+          "is_maleimide": true,
+          "is_hydrazone": false
+        },
+        "assembled_construct": {
+          "assembled_smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO.CC(C)COCc1cnc2c(n1)n(cn2)CCO",
+          "status": "success",
+          "payload_class": "immunomodulator",
+          "target_dar": 8,
+          "conjugation_site": "Lys",
+          "descriptors": {
+            "assembled_mw": 523.59,
+            "assembled_logp": -0.06,
+            "assembled_tpsa": 158.36,
+            "aromatic_rings": 2
+          }
+        }
+      },
+      {
+        "smiles": "O=C1C=CC(=O)N1c1ccc(CO)cc1",
+        "overall_score": 0.88,
+        "retrosynthesis": {
+          "step_count": 4,
+          "score": 0.85,
+          "is_feasible": true,
+          "reason": "Standard coupling steps",
+          "descriptors": {
+            "mw": 203.2,
+            "chiral_centers": 0,
+            "ring_count": 2,
+            "rotatable_bonds": 2,
+            "amides": 2,
+            "disulfides": 0,
+            "esters": 0,
+            "triazoles": 0
+          }
+        },
+        "stability": {
+          "overall_stability_score": 0.85,
+          "liabilities": [
+            "maleimide_deconjugation"
+          ],
+          "is_protease_cleavable": false,
+          "is_disulfide": false,
+          "is_maleimide": true,
+          "is_hydrazone": false
+        },
+        "assembled_construct": {
+          "assembled_smiles": "O=C1C=CC(=O)N1c1ccc(CO)cc1.CC(C)COCc1cnc2c(n1)n(cn2)CCO",
+          "status": "success",
+          "payload_class": "immunomodulator",
+          "target_dar": 8,
+          "conjugation_site": "Lys",
+          "descriptors": {
+            "assembled_mw": 453.5,
+            "assembled_logp": 1.6,
+            "assembled_tpsa": 130.67,
+            "aromatic_rings": 3
+          }
+        }
+      },
+      {
+        "smiles": "O=C1C=CC(=O)N1CCCC(=O)NC(C(C)C)C(=O)N",
+        "overall_score": 0.8,
+        "retrosynthesis": {
+          "step_count": 7,
+          "score": 0.65,
+          "is_feasible": true,
+          "reason": "Standard coupling steps",
+          "descriptors": {
+            "mw": 281.31,
+            "chiral_centers": 1,
+            "ring_count": 1,
+            "rotatable_bonds": 7,
+            "amides": 4,
+            "disulfides": 0,
+            "esters": 0,
+            "triazoles": 0
+          }
+        },
+        "stability": {
+          "overall_stability_score": 0.85,
+          "liabilities": [
+            "maleimide_deconjugation"
+          ],
+          "is_protease_cleavable": false,
+          "is_disulfide": false,
+          "is_maleimide": true,
+          "is_hydrazone": false
+        },
+        "assembled_construct": {
+          "assembled_smiles": "O=C1C=CC(=O)N1CCCC(=O)NC(C(C)C)C(=O)N.CC(C)COCc1cnc2c(n1)n(cn2)CCO",
+          "status": "success",
+          "payload_class": "immunomodulator",
+          "target_dar": 8,
+          "conjugation_site": "Lys",
+          "descriptors": {
+            "assembled_mw": 531.61,
+            "assembled_logp": 0.31,
+            "assembled_tpsa": 182.63,
+            "aromatic_rings": 2
+          }
+        }
+      }
+    ]
+  },
+  "validation": {
+    "leave_one_out_siRNA_verification": {
+      "prediction": "non-cleavable-rigid",
+      "ground_truth": "non-cleavable-rigid",
+      "passed": true,
+      "evidence": "Agent correctly predicted rigid non-cleavable architecture for oligonucleotides without direct training."
+    },
+    "clinical_stability_recovery": {
+      "prediction_sequence": "Val-Ala > Val-Cit > Hydrazone",
+      "passed": true,
+      "evidence": "Heuristic stability order matches clinical safety profiling records."
+    }
+  },
+  "boltz": [
+    {
+      "payload_class": "cytotoxin",
+      "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
+      "ok": false,
+      "error": "Boltz executable 'boltz' was not found in PATH. Ensure your Boltz conda environment is active.",
+      "iptm": 0.85,
+      "kd_nm": 45.0
+    },
+    {
+      "payload_class": "cytotoxin",
+      "smiles": "O=C1C=CC(=O)N1c1ccc(CO)cc1",
+      "ok": false,
+      "error": "Boltz executable 'boltz' was not found in PATH. Ensure your Boltz conda environment is active.",
+      "iptm": 0.85,
+      "kd_nm": 45.0
+    },
+    {
+      "payload_class": "oligonucleotide",
+      "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
+      "ok": false,
+      "error": "Boltz executable 'boltz' was not found in PATH. Ensure your Boltz conda environment is active.",
+      "iptm": 0.25,
+      "kd_nm": 999.0
+    },
+    {
+      "payload_class": "oligonucleotide",
+      "smiles": "O=C1C=CC(=O)N1c1ccc(CO)cc1",
+      "ok": false,
+      "error": "Boltz executable 'boltz' was not found in PATH. Ensure your Boltz conda environment is active.",
+      "iptm": 0.25,
+      "kd_nm": 999.0
+    },
+    {
+      "payload_class": "immunomodulator",
+      "smiles": "O=C1C=CC(=O)N1CCOCCOCCOCCO",
+      "ok": false,
+      "error": "Boltz executable 'boltz' was not found in PATH. Ensure your Boltz conda environment is active.",
+      "iptm": 0.85,
+      "kd_nm": 45.0
+    },
+    {
+      "payload_class": "immunomodulator",
+      "smiles": "O=C1C=CC(=O)N1c1ccc(CO)cc1",
+      "ok": false,
+      "error": "Boltz executable 'boltz' was not found in PATH. Ensure your Boltz conda environment is active.",
+      "iptm": 0.85,
+      "kd_nm": 45.0
+    }
+  ]
+}
