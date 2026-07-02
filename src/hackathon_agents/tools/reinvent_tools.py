@@ -744,6 +744,8 @@ def _run_reinvent(parsed: ReinventInput, availability: dict[str, Any], config_pa
         ]
 
     env = dict(os.environ)
+    if str(parsed.device).lower().startswith("cpu"):
+        env["CUDA_VISIBLE_DEVICES"] = ""
     if parsed.prior_base:
         env["REINVENT_PRIOR_BASE"] = parsed.prior_base
 
