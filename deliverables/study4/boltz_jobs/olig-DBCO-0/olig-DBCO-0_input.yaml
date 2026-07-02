@@ -9,7 +9,7 @@ sequences:
       smiles: COP(=O)(O)OCC1OC(N)C(O)C1OP(=O)(O)OCC
   - ligand:
       id: B
-      smiles: O=C(NCc1ccccc1)c1cn(C(=O)N2Cc3ccccc3C#Cc3ccccc32)c(=O)[nH]c1=O
+      smiles: NCC1CCC(NC(=O)N2CCN(c3ccc(S(=O)(=O)N4Cc5ccccc5C#Cc5ccccc54)cn3)CC2)CC1
 properties:
   - affinity:
       binder: B

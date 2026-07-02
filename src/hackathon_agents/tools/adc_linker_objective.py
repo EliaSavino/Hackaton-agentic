@@ -229,6 +229,26 @@ def build_adc_linkinvent_objective(
     }
 
 
+def _sa_to_synth(sa_score: float, max_sa: float = 5.0) -> float:
+    """Map the continuous Ertl SA_Score (1=easy .. 10=hard) to a [0,1] synthesizability
+    subscore. Continuous (no discretization) and computed from the SAME SA_Score the
+    REINVENT generation objective optimises (build_adc_linkinvent_objective, the
+    reverse_sigmoid on max_sa_score), so offline ranking and generation agree.
+
+    Uses a reverse-sigmoid centred on ``max_sa`` (matching the generator's transform):
+    designs at/below SA=1 score ~1.0, designs at SA=max_sa score ~0.5, harder designs decay.
+    """
+    import math
+
+    try:
+        sa = float(sa_score)
+    except (TypeError, ValueError):
+        return 0.3
+    # reverse sigmoid: high score for low SA, passing through 0.5 at sa == max_sa.
+    k = 0.5
+    return round(1.0 / (1.0 + math.exp(k * (sa - float(max_sa)))), 6)
+
+
 def score_adc_linker(
     smiles: str,
     profile: ADCGoalProfile | dict[str, Any] | None = None,
@@ -257,7 +277,7 @@ def score_adc_linker(
     else:  # reward / ignore
         cleavability = 1.0 if has_cleavable else 0.4
 
-    from hackathon_agents.tools.predictive_scorers import estimate_retrosynthetic_steps, score_mechanism_resolved_stability
+    from hackathon_agents.tools.predictive_scorers import score_mechanism_resolved_stability
 
     subscores: dict[str, float] = {
         "solubility": round(
@@ -267,10 +287,10 @@ def score_adc_linker(
         ),
         "size": round(_window(mol_wt, profile.mw_low, profile.mw_high), 4),
         "flexibility": round(_sigmoid_low(float(rot_bonds), float(profile.max_rot_bonds), width=3.0), 4),
-        "synthesizability": round(
-            estimate_retrosynthetic_steps(smiles)["score"],
-            4,
-        ),
+        # Continuous Ertl SA_Score (same metric the generator optimises), NOT the old
+        # discretized step-count ladder. The step-count survives only as a reported
+        # "heuristic complexity index" + feasibility filter, never as the scoring axis.
+        "synthesizability": round(_sa_to_synth(sa_score, profile.max_sa_score), 4),
         "cleavability": round(cleavability, 4),
         "stability": round(score_mechanism_resolved_stability(smiles)["overall_stability_score"], 4),
         "similarity": 0.5,  # neutral placeholder until the corpus carries linker SMILES

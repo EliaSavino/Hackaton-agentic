@@ -7,8 +7,7 @@ from __future__ import annotations
 
 from typing import Any
 from rdkit import Chem
-from rdkit.Chem import Descriptors, RDConfig
-import os
+from rdkit.Chem import Descriptors
 
 def estimate_retrosynthetic_steps(smiles: str) -> dict[str, Any]:
     """Analyze a linker fragment to estimate synthetic step count, starting materials and complexity."""

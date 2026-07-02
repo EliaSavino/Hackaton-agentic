@@ -1,0 +1,1350 @@
+{
+  "dossiers": {
+    "cytotoxin": [
+      {
+        "payload_class": "cytotoxin",
+        "real_payload": "MMAE",
+        "smiles": "CC(C)C(NC(=O)C(=O)NC(=O)CNC(=O)N1C(=O)C=CC1=O)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+        "assembled_smiles": "CC(C)C(NC(=O)C(=O)NC(=O)CNC(=O)N1C(=O)C=CC1=O)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1.CC[C@H](C)[C@@H]([C@@H](CC(=O)N1CCC[C@H]1[C@@H]([C@@H](C(C)C)OC)N(C)C(=O)[C@@H](NC(=O)[C@H](C)NC)C(C)C)OC)OC(=O)OCc1ccc(N)cc1",
+        "handle": "Maleimide",
+        "trigger": "Val-Cit-PABC",
+        "composite_score": 0.6575,
+        "subscores": {
+          "solubility": 0.9342,
+          "size": 0.932,
+          "flexibility": 0.2689,
+          "synthesizability": 0.6437,
+          "cleavability": 1.0,
+          "stability": 0.85,
+          "similarity": 0.5
+        },
+        "has_cleavable_motif": true,
+        "retrosynthesis": {
+          "step_count": 12,
+          "score": 0.15,
+          "is_feasible": false,
+          "reason": "Too many linear/synthetic steps required",
+          "descriptors": {
+            "mw": 630.62,
+            "chiral_centers": 2,
+            "ring_count": 2,
+            "rotatable_bonds": 13,
+            "amides": 11,
+            "disulfides": 0,
+            "esters": 0,
+            "triazoles": 0
+          }
+        },
+        "stability": {
+          "overall_stability_score": 0.85,
+          "liabilities": [
+            "maleimide_deconjugation"
+          ],
+          "is_protease_cleavable": true,
+          "is_disulfide": false,
+          "is_maleimide": true,
+          "is_hydrazone": false
+        },
+        "closest_analogue": {
+          "name": "mc-Val-Cit-PABC",
+          "smiles": "O=C1C=CC(=O)N1CCCCCC(=O)NC(C(C)C)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+          "class": "protease-cleavable (maleimide/Cys)",
+          "adc": "brentuximab vedotin (Adcetris)",
+          "tanimoto": 0.654
+        },
+        "economics": {
+          "estimated_synthesis_steps": 12,
+          "estimated_cost_usd": 4400,
+          "estimated_duration_days": 30.0,
+          "probability_of_success": 0.14,
+          "note": "order-of-magnitude heuristics from step count + stability; not a quote"
+        },
+        "narrative": {
+          "design_rationale": "This linker incorporates a Val-Cit dipeptide motif consistent with the protease-cleavable design rule preferred for MMAE payloads, enabling efficient cathepsin B-mediated lysosomal release. The maleimide conjugation handle and semi-rigid PABC-like self-immolative spacer (p-aminobenzyl alcohol) provide the balance of plasma stability and triggered drug release specified by the stability-priority and rigidity guidelines. However, the design introduces an additional oxalyl-amide linkage upstream of the dipeptide, adding synthetic complexity and a potential hydrolytic liability not present in the canonical mc-Val-Cit-PABC scaffold.",
+          "synthesis_route": [
+            "Fmoc-SPPS assembly of Val-Cit dipeptide on Rink amide resin, with citrulline side-chain protection",
+            "Solution-phase coupling of p-aminobenzyl alcohol (PABOH) to Cit C-terminus via HATU-mediated amide bond formation",
+            "N-terminal glycine extension onto Val via Fmoc-Gly-OH coupling (HATU/DIPEA)",
+            "Oxalyl bridge installation: reaction of Gly N-terminus with oxalyl chloride followed by coupling to maleimide-bearing amine",
+            "Maleimide ring formation via cyclization of maleamic acid intermediate using acetic anhydride/NaOAc",
+            "Global deprotection, HPLC purification, and conjugation to MMAE via carbonate or carbamate linkage at PABOH"
+          ],
+          "expected_failure_modes": [
+            "Maleimide retro-Michael deconjugation in plasma leading to premature payload transfer to albumin (identified liability)",
+            "Oxalamide bond hydrolysis under physiological conditions releasing the maleimide-spacer fragment before target-cell internalization",
+            "High step count (\u226512 steps) reducing overall yield and complicating scale-up, increasing cost-of-goods",
+            "Incomplete self-immolation of the PABC spacer due to steric or electronic perturbation from the non-canonical upstream linkage"
+          ],
+          "validation_experiments": [
+            "Cathepsin B cleavage kinetics monitored by LC-MS/MS to confirm Val-Cit bond cleavage and complete 1,6-elimination of MMAE",
+            "Plasma stability assay (human, mouse, cynomolgus; 37\u00b0C, 7 days) with DAR tracking by HIC and free MMAE quantification",
+            "Maleimide hydrolysis/ring-opening rate assessment via thiol-exchange assay with N-acetylcysteine and LC-MS monitoring",
+            "In vitro cytotoxicity (CD30+ Karpas-299 vs CD30\u2212 control) comparing potency to brentuximab vedotin mc-Val-Cit-PABC-MMAE benchmark"
+          ],
+          "information_gain": "Testing this linker would reveal whether an oxalamide bridge upstream of Val-Cit preserves efficient protease cleavage and self-immolation kinetics while introducing a new hydrolytic vulnerability, thereby defining the tolerance of the mc-Val-Cit-PABC scaffold to non-canonical N-terminal extensions for MMAE payloads."
+        },
+        "narrative_llm_ok": true,
+        "derived_rule": {
+          "cleavage_preference": "protease-cleavable",
+          "rigidity": "semi-rigid",
+          "stability_priority": "high",
+          "confidence": 0.784
+        }
+      },
+      {
+        "payload_class": "cytotoxin",
+        "real_payload": "MMAE",
+        "smiles": "CC(C)C(NC(=O)CNC(=O)C(=O)NC(=O)CN1C(=O)C=CC1=O)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+        "assembled_smiles": "CC(C)C(NC(=O)CNC(=O)C(=O)NC(=O)CN1C(=O)C=CC1=O)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1.CC[C@H](C)[C@@H]([C@@H](CC(=O)N1CCC[C@H]1[C@@H]([C@@H](C(C)C)OC)N(C)C(=O)[C@@H](NC(=O)[C@H](C)NC)C(C)C)OC)OC(=O)OCc1ccc(N)cc1",
+        "handle": "Maleimide",
+        "trigger": "Val-Cit-PABC",
+        "composite_score": 0.6262,
+        "subscores": {
+          "solubility": 0.9499,
+          "size": 0.9008,
+          "flexibility": 0.1589,
+          "synthesizability": 0.6565,
+          "cleavability": 1.0,
+          "stability": 0.85,
+          "similarity": 0.5
+        },
+        "has_cleavable_motif": true,
+        "retrosynthesis": {
+          "step_count": 12,
+          "score": 0.15,
+          "is_feasible": false,
+          "reason": "Too many linear/synthetic steps required",
+          "descriptors": {
+            "mw": 644.64,
+            "chiral_centers": 2,
+            "ring_count": 2,
+            "rotatable_bonds": 15,
+            "amides": 10,
+            "disulfides": 0,
+            "esters": 0,
+            "triazoles": 0
+          }
+        },
+        "stability": {
+          "overall_stability_score": 0.85,
+          "liabilities": [
+            "maleimide_deconjugation"
+          ],
+          "is_protease_cleavable": true,
+          "is_disulfide": false,
+          "is_maleimide": true,
+          "is_hydrazone": false
+        },
+        "closest_analogue": {
+          "name": "mc-Val-Cit-PABC",
+          "smiles": "O=C1C=CC(=O)N1CCCCCC(=O)NC(C(C)C)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+          "class": "protease-cleavable (maleimide/Cys)",
+          "adc": "brentuximab vedotin (Adcetris)",
+          "tanimoto": 0.711
+        },
+        "economics": {
+          "estimated_synthesis_steps": 12,
+          "estimated_cost_usd": 4400,
+          "estimated_duration_days": 30.0,
+          "probability_of_success": 0.14,
+          "note": "order-of-magnitude heuristics from step count + stability; not a quote"
+        },
+        "narrative": {
+          "design_rationale": "This linker incorporates a Val-Cit dipeptide motif consistent with the protease-cleavable design rule preferred for MMAE payloads, enabling lysosomal cathepsin B-mediated release. The maleimide conjugation handle provides cysteine-selective attachment, and the semi-rigid scaffold with alternating amide bonds and a PABC-like p-aminobenzyl alcohol self-immolative spacer balances conformational restraint with cleavage efficiency. The high stability score (0.85) aligns with the stability priority, though the oxalamide insertion and modified glycine spacers deviate from the canonical mc-Val-Cit-PABC by adding unnecessary complexity.",
+          "synthesis_route": [
+            "Maleimide-glycine building block: alkylation of maleimide with bromoacetyl chloride followed by glycine amide coupling (HATU)",
+            "Oxalamide formation: coupling of oxalyl chloride with glycine-maleimide intermediate under controlled stoichiometry",
+            "Dipeptide assembly: Fmoc-Val-OH coupled to H-Cit-OH via HATU/DIPEA, followed by Fmoc deprotection",
+            "Fragment coupling: amide bond formation between oxalamide-glycine fragment and Val-Cit dipeptide N-terminus (HATU/DIPEA)",
+            "PABC spacer attachment: coupling of Val-Cit C-terminus to 4-aminobenzyl alcohol using HATU/DIPEA",
+            "MMAE conjugation: activation of PABC alcohol as p-nitrophenyl carbonate, followed by reaction with MMAE secondary amine"
+          ],
+          "expected_failure_modes": [
+            "Maleimide retro-Michael deconjugation in plasma leading to off-target albumin transfer and reduced DAR over time",
+            "Oxalamide moiety may introduce hydrolytic instability under physiological pH, causing premature linker fragmentation",
+            "12-step linear synthesis reduces overall yield and scalability, increasing cost-of-goods and limiting material availability for studies",
+            "Non-canonical spacer geometry between maleimide and dipeptide may impair cathepsin B substrate recognition and reduce cleavage efficiency"
+          ],
+          "validation_experiments": [
+            "Cathepsin B cleavage kinetics by LC-MS/MS monitoring MMAE release at pH 5.0 vs pH 7.4 over 24 h",
+            "Plasma stability assay in human, mouse, and cynomolgus monkey plasma measuring intact ADC DAR by HIC at 0, 24, 72, 168 h",
+            "Maleimide hydrolysis and deconjugation assessment: incubation with free cysteine/albumin followed by SEC and RP-HPLC analysis",
+            "In vitro cytotoxicity comparison vs benchmark mc-Val-Cit-PABC-MMAE ADC on CD30+ Karpas-299 cells (IC50 determination)"
+          ],
+          "information_gain": "Testing this linker would reveal whether an oxalamide-extended glycine spacer between the maleimide and Val-Cit dipeptide alters cathepsin B cleavage efficiency or plasma stability relative to the canonical mc-Val-Cit-PABC benchmark, informing whether non-standard spacer insertions are tolerated or detrimental in MMAE ADC linker design."
+        },
+        "narrative_llm_ok": true,
+        "derived_rule": {
+          "cleavage_preference": "protease-cleavable",
+          "rigidity": "semi-rigid",
+          "stability_priority": "high",
+          "confidence": 0.784
+        }
+      },
+      {
+        "payload_class": "cytotoxin",
+        "real_payload": "MMAE",
+        "smiles": "CC(C)C(NC(=O)C(=O)NC(=O)CNC(=O)CN1C(=O)C=CC1=O)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+        "assembled_smiles": "CC(C)C(NC(=O)C(=O)NC(=O)CNC(=O)CN1C(=O)C=CC1=O)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1.CC[C@H](C)[C@@H]([C@@H](CC(=O)N1CCC[C@H]1[C@@H]([C@@H](C(C)C)OC)N(C)C(=O)[C@@H](NC(=O)[C@H](C)NC)C(C)C)OC)OC(=O)OCc1ccc(N)cc1",
+        "handle": "Maleimide",
+        "trigger": "Val-Cit-PABC",
+        "composite_score": 0.6258,
+        "subscores": {
+          "solubility": 0.9499,
+          "size": 0.9008,
+          "flexibility": 0.1589,
+          "synthesizability": 0.6542,
+          "cleavability": 1.0,
+          "stability": 0.85,
+          "similarity": 0.5
+        },
+        "has_cleavable_motif": true,
+        "retrosynthesis": {
+          "step_count": 12,
+          "score": 0.15,
+          "is_feasible": false,
+          "reason": "Too many linear/synthetic steps required",
+          "descriptors": {
+            "mw": 644.64,
+            "chiral_centers": 2,
+            "ring_count": 2,
+            "rotatable_bonds": 15,
+            "amides": 10,
+            "disulfides": 0,
+            "esters": 0,
+            "triazoles": 0
+          }
+        },
+        "stability": {
+          "overall_stability_score": 0.85,
+          "liabilities": [
+            "maleimide_deconjugation"
+          ],
+          "is_protease_cleavable": true,
+          "is_disulfide": false,
+          "is_maleimide": true,
+          "is_hydrazone": false
+        },
+        "closest_analogue": {
+          "name": "mc-Val-Cit-PABC",
+          "smiles": "O=C1C=CC(=O)N1CCCCCC(=O)NC(C(C)C)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+          "class": "protease-cleavable (maleimide/Cys)",
+          "adc": "brentuximab vedotin (Adcetris)",
+          "tanimoto": 0.688
+        },
+        "economics": {
+          "estimated_synthesis_steps": 12,
+          "estimated_cost_usd": 4400,
+          "estimated_duration_days": 30.0,
+          "probability_of_success": 0.14,
+          "note": "order-of-magnitude heuristics from step count + stability; not a quote"
+        },
+        "narrative": {
+          "design_rationale": "This linker incorporates a Val-Cit dipeptide motif consistent with the protease-cleavable design rule preferred for MMAE payloads, enabling efficient cathepsin B-mediated lysosomal release. The maleimide conjugation handle and PABC-like self-immolative spacer (p-aminobenzyl alcohol) provide semi-rigid architecture matching the mc-ValCitPABC scaffold logic, though an additional glycine-glycine extension introduces unnecessary flexibility and synthetic complexity. The overall design prioritizes high plasma stability via the dipeptide trigger, but the standard maleimide carries a known deconjugation liability via retro-Michael reaction.",
+          "synthesis_route": [
+            "Maleimide-glycine conjugate formation: acylation of glycine with maleimidoacetic acid (EDC/HOBt)",
+            "Elongation with second glycine unit via amide coupling (HATU/DIPEA)",
+            "Coupling of Gly-Gly-maleimide fragment to Fmoc-Val-OH followed by Fmoc deprotection (standard Fmoc SPPS or solution-phase HATU coupling)",
+            "Amide coupling of Val intermediate with Fmoc-Cit(Pbf)-OH, then global deprotection (TFA/scavengers)",
+            "Coupling of Val-Cit dipeptide to 4-aminobenzyl alcohol (p-AB-OH) via amide bond (HATU/DIPEA)",
+            "Activation of p-AB-OH as p-nitrophenyl carbonate and conjugation to MMAE (carbonate/carbamate formation, then purification by RP-HPLC)"
+          ],
+          "expected_failure_modes": [
+            "Maleimide retro-Michael deconjugation in plasma leading to premature payload transfer to albumin (score 0.85 stability flag)",
+            "Excessive linker length and flexibility from Gly-Gly spacer may reduce plasma stability and increase aggregation propensity",
+            "12-step linear synthesis reduces overall yield and scalability, increasing risk of impurity-related toxicity",
+            "Oxalyl amide (C(=O)C(=O)) motif between Gly and Val may be hydrolytically labile under physiological conditions, causing premature linker fragmentation"
+          ],
+          "validation_experiments": [
+            "Cathepsin B cleavage kinetics monitored by LC-MS/MS to confirm Val-Cit bond cleavage and MMAE release efficiency vs. mc-ValCitPABC benchmark",
+            "Plasma stability assay in human and mouse plasma (t1/2 measurement by LC-MS at 37\u00b0C over 7 days) to assess maleimide deconjugation and oxalyl amide hydrolysis",
+            "DAR determination by HIC and intact-mass LC-MS after conjugation to anti-CD30 cysteine-engineered antibody",
+            "In vitro cytotoxicity (IC50) in CD30+ Karpas-299 cells vs. brentuximab vedotin as head-to-head comparator"
+          ],
+          "information_gain": "Testing this linker would reveal whether the additional Gly-Gly-oxalyl spacer between the maleimide and Val-Cit dipeptide meaningfully alters cathepsin B cleavage efficiency or plasma stability relative to the minimal mc-ValCitPABC benchmark, informing whether extended spacer architectures offer any advantage or simply add synthetic burden and new hydrolytic liabilities."
+        },
+        "narrative_llm_ok": true,
+        "derived_rule": {
+          "cleavage_preference": "protease-cleavable",
+          "rigidity": "semi-rigid",
+          "stability_priority": "high",
+          "confidence": 0.784
+        }
+      },
+      {
+        "payload_class": "cytotoxin",
+        "real_payload": "MMAE",
+        "smiles": "CC(C)C(NC(=O)C(=O)NC(=O)CN(C)C(=O)CN1C(=O)C=CC1=O)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+        "assembled_smiles": "CC(C)C(NC(=O)C(=O)NC(=O)CN(C)C(=O)CN1C(=O)C=CC1=O)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1.CC[C@H](C)[C@@H]([C@@H](CC(=O)N1CCC[C@H]1[C@@H]([C@@H](C(C)C)OC)N(C)C(=O)[C@@H](NC(=O)[C@H](C)NC)C(C)C)OC)OC(=O)OCc1ccc(N)cc1",
+        "handle": "Maleimide",
+        "trigger": "Val-Cit-PABC",
+        "composite_score": 0.6192,
+        "subscores": {
+          "solubility": 0.9413,
+          "size": 0.8696,
+          "flexibility": 0.1589,
+          "synthesizability": 0.646,
+          "cleavability": 1.0,
+          "stability": 0.85,
+          "similarity": 0.5
+        },
+        "has_cleavable_motif": true,
+        "retrosynthesis": {
+          "step_count": 12,
+          "score": 0.15,
+          "is_feasible": false,
+          "reason": "Too many linear/synthetic steps required",
+          "descriptors": {
+            "mw": 658.67,
+            "chiral_centers": 2,
+            "ring_count": 2,
+            "rotatable_bonds": 15,
+            "amides": 10,
+            "disulfides": 0,
+            "esters": 0,
+            "triazoles": 0
+          }
+        },
+        "stability": {
+          "overall_stability_score": 0.85,
+          "liabilities": [
+            "maleimide_deconjugation"
+          ],
+          "is_protease_cleavable": true,
+          "is_disulfide": false,
+          "is_maleimide": true,
+          "is_hydrazone": false
+        },
+        "closest_analogue": {
+          "name": "mc-Val-Cit-PABC",
+          "smiles": "O=C1C=CC(=O)N1CCCCCC(=O)NC(C(C)C)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+          "class": "protease-cleavable (maleimide/Cys)",
+          "adc": "brentuximab vedotin (Adcetris)",
+          "tanimoto": 0.654
+        },
+        "economics": {
+          "estimated_synthesis_steps": 12,
+          "estimated_cost_usd": 4400,
+          "estimated_duration_days": 30.0,
+          "probability_of_success": 0.14,
+          "note": "order-of-magnitude heuristics from step count + stability; not a quote"
+        },
+        "narrative": {
+          "design_rationale": "This linker incorporates a Val-Cit dipeptide motif for protease-cleavable release of MMAE, consistent with the derived rule favoring cathepsin B-sensitive sequences for cytotoxin payloads. The maleimide conjugation handle and PABC-like self-immolative spacer (p-aminobenzyl alcohol) provide semi-rigid architecture between antibody and payload, matching the rigidity preference. However, the design introduces additional amide and glycine-derived segments upstream of Val-Cit, adding synthetic complexity (12 steps) and potential instability points while aiming to modulate hydrophobicity and plasma stability.",
+          "synthesis_route": [
+            "Maleimide-glycine building block: N-alkylation of maleimide with bromoacetyl chloride followed by coupling to N-methylglycine (sarcosine) derivative",
+            "Oxalyl bridge formation: activation of oxalic acid mono-ester with EDC, coupling to valine-derived amine to install the oxalamide motif",
+            "Dipeptide assembly: HATU-mediated amide coupling of N-protected valine with citrulline",
+            "PABC spacer attachment: amide coupling of citrulline C-terminus with 4-aminobenzyl alcohol (HATU/DIPEA)",
+            "Carbonate activation of PABC: reaction of p-aminobenzyl alcohol with p-nitrophenyl chloroformate for subsequent MMAE conjugation",
+            "Global deprotection and MMAE conjugation: TFA deprotection followed by carbonate coupling to MMAE secondary amine"
+          ],
+          "expected_failure_modes": [
+            "Maleimide retro-Michael deconjugation in plasma leading to premature payload transfer to serum albumin (score 0.85 stability flag)",
+            "Oxalamide linkage susceptibility to non-specific hydrolysis under physiological conditions, reducing circulation stability",
+            "High lipophilicity from extended linker causing aggregation and reduced DAR homogeneity during conjugation",
+            "Excessive synthetic length (12 steps) reducing overall yield and complicating GMP scale-up"
+          ],
+          "validation_experiments": [
+            "Cathepsin B cleavage kinetics by LC-MS/MS monitoring MMAE release at pH 5.0 vs pH 7.4 over 24 h",
+            "Plasma stability assay in human, mouse, and cynomolgus monkey plasma measuring intact ADC by affinity capture LC-MS (t1/2 target >5 days)",
+            "DAR distribution and aggregation assessment by HIC and SEC after interchain cysteine conjugation to trastuzumab",
+            "Maleimide hydrolysis/ring-opening kinetics by LC-MS at 37\u00b0C in PBS pH 7.4 to quantify succinimide ring opening rate"
+          ],
+          "information_gain": "Testing this extended oxalamide-containing Val-Cit-PABC linker would reveal whether additional polar amide segments upstream of the canonical dipeptide improve or impair plasma stability relative to the standard mc-Val-Cit-PABC benchmark, and whether the added complexity is justified by any pharmacokinetic or therapeutic index advantage."
+        },
+        "narrative_llm_ok": true,
+        "derived_rule": {
+          "cleavage_preference": "protease-cleavable",
+          "rigidity": "semi-rigid",
+          "stability_priority": "high",
+          "confidence": 0.784
+        }
+      },
+      {
+        "payload_class": "cytotoxin",
+        "real_payload": "MMAE",
+        "smiles": "CC(C)C(NC(=O)CC(=O)NC(=O)C(=O)NC(=O)CN1C(=O)C=CC1=O)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+        "assembled_smiles": "CC(C)C(NC(=O)CC(=O)NC(=O)C(=O)NC(=O)CN1C(=O)C=CC1=O)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1.CC[C@H](C)[C@@H]([C@@H](CC(=O)N1CCC[C@H]1[C@@H]([C@@H](C(C)C)OC)N(C)C(=O)[C@@H](NC(=O)[C@H](C)NC)C(C)C)OC)OC(=O)OCc1ccc(N)cc1",
+        "handle": "Maleimide",
+        "trigger": "Val-Cit-PABC",
+        "composite_score": 0.6147,
+        "subscores": {
+          "solubility": 0.9518,
+          "size": 0.8386,
+          "flexibility": 0.1589,
+          "synthesizability": 0.6371,
+          "cleavability": 1.0,
+          "stability": 0.85,
+          "similarity": 0.5
+        },
+        "has_cleavable_motif": true,
+        "retrosynthesis": {
+          "step_count": 12,
+          "score": 0.15,
+          "is_feasible": false,
+          "reason": "Too many linear/synthetic steps required",
+          "descriptors": {
+            "mw": 672.65,
+            "chiral_centers": 2,
+            "ring_count": 2,
+            "rotatable_bonds": 15,
+            "amides": 11,
+            "disulfides": 0,
+            "esters": 0,
+            "triazoles": 0
+          }
+        },
+        "stability": {
+          "overall_stability_score": 0.85,
+          "liabilities": [
+            "maleimide_deconjugation"
+          ],
+          "is_protease_cleavable": true,
+          "is_disulfide": false,
+          "is_maleimide": true,
+          "is_hydrazone": false
+        },
+        "closest_analogue": {
+          "name": "mc-Val-Cit-PABC",
+          "smiles": "O=C1C=CC(=O)N1CCCCCC(=O)NC(C(C)C)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+          "class": "protease-cleavable (maleimide/Cys)",
+          "adc": "brentuximab vedotin (Adcetris)",
+          "tanimoto": 0.73
+        },
+        "economics": {
+          "estimated_synthesis_steps": 12,
+          "estimated_cost_usd": 4400,
+          "estimated_duration_days": 30.0,
+          "probability_of_success": 0.14,
+          "note": "order-of-magnitude heuristics from step count + stability; not a quote"
+        },
+        "narrative": {
+          "design_rationale": "This linker incorporates a Val-Cit dipeptide motif consistent with the protease-cleavable design rule preferred for MMAE payloads, enabling efficient lysosomal cathepsin B-mediated release. The maleimide conjugation handle and semi-rigid amide backbone align with the mc-ValCitPABC clinical precedent, though the oxalamide and \u03b2-alanine spacer insertions add rigidity and extend the linker beyond the minimal scaffold. The stability score of 0.85 reflects reasonable plasma stability, but the additional carbonyl units (oxalamide segment) introduce synthetic complexity and potential hydrolytic liabilities not present in the canonical mc-ValCitPABC design.",
+          "synthesis_route": [
+            "Maleimide-glycine building block: alkylation of glycine with maleic anhydride followed by ring closure to N-maleimidoacetyl-glycine",
+            "Oxalamide formation: coupling of N-maleimidoacetyl-glycine with oxalyl chloride mono-acid to install the oxalamide motif",
+            "Amide coupling of oxalamide intermediate with \u03b2-alanine spacer (HATU/DIPEA)",
+            "Peptide coupling of \u03b2-alanine-extended fragment with Val-Cit dipeptide (Fmoc-SPPS or solution-phase HATU coupling)",
+            "Amide coupling of Val-Cit C-terminus with 4-aminobenzyl alcohol (PABC) to form the self-immolative unit",
+            "Activation of PABC hydroxyl as p-nitrophenyl carbonate for subsequent MMAE conjugation"
+          ],
+          "expected_failure_modes": [
+            "Maleimide retro-Michael deconjugation in plasma leading to premature payload transfer to serum albumin",
+            "Oxalamide bond hydrolysis under physiological conditions causing linker fragmentation before target-cell internalization",
+            "High step count (12 steps) reducing overall yield and complicating scale-up, increasing impurity burden",
+            "Altered cathepsin B cleavage kinetics due to non-canonical N-terminal extensions on the Val-Cit dipeptide reducing payload release efficiency"
+          ],
+          "validation_experiments": [
+            "Cathepsin B cleavage kinetics by LC-MS/MS monitoring MMAE release at pH 5.0 vs pH 7.4 over 24 h",
+            "Human and mouse plasma stability assay (37\u00b0C, 96 h) with DAR tracking by HIC and intact-mass MS to quantify maleimide deconjugation",
+            "In vitro cytotoxicity (IC50) on CD30+ Karpas-299 cells vs unconjugated MMAE and brentuximab vedotin benchmark",
+            "Forced degradation study (pH 4.5, 7.4, 8.5; 40\u00b0C) with LC-MS to identify oxalamide and maleimide hydrolysis products"
+          ],
+          "information_gain": "Testing this extended oxalamide-containing mc-ValCitPABC variant will reveal whether additional rigidifying carbonyl spacers between the maleimide and dipeptide improve or impair cathepsin B recognition and plasma stability relative to the minimal clinical scaffold, informing whether linker elongation strategies are viable for MMAE ADCs."
+        },
+        "narrative_llm_ok": true,
+        "derived_rule": {
+          "cleavage_preference": "protease-cleavable",
+          "rigidity": "semi-rigid",
+          "stability_priority": "high",
+          "confidence": 0.784
+        }
+      }
+    ],
+    "immunomodulator": [
+      {
+        "payload_class": "immunomodulator",
+        "real_payload": "R848",
+        "smiles": "CC(NC(=O)C(NC(=O)CC(N)C(=O)NCC(=O)N1C(=O)C=CC1=O)C(C)C)C(=O)Nc1ccc(CO)cc1",
+        "assembled_smiles": "CC(NC(=O)C(NC(=O)CC(N)C(=O)NCC(=O)N1C(=O)C=CC1=O)C(C)C)C(=O)Nc1ccc(CO)cc1.CC(C)COCc1cnc2c(n1)n(cn2)CCO",
+        "handle": "Maleimide",
+        "trigger": "Val-Ala-PABC",
+        "composite_score": 0.7355,
+        "subscores": {
+          "solubility": 0.9148,
+          "size": 1.0,
+          "flexibility": 0.6608,
+          "synthesizability": 0.6547,
+          "cleavability": 1.0,
+          "stability": 0.85,
+          "similarity": 0.5
+        },
+        "has_cleavable_motif": true,
+        "retrosynthesis": {
+          "step_count": 12,
+          "score": 0.15,
+          "is_feasible": false,
+          "reason": "Too many linear/synthetic steps required",
+          "descriptors": {
+            "mw": 544.57,
+            "chiral_centers": 3,
+            "ring_count": 2,
+            "rotatable_bonds": 12,
+            "amides": 7,
+            "disulfides": 0,
+            "esters": 0,
+            "triazoles": 0
+          }
+        },
+        "stability": {
+          "overall_stability_score": 0.85,
+          "liabilities": [
+            "maleimide_deconjugation"
+          ],
+          "is_protease_cleavable": true,
+          "is_disulfide": false,
+          "is_maleimide": true,
+          "is_hydrazone": false
+        },
+        "closest_analogue": {
+          "name": "mc-Val-Ala-PABC",
+          "smiles": "O=C1C=CC(=O)N1CCCCCC(=O)NC(C(C)C)C(=O)NC(C)C(=O)Nc1ccc(CO)cc1",
+          "class": "protease-cleavable (maleimide/Cys)",
+          "adc": "Val-Ala class",
+          "tanimoto": 0.58
+        },
+        "economics": {
+          "estimated_synthesis_steps": 12,
+          "estimated_cost_usd": 4400,
+          "estimated_duration_days": 30.0,
+          "probability_of_success": 0.14,
+          "note": "order-of-magnitude heuristics from step count + stability; not a quote"
+        },
+        "narrative": {
+          "design_rationale": "This linker employs a Val-Ala dipeptide protease-cleavable trigger consistent with the derived rule's cleavage preference for immunomodulator payloads, enabling cathepsin-mediated release in the endolysosome. The flexible alkyl spacer and PABC self-immolative unit match the 'flexible' rigidity preference, allowing efficient payload liberation after enzymatic cleavage. Maleimide-thiol conjugation aligns with the single validated clinical exemplar, though the known maleimide retro-Michael deconjugation liability warrants monitoring against the 'standard' stability priority.",
+          "synthesis_route": [
+            "Fmoc-SPPS assembly of Gly-Val-Ala tripeptide on Rink amide resin, cleaving to give H-Gly-Val-Ala-OH",
+            "Amide coupling of 4-aminobenzyl alcohol (PABC) with the tripeptide C-terminus using HATU/DIPEA",
+            "Activation of PABC benzylic alcohol as p-nitrophenyl carbonate, then coupling with R848 primary amine to form carbamate linkage",
+            "N-terminal deprotection and coupling with 3-maleimidopropionic acid NHS ester to install the maleimide conjugation handle",
+            "Global deprotection, HPLC purification, and LC-MS characterization of final linker-payload"
+          ],
+          "expected_failure_modes": [
+            "Maleimide retro-Michael addition causing premature payload loss in plasma (thiol exchange with albumin Cys34)",
+            "Steric hindrance from R848 imidazoquinoline ring system may impair PABC 1,6-elimination kinetics, leading to incomplete payload release",
+            "12-step linear synthesis reduces overall yield and scalability, risking insufficient material for in vivo studies",
+            "Potential premature cleavage of Val-Ala dipeptide by extracellular proteases (e.g., neutrophil elastase) causing off-target immune activation"
+          ],
+          "validation_experiments": [
+            "Cathepsin B cleavage assay (pH 5.0, 37\u00b0C) monitored by LC-MS/MS to confirm Val-Ala cleavage and free R848 release kinetics",
+            "Human and mouse plasma stability (37\u00b0C, 96 h) measuring intact ADC by HIC and free R848 by LC-MS to quantify maleimide deconjugation rate",
+            "DAR determination by HIC and native MS after stochastic conjugation to trastuzumab interchain cysteines",
+            "TLR7/8 NF-\u03baB reporter cell assay (HEK-Blue) comparing free R848 vs. linker-payload vs. intact ADC to confirm conditional activation only after cleavage"
+          ],
+          "information_gain": "Testing this construct will reveal whether the Val-Ala-PABC self-immolative mechanism efficiently liberates the bulky R848 imidazoquinoline scaffold and whether maleimide stabilization strategies (e.g., hydrolysis to succinamic acid) are necessary to achieve adequate plasma stability for immunomodulator ADCs."
+        },
+        "narrative_llm_ok": true,
+        "derived_rule": {
+          "cleavage_preference": "protease-cleavable",
+          "rigidity": "flexible",
+          "stability_priority": "standard",
+          "confidence": 0.821
+        }
+      },
+      {
+        "payload_class": "immunomodulator",
+        "real_payload": "R848",
+        "smiles": "CC(NC(=O)C(NC(=O)CS(=O)(=O)CC(=O)NCC(=O)N1C(=O)C=CC1=O)C(C)C)C(=O)Nc1ccc(CO)cc1",
+        "assembled_smiles": "CC(NC(=O)C(NC(=O)CS(=O)(=O)CC(=O)NCC(=O)N1C(=O)C=CC1=O)C(C)C)C(=O)Nc1ccc(CO)cc1.CC(C)COCc1cnc2c(n1)n(cn2)CCO",
+        "handle": "Maleimide",
+        "trigger": "Val-Ala-PABC",
+        "composite_score": 0.7348,
+        "subscores": {
+          "solubility": 0.9255,
+          "size": 1.0,
+          "flexibility": 0.5826,
+          "synthesizability": 0.6606,
+          "cleavability": 1.0,
+          "stability": 0.85,
+          "similarity": 0.5
+        },
+        "has_cleavable_motif": true,
+        "retrosynthesis": {
+          "step_count": 12,
+          "score": 0.15,
+          "is_feasible": false,
+          "reason": "Too many linear/synthetic steps required",
+          "descriptors": {
+            "mw": 593.62,
+            "chiral_centers": 2,
+            "ring_count": 2,
+            "rotatable_bonds": 13,
+            "amides": 7,
+            "disulfides": 0,
+            "esters": 0,
+            "triazoles": 0
+          }
+        },
+        "stability": {
+          "overall_stability_score": 0.85,
+          "liabilities": [
+            "maleimide_deconjugation"
+          ],
+          "is_protease_cleavable": true,
+          "is_disulfide": false,
+          "is_maleimide": true,
+          "is_hydrazone": false
+        },
+        "closest_analogue": {
+          "name": "mc-Val-Ala-PABC",
+          "smiles": "O=C1C=CC(=O)N1CCCCCC(=O)NC(C(C)C)C(=O)NC(C)C(=O)Nc1ccc(CO)cc1",
+          "class": "protease-cleavable (maleimide/Cys)",
+          "adc": "Val-Ala class",
+          "tanimoto": 0.588
+        },
+        "economics": {
+          "estimated_synthesis_steps": 12,
+          "estimated_cost_usd": 4400,
+          "estimated_duration_days": 30.0,
+          "probability_of_success": 0.14,
+          "note": "order-of-magnitude heuristics from step count + stability; not a quote"
+        },
+        "narrative": {
+          "design_rationale": "This linker employs a Val-Ala dipeptide protease-cleavable trigger consistent with the derived rule's cleavage preference for immunomodulator payloads, enabling selective intracellular release of R848 by cathepsin B. The flexible alkyl-sulfonyl spacer and PABC self-immolative unit match the 'flexible' rigidity preference, allowing efficient payload liberation after enzymatic cleavage. Thiol-maleimide conjugation provides standard stochastic attachment at interchain disulfides, aligning with the single literature exemplar, though the known maleimide retro-Michael liability is a recognized trade-off for conjugation simplicity.",
+          "synthesis_route": [
+            "Sulfonylation: alkylation of thioglycolic acid with chloroacetamide-maleimide building block to install the sulfonyl-maleimide handle",
+            "Amide coupling of sulfonylacetyl acid with H-Ala-Val-OH dipeptide (HATU/DIPEA) to form the cleavable dipeptide segment",
+            "Synthesis of PABC-amine: reductive amination or carbamate formation linking 4-aminobenzyl alcohol to R848 via carbonate/carbamate linkage",
+            "Amide coupling of Val-Ala dipeptide C-terminus with PABC-R848 amine (HATU/DIPEA)",
+            "Global deprotection (TFA or hydrogenolysis) and HPLC purification of the final linker-payload construct"
+          ],
+          "expected_failure_modes": [
+            "Maleimide retro-Michael deconjugation in plasma leading to premature payload transfer to serum albumin",
+            "Sulfonyl linkage may introduce steric or electronic effects reducing cathepsin B cleavage efficiency at the Val-Ala site",
+            "12-step linear synthesis reduces overall yield and scalability, increasing risk of impurity-related toxicity",
+            "Hydrolytic instability of the PABC carbamate or carbonate bond to R848 under physiological pH could cause premature payload release"
+          ],
+          "validation_experiments": [
+            "Cathepsin B cleavage kinetics monitored by LC-MS/MS to confirm Val-Ala cleavage and PABC self-immolation releasing free R848",
+            "Plasma stability assay (human, mouse) measuring intact ADC and free R848 at 0\u201396 h by ELISA and LC-MS",
+            "DAR determination by HIC and native SEC-MS after conjugation to anti-HER2 IgG1 surrogate antibody",
+            "In vitro TLR7/8 NF-\u03baB reporter assay comparing free R848 vs. linker-R848 vs. ADC to confirm payload potency is retained post-release"
+          ],
+          "information_gain": "Testing this construct will reveal whether a sulfonyl-containing spacer between the maleimide handle and Val-Ala dipeptide preserves efficient protease cleavage kinetics and whether the added hydrophilicity from the sulfonyl group improves ADC homogeneity and pharmacokinetics relative to canonical mc-Val-Ala-PABC linkers for immunomodulator payloads."
+        },
+        "narrative_llm_ok": true,
+        "derived_rule": {
+          "cleavage_preference": "protease-cleavable",
+          "rigidity": "flexible",
+          "stability_priority": "standard",
+          "confidence": 0.821
+        }
+      },
+      {
+        "payload_class": "immunomodulator",
+        "real_payload": "R848",
+        "smiles": "CC(NC(=O)C(NC(=O)C=CC(=O)NCC(=O)NCC(=O)N1C(=O)C=CC1=O)C(C)C)C(=O)Nc1ccc(CO)cc1",
+        "assembled_smiles": "CC(NC(=O)C(NC(=O)C=CC(=O)NCC(=O)NCC(=O)N1C(=O)C=CC1=O)C(C)C)C(=O)Nc1ccc(CO)cc1.CC(C)COCc1cnc2c(n1)n(cn2)CCO",
+        "handle": "Maleimide",
+        "trigger": "Val-Ala-PABC",
+        "composite_score": 0.7334,
+        "subscores": {
+          "solubility": 0.9164,
+          "size": 1.0,
+          "flexibility": 0.5826,
+          "synthesizability": 0.661,
+          "cleavability": 1.0,
+          "stability": 0.85,
+          "similarity": 0.5
+        },
+        "has_cleavable_motif": true,
+        "retrosynthesis": {
+          "step_count": 12,
+          "score": 0.15,
+          "is_feasible": false,
+          "reason": "Too many linear/synthetic steps required",
+          "descriptors": {
+            "mw": 584.59,
+            "chiral_centers": 2,
+            "ring_count": 2,
+            "rotatable_bonds": 13,
+            "amides": 8,
+            "disulfides": 0,
+            "esters": 0,
+            "triazoles": 0
+          }
+        },
+        "stability": {
+          "overall_stability_score": 0.85,
+          "liabilities": [
+            "maleimide_deconjugation"
+          ],
+          "is_protease_cleavable": true,
+          "is_disulfide": false,
+          "is_maleimide": true,
+          "is_hydrazone": false
+        },
+        "closest_analogue": {
+          "name": "mc-Val-Ala-PABC",
+          "smiles": "O=C1C=CC(=O)N1CCCCCC(=O)NC(C(C)C)C(=O)NC(C)C(=O)Nc1ccc(CO)cc1",
+          "class": "protease-cleavable (maleimide/Cys)",
+          "adc": "Val-Ala class",
+          "tanimoto": 0.549
+        },
+        "economics": {
+          "estimated_synthesis_steps": 12,
+          "estimated_cost_usd": 4400,
+          "estimated_duration_days": 30.0,
+          "probability_of_success": 0.14,
+          "note": "order-of-magnitude heuristics from step count + stability; not a quote"
+        },
+        "narrative": {
+          "design_rationale": "This linker employs a Val-Ala dipeptide protease-cleavable trigger consistent with the derived rule's cleavage preference for immunomodulator payloads, enabling cathepsin-mediated release in the endolysosome. The flexible PEG-like glycine spacers and linear amide backbone align with the 'flexible' rigidity preference, facilitating enzymatic access to the cleavage site. A maleimide handle provides standard thiol conjugation analogous to the single validated TLR7/8 clinical exemplar, though the known maleimide retro-Michael deconjugation liability warrants monitoring.",
+          "synthesis_route": [
+            "Maleimide-glycine building block synthesis: N-maleimidoacetic acid preparation via maleic anhydride ring closure with glycine",
+            "Amide coupling of maleimide-Gly-OH with H-Gly-OH spacer (HATU/DIPEA)",
+            "Maleic acid monoamide formation: conjugation of maleimide-Gly-Gly with fumaric acid mono-NHS ester to install the Michael acceptor linker segment",
+            "Dipeptide coupling: amide bond formation of acrylamide terminus with H-Val-Ala-OH dipeptide (HATU/DIPEA)",
+            "PABC spacer attachment: coupling of Val-Ala dipeptide C-terminus with 4-aminobenzyl alcohol (PABC) via HATU-mediated amide bond",
+            "Carbonate or carbamate activation of PABC benzylic alcohol for subsequent conjugation to R848 amine (p-nitrophenyl carbonate activation then R848 displacement)"
+          ],
+          "expected_failure_modes": [
+            "Maleimide retro-Michael deconjugation in plasma leading to premature payload transfer to serum albumin and off-target immune activation",
+            "12-step linear synthesis reduces overall yield and scalability, increasing risk of impurity-related toxicity",
+            "The acrylamide/maleimide dual Michael acceptor motif may undergo undesired thiol addition at the acrylamide, causing linker degradation or crosslinking",
+            "Insufficient steric shielding around Val-Ala dipeptide may permit premature cleavage by extracellular proteases, reducing tumor selectivity"
+          ],
+          "validation_experiments": [
+            "Cathepsin B cleavage kinetics by LC-MS/MS monitoring R848 release at pH 5.0 vs pH 7.4 over 24 h",
+            "Human and mouse plasma stability assay (37\u00b0C, 0\u201396 h) with DAR tracking by HIC and free R848 quantification by LC-MS",
+            "Thiol-exchange deconjugation assay: incubation with 50 \u00b5M glutathione or albumin, monitoring maleimide ring-opening and payload transfer by SEC-MS",
+            "In vitro TLR7/8 NF-\u03baB reporter assay comparing free R848 vs intact ADC vs cathepsin B-pretreated ADC to confirm conditional activation"
+          ],
+          "information_gain": "Testing this candidate would reveal whether a Val-Ala-PABC cleavable linker with maleimide conjugation can achieve sufficient plasma stability and selective intracellular R848 release for immunomodulator ADCs, directly validating or refuting the single-exemplar-derived design rule and establishing whether maleimide deconjugation is a tolerable or disqualifying liability for this payload class."
+        },
+        "narrative_llm_ok": true,
+        "derived_rule": {
+          "cleavage_preference": "protease-cleavable",
+          "rigidity": "flexible",
+          "stability_priority": "standard",
+          "confidence": 0.821
+        }
+      },
+      {
+        "payload_class": "immunomodulator",
+        "real_payload": "R848",
+        "smiles": "CC(NC(=O)C(NC(=O)CCC(=O)NCC(=O)NCC(=O)N1C(=O)C=CC1=O)C(C)C)C(=O)Nc1ccc(CO)cc1",
+        "assembled_smiles": "CC(NC(=O)C(NC(=O)CCC(=O)NCC(=O)NCC(=O)N1C(=O)C=CC1=O)C(C)C)C(=O)Nc1ccc(CO)cc1.CC(C)COCc1cnc2c(n1)n(cn2)CCO",
+        "handle": "Maleimide",
+        "trigger": "Val-Ala-PABC",
+        "composite_score": 0.7307,
+        "subscores": {
+          "solubility": 0.9078,
+          "size": 1.0,
+          "flexibility": 0.5,
+          "synthesizability": 0.6756,
+          "cleavability": 1.0,
+          "stability": 0.85,
+          "similarity": 0.5
+        },
+        "has_cleavable_motif": true,
+        "retrosynthesis": {
+          "step_count": 12,
+          "score": 0.15,
+          "is_feasible": false,
+          "reason": "Too many linear/synthetic steps required",
+          "descriptors": {
+            "mw": 586.6,
+            "chiral_centers": 2,
+            "ring_count": 2,
+            "rotatable_bonds": 14,
+            "amides": 8,
+            "disulfides": 0,
+            "esters": 0,
+            "triazoles": 0
+          }
+        },
+        "stability": {
+          "overall_stability_score": 0.85,
+          "liabilities": [
+            "maleimide_deconjugation"
+          ],
+          "is_protease_cleavable": true,
+          "is_disulfide": false,
+          "is_maleimide": true,
+          "is_hydrazone": false
+        },
+        "closest_analogue": {
+          "name": "mc-Val-Ala-PABC",
+          "smiles": "O=C1C=CC(=O)N1CCCCCC(=O)NC(C(C)C)C(=O)NC(C)C(=O)Nc1ccc(CO)cc1",
+          "class": "protease-cleavable (maleimide/Cys)",
+          "adc": "Val-Ala class",
+          "tanimoto": 0.646
+        },
+        "economics": {
+          "estimated_synthesis_steps": 12,
+          "estimated_cost_usd": 4400,
+          "estimated_duration_days": 30.0,
+          "probability_of_success": 0.14,
+          "note": "order-of-magnitude heuristics from step count + stability; not a quote"
+        },
+        "narrative": {
+          "design_rationale": "This linker employs a Val-Ala dipeptide protease-cleavable trigger consistent with the derived rule's cleavage preference for immunomodulator payloads, enabling cathepsin-mediated release in the endolysosomal compartment. The flexible Glu-Gly-Gly spacer between the maleimide conjugation handle and the dipeptide provides the flexible character specified by the rule, while the PABC self-immolative unit ensures clean traceless release of the R848 payload via 1,6-elimination. Standard stability priority is addressed, though the maleimide handle introduces a known deconjugation liability via retro-Michael exchange with serum albumin.",
+          "synthesis_route": [
+            "Fmoc solid-phase peptide synthesis of Glu(OtBu)-Gly-Gly-Val-Ala pentapeptide fragment with N-terminal maleimidocaproyl capping",
+            "Solution-phase synthesis of 4-aminobenzyl alcohol (PABC) carbonate or carbamate linkage to R848 exocyclic amine",
+            "Amide coupling of C-terminal Ala of dipeptide fragment to PABC-R848 amine using HATU/DIPEA",
+            "Global TFA deprotection of Glu side-chain and any remaining protecting groups",
+            "HPLC purification and LC-MS characterization of final linker-payload construct",
+            "Thiol-maleimide conjugation to reduced interchain disulfide cysteines of anti-target antibody"
+          ],
+          "expected_failure_modes": [
+            "Maleimide retro-Michael deconjugation in plasma leading to premature payload transfer to serum albumin and off-target TLR activation",
+            "Incomplete PABC 1,6-elimination under lysosomal conditions resulting in poor R848 release and reduced immunostimulatory potency",
+            "High hydrophobicity of the 12-step linear construct causing antibody aggregation and reduced DAR homogeneity",
+            "Premature extracellular cleavage of Val-Ala dipeptide by serum proteases leading to systemic cytokine release"
+          ],
+          "validation_experiments": [
+            "Cathepsin B cleavage kinetics monitored by LC-MS/MS to confirm Val-Ala cleavage and quantify free R848 release efficiency",
+            "Plasma stability assay in human and mouse plasma (37\u00b0C, 96 h) measuring intact ADC and free payload by ELISA and LC-MS",
+            "DAR distribution analysis by HIC and native SEC to assess conjugation homogeneity and aggregation propensity",
+            "In vitro TLR7/8 NF-\u03baB reporter assay comparing free R848 vs. linker-R848 vs. ADC to confirm payload is masked until cleavage"
+          ],
+          "information_gain": "Testing this construct would reveal whether a Val-Ala-PABC cleavable linker with a flexible Glu-Gly-Gly spacer can achieve efficient intracellular R848 release while maintaining sufficient serum stability despite the maleimide liability, directly validating the single-exemplar-derived design rule for immunomodulator payloads and informing whether maleimide stabilization (e.g., self-hydrolyzing maleimide) is required for this payload class."
+        },
+        "narrative_llm_ok": true,
+        "derived_rule": {
+          "cleavage_preference": "protease-cleavable",
+          "rigidity": "flexible",
+          "stability_priority": "standard",
+          "confidence": 0.821
+        }
+      },
+      {
+        "payload_class": "immunomodulator",
+        "real_payload": "R848",
+        "smiles": "CC(NC(=O)C(NC(=O)C(N)CCC(=O)NCC(=O)N1C(=O)C=CC1=O)C(C)C)C(=O)Nc1ccc(CO)cc1",
+        "assembled_smiles": "CC(NC(=O)C(NC(=O)C(N)CCC(=O)NCC(=O)N1C(=O)C=CC1=O)C(C)C)C(=O)Nc1ccc(CO)cc1.CC(C)COCc1cnc2c(n1)n(cn2)CCO",
+        "handle": "Maleimide",
+        "trigger": "Val-Ala-PABC",
+        "composite_score": 0.7297,
+        "subscores": {
+          "solubility": 0.8991,
+          "size": 1.0,
+          "flexibility": 0.5826,
+          "synthesizability": 0.6575,
+          "cleavability": 1.0,
+          "stability": 0.85,
+          "similarity": 0.5
+        },
+        "has_cleavable_motif": true,
+        "retrosynthesis": {
+          "step_count": 12,
+          "score": 0.15,
+          "is_feasible": false,
+          "reason": "Too many linear/synthetic steps required",
+          "descriptors": {
+            "mw": 558.59,
+            "chiral_centers": 3,
+            "ring_count": 2,
+            "rotatable_bonds": 13,
+            "amides": 7,
+            "disulfides": 0,
+            "esters": 0,
+            "triazoles": 0
+          }
+        },
+        "stability": {
+          "overall_stability_score": 0.85,
+          "liabilities": [
+            "maleimide_deconjugation"
+          ],
+          "is_protease_cleavable": true,
+          "is_disulfide": false,
+          "is_maleimide": true,
+          "is_hydrazone": false
+        },
+        "closest_analogue": {
+          "name": "mc-Val-Ala-PABC",
+          "smiles": "O=C1C=CC(=O)N1CCCCCC(=O)NC(C(C)C)C(=O)NC(C)C(=O)Nc1ccc(CO)cc1",
+          "class": "protease-cleavable (maleimide/Cys)",
+          "adc": "Val-Ala class",
+          "tanimoto": 0.563
+        },
+        "economics": {
+          "estimated_synthesis_steps": 12,
+          "estimated_cost_usd": 4400,
+          "estimated_duration_days": 30.0,
+          "probability_of_success": 0.14,
+          "note": "order-of-magnitude heuristics from step count + stability; not a quote"
+        },
+        "narrative": {
+          "design_rationale": "This linker employs a Val-Ala dipeptide protease-cleavable trigger consistent with the derived rule's cleavage preference for immunomodulator payloads, enabling cathepsin-mediated release in the lysosome. The flexible alkyl spacer and PABC self-immolative unit match the 'flexible' rigidity preference, allowing efficient payload liberation after enzymatic cleavage. Maleimide-thiol conjugation aligns with the single clinical exemplar's stochastic interchain cysteine strategy, though the known maleimide retro-Michael deconjugation liability warrants monitoring under the 'standard' stability priority.",
+          "synthesis_route": [
+            "Fmoc-SPPS assembly of Glu(\u03b3-glycine)-Val-Ala tripeptide on resin, cleaving to give H-Glu(\u03b3-Gly)-Val-Ala-OH",
+            "Amide coupling of tripeptide C-terminus with 4-aminobenzyl alcohol (PABC) using HATU/DIPEA",
+            "Activation of PABC benzyl alcohol as p-nitrophenyl carbonate, then displacement with R848 primary amine to install payload carbonate/carbamate linkage",
+            "Capping of N-terminal amine with maleimide-NHS ester (e.g., SMCC or maleimidoacetic acid via HATU) to install conjugation handle",
+            "Global deprotection, HPLC purification, and LC-MS characterization of final linker-payload construct"
+          ],
+          "expected_failure_modes": [
+            "Maleimide retro-Michael deconjugation in plasma leading to premature payload transfer to serum albumin",
+            "Incomplete or slow cathepsin B/L cleavage of Val-Ala dipeptide due to steric effects of the branched valine side chain adjacent to maleimide",
+            "Hydrolytic instability of the PABC carbamate linkage to R848 under acidic lysosomal conditions leading to premature release",
+            "High synthetic step count (\u226512 steps) reducing overall yield and complicating scale-up for in vivo studies"
+          ],
+          "validation_experiments": [
+            "Cathepsin B cleavage kinetics monitored by LC-MS/MS to confirm Val-Ala dipeptide processing and free R848 release",
+            "Plasma stability assay (human, mouse) measuring intact ADC and free payload over 96 h by ELISA and LC-MS to quantify maleimide deconjugation",
+            "DAR determination by HIC and native SEC-MS after conjugation to anti-target IgG1 via partial reduction of interchain disulfides",
+            "TLR7/8 NF-\u03baB reporter cell assay comparing free R848 vs. linker-payload vs. intact ADC to confirm payload is masked until cleavage"
+          ],
+          "information_gain": "Testing this construct will reveal whether the Val-Ala-PABC cleavable mechanism efficiently liberates the small-molecule TLR7/8 agonist R848 with retained immunostimulatory potency, and whether maleimide deconjugation is a dominant liability requiring migration to a self-stabilizing maleimide or alternative conjugation chemistry for this payload class."
+        },
+        "narrative_llm_ok": true,
+        "derived_rule": {
+          "cleavage_preference": "protease-cleavable",
+          "rigidity": "flexible",
+          "stability_priority": "standard",
+          "confidence": 0.821
+        }
+      }
+    ],
+    "oligonucleotide": [
+      {
+        "payload_class": "oligonucleotide",
+        "real_payload": "siRNA",
+        "smiles": "NCC1CCC(NC(=O)N2CCN(c3ccc(S(=O)(=O)N4Cc5ccccc5C#Cc5ccccc54)cn3)CC2)CC1",
+        "assembled_smiles": "NCC1CCC(NC(=O)N2CCN(c3ccc(S(=O)(=O)N4Cc5ccccc5C#Cc5ccccc54)cn3)CC2)CC1.COP(=O)(O)OCC1OC(N)C(O)C1OP(=O)(O)OCC",
+        "handle": "DBCO",
+        "trigger": "Non-cleavable-rigid",
+        "composite_score": 0.7374,
+        "subscores": {
+          "solubility": 0.5013,
+          "size": 1.0,
+          "flexibility": 0.5,
+          "synthesizability": 0.6866,
+          "cleavability": 1.0,
+          "stability": 1.0,
+          "similarity": 0.5
+        },
+        "has_cleavable_motif": false,
+        "retrosynthesis": {
+          "step_count": 6,
+          "score": 0.65,
+          "is_feasible": true,
+          "reason": "Standard coupling steps",
+          "descriptors": {
+            "mw": 584.75,
+            "chiral_centers": 0,
+            "ring_count": 6,
+            "rotatable_bonds": 5,
+            "amides": 2,
+            "disulfides": 0,
+            "esters": 0,
+            "triazoles": 0
+          }
+        },
+        "stability": {
+          "overall_stability_score": 1.0,
+          "liabilities": [],
+          "is_protease_cleavable": false,
+          "is_disulfide": false,
+          "is_maleimide": false,
+          "is_hydrazone": false
+        },
+        "closest_analogue": {
+          "name": "MCC (non-cleavable)",
+          "smiles": "O=C(O)C1CCC(CN2C(=O)C=CC2=O)CC1",
+          "class": "non-cleavable thioether",
+          "adc": "trastuzumab emtansine (Kadcyla)",
+          "tanimoto": 0.145
+        },
+        "economics": {
+          "estimated_synthesis_steps": 6,
+          "estimated_cost_usd": 2400,
+          "estimated_duration_days": 15.0,
+          "probability_of_success": 0.65,
+          "note": "order-of-magnitude heuristics from step count + stability; not a quote"
+        },
+        "narrative": {
+          "design_rationale": "This linker employs a non-cleavable urea-piperazine backbone with a fused dibenzocyclooctyne (DBCO)-reactive sulfonamide motif, directly satisfying the derived rule's preference for non-cleavable-rigid architectures for siRNA payloads. The rigid aromatic alkyne scaffold and constrained piperazine ring minimize conformational flexibility, mirroring the sulfo-SMCC design principle that rigidity maximizes DAR2 homogeneity. The sulfonamide group enhances aqueous solubility analogous to the sulfo group in sulfo-SMCC, supporting efficient conjugation with hydrophilic oligonucleotide payloads.",
+          "synthesis_route": [
+            "Sulfonamide formation: react 2-aminodibenzazocine (iminodibenzyl alkyne) with pyridine-4-sulfonyl chloride bearing a piperazine handle",
+            "SNAr or Buchwald coupling: install piperazine onto chloropyridinesulfonamide scaffold",
+            "Urea formation: react piperazine nitrogen with 4-aminocyclohexyl isocyanate (CDI-mediated)",
+            "Amine deprotection: remove Boc from the primary amine on the cyclohexane terminus",
+            "DBCO-NHS activation: couple the terminal amine with DBCO-NHS ester for strain-promoted azide-alkyne cycloaddition handle installation",
+            "Final purification by preparative HPLC and characterization (LC-MS, NMR)"
+          ],
+          "expected_failure_modes": [
+            "Steric congestion around the sulfonamide-dibenzocyclooctyne junction may impair SPAAC click conjugation kinetics with azide-modified siRNA",
+            "The extended aromatic system may increase hydrophobicity beyond optimal range, causing aggregation of the ADC despite the sulfonamide",
+            "The urea linkage, while stable, combined with the rigid scaffold may limit payload release in endosomal compartments, reducing siRNA cytoplasmic delivery",
+            "Low Tanimoto similarity (0.145) to clinical MCC linker suggests unpredictable in vivo PK behavior and potential rapid clearance"
+          ],
+          "validation_experiments": [
+            "DAR analysis by HIC and native SEC to assess conjugation homogeneity and confirm DAR2 enrichment",
+            "Plasma stability assay (human and mouse, 37\u00b0C, 7 days) with LC-MS/MS quantification of intact conjugate",
+            "SPAAC conjugation kinetics: monitor reaction of linker-DBCO with azide-siRNA by HPLC at multiple time points to measure second-order rate constant",
+            "In vitro gene silencing assay (RT-qPCR) in target-expressing cells comparing ADC vs free siRNA to confirm functional siRNA delivery"
+          ],
+          "information_gain": "Testing this candidate will reveal whether a rigid, extended aromatic non-cleavable linker with DBCO-SPAAC conjugation chemistry can match or exceed sulfo-SMCC's DAR2 homogeneity performance while maintaining sufficient hydrophilicity and functional siRNA delivery, thereby validating the generalizability of the rigidity-homogeneity relationship beyond maleimide-thiol chemistry."
+        },
+        "narrative_llm_ok": true,
+        "derived_rule": {
+          "cleavage_preference": "non-cleavable-rigid",
+          "rigidity": "rigid",
+          "stability_priority": "high",
+          "confidence": 0.866
+        }
+      },
+      {
+        "payload_class": "oligonucleotide",
+        "real_payload": "siRNA",
+        "smiles": "NCC1CCC(NC(=O)c2ccc(NC(=O)N3Cc4ccccc4C#Cc4ccccc43)nc2)CC1",
+        "assembled_smiles": "NCC1CCC(NC(=O)c2ccc(NC(=O)N3Cc4ccccc4C#Cc4ccccc43)nc2)CC1.COP(=O)(O)OCC1OC(N)C(O)C1OP(=O)(O)OCC",
+        "handle": "DBCO",
+        "trigger": "Non-cleavable-rigid",
+        "composite_score": 0.7348,
+        "subscores": {
+          "solubility": 0.4204,
+          "size": 1.0,
+          "flexibility": 0.5826,
+          "synthesizability": 0.6994,
+          "cleavability": 1.0,
+          "stability": 1.0,
+          "similarity": 0.5
+        },
+        "has_cleavable_motif": false,
+        "retrosynthesis": {
+          "step_count": 6,
+          "score": 0.65,
+          "is_feasible": true,
+          "reason": "Standard coupling steps",
+          "descriptors": {
+            "mw": 479.58,
+            "chiral_centers": 0,
+            "ring_count": 5,
+            "rotatable_bonds": 4,
+            "amides": 3,
+            "disulfides": 0,
+            "esters": 0,
+            "triazoles": 0
+          }
+        },
+        "stability": {
+          "overall_stability_score": 1.0,
+          "liabilities": [],
+          "is_protease_cleavable": false,
+          "is_disulfide": false,
+          "is_maleimide": false,
+          "is_hydrazone": false
+        },
+        "closest_analogue": {
+          "name": "MCC (non-cleavable)",
+          "smiles": "O=C(O)C1CCC(CN2C(=O)C=CC2=O)CC1",
+          "class": "non-cleavable thioether",
+          "adc": "trastuzumab emtansine (Kadcyla)",
+          "tanimoto": 0.158
+        },
+        "economics": {
+          "estimated_synthesis_steps": 6,
+          "estimated_cost_usd": 2400,
+          "estimated_duration_days": 15.0,
+          "probability_of_success": 0.65,
+          "note": "order-of-magnitude heuristics from step count + stability; not a quote"
+        },
+        "narrative": {
+          "design_rationale": "This linker satisfies the non-cleavable-rigid design rule for oligonucleotide payloads by incorporating a urea-bridged diarylacetylene core that enforces rigidity analogous to the sulfo-SMCC cyclohexane scaffold, promoting homogeneous DAR2 conjugation. The DBCO handle enables strain-promoted azide-alkyne cycloaddation (SPAAC) with azide-modified siRNA under copper-free conditions, preserving oligonucleotide integrity. The absence of cleavable triggers and enzymatically labile bonds ensures high plasma stability (score 1.0), consistent with the high stability priority derived from the literature rule.",
+          "synthesis_route": [
+            "Sonogashira coupling of 2-iodobenzylamine derivative with 2-ethynylaniline to form the diarylacetylene DBCO-like core",
+            "Intramolecular cyclization to close the dibenzoazacyclooctyne (DBCO) ring system via ring-closing amination",
+            "Urea formation: reaction of the DBCO-amine with 5-amino-nicotinoyl isocyanate (CDI-mediated)",
+            "Amide coupling of nicotinic acid intermediate with trans-4-aminocyclohexylamine (HATU/DIPEA)",
+            "Deprotection of the terminal amine (Boc removal, TFA/DCM) to reveal the primary amine conjugation handle for siRNA attachment",
+            "NHS-ester or carbodiimide coupling of terminal amine to 5'-phosphate-modified siRNA"
+          ],
+          "expected_failure_modes": [
+            "DBCO cyclooctyne strain may lead to non-specific thiol reactivity with serum albumin, reducing effective siRNA delivery",
+            "Extended rigid aromatic core increases hydrophobicity, potentially causing aggregation of the ADC or poor aqueous solubility despite hydrophilic siRNA payload",
+            "Urea linkage, while stable, may undergo slow glucuronidation in hepatocytes leading to premature clearance",
+            "Low Tanimoto similarity (0.158) to clinical MCC linker suggests unpredictable PK behavior with limited translational precedent"
+          ],
+          "validation_experiments": [
+            "DAR analysis by HIC and native SEC-MALS to confirm homogeneous DAR2 conjugation with siRNA",
+            "Plasma stability assay (human, mouse, 37\u00b0C, 72h) with LC-MS/MS quantification of intact conjugate vs. free siRNA",
+            "SPAAC conjugation kinetics: monitor reaction of DBCO-linker with azide-siRNA by RP-HPLC at varying stoichiometries to assess coupling efficiency",
+            "In vitro gene knockdown (RT-qPCR) in HER2+ cell line comparing this rigid linker-ADC vs. flexible EMCS-linked siRNA conjugate to validate rigidity hypothesis"
+          ],
+          "information_gain": "Testing this conjugate would reveal whether a rigid diarylacetylene-urea non-cleavable linker with DBCO click chemistry improves DAR homogeneity and functional siRNA delivery over flexible thiol-maleimide linkers like EMCS, directly validating the rigidity component of the design hypothesis for oligonucleotide ADCs."
+        },
+        "narrative_llm_ok": true,
+        "derived_rule": {
+          "cleavage_preference": "non-cleavable-rigid",
+          "rigidity": "rigid",
+          "stability_priority": "high",
+          "confidence": 0.866
+        }
+      },
+      {
+        "payload_class": "oligonucleotide",
+        "real_payload": "siRNA",
+        "smiles": "NCC1CCC(Nc2ccc(NC(=O)N3CCN(C(=O)N4Cc5ccccc5C#Cc5ccccc54)CC3)cn2)CC1",
+        "assembled_smiles": "NCC1CCC(Nc2ccc(NC(=O)N3CCN(C(=O)N4Cc5ccccc5C#Cc5ccccc54)CC3)cn2)CC1.COP(=O)(O)OCC1OC(N)C(O)C1OP(=O)(O)OCC",
+        "handle": "DBCO",
+        "trigger": "Non-cleavable-rigid",
+        "composite_score": 0.729,
+        "subscores": {
+          "solubility": 0.4112,
+          "size": 1.0,
+          "flexibility": 0.5826,
+          "synthesizability": 0.6842,
+          "cleavability": 1.0,
+          "stability": 1.0,
+          "similarity": 0.5
+        },
+        "has_cleavable_motif": false,
+        "retrosynthesis": {
+          "step_count": 8,
+          "score": 0.4,
+          "is_feasible": false,
+          "reason": "Too many linear/synthetic steps required",
+          "descriptors": {
+            "mw": 563.71,
+            "chiral_centers": 0,
+            "ring_count": 6,
+            "rotatable_bonds": 4,
+            "amides": 4,
+            "disulfides": 0,
+            "esters": 0,
+            "triazoles": 0
+          }
+        },
+        "stability": {
+          "overall_stability_score": 1.0,
+          "liabilities": [],
+          "is_protease_cleavable": false,
+          "is_disulfide": false,
+          "is_maleimide": false,
+          "is_hydrazone": false
+        },
+        "closest_analogue": {
+          "name": "MCC (non-cleavable)",
+          "smiles": "O=C(O)C1CCC(CN2C(=O)C=CC2=O)CC1",
+          "class": "non-cleavable thioether",
+          "adc": "trastuzumab emtansine (Kadcyla)",
+          "tanimoto": 0.152
+        },
+        "economics": {
+          "estimated_synthesis_steps": 8,
+          "estimated_cost_usd": 3000,
+          "estimated_duration_days": 20.0,
+          "probability_of_success": 0.4,
+          "note": "order-of-magnitude heuristics from step count + stability; not a quote"
+        },
+        "narrative": {
+          "design_rationale": "This linker employs a non-cleavable urea-piperazine-urea backbone with a fused isoindoline-alkyne rigid scaffold, directly matching the derived rule's preference for non-cleavable-rigid architectures for siRNA payloads. The DBCO moiety provides strain-promoted azide-alkyne cycloaddition (SPAAC) conjugation without copper catalysis, preserving oligonucleotide integrity, while the extended rigid aromatic core maintains defined spatial geometry to maximize DAR homogeneity analogous to sulfo-SMCC. High stability (score 1.0, no liabilities) aligns with the rule's high stability priority, ensuring linker integrity during circulation.",
+          "synthesis_route": [
+            "Buchwald-Hartley amination of 4-amino-2-chloropyridine with trans-4-aminocyclohexylamine to install the diaminopyridine-cyclohexane fragment",
+            "Urea formation between the pyridine amine and piperazine mono-Boc using CDI or triphosgene",
+            "Boc deprotection of piperazine nitrogen with TFA/DCM",
+            "Urea coupling of free piperazine nitrogen with DBCO-amine (CDI-mediated carbonylation)",
+            "Installation of the primary amine conjugation handle via reductive amination or Boc-deprotection of the cyclohexyl terminal amine",
+            "NHS-ester or maleimide activation of the terminal amine for antibody or siRNA conjugation as needed"
+          ],
+          "expected_failure_modes": [
+            "8-step linear synthesis reduces overall yield and scalability, increasing cost-of-goods for clinical development",
+            "Low Tanimoto similarity (0.152) to validated MCC linker suggests uncertain translational relevance and potential for unexpected PK behavior",
+            "Dual urea bonds and piperazine ring may reduce aqueous solubility despite the polar groups, causing aggregation of siRNA-ADC conjugates",
+            "DBCO moiety may undergo non-specific thiol-yne side reactions with serum albumin cysteine-34, leading to premature payload loss in circulation"
+          ],
+          "validation_experiments": [
+            "DAR analysis by HIC and native SEC-MALS to assess conjugation homogeneity and confirm DAR2 preference consistent with sulfo-SMCC benchmark",
+            "Plasma stability assay (human, mouse, 37\u00b0C, 7 days) with LC-MS/MS quantification of intact conjugate vs free siRNA",
+            "Solubility and aggregation assessment by DLS and analytical SEC at physiological pH and ionic strength",
+            "In vitro gene silencing potency (RT-qPCR) of siRNA-linker-antibody conjugate vs naked siRNA and sulfo-SMCC-linked control in target-expressing cells"
+          ],
+          "information_gain": "Testing this molecule would reveal whether replacing the classical maleimide-thiol chemistry (sulfo-SMCC) with a DBCO-SPAAC click handle on a rigid bis-urea scaffold can maintain or improve DAR2 homogeneity and silencing potency for siRNA-ADCs, thereby expanding the conjugation chemistry toolbox beyond thiol-maleimide for oligonucleotide payloads."
+        },
+        "narrative_llm_ok": true,
+        "derived_rule": {
+          "cleavage_preference": "non-cleavable-rigid",
+          "rigidity": "rigid",
+          "stability_priority": "high",
+          "confidence": 0.866
+        }
+      },
+      {
+        "payload_class": "oligonucleotide",
+        "real_payload": "siRNA",
+        "smiles": "NCC1CCC(NC(=O)c2cnc(-c3cnc(N4Cc5ccccc5C#Cc5ccccc54)nc3)nc2)CC1",
+        "assembled_smiles": "NCC1CCC(NC(=O)c2cnc(-c3cnc(N4Cc5ccccc5C#Cc5ccccc54)nc3)nc2)CC1.COP(=O)(O)OCC1OC(N)C(O)C1OP(=O)(O)OCC",
+        "handle": "DBCO",
+        "trigger": "Non-cleavable-rigid",
+        "composite_score": 0.721,
+        "subscores": {
+          "solubility": 0.4475,
+          "size": 1.0,
+          "flexibility": 0.5,
+          "synthesizability": 0.6786,
+          "cleavability": 1.0,
+          "stability": 1.0,
+          "similarity": 0.5
+        },
+        "has_cleavable_motif": false,
+        "retrosynthesis": {
+          "step_count": 5,
+          "score": 0.85,
+          "is_feasible": true,
+          "reason": "Standard coupling steps",
+          "descriptors": {
+            "mw": 515.62,
+            "chiral_centers": 0,
+            "ring_count": 6,
+            "rotatable_bonds": 5,
+            "amides": 1,
+            "disulfides": 0,
+            "esters": 0,
+            "triazoles": 0
+          }
+        },
+        "stability": {
+          "overall_stability_score": 1.0,
+          "liabilities": [],
+          "is_protease_cleavable": false,
+          "is_disulfide": false,
+          "is_maleimide": false,
+          "is_hydrazone": false
+        },
+        "closest_analogue": {
+          "name": "MCC (non-cleavable)",
+          "smiles": "O=C(O)C1CCC(CN2C(=O)C=CC2=O)CC1",
+          "class": "non-cleavable thioether",
+          "adc": "trastuzumab emtansine (Kadcyla)",
+          "tanimoto": 0.16
+        },
+        "economics": {
+          "estimated_synthesis_steps": 5,
+          "estimated_cost_usd": 2000,
+          "estimated_duration_days": 12.5,
+          "probability_of_success": 0.85,
+          "note": "order-of-magnitude heuristics from step count + stability; not a quote"
+        },
+        "narrative": {
+          "design_rationale": "This linker satisfies the non-cleavable-rigid design rule for siRNA payloads by incorporating a fused bipyrimidine-dihydroisoindole core that enforces conformational rigidity, minimizing entropic penalties during conjugation and promoting homogeneous DAR species. The DBCO handle enables strain-promoted azide-alkyne cycloaddition (SPAAC) with azide-functionalized siRNA, providing a bioorthogonal, non-cleavable triazole linkage that ensures high serum stability consistent with the high stability priority. The terminal amine on the cyclohexane spacer allows antibody conjugation via NHS-ester chemistry, while the rigid aromatic scaffold maintains appropriate spatial separation between antibody and siRNA payload.",
+          "synthesis_route": [
+            "Suzuki coupling of 5-bromopyrimidine-2-carboxylic acid with 5-(4,4,5,5-tetramethyl-1,3,2-dioxaborolan-2-yl)pyrimidine-2-amine to form the bipyrimidine core",
+            "Buchwald-Hartley N-arylation of the 2-aminopyrimidine with 2-ethynyl-iodobenzene to install the alkyne-aniline moiety",
+            "Intramolecular copper-catalyzed cyclization to form the dihydroisoindole ring bearing the internal alkyne (DBCO-like handle)",
+            "Amide coupling of the pyrimidine carboxylic acid with trans-4-aminocyclohexylamine (mono-Boc protected) using HATU/DIPEA",
+            "Boc deprotection with TFA to reveal the terminal primary amine conjugation handle"
+          ],
+          "expected_failure_modes": [
+            "Poor aqueous solubility of the extended aromatic scaffold may limit conjugation efficiency with hydrophilic siRNA in aqueous buffers, unlike the sulfo-SMCC benchmark which carries a solubilizing sulfonate",
+            "The internal alkyne in the DBCO-like moiety may undergo non-specific thiol-yne reactions with cysteine residues on the antibody or serum proteins",
+            "Rigid bipyrimidine core may be susceptible to CYP-mediated oxidative metabolism at the electron-rich nitrogen positions, reducing in vivo stability",
+            "Low Tanimoto similarity (0.16) to clinical MCC linker suggests unpredictable pharmacokinetic behavior with limited translational precedent"
+          ],
+          "validation_experiments": [
+            "SPAAC conjugation kinetics with azide-modified siRNA monitored by HPLC and MALDI-TOF to confirm click efficiency and DAR distribution (target DAR2)",
+            "Plasma stability assay in human and mouse plasma at 37\u00b0C over 7 days with LC-MS/MS quantification of intact conjugate vs. free siRNA",
+            "Hydrophobic interaction chromatography (HIC) and SEC of the full ADC to assess DAR homogeneity and aggregation propensity",
+            "Kinetic solubility measurement of the linker-payload intermediate in PBS (pH 7.4) and conjugation buffer to identify solubility-limited reaction conditions"
+          ],
+          "information_gain": "Testing this linker will reveal whether a fully rigid, extended aromatic DBCO-type scaffold can match or exceed sulfo-SMCC's conjugation homogeneity for siRNA payloads despite lacking an explicit solubilizing group, thereby decoupling the contributions of rigidity versus hydrophilicity to DAR2 selectivity."
+        },
+        "narrative_llm_ok": true,
+        "derived_rule": {
+          "cleavage_preference": "non-cleavable-rigid",
+          "rigidity": "rigid",
+          "stability_priority": "high",
+          "confidence": 0.866
+        }
+      },
+      {
+        "payload_class": "oligonucleotide",
+        "real_payload": "siRNA",
+        "smiles": "NCC1CCC(NS(=O)(=O)N2CCN(C(=O)c3ccc(N4Cc5ccccc5C#Cc5ccccc54)nc3)CC2)CC1",
+        "assembled_smiles": "NCC1CCC(NS(=O)(=O)N2CCN(C(=O)c3ccc(N4Cc5ccccc5C#Cc5ccccc54)nc3)CC2)CC1.COP(=O)(O)OCC1OC(N)C(O)C1OP(=O)(O)OCC",
+        "handle": "DBCO",
+        "trigger": "Non-cleavable-rigid",
+        "composite_score": 0.7205,
+        "subscores": {
+          "solubility": 0.5243,
+          "size": 1.0,
+          "flexibility": 0.4174,
+          "synthesizability": 0.6789,
+          "cleavability": 1.0,
+          "stability": 1.0,
+          "similarity": 0.5
+        },
+        "has_cleavable_motif": false,
+        "retrosynthesis": {
+          "step_count": 5,
+          "score": 0.85,
+          "is_feasible": true,
+          "reason": "Standard coupling steps",
+          "descriptors": {
+            "mw": 584.75,
+            "chiral_centers": 0,
+            "ring_count": 6,
+            "rotatable_bonds": 6,
+            "amides": 1,
+            "disulfides": 0,
+            "esters": 0,
+            "triazoles": 0
+          }
+        },
+        "stability": {
+          "overall_stability_score": 1.0,
+          "liabilities": [],
+          "is_protease_cleavable": false,
+          "is_disulfide": false,
+          "is_maleimide": false,
+          "is_hydrazone": false
+        },
+        "closest_analogue": {
+          "name": "MCC (non-cleavable)",
+          "smiles": "O=C(O)C1CCC(CN2C(=O)C=CC2=O)CC1",
+          "class": "non-cleavable thioether",
+          "adc": "trastuzumab emtansine (Kadcyla)",
+          "tanimoto": 0.163
+        },
+        "economics": {
+          "estimated_synthesis_steps": 5,
+          "estimated_cost_usd": 2000,
+          "estimated_duration_days": 12.5,
+          "probability_of_success": 0.85,
+          "note": "order-of-magnitude heuristics from step count + stability; not a quote"
+        },
+        "narrative": {
+          "design_rationale": "This linker satisfies the non-cleavable-rigid design rule for oligonucleotide payloads by incorporating a DBCO click-chemistry handle for strain-promoted azide-alkyne cycloaddation (SPAAC) conjugation, ensuring stable triazole linkage that is non-cleavable in circulation. Rigidity is enforced through the fused dibenzocyclooctyne (DBCO) core and the sulfonamide-piperazine backbone, mimicking the beneficial rigidity of sulfo-SMCC that maximized DAR2 homogeneity in literature precedent. The sulfonamide moiety enhances aqueous solubility analogous to the sulfo group in SMCC, which is critical for maintaining compatibility with hydrophilic siRNA payloads while preserving high plasma stability (score 1.0, no identified liabilities).",
+          "synthesis_route": [
+            "Synthesis of 4-aminocyclohexyl amine core via reductive amination or Boc-protection/deprotection of trans-1,4-diaminocyclohexane",
+            "Sulfonylation of cyclohexylamine nitrogen with piperazine-1-sulfonyl chloride to install the sulfonamide-piperazine unit",
+            "Amide coupling of piperazine nitrogen with 6-chloronicotinoyl chloride or activated ester (HATU/DIPEA)",
+            "SNAr displacement of chloropyridine with DBCO-amine (5H-dibenzo[b,f]azocine secondary amine) to install the DBCO click handle",
+            "Global deprotection and purification by reverse-phase HPLC to yield the final bifunctional linker"
+          ],
+          "expected_failure_modes": [
+            "DBCO moiety may undergo premature reaction with biological thiols or nucleophiles in formulation buffer, reducing conjugation efficiency",
+            "The extended aromatic DBCO system may increase lipophilicity beyond optimal range, causing aggregation of the siRNA-linker-antibody conjugate",
+            "Sulfonamide bond may be susceptible to slow hydrolysis under acidic endosomal conditions (pH 5.0), potentially compromising non-cleavable design intent",
+            "Rigid piperazine-sulfonamide-cyclohexane spacer may impose steric constraints that reduce SPAAC reaction kinetics with azide-modified siRNA"
+          ],
+          "validation_experiments": [
+            "DAR analysis by HIC and native SEC-MALS after SPAAC conjugation with azide-functionalized siRNA to assess conjugation efficiency and homogeneity",
+            "Plasma stability assay (human, mouse, 37\u00b0C, 7 days) with LC-MS/MS quantification of intact conjugate vs. free siRNA release",
+            "SPAAC reaction kinetics measurement (second-order rate constant) by monitoring DBCO absorbance loss at 309 nm with model azide-siRNA",
+            "Hydrophobicity assessment by HIC retention time comparison against sulfo-SMCC-based conjugate and aggregation propensity by SEC"
+          ],
+          "information_gain": "Testing this DBCO-based rigid non-cleavable linker will reveal whether replacing the traditional thiol-maleimide conjugation chemistry (sulfo-SMCC) with bioorthogonal SPAAC click chemistry can maintain or improve DAR2 homogeneity and plasma stability for siRNA ADCs, while informing whether the added rigidity and steric bulk of the dibenzocyclooctyne system is tolerable for this payload class."
+        },
+        "narrative_llm_ok": true,
+        "derived_rule": {
+          "cleavage_preference": "non-cleavable-rigid",
+          "rigidity": "rigid",
+          "stability_priority": "high",
+          "confidence": 0.866
+        }
+      }
+    ]
+  },
+  "counts": {
+    "cytotoxin": 5,
+    "immunomodulator": 5,
+    "oligonucleotide": 5
+  }
+}

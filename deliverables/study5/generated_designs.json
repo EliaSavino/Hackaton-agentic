@@ -1,0 +1,581 @@
+{
+  "cytotoxin": {
+    "payload_class": "cytotoxin",
+    "handle": "Maleimide",
+    "trigger": "Val-Cit-PABC",
+    "warhead_pair": "O=C1C=CC(=O)N1*|CC(C)[C@@H](C(=O)N[C@@H](CCCNC(=O)N)C(=O)Nc1ccc(CO)cc1)N*",
+    "cleavage_preference": "reward",
+    "max_rot_bonds": 10,
+    "weights": {
+      "solubility": 1.0,
+      "size": 1.0,
+      "flexibility": 0.5,
+      "synthesizability": 1.0,
+      "cleavability": 1.0,
+      "stability": 0.85,
+      "similarity": 0.0
+    },
+    "mock": false,
+    "ok": true,
+    "error": null,
+    "n_generated": 25,
+    "n_assembled": 25,
+    "best_score": 0.6575,
+    "top": [
+      {
+        "smiles": "CC(C)C(NC(=O)C(=O)NC(=O)CNC(=O)N1C(=O)C=CC1=O)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+        "score": 0.6575,
+        "subscores": {
+          "solubility": 0.9342,
+          "size": 0.932,
+          "flexibility": 0.2689,
+          "synthesizability": 0.6437,
+          "cleavability": 1.0,
+          "stability": 0.85,
+          "similarity": 0.5
+        },
+        "descriptors": {}
+      },
+      {
+        "smiles": "CC(C)C(NC(=O)CNC(=O)C(=O)NC(=O)CN1C(=O)C=CC1=O)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+        "score": 0.6262,
+        "subscores": {
+          "solubility": 0.9499,
+          "size": 0.9008,
+          "flexibility": 0.1589,
+          "synthesizability": 0.6565,
+          "cleavability": 1.0,
+          "stability": 0.85,
+          "similarity": 0.5
+        },
+        "descriptors": {}
+      },
+      {
+        "smiles": "CC(C)C(NC(=O)C(=O)NC(=O)CNC(=O)CN1C(=O)C=CC1=O)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+        "score": 0.6258,
+        "subscores": {
+          "solubility": 0.9499,
+          "size": 0.9008,
+          "flexibility": 0.1589,
+          "synthesizability": 0.6542,
+          "cleavability": 1.0,
+          "stability": 0.85,
+          "similarity": 0.5
+        },
+        "descriptors": {}
+      },
+      {
+        "smiles": "CC(C)C(NC(=O)C(=O)NC(=O)CN(C)C(=O)CN1C(=O)C=CC1=O)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+        "score": 0.6192,
+        "subscores": {
+          "solubility": 0.9413,
+          "size": 0.8696,
+          "flexibility": 0.1589,
+          "synthesizability": 0.646,
+          "cleavability": 1.0,
+          "stability": 0.85,
+          "similarity": 0.5
+        },
+        "descriptors": {}
+      },
+      {
+        "smiles": "CC(C)C(NC(=O)CC(=O)NC(=O)C(=O)NC(=O)CN1C(=O)C=CC1=O)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+        "score": 0.6147,
+        "subscores": {
+          "solubility": 0.9518,
+          "size": 0.8386,
+          "flexibility": 0.1589,
+          "synthesizability": 0.6371,
+          "cleavability": 1.0,
+          "stability": 0.85,
+          "similarity": 0.5
+        },
+        "descriptors": {}
+      },
+      {
+        "smiles": "CC(C)C(NC(=O)C(=O)NC(=O)CC(=O)NC(=O)CN1C(=O)C=CC1=O)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+        "score": 0.6146,
+        "subscores": {
+          "solubility": 0.9518,
+          "size": 0.8386,
+          "flexibility": 0.1589,
+          "synthesizability": 0.6368,
+          "cleavability": 1.0,
+          "stability": 0.85,
+          "similarity": 0.5
+        },
+        "descriptors": {}
+      },
+      {
+        "smiles": "CC(C)C(NC(=O)CNC(=O)C(=O)NC(=O)CNC(=O)N1C(=O)C=CC1=O)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+        "score": 0.6099,
+        "subscores": {
+          "solubility": 0.9562,
+          "size": 0.8052,
+          "flexibility": 0.1589,
+          "synthesizability": 0.6334,
+          "cleavability": 1.0,
+          "stability": 0.85,
+          "similarity": 0.5
+        },
+        "descriptors": {}
+      },
+      {
+        "smiles": "CC(C)C(NC(=O)NCCC(=O)NC(=O)CN1C(=O)C=CC1=O)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+        "score": 0.6092,
+        "subscores": {
+          "solubility": 0.9035,
+          "size": 0.9319,
+          "flexibility": 0.1192,
+          "synthesizability": 0.6645,
+          "cleavability": 1.0,
+          "stability": 0.85,
+          "similarity": 0.5
+        },
+        "descriptors": {}
+      },
+      {
+        "smiles": "CC(C)C(NC(=O)CC(N)C(=O)NC(=O)CN1C(=O)C=CC1=O)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+        "score": 0.608,
+        "subscores": {
+          "solubility": 0.934,
+          "size": 0.9319,
+          "flexibility": 0.1192,
+          "synthesizability": 0.6363,
+          "cleavability": 1.0,
+          "stability": 0.85,
+          "similarity": 0.5
+        },
+        "descriptors": {}
+      },
+      {
+        "smiles": "CC(C)C(NC(=O)CCC(=O)NC(=O)CNC(=O)N1C(=O)C=CC1=O)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+        "score": 0.5987,
+        "subscores": {
+          "solubility": 0.907,
+          "size": 0.8696,
+          "flexibility": 0.1192,
+          "synthesizability": 0.6464,
+          "cleavability": 1.0,
+          "stability": 0.85,
+          "similarity": 0.5
+        },
+        "descriptors": {}
+      },
+      {
+        "smiles": "CC(C)C(NC(=O)C(=O)NC(=O)CCC(=O)NC(=O)CN1C(=O)C=CC1=O)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+        "score": 0.5936,
+        "subscores": {
+          "solubility": 0.9422,
+          "size": 0.8074,
+          "flexibility": 0.1192,
+          "synthesizability": 0.6405,
+          "cleavability": 1.0,
+          "stability": 0.85,
+          "similarity": 0.5
+        },
+        "descriptors": {}
+      },
+      {
+        "smiles": "CC(C)C(NC(=O)C(=O)NC(=O)CNC(=O)C(=O)NCCN1C(=O)C=CC1=O)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+        "score": 0.5911,
+        "subscores": {
+          "solubility": 0.9669,
+          "size": 0.774,
+          "flexibility": 0.1192,
+          "synthesizability": 0.6365,
+          "cleavability": 1.0,
+          "stability": 0.85,
+          "similarity": 0.5
+        },
+        "descriptors": {}
+      }
+    ]
+  },
+  "immunomodulator": {
+    "payload_class": "immunomodulator",
+    "handle": "Maleimide",
+    "trigger": "Val-Ala-PABC",
+    "warhead_pair": "O=C1C=CC(=O)N1*|CC(C)[C@@H](C(=O)N[C@@H](C)C(=O)Nc1ccc(CO)cc1)N*",
+    "cleavage_preference": "reward",
+    "max_rot_bonds": 14,
+    "weights": {
+      "solubility": 1.0,
+      "size": 1.0,
+      "flexibility": 0.2,
+      "synthesizability": 1.0,
+      "cleavability": 1.0,
+      "stability": 0.7,
+      "similarity": 0.0
+    },
+    "mock": false,
+    "ok": true,
+    "error": null,
+    "n_generated": 25,
+    "n_assembled": 25,
+    "best_score": 0.7355,
+    "top": [
+      {
+        "smiles": "CC(NC(=O)C(NC(=O)CC(N)C(=O)NCC(=O)N1C(=O)C=CC1=O)C(C)C)C(=O)Nc1ccc(CO)cc1",
+        "score": 0.7355,
+        "subscores": {
+          "solubility": 0.9148,
+          "size": 1.0,
+          "flexibility": 0.6608,
+          "synthesizability": 0.6547,
+          "cleavability": 1.0,
+          "stability": 0.85,
+          "similarity": 0.5
+        },
+        "descriptors": {}
+      },
+      {
+        "smiles": "CC(NC(=O)C(NC(=O)CS(=O)(=O)CC(=O)NCC(=O)N1C(=O)C=CC1=O)C(C)C)C(=O)Nc1ccc(CO)cc1",
+        "score": 0.7348,
+        "subscores": {
+          "solubility": 0.9255,
+          "size": 1.0,
+          "flexibility": 0.5826,
+          "synthesizability": 0.6606,
+          "cleavability": 1.0,
+          "stability": 0.85,
+          "similarity": 0.5
+        },
+        "descriptors": {}
+      },
+      {
+        "smiles": "CC(NC(=O)C(NC(=O)C=CC(=O)NCC(=O)NCC(=O)N1C(=O)C=CC1=O)C(C)C)C(=O)Nc1ccc(CO)cc1",
+        "score": 0.7334,
+        "subscores": {
+          "solubility": 0.9164,
+          "size": 1.0,
+          "flexibility": 0.5826,
+          "synthesizability": 0.661,
+          "cleavability": 1.0,
+          "stability": 0.85,
+          "similarity": 0.5
+        },
+        "descriptors": {}
+      },
+      {
+        "smiles": "CC(NC(=O)C(NC(=O)CCC(=O)NCC(=O)NCC(=O)N1C(=O)C=CC1=O)C(C)C)C(=O)Nc1ccc(CO)cc1",
+        "score": 0.7307,
+        "subscores": {
+          "solubility": 0.9078,
+          "size": 1.0,
+          "flexibility": 0.5,
+          "synthesizability": 0.6756,
+          "cleavability": 1.0,
+          "stability": 0.85,
+          "similarity": 0.5
+        },
+        "descriptors": {}
+      },
+      {
+        "smiles": "CC(NC(=O)C(NC(=O)C(N)CCC(=O)NCC(=O)N1C(=O)C=CC1=O)C(C)C)C(=O)Nc1ccc(CO)cc1",
+        "score": 0.7297,
+        "subscores": {
+          "solubility": 0.8991,
+          "size": 1.0,
+          "flexibility": 0.5826,
+          "synthesizability": 0.6575,
+          "cleavability": 1.0,
+          "stability": 0.85,
+          "similarity": 0.5
+        },
+        "descriptors": {}
+      },
+      {
+        "smiles": "CC(NC(=O)C(NC(=O)CNC(=O)C(N)CC(=O)NCC(=O)N1C(=O)C=CC1=O)C(C)C)C(=O)Nc1ccc(CO)cc1",
+        "score": 0.7284,
+        "subscores": {
+          "solubility": 0.9427,
+          "size": 0.9964,
+          "flexibility": 0.5,
+          "synthesizability": 0.6432,
+          "cleavability": 1.0,
+          "stability": 0.85,
+          "similarity": 0.5
+        },
+        "descriptors": {}
+      },
+      {
+        "smiles": "CC(NC(=O)C(NC(=O)CC(N)C(=O)NCC(=O)NCC(=O)N1C(=O)C=CC1=O)C(C)C)C(=O)Nc1ccc(CO)cc1",
+        "score": 0.7283,
+        "subscores": {
+          "solubility": 0.9427,
+          "size": 0.9964,
+          "flexibility": 0.5,
+          "synthesizability": 0.6428,
+          "cleavability": 1.0,
+          "stability": 0.85,
+          "similarity": 0.5
+        },
+        "descriptors": {}
+      },
+      {
+        "smiles": "CC(NC(=O)C=CC(=O)NCC(=O)N1C(=O)C=CC1=O)C(=O)NC(C(=O)NC(C)C(=O)Nc1ccc(CO)cc1)C(C)C",
+        "score": 0.7258,
+        "subscores": {
+          "solubility": 0.9011,
+          "size": 1.0,
+          "flexibility": 0.5826,
+          "synthesizability": 0.639,
+          "cleavability": 1.0,
+          "stability": 0.85,
+          "similarity": 0.5
+        },
+        "descriptors": {}
+      },
+      {
+        "smiles": "CC(NC(=O)C(=O)NCC(=O)NC(C(=O)NC(C)C(=O)Nc1ccc(CO)cc1)C(C)C)C(=O)NCC(=O)N1C(=O)C=CC1=O",
+        "score": 0.723,
+        "subscores": {
+          "solubility": 0.9481,
+          "size": 0.9342,
+          "flexibility": 0.5826,
+          "synthesizability": 0.6379,
+          "cleavability": 1.0,
+          "stability": 0.85,
+          "similarity": 0.5
+        },
+        "descriptors": {}
+      },
+      {
+        "smiles": "CC(NC(=O)C(NC(=O)C=C(N)CCC(=O)NCC(=O)N1C(=O)C=CC1=O)C(C)C)C(=O)Nc1ccc(CO)cc1",
+        "score": 0.7229,
+        "subscores": {
+          "solubility": 0.8747,
+          "size": 1.0,
+          "flexibility": 0.5826,
+          "synthesizability": 0.6452,
+          "cleavability": 1.0,
+          "stability": 0.85,
+          "similarity": 0.5
+        },
+        "descriptors": {}
+      },
+      {
+        "smiles": "CC(NC(=O)CCC(=O)NCC(=O)N1C(=O)C=CC1=O)C(=O)NC(C(=O)NC(C)C(=O)Nc1ccc(CO)cc1)C(C)C",
+        "score": 0.7226,
+        "subscores": {
+          "solubility": 0.8912,
+          "size": 0.9986,
+          "flexibility": 0.5,
+          "synthesizability": 0.6526,
+          "cleavability": 1.0,
+          "stability": 0.85,
+          "similarity": 0.5
+        },
+        "descriptors": {}
+      },
+      {
+        "smiles": "CC(NC(=O)CCC(=O)NC(C(=O)NC(C)C(=O)Nc1ccc(CO)cc1)C(C)C)C(=O)NCC(=O)N1C(=O)C=CC1=O",
+        "score": 0.7223,
+        "subscores": {
+          "solubility": 0.8912,
+          "size": 0.9986,
+          "flexibility": 0.5,
+          "synthesizability": 0.6513,
+          "cleavability": 1.0,
+          "stability": 0.85,
+          "similarity": 0.5
+        },
+        "descriptors": {}
+      }
+    ]
+  },
+  "oligonucleotide": {
+    "payload_class": "oligonucleotide",
+    "handle": "DBCO",
+    "trigger": "Non-cleavable-rigid",
+    "warhead_pair": "*N1Cc2ccccc2C#Cc2ccccc21|*C1CCC(CN)CC1",
+    "cleavage_preference": "penalize",
+    "max_rot_bonds": 5,
+    "weights": {
+      "solubility": 1.0,
+      "size": 1.0,
+      "flexibility": 0.9,
+      "synthesizability": 1.0,
+      "cleavability": 0.8,
+      "stability": 0.85,
+      "similarity": 0.0
+    },
+    "mock": false,
+    "ok": true,
+    "error": null,
+    "n_generated": 25,
+    "n_assembled": 25,
+    "best_score": 0.7374,
+    "top": [
+      {
+        "smiles": "NCC1CCC(NC(=O)N2CCN(c3ccc(S(=O)(=O)N4Cc5ccccc5C#Cc5ccccc54)cn3)CC2)CC1",
+        "score": 0.7374,
+        "subscores": {
+          "solubility": 0.5013,
+          "size": 1.0,
+          "flexibility": 0.5,
+          "synthesizability": 0.6866,
+          "cleavability": 1.0,
+          "stability": 1.0,
+          "similarity": 0.5
+        },
+        "descriptors": {}
+      },
+      {
+        "smiles": "NCC1CCC(NC(=O)c2ccc(NC(=O)N3Cc4ccccc4C#Cc4ccccc43)nc2)CC1",
+        "score": 0.7348,
+        "subscores": {
+          "solubility": 0.4204,
+          "size": 1.0,
+          "flexibility": 0.5826,
+          "synthesizability": 0.6994,
+          "cleavability": 1.0,
+          "stability": 1.0,
+          "similarity": 0.5
+        },
+        "descriptors": {}
+      },
+      {
+        "smiles": "NCC1CCC(Nc2ccc(NC(=O)N3CCN(C(=O)N4Cc5ccccc5C#Cc5ccccc54)CC3)cn2)CC1",
+        "score": 0.729,
+        "subscores": {
+          "solubility": 0.4112,
+          "size": 1.0,
+          "flexibility": 0.5826,
+          "synthesizability": 0.6842,
+          "cleavability": 1.0,
+          "stability": 1.0,
+          "similarity": 0.5
+        },
+        "descriptors": {}
+      },
+      {
+        "smiles": "NCC1CCC(NC(=O)c2cnc(-c3cnc(N4Cc5ccccc5C#Cc5ccccc54)nc3)nc2)CC1",
+        "score": 0.721,
+        "subscores": {
+          "solubility": 0.4475,
+          "size": 1.0,
+          "flexibility": 0.5,
+          "synthesizability": 0.6786,
+          "cleavability": 1.0,
+          "stability": 1.0,
+          "similarity": 0.5
+        },
+        "descriptors": {}
+      },
+      {
+        "smiles": "NCC1CCC(NS(=O)(=O)N2CCN(C(=O)c3ccc(N4Cc5ccccc5C#Cc5ccccc54)nc3)CC2)CC1",
+        "score": 0.7205,
+        "subscores": {
+          "solubility": 0.5243,
+          "size": 1.0,
+          "flexibility": 0.4174,
+          "synthesizability": 0.6789,
+          "cleavability": 1.0,
+          "stability": 1.0,
+          "similarity": 0.5
+        },
+        "descriptors": {}
+      },
+      {
+        "smiles": "NCC1CCC(Nc2ncnc(-c3ccc(C(=O)N4Cc5ccccc5C#Cc5ccccc54)cn3)n2)CC1",
+        "score": 0.7175,
+        "subscores": {
+          "solubility": 0.4354,
+          "size": 1.0,
+          "flexibility": 0.5,
+          "synthesizability": 0.6792,
+          "cleavability": 1.0,
+          "stability": 1.0,
+          "similarity": 0.5
+        },
+        "descriptors": {}
+      },
+      {
+        "smiles": "NCC1CCC(Nc2ncc(-c3ncc(C(=O)N4Cc5ccccc5C#Cc5ccccc54)cn3)cn2)CC1",
+        "score": 0.7174,
+        "subscores": {
+          "solubility": 0.4354,
+          "size": 1.0,
+          "flexibility": 0.5,
+          "synthesizability": 0.6783,
+          "cleavability": 1.0,
+          "stability": 1.0,
+          "similarity": 0.5
+        },
+        "descriptors": {}
+      },
+      {
+        "smiles": "NCC1CCC(NC(=O)N2CCN(c3ccc(NC(=O)N4Cc5ccccc5C#Cc5ccccc54)cc3)CC2)CC1",
+        "score": 0.716,
+        "subscores": {
+          "solubility": 0.3632,
+          "size": 1.0,
+          "flexibility": 0.5826,
+          "synthesizability": 0.701,
+          "cleavability": 1.0,
+          "stability": 1.0,
+          "similarity": 0.5
+        },
+        "descriptors": {}
+      },
+      {
+        "smiles": "NCC1CCC(NC(=O)Nc2ccc(C(=O)N3Cc4ccccc4C#Cc4ccccc43)cc2)CC1",
+        "score": 0.7147,
+        "subscores": {
+          "solubility": 0.3524,
+          "size": 1.0,
+          "flexibility": 0.5826,
+          "synthesizability": 0.7152,
+          "cleavability": 1.0,
+          "stability": 1.0,
+          "similarity": 0.5
+        },
+        "descriptors": {}
+      },
+      {
+        "smiles": "NCC1CCC(NC(=O)c2ccc(-c3ccc(C(=O)N4Cc5ccccc5C#Cc5ccccc54)cn3)nc2)CC1",
+        "score": 0.7042,
+        "subscores": {
+          "solubility": 0.3833,
+          "size": 1.0,
+          "flexibility": 0.5,
+          "synthesizability": 0.6953,
+          "cleavability": 1.0,
+          "stability": 1.0,
+          "similarity": 0.5
+        },
+        "descriptors": {}
+      },
+      {
+        "smiles": "NCC1CCC(NC(=O)c2ccc(-c3ccc(C(=O)N4Cc5ccccc5C#Cc5ccccc54)nc3)nc2)CC1",
+        "score": 0.7038,
+        "subscores": {
+          "solubility": 0.3833,
+          "size": 1.0,
+          "flexibility": 0.5,
+          "synthesizability": 0.6929,
+          "cleavability": 1.0,
+          "stability": 1.0,
+          "similarity": 0.5
+        },
+        "descriptors": {}
+      },
+      {
+        "smiles": "NCC1CCC(NC(=O)c2nccc(-c3ccc(C(=O)N4Cc5ccccc5C#Cc5ccccc54)cc3)n2)CC1",
+        "score": 0.7036,
+        "subscores": {
+          "solubility": 0.3833,
+          "size": 1.0,
+          "flexibility": 0.5,
+          "synthesizability": 0.6919,
+          "cleavability": 1.0,
+          "stability": 1.0,
+          "similarity": 0.5
+        },
+        "descriptors": {}
+      }
+    ]
+  }
+}

@@ -1,0 +1,155 @@
+{
+  "device": "cpu",
+  "diversity_filter": {
+    "bucket_size": 25,
+    "minscore": 0.4,
+    "type": "IdenticalMurckoScaffold"
+  },
+  "learning_strategy": {
+    "rate": 0.0001,
+    "sigma": 128.0,
+    "type": "dap"
+  },
+  "parameters": {
+    "agent_file": ".linkinvent",
+    "batch_size": 32,
+    "prior_file": ".linkinvent",
+    "purge_memories": false,
+    "randomize_smiles": true,
+    "smiles_file": "/reinvent_runs/reinvent-0_20260702_202830_20513_c94f47f5/reinvent_inputs.smi",
+    "summary_csv_prefix": "/reinvent_runs/reinvent-0_20260702_202830_20513_c94f47f5/rl_output",
+    "use_checkpoint": false
+  },
+  "run_type": "staged_learning",
+  "seed": 0,
+  "stage": [
+    {
+      "chkpt_file": "/reinvent_runs/reinvent-0_20260702_202830_20513_c94f47f5/stage1.chkpt",
+      "max_score": 0.6,
+      "max_steps": 40,
+      "min_steps": 25,
+      "scoring": {
+        "component": [
+          {
+            "FragmentSlogP": {
+              "endpoint": [
+                {
+                  "name": "linker logP",
+                  "transform": {
+                    "high": 4.0,
+                    "k": 0.5,
+                    "low": 1.0,
+                    "type": "reverse_sigmoid"
+                  },
+                  "weight": 1.0
+                }
+              ]
+            }
+          },
+          {
+            "FragmentTPSA": {
+              "endpoint": [
+                {
+                  "name": "linker TPSA",
+                  "transform": {
+                    "high": 120.0,
+                    "k": 0.5,
+                    "low": 40.0,
+                    "type": "sigmoid"
+                  },
+                  "weight": 0.5
+                }
+              ]
+            }
+          },
+          {
+            "FragmentMolecularWeight": {
+              "endpoint": [
+                {
+                  "name": "linker MW",
+                  "transform": {
+                    "coef_div": 100.0,
+                    "coef_se": 150.0,
+                    "coef_si": 150.0,
+                    "high": 600.0,
+                    "low": 150.0,
+                    "type": "double_sigmoid"
+                  },
+                  "weight": 1.0
+                }
+              ]
+            }
+          },
+          {
+            "FragmentNumRotBond": {
+              "endpoint": [
+                {
+                  "name": "linker rotatable bonds",
+                  "transform": {
+                    "high": 10.0,
+                    "k": 0.5,
+                    "low": 2.0,
+                    "type": "reverse_sigmoid"
+                  },
+                  "weight": 0.5
+                }
+              ]
+            }
+          },
+          {
+            "SAScore": {
+              "endpoint": [
+                {
+                  "name": "synthetic accessibility",
+                  "transform": {
+                    "high": 5.0,
+                    "k": 0.5,
+                    "low": 1.0,
+                    "type": "reverse_sigmoid"
+                  },
+                  "weight": 1.0
+                }
+              ]
+            }
+          },
+          {
+            "MatchingSubstructure": {
+              "endpoint": [
+                {
+                  "name": "cleavable motif present",
+                  "params": {
+                    "smarts": [
+                      "[NX3][CX4][CX3](=O)[NX3][CX3](=O)",
+                      "[#16X2][#16X2]",
+                      "c1ccc(CO[CX3](=O))cc1"
+                    ],
+                    "use_chirality": false
+                  },
+                  "weight": 1.0
+                }
+              ]
+            }
+          },
+          {
+            "CustomAlerts": {
+              "endpoint": [
+                {
+                  "name": "labile group alerts",
+                  "params": {
+                    "smarts": [
+                      "[CX3]=[NX2][NX3]",
+                      "[CX4]([OX2H0])[OX2H0]"
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "type": "geometric_mean"
+      },
+      "termination": "simple"
+    }
+  ],
+  "tb_logdir": "/reinvent_runs/reinvent-0_20260702_202830_20513_c94f47f5/tb_logs"
+}

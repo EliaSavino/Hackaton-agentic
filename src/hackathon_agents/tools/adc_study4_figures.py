@@ -122,6 +122,67 @@ def fig_heldout(heldout: dict[str, Any], chains: dict[str, Any], out: Path) -> P
     return out
 
 
+def fig_heldout_v5(heldout: dict[str, Any], chains: dict[str, Any], out: Path) -> Path:
+    """V5 held-out: discriminate ROBUST rules (recover when a paper is withheld) from
+    CONTESTED ones (the rule flips because the broader literature genuinely disagrees)."""
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    def _dir(pref):  # canonical cleavage -> readable direction
+        return {"reward": "cleavable", "penalize": "non-cleavable", "ignore": "either"}.get(pref, pref or "?")
+
+    def _rule_dir(rule):
+        from hackathon_agents.tools.lit_reasoning_s4 import normalize_rule
+        return _dir(normalize_rule(rule)["cleavage_preference"]) if rule else "?"
+
+    classes = [c for c in ("cytotoxin", "immunomodulator", "oligonucleotide") if c in heldout]
+    full_conf = [chains.get(c, {}).get("confidence", {}).get("score", 0.0) for c in classes]
+    held_conf = [heldout.get(c, {}).get("confidence", {}).get("score", 0.0) for c in classes]
+    full_dir = [_rule_dir(chains.get(c, {}).get("rule")) for c in classes]
+    held_dir = [_dir(heldout.get(c, {}).get("score", {}).get("predicted_cleavage")) for c in classes]
+    verdicts = [heldout.get(c, {}).get("score", {}).get("verdict", "?") for c in classes]
+    withheld = [", ".join(heldout.get(c, {}).get("withheld", []))[:34] for c in classes]
+
+    x = np.arange(len(classes)); width = 0.38
+    fig, ax = plt.subplots(figsize=(8.6, 4.6))
+    ax.bar(x - width / 2, full_conf, width, label="full corpus", color="#3b7dd8", edgecolor="black", linewidth=0.5)
+    held_colors = ["#5aa469" if v == "agree" else "#d1495b" for v in verdicts]
+    ax.bar(x + width / 2, held_conf, width, label="key paper(s) withheld", color=held_colors, edgecolor="black", linewidth=0.5)
+    ax.set_xticks(x)
+    ax.set_xticklabels([f"{_CLASS_SHORT.get(c,c)}\n(withhold: {w})" for c, w in zip(classes, withheld)], fontsize=8)
+    ax.set_ylabel("derived-rule confidence"); ax.set_ylim(0, 1.05)
+    ax.set_title("Held-out test discriminates ROBUST rules (recover when a paper is withheld)\n"
+                 "from CONTESTED ones (rule flips because the broader literature disagrees)", fontsize=9.5)
+    for i in range(len(classes)):
+        ax.text(x[i] - width / 2, full_conf[i] + 0.015, f"{full_dir[i]}\n{full_conf[i]:.2f}",
+                ha="center", va="bottom", fontsize=7, color="#12386e")
+        col = "#2e6b3e" if verdicts[i] == "agree" else "#7a1020"
+        tag = "ROBUST" if verdicts[i] == "agree" else "CONTESTED"
+        ax.text(x[i] + width / 2, held_conf[i] + 0.015, f"{held_dir[i]}\n{held_conf[i]:.2f}\n{tag}",
+                ha="center", va="bottom", fontsize=7, color=col, fontweight="bold")
+    ax.legend(fontsize=8, loc="upper center", ncol=2)
+    fig.tight_layout()
+    out.parent.mkdir(parents=True, exist_ok=True)
+    fig.savefig(out, dpi=200); plt.close(fig)
+    return out
+
+
+def render_study5_figures(
+    reasoning_path: str | Path = "deliverables/study5/reasoning_chains.json",
+    heldout_path: str | Path = "deliverables/study5/heldout_predictions.json",
+    out_dir: str | Path = "deliverables/study5/figures",
+) -> dict[str, Path]:
+    chains = json.loads(Path(reasoning_path).read_text())
+    heldout = json.loads(Path(heldout_path).read_text())
+    out = Path(out_dir)
+    return {
+        "reasoning": fig_reasoning_cascade(chains, out / "fig_reasoning_cascade.png"),
+        "heldout": fig_heldout_v5(heldout, chains, out / "fig_heldout.png"),
+    }
+
+
 def render_study4_figures(
     reasoning_path: str | Path = "deliverables/study4/reasoning_chains.json",
     heldout_path: str | Path = "deliverables/study4/heldout_predictions.json",
