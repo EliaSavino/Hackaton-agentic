@@ -45,8 +45,9 @@ Also: scissile-bond SMARTS tightened (red marks the Cit-PABC anilide, not every 
 `boltz.json` flag renamed `whole_conjugate` → `co_present`; gallery label "steps" → "cplx idx".
 
 ## Files
-- `ADC_Linker_Study6_Paper.pdf` (6 pp) · `ADC_Linker_Study6_Supplementary.pdf` (7 pp)
-- `figures/` — fig1_journey, fig2_heldout, fig3_rules_steer, fig4_cofold, fig5_sensitivity, **fig6_gallery**
+- `ADC_Linker_Study6_Paper.pdf` (**5 pp**) · `ADC_Linker_Study6_Supplementary.pdf` (**8 pp**)
+- `figures/` — fig1_journey, fig2_heldout, fig3_rules_steer, fig4_cofold, fig5_sensitivity, fig6_gallery
+  (fig6 is now rendered in the **SI**, not the main text — see Part XI)
 - Data JSONs live in `deliverables/study5/` (the ISAC objective was corrected in place by the V7
   safety gate; molecules are the same real REINVENT SMILES, re-scored under the gated objective).
 
@@ -109,6 +110,33 @@ Discussion; Fig 4 labels humanised + the hypothesis point added; Fig 1 citation 
   "driven mainly by the rigidity knob".
 - **New Fig 6 — trial-molecule gallery** (personal request): two real generated linkers per class,
   each carrying its literature-derived motif by construction, with SMARTS-detected highlights.
+
+## Part XI — Cosmetic pass (purely stylistic; no number or claim changed)
+
+A layout/beauty pass. **Nothing here changes a value or a result** — same JSON, same figures'
+data, re-rendered and re-typeset only.
+
+- **XI.0 — back under the 5-page limit.** The 6th page held only Fig 6 (gallery) plus three
+  trailing references. Fig 6 moved to the **SI** (it is redundant with Table 2 and Fig 1's inset),
+  in-plot suptitles were dropped in favour of the LaTeX captions, and the float↔text spacing was
+  tightened. Result: a clean **5-page** main text (4-figure spine: journey, held-out, rules-steer,
+  co-fold), SI now 8 pp.
+- **XI.1 — one semantic colour language across every figure:** cleavable = teal (`#2C7FB8`),
+  rigid/non-cleavable = amber (`#E6820E`), contested/flips = red, robust/recovers = green (outcome
+  accents), clinical/neutral = slate. The two cleavable classes share the cool teal family, the
+  rigid/contested ARC class is amber, so "cleavable vs rigid" reads in the same ink everywhere.
+- **XI.2 — title** dropped to 16/19 pt (via `anyfontsize`): same words, less shouting, more air.
+- **XI.3 — per-figure polish.** Fig 1: neutral slate boxes with a teal accent only on the two
+  stages the agent produces (DERIVED RULE, GENERATED) + a legible "generated Val-Cit design"
+  caption. Fig 2 (money): full-corpus bars muted to neutral grey so the green-recover/red-flip
+  held-out bars are the only saturated ink, plus a dotted 0.5 contested-floor gridline anchoring
+  the ARC flip below it. Fig 3: heatmap → `YlGnBu` (legible labels in every cell), scatter
+  palette-keyed with a distinct marker per class and the legend tucked inside. Fig 5 (co-fold):
+  height cut, markers recoloured by cleavage class (cleavables teal cluster left, rigid ARC amber
+  far right, clinical slate), and the bold hypothesis label offset so it no longer collides with
+  the markers or the axis ticks. Sensitivity (Fig 4): shortened, palette-aligned bands.
+- **XI.4 — typographic nits:** em-dashes and redundant in-plot titles removed (the caption is the
+  single voice).
 
 ## Standing (deferred, named in the paper as boundaries)
 Real retrosynthesis (AiZynthFinder, n=15); covalent Boltz conjugate; deeper generative sampling
