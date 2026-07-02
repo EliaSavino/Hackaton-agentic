@@ -9,6 +9,8 @@ AI tools moved out of the author list; the four-figure narrative spine (journey,
 from __future__ import annotations
 
 import json
+import re
+import sqlite3
 import subprocess
 from pathlib import Path
 from typing import Any
@@ -17,6 +19,59 @@ from hackathon_agents.tools.adc_study4_paper import _tex_escape, _smiles_tt, PRE
 from hackathon_agents.tools.provenance import build_ledger, assert_no_mock_in_results
 from hackathon_agents.tools.consensus import disagreement_aware_confidence
 from hackathon_agents.tools.lit_reasoning_s4 import normalize_rule
+
+
+# Journal hints keyed by the source-file prefix (safe, mechanical mappings only -- the
+# filename prefix *is* the journal/DOI handle; we never invent authors we cannot verify).
+_JOURNAL_HINT = {
+    "biomedicines": "Biomedicines (MDPI)",
+    "fphar": "Front.\\ Pharmacol.",
+    "jitc": "J.\\ Immunother.\\ Cancer",
+    "cir": "Cancer Immunol.\\ Res.",
+    "d2cs00446a": "Chem.\\ Soc.\\ Rev., DOI 10.1039/d2cs00446a",
+    "s41434": "Gene Therapy (Nature), DOI 10.1038/s41434-026-00621-5",
+    "1-s2.0": "Elsevier ScienceDirect",
+    "piis": "Elsevier/Cell Press",
+    "10555": "Springer",
+    "chemsocrev": "Chem.\\ Soc.\\ Rev.",
+}
+
+
+def _readable_ref(title: str) -> str:
+    """Best-effort readable label from the stored corpus title -- reformatting only,
+    never fabricating authorship. Descriptive slugs are de-hyphenated; identifier-style
+    titles keep their identifier plus a journal hint where the prefix is unambiguous."""
+    t = title.strip()
+    low = t.lower()
+    # Wiley-style "Journal - YYYY - Author - Title" filenames are already citations.
+    if re.search(r" - \d{4} - ", t):
+        return t
+    # descriptive slug (several hyphen-separated words, not starting with a digit/PII)
+    words = t.replace("_", " ").split("-")
+    if len(words) >= 4 and not t[:1].isdigit() and not low.startswith(("piis", "1-s2.0")):
+        s = t.replace("-", " ").replace("_", " ").strip()
+        return s[:1].upper() + s[1:]
+    # identifier-style: attach a journal hint if the prefix is a known handle
+    for key, hint in _JOURNAL_HINT.items():
+        if low.startswith(key) or key in low:
+            return f"{t} ({hint})"
+    return t
+
+
+def corpus_entries(db_path: str | Path = "data/rag.sqlite") -> list[str]:
+    """All non-README corpus documents (deduped by content hash), as readable references."""
+    con = sqlite3.connect(str(db_path))
+    rows = con.execute(
+        "select title, content_hash from documents where lower(trim(title)) != 'readme' order by title"
+    ).fetchall()
+    seen: set[str] = set()
+    out: list[str] = []
+    for title, chash in rows:
+        if chash in seen:
+            continue
+        seen.add(chash)
+        out.append(_readable_ref(title))
+    return out
 
 _PDFLATEX = "/Library/TeX/texbin/pdflatex"
 _SHORT = {"cytotoxin": "Cytotoxin", "oligonucleotide": "Oligonucleotide (ARC)", "immunomodulator": "Immunomodulator (ISAC)"}
@@ -131,7 +186,8 @@ def build_main_tex(art: dict[str, Any]) -> str:
 
     methods = (
         "\\subsection{Reasoning that drives generation}\n"
-        f"For each payload class an agent (Claude Opus, always on) queries a store of {n_docs} papers, "
+        f"For each payload class an agent (Claude Opus, always on) queries a store of {n_docs} "
+        "primary-literature documents (the full corpus is listed in SI), "
         "retrieves passages with provenance, and extracts conjugate exemplars that must each cite a "
         "retrieved passage. It derives a rule (cleavage, rigidity, plasma-stability) from the grounded "
         "exemplars---with no hardcoded fallback, so a failed call is an explicit abstain---and the "
@@ -140,20 +196,37 @@ def build_main_tex(art: dict[str, Any]) -> str:
         "the linkers (staged learning, remote GPU); the class trigger warhead (Val-Cit-PABC, "
         "Val-Ala-PABC or the rigid sulfo-SMCC cap) is welded into every molecule "
         "(Figure~\\ref{fig:steer}).\n\n"
-        "\\subsection{Confidence, scorers and provenance}\n"
-        "Rule confidence is \\emph{disagreement-aware}: it is high only when the grounded exemplars "
-        "are both plentiful and consistent, so a split field drives confidence down and is flagged "
-        "contested. Synthesizability is the continuous Ertl SA\\_Score (the metric the generator "
-        "optimises); the step-count survives only as a reported complexity index, not a route. "
-        "Plasma stability is mechanism-resolved. Every value that reaches the manuscript is tagged "
-        "\\emph{measured} (a real Boltz or REINVENT run), \\emph{llm}, or \\emph{heuristic}; a gate "
-        "blocks any placeholder from a results claim (SI provenance table).\n\n"
+        "\\subsection{The disagreement-aware confidence}\n"
+        "Confidence in a derived rule is defined explicitly as evidence strength times consensus. Let "
+        "$n$ be the number of grounded exemplars, and among those whose linker is cleavage-labelled "
+        "let $n_c$ favour cleavable and $n_n$ non-cleavable release. With consensus "
+        "$\\kappa = \\max(n_c,n_n)/(n_c+n_n)$,\n"
+        "\\begin{equation}\n"
+        "C \\;=\\; \\min\\!\\big(0.97,\\; E\\cdot P\\big),\\qquad "
+        "E=\\min\\!\\big(1,\\tfrac{n}{6}\\big),\\qquad P=\\max\\!\\big(0,\\;2\\kappa-1\\big).\n"
+        "\\end{equation}\n"
+        "$E$ rewards evidence volume (saturating at six grounded exemplars); $P$ rewards consensus, "
+        "falling linearly from $1$ at unanimity to $0$ at an even split, so a contested field drives "
+        "$C$ down regardless of how many papers were read. A rule is flagged \\emph{contested} when "
+        "$n_c+n_n\\ge 3$ and $\\kappa<0.7$. This makes every confidence in the paper derivable: e.g.\\ "
+        "the full-corpus cytotoxin evidence is $12{:}3$ cleavable:non-cleavable ($\\kappa=0.80$, $E=1$) "
+        "so $C=0.60$, whereas withholding the review that supplies those non-cleavable examples leaves "
+        "$8{:}0$ ($\\kappa=1$) so $C=0.97$---the rise reflects a genuinely more consistent evidence "
+        "subset, not a change in how many papers were seen.\n\n"
+        "\\subsection{Scorers and provenance}\n"
+        "Synthesizability is the continuous Ertl SA\\_Score (the metric the generator optimises); the "
+        "step-count survives only as a reported complexity index, not a route. Plasma stability is "
+        "mechanism-resolved. Every value that reaches the manuscript is tagged \\emph{measured} (a "
+        "real Boltz or REINVENT run), \\emph{llm}, or \\emph{heuristic}; a gate blocks any placeholder "
+        "from a results claim (SI provenance table).\n\n"
         "\\subsection{Held-out test and co-fold}\n"
         "We withhold a class's key paper, re-derive the rule from the remaining corpus, record the "
         "prediction before revealing the withheld paper, and report agree/disagree with its evidence "
         "composition. We co-fold each designed linker with its real payload against cathepsin~B "
         "(Boltz-2) as two co-present ligands---a recognition/plausibility check, not a covalent "
-        "conjugate and not a claim of cleavage."
+        "conjugate and not a claim of cleavage. Boltz-2 affinity predictions carry roughly an "
+        "order-of-magnitude ($\\sim$1 log-unit) uncertainty, so we read them only as regime "
+        "separators, not point values."
     )
 
     results = (
@@ -175,15 +248,26 @@ def build_main_tex(art: dict[str, Any]) -> str:
         "favour rigid non-cleavable linkers; clinical AOCs increasingly use cleavable Val-Cit. The "
         "agent surfaces that tension and lowers its confidence accordingly, rather than asserting a "
         "single rule.\n\n"
+        "\\subsection{The confidence metric is robust to retrieval perturbation}\n"
+        "Because the disagreement-aware confidence is the central claim, we stress-tested it against "
+        "the retrieval it depends on. Varying the depth ($k\\in\\{6,8,10,12\\}$ passages) leaves each "
+        "class's confidence stable (Figure~\\ref{fig:sens}): the ARC rule stays contested at "
+        "$C\\approx0.33$ at every depth, cytotoxin stays medium ($0.57$--$0.60$) and ISAC high "
+        "($0.83$--$0.97$), so the ordering and the contested-ARC classification are reproducible, not "
+        "artefacts of a particular $k$. A harder jackknife---dropping the top-ranked retrieved "
+        "source---moves the values for classes with few cleavage-labelled exemplars (ISAC has a "
+        "single one), exactly as the metric should when key evidence is removed, while the ARC rule "
+        "stays cleavable-modal throughout. The 0.33 is a reproducible behaviour, not a lucky draw.\n\n"
         "\\subsection{An agent-derived hypothesis, tested in silico}\n"
         "The contested ARC result is a prediction, not just a caveat. From the clinical antibody-"
         "oligonucleotide literature the agent derives that ARC linkers can be protease-cleavable "
         "Val-Cit, against the rigid non-cleavable standard. We tested its structural feasibility: a "
         "Val-Cit ARC linker generated under the derived cleavable rule co-folds with cathepsin~B at "
-        f"predicted $K_\\mathrm{{d}}$ {kd_hyp_txt}\\,nM (Figure~\\ref{{fig:cofold}}), matching the "
-        f"clinical Val-Cit substrate ({kd_clin:.0f}\\,nM) and the cytotoxin Val-Cit design "
-        f"({kd_cyto:.0f}\\,nM), while the rigid non-cleavable ARC design binds an order of magnitude "
-        f"more weakly ({kd_olig:.0f}\\,nM). The prediction is thus both literature-derived and "
+        f"predicted $K_\\mathrm{{d}}$ {kd_hyp_txt}\\,nM (Figure~\\ref{{fig:cofold}})---within the same "
+        f"nanomolar affinity regime as the clinical Val-Cit substrate ({kd_clin:.0f}\\,nM) and the "
+        f"cytotoxin Val-Cit design ({kd_cyto:.0f}\\,nM), given Boltz-2's $\\sim$1 log-unit noise "
+        f"floor---while the rigid non-cleavable ARC design binds more than an order of magnitude "
+        f"weaker ({kd_olig:.0f}\\,nM), a separation beyond that noise floor. The prediction is thus both literature-derived and "
         "structurally feasible, and directly falsifiable: a wet-lab comparison of Val-Cit versus "
         "sulfo-SMCC ARC linkers on protease-mediated release and potency would confirm or refute it.\n\n"
         "\\begin{table}[t]\\centering\\caption{Leave-one-paper-out. Confidence is disagreement-aware; "
@@ -195,9 +279,10 @@ def build_main_tex(art: dict[str, Any]) -> str:
         f"{ho_table}\n\\bottomrule\\end{{tabular}}\\end{{table}}\n\n"
         "\\subsection{Structural recognition}\n"
         f"The rule-generated Val-Cit cytotoxin design co-folds tightly with cathepsin~B (predicted "
-        f"$K_\\mathrm{{d}}$ {kd_cyto:.0f}\\,nM), near the clinical mc-Val-Cit-PABC substrate "
-        f"({kd_clin:.0f}\\,nM), while the rigid non-cleavable ARC design binds an order of magnitude "
-        f"more weakly ({kd_olig:.0f}\\,nM) (Figure~\\ref{{fig:cofold}}). Affinity indexes recognition, "
+        f"$K_\\mathrm{{d}}$ {kd_cyto:.0f}\\,nM), in the same regime as the clinical mc-Val-Cit-PABC "
+        f"substrate ({kd_clin:.0f}\\,nM) once Boltz-2's $\\sim$1 log-unit uncertainty is allowed, while "
+        f"the rigid non-cleavable ARC design binds more than an order of magnitude weaker "
+        f"({kd_olig:.0f}\\,nM) (Figure~\\ref{{fig:cofold}}). Affinity indexes recognition, "
         "not cleavage.\n\n"
         "\\subsection{Actionable designs}\n"
         "Table~\\ref{tab:short} gives one representative generated design per class (all fifteen, with "
@@ -240,13 +325,18 @@ def build_main_tex(art: dict[str, Any]) -> str:
     body = [PREAMBLE, author_setup, r"\title{" + title + "}", author_block, r"\date{}",
             r"\begin{document}", r"\maketitle",
             r"\begin{abstract}" + abstract + r"\end{abstract}",
-            r"\begin{figure}[t]\centering\includegraphics[width=0.98\linewidth]{fig1_journey.png}\caption{One molecule, end to end: a retrieved quote grounds the cytotoxin rule that generates a Val-Cit linker that cathepsin~B recognises. Handle (blue), scissile bond (red) and spacer (green) are SMARTS-detected.}\label{fig:journey}\end{figure}",
+            r"\begin{figure}[t]\centering\includegraphics[width=0.82\linewidth]{fig1_journey.png}\caption{One molecule, end to end: a retrieved quote grounds the cytotoxin rule that generates a Val-Cit linker that cathepsin~B recognises. Handle (blue), scissile bond (red) and spacer (green) are SMARTS-detected.}\label{fig:journey}\end{figure}",
             r"\section{Introduction}" + intro,
             r"\section{Methods}" + methods,
             r"\section{Results}" + results,
-            r"\begin{figure}[t]\centering\includegraphics[width=0.86\linewidth]{fig2_heldout.png}\caption{Held-out test. Top: full-corpus vs held-out confidence (disagreement-aware); the ARC rule flips (red) while cytotoxin/ISAC recover (green). Bottom: the grounded-evidence split that explains it---ARC is 4:2 (contested), the others unanimous.}\label{fig:heldout}\end{figure}",
-            r"\begin{figure}[t]\centering\includegraphics[width=0.98\linewidth]{fig3_rules_steer.png}\caption{The rules steer the chemistry. Left: the compiled objective weights differ by class. Right: the generated designs separate by class, driven mainly by the rigidity knob (rotatable bonds); the cleavable-motif axis is set by the welded trigger.}\label{fig:steer}\end{figure}",
-            r"\begin{figure}[t]\centering\includegraphics[width=0.86\linewidth]{fig4_cofold.png}\caption{Cathepsin-B co-fold (predicted affinity indexes recognition, not cleavage). The cleavable Val-Cit designs---cytotoxin, and the ARC linker generated under the agent's held-out cleavable rule---are recognised as tightly as the clinical substrate, while the rigid non-cleavable ARC design binds an order of magnitude more weakly. The cleavable ARC point is the in-silico feasibility proof for the hypothesis.}\label{fig:cofold}\end{figure}",
+            r"\begin{figure}[t]\centering\includegraphics[width=0.74\linewidth]{fig2_heldout.png}\caption{Held-out test. Top: full-corpus vs held-out confidence (disagreement-aware); the ARC rule flips (red) while cytotoxin/ISAC recover (green). Bottom: the grounded-evidence split that explains it---ARC is 4:2 (contested), the others unanimous.}\label{fig:heldout}\end{figure}",
+            r"\begin{figure}[t]\centering\includegraphics[width=0.86\linewidth]{fig3_rules_steer.png}\caption{The rules steer the chemistry. Left: the compiled objective weights differ by class. Right: the generated designs separate by class, driven mainly by the rigidity knob (rotatable bonds); the cleavable-motif axis is set by the welded trigger.}\label{fig:steer}\end{figure}",
+            r"\begin{figure}[t]\centering"
+            r"\begin{minipage}[t]{0.49\linewidth}\centering\includegraphics[width=\linewidth]{fig5_sensitivity.png}"
+            r"\caption{Stress-test of the confidence metric: varying retrieval depth (top-$k$) leaves each class's confidence stable---the ARC rule stays contested ($\approx$0.33) at every $k$. Reproducible, not a lucky $k$.}\label{fig:sens}\end{minipage}\hfill"
+            r"\begin{minipage}[t]{0.49\linewidth}\centering\includegraphics[width=\linewidth]{fig4_cofold.png}"
+            r"\caption{Cathepsin-B co-fold (affinity indexes recognition, not cleavage). The cleavable Val-Cit designs (cytotoxin, and the held-out-derived ARC linker) are recognised in the clinical-substrate regime; the rigid ARC design binds $>$10$\times$ weaker---the in-silico feasibility proof.}\label{fig:cofold}\end{minipage}"
+            r"\end{figure}",
             _short_table(dossiers),
             r"\section{Discussion}" + discussion,
             r"\section{Conclusion}" + conclusion, ack, BIB, r"\end{document}"]
@@ -276,7 +366,7 @@ def build_supp_tex(art: dict[str, Any]) -> str:
     prov = art["provenance"]
     fullc = {c: disagreement_aware_confidence(chains[c]["exemplars"]) for c in chains}
     body = [PREAMBLE, r"\title{\textbf{Supplementary Information}}", r"\author{}", r"\date{}",
-            r"\begin{document}", r"\maketitle"]
+            r"\begin{document}", r"\maketitle", r"\sloppy"]
 
     body.append(r"\section{Provenance of every reported value}")
     body.append("Values are tagged \\emph{measured} (a real Boltz co-fold or REINVENT run), "
@@ -328,6 +418,15 @@ def build_supp_tex(art: dict[str, Any]) -> str:
     brows = "\n".join(f"{_tex_escape(r.get('label','?'))} & {r.get('iptm','?')} & {r.get('binding_affinity_kd_nm','?')} \\\\" for r in boltz)
     body.append(r"\begin{table}[h]\centering\small\begin{tabular}{l c c}\toprule Co-fold (co-present) & ipTM & Pred.\ $K_d$ (nM) \\ \midrule "
                 + brows + r" \bottomrule\end{tabular}\end{table}")
+
+    # Full literature corpus the agent read (real metadata; identifiers as ingested).
+    corpus = art.get("corpus", [])
+    body.append(r"\section{Literature corpus (" + str(len(corpus)) + r" documents the agent read)}")
+    body.append("The retrieval and reasoning operated over the following primary-literature documents. "
+                "Identifiers/titles are the sources as ingested (filenames, DOIs, or journal handles); "
+                "they are the ground truth for every grounded exemplar cited above.\n")
+    items = "\n".join(rf"\item {_tex_escape(ref)}" for ref in corpus)
+    body.append(r"\begin{enumerate}\setlength{\itemsep}{0pt}\small" + "\n" + items + "\n" + r"\end{enumerate}")
     body.append(r"\end{document}")
     return "\n".join(body)
 
@@ -348,10 +447,11 @@ def build_study6_paper(deliv_dir="deliverables/study6", src_dir="deliverables/st
         prov.append({"item": "ARC hypothesis co-fold: Kd", "source": "measured",
                      "detail": f"Val-Cit ARC design, Kd {hypothesis['cofold'].get('binding_affinity_kd_nm')} nM"})
     assert_no_mock_in_results(prov)
-    import sqlite3
-    n_docs = sqlite3.connect(db_path).execute("select count(*) from documents").fetchone()[0]
+    corpus = corpus_entries(db_path)  # non-README, deduped by content hash
+    n_docs = len(corpus)
     art = {"chains": chains, "designs": designs, "boltz": boltz, "heldout": heldout,
-           "dossiers": dossiers, "provenance": prov, "n_docs": n_docs, "hypothesis": hypothesis}
+           "dossiers": dossiers, "provenance": prov, "n_docs": n_docs, "hypothesis": hypothesis,
+           "corpus": corpus}
 
     main_tex = d / "adc_linker_study6.tex"; supp_tex = d / "adc_linker_study6_supp.tex"
     main_tex.write_text(build_main_tex(art)); supp_tex.write_text(build_supp_tex(art))

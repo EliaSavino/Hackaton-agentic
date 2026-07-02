@@ -181,6 +181,33 @@ def fig4_cofold_kd(boltz, out: Path, hypothesis: dict | None = None) -> Path:
 
 
 # --------------------------------------------------------------------------- #
+def fig5_sensitivity(sens, out: Path) -> Path:
+    """Stress-test: confidence vs retrieval perturbation. Robust classes stay high; the
+    contested ARC class stays low/contested across top-k and a drop-top-source jackknife."""
+    import matplotlib; matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+
+    classes = ["cytotoxin", "immunomodulator", "oligonucleotide"]
+    topk = [6, 8, 10, 12]
+    fig, ax = plt.subplots(figsize=(7.4, 3.8))
+    ax.axhspan(0.6, 1.02, color="#5aa469", alpha=0.08)
+    ax.axhspan(-0.02, 0.4, color="#d1495b", alpha=0.08)
+    ax.text(6.0, 0.93, "robust", color="#2e6b3e", fontsize=8, fontweight="bold")
+    ax.text(6.0, 0.05, "contested / low", color="#7a1020", fontsize=8, fontweight="bold")
+    for pc in classes:
+        ys = [sens["topk"][pc][str(k)]["score"] for k in topk]
+        lab = f"{_SHORT[pc]}  ({min(ys):.2f}--{max(ys):.2f})"
+        ax.plot(topk, ys, "-o", color=_COL[pc], lw=2, ms=6, label=lab)
+    ax.set_xlabel("retrieval depth (top-$k$ passages)"); ax.set_ylabel("disagreement-aware confidence $C$")
+    ax.set_ylim(0, 1.05); ax.set_xlim(5.5, 12.5); ax.set_xticks(topk)
+    ax.set_title("Confidence is stable across retrieval depth: the ARC rule stays contested ($\\approx$0.33)\n"
+                 "at every $k$, cytotoxin medium, ISAC high $-$ the ordering is reproducible, not a lucky $k$", fontsize=9.3)
+    ax.legend(fontsize=8, loc="center left", title="class (conf range over $k$)")
+    fig.tight_layout()
+    out.parent.mkdir(parents=True, exist_ok=True); fig.savefig(out, dpi=200); plt.close(fig)
+    return out
+
+
 def fig1_journey(chains, designs, boltz, out: Path, out_struct: Path) -> Path:
     """Hero: one cytotoxin molecule threaded from real quote -> exemplar -> rule -> structure -> Kd."""
     import matplotlib; matplotlib.use("Agg")
@@ -253,12 +280,16 @@ def render_study6_figures(src="deliverables/study5", out_dir="deliverables/study
     if hyp_path.exists():
         hyp = json.loads(hyp_path.read_text())
         hypothesis = hyp.get("cofold")
-    return {
+    figs = {
         "fig1": fig1_journey(chains, designs, boltz, out / "fig1_journey.png", out / "_struct_cyto.png"),
         "fig2": fig2_heldout_composition(chains, heldout, out / "fig2_heldout.png"),
         "fig3": fig3_rules_steer(designs, out / "fig3_rules_steer.png"),
         "fig4": fig4_cofold_kd(boltz, out / "fig4_cofold.png", hypothesis=hypothesis),
     }
+    sens_path = Path(out_dir).parent / "sensitivity.json"
+    if sens_path.exists():
+        figs["fig5"] = fig5_sensitivity(json.loads(sens_path.read_text()), out / "fig5_sensitivity.png")
+    return figs
 
 
 if __name__ == "__main__":
