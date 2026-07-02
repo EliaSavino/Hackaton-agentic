@@ -1,0 +1,1335 @@
+{
+  "dossiers": {
+    "cytotoxin": [
+      {
+        "payload_class": "cytotoxin",
+        "real_payload": "MMAE",
+        "smiles": "Nc1c(C(=O)SSc2ccccn2)nnn1CC(=O)NCc1ccccc1",
+        "assembled_smiles": "Nc1c(C(=O)SSc2ccccn2)nnn1CC(=O)NCc1ccccc1.CC[C@H](C)[C@@H]([C@@H](CC(=O)N1CCC[C@H]1[C@@H]([C@@H](C(C)C)OC)N(C)C(=O)[C@@H](NC(=O)[C@H](C)NC)C(C)C)OC)OC(=O)OCc1ccc(N)cc1",
+        "handle": "Disulfide",
+        "trigger": "Non-cleavable",
+        "composite_score": 0.5852,
+        "subscores": {
+          "solubility": 0.6261,
+          "size": 1.0,
+          "flexibility": 0.7311,
+          "synthesizability": 0.65,
+          "cleavability": 1.0,
+          "stability": 0.8,
+          "similarity": 0.5
+        },
+        "has_cleavable_motif": true,
+        "retrosynthesis": {
+          "step_count": 6,
+          "score": 0.65,
+          "is_feasible": true,
+          "reason": "Standard coupling steps",
+          "descriptors": {
+            "mw": 400.49,
+            "chiral_centers": 0,
+            "ring_count": 3,
+            "rotatable_bonds": 7,
+            "amides": 1,
+            "disulfides": 1,
+            "esters": 0,
+            "triazoles": 1
+          }
+        },
+        "stability": {
+          "overall_stability_score": 0.8,
+          "liabilities": [
+            "disulfide_reduction"
+          ],
+          "is_protease_cleavable": false,
+          "is_disulfide": true,
+          "is_maleimide": false,
+          "is_hydrazone": false
+        },
+        "closest_analogue": {
+          "name": "SPDB disulfide",
+          "smiles": "O=C(O)CCCSSc1ccccn1",
+          "class": "redox-cleavable disulfide",
+          "adc": "mirvetuximab soravtansine (Elahere)",
+          "tanimoto": 0.339
+        },
+        "economics": {
+          "estimated_synthesis_steps": 6,
+          "estimated_cost_usd": 2400,
+          "estimated_duration_days": 15.0,
+          "probability_of_success": 0.6,
+          "note": "order-of-magnitude heuristics from step count + stability; not a quote"
+        },
+        "narrative": {
+          "design_rationale": "This linker employs a disulfide trigger (pyridyldisulfide) intended for intracellular glutathione-mediated cleavage, which partially aligns with the cleavable preference for MMAE payloads but contradicts the derived rule favoring protease-cleavable (ValCit-type) mechanisms over redox-cleavable ones. The triazole core and benzylamide sidechain provide semi-rigid character consistent with the rigidity preference, yet the disulfide bond represents a significant plasma stability liability that conflicts with the high stability priority established by the design rule. The low Tanimoto similarity (0.339) to the nearest clinical SPDB disulfide analogue and the absence of hydrophilic/charged stabilizing elements (e.g., Glu/Asp residues) further deviate from best-practice cytotoxin linker design.",
+          "synthesis_route": [
+            "Synthesis of 5-amino-1H-1,2,3-triazole-4-carboxylic acid via Dimroth triazole formation from appropriate azide and cyanoacetamide precursors",
+            "N-alkylation of triazole nitrogen with bromoacetyl bromide to install the chloroacetamide handle",
+            "Amide coupling of bromoacetyl-triazole intermediate with benzylamine (HATU/DIPEA)",
+            "Activation of triazole-4-carboxylic acid as thioester or mixed anhydride followed by reaction with 2-mercaptopyridine to form the pyridyl disulfide",
+            "Disulfide exchange with thiol-bearing MMAE-linker fragment (e.g., thiol-mc-MMAE) to install the payload",
+            "Conjugation to antibody interchain cysteines via disulfide exchange or maleimide-thiol if re-engineered"
+          ],
+          "expected_failure_modes": [
+            "Premature disulfide reduction in plasma by albumin thiols and circulating glutathione, leading to early payload release and off-target toxicity",
+            "Poor DAR homogeneity due to competing disulfide scrambling during conjugation to antibody cysteines",
+            "Suboptimal hydrophobicity profile from the benzylamide moiety promoting aggregation and accelerated clearance",
+            "Low potency relative to protease-cleavable MMAE ADCs due to inefficient intracellular disulfide cleavage kinetics compared to cathepsin B processing"
+          ],
+          "validation_experiments": [
+            "Plasma stability assay in human, mouse, and cynomolgus plasma (LC-MS monitoring of intact linker-payload vs free MMAE, t1/2 determination at 37\u00b0C over 96 h)",
+            "Glutathione-mediated cleavage kinetics (10 mM GSH, pH 7.4 and pH 5.5, LC-MS quantification of released MMAE over time)",
+            "In vitro cytotoxicity comparison vs mc-ValCitPABC-MMAE ADC on HER2+ cell lines (SKBR3, NCI-N87) to benchmark potency differential",
+            "DAR characterization by HIC and native SEC-MS after conjugation to trastuzumab interchain cysteines"
+          ],
+          "information_gain": "Testing this disulfide-triggered MMAE linker against the protease-cleavable standard would quantify the plasma stability and potency penalty of redox-cleavable mechanisms for MMAE, directly validating whether the derived rule's strong preference for protease-cleavable linkers is justified by measurable therapeutic index differences."
+        },
+        "narrative_llm_ok": true,
+        "derived_rule": {
+          "cleavage_preference": "protease-cleavable",
+          "rigidity": "semi-rigid",
+          "stability_priority": "high",
+          "confidence": 0.762
+        }
+      },
+      {
+        "payload_class": "cytotoxin",
+        "real_payload": "MMAE",
+        "smiles": "O=C(Cn1cc(C(=O)NCC(=O)SSc2ccccn2)nn1)NCc1ccccc1",
+        "assembled_smiles": "O=C(Cn1cc(C(=O)NCC(=O)SSc2ccccn2)nn1)NCc1ccccc1.CC[C@H](C)[C@@H]([C@@H](CC(=O)N1CCC[C@H]1[C@@H]([C@@H](C(C)C)OC)N(C)C(=O)[C@@H](NC(=O)[C@H](C)NC)C(C)C)OC)OC(=O)OCc1ccc(N)cc1",
+        "handle": "Disulfide",
+        "trigger": "Non-cleavable",
+        "composite_score": 0.5825,
+        "subscores": {
+          "solubility": 0.6746,
+          "size": 1.0,
+          "flexibility": 0.5826,
+          "synthesizability": 0.65,
+          "cleavability": 1.0,
+          "stability": 0.8,
+          "similarity": 0.5
+        },
+        "has_cleavable_motif": true,
+        "retrosynthesis": {
+          "step_count": 7,
+          "score": 0.65,
+          "is_feasible": true,
+          "reason": "Standard coupling steps",
+          "descriptors": {
+            "mw": 442.53,
+            "chiral_centers": 0,
+            "ring_count": 3,
+            "rotatable_bonds": 9,
+            "amides": 2,
+            "disulfides": 1,
+            "esters": 0,
+            "triazoles": 1
+          }
+        },
+        "stability": {
+          "overall_stability_score": 0.8,
+          "liabilities": [
+            "disulfide_reduction"
+          ],
+          "is_protease_cleavable": false,
+          "is_disulfide": true,
+          "is_maleimide": false,
+          "is_hydrazone": false
+        },
+        "closest_analogue": {
+          "name": "SPDB disulfide",
+          "smiles": "O=C(O)CCCSSc1ccccn1",
+          "class": "redox-cleavable disulfide",
+          "adc": "mirvetuximab soravtansine (Elahere)",
+          "tanimoto": 0.344
+        },
+        "economics": {
+          "estimated_synthesis_steps": 7,
+          "estimated_cost_usd": 2700,
+          "estimated_duration_days": 17.5,
+          "probability_of_success": 0.6,
+          "note": "order-of-magnitude heuristics from step count + stability; not a quote"
+        },
+        "narrative": {
+          "design_rationale": "This linker employs a disulfide trigger (pyridyldisulfide) intended for intracellular glutathione-mediated cleavage, which partially aligns with the cleavable preference for MMAE but contradicts the derived rule favoring protease-cleavable (ValCit-type) linkers that offer superior plasma stability. The triazole and benzylamine moieties provide semi-rigid character consistent with the rigidity preference, yet the disulfide bond represents a known plasma stability liability that conflicts with the high stability priority established by the design rule. This molecule thus serves as a deliberate disulfide comparator against the preferred protease-cleavable scaffold to quantify the stability penalty.",
+          "synthesis_route": [
+            "CuAAC or thermal cycloaddition to form the 1,2,3-triazole ring from azidoacetic acid derivative and propargyl amide precursor",
+            "Amide coupling of triazole-acetic acid with benzylamine (HATU/DIPEA)",
+            "Amide coupling of triazole-3-carboxylic acid with glycine derivative (HATU/DIPEA)",
+            "Activation of glycine carboxyl as thiol via thioester or direct thiolation to free thiol intermediate",
+            "Disulfide exchange with 2,2'-dipyridyl disulfide (Aldrithiol-2) to install pyridyldisulfide handle",
+            "Conjugation of free thiol terminus to MMAE via thiol-maleimide or direct disulfide exchange"
+          ],
+          "expected_failure_modes": [
+            "Premature disulfide reduction by plasma thiols (albumin Cys34, glutathione) causing payload release in circulation",
+            "Competing disulfide scrambling with antibody interchain disulfides leading to heterogeneous DAR and aggregation",
+            "Insufficient steric shielding around disulfide bond compared to SPDB gem-dimethyl variants, accelerating non-specific cleavage",
+            "Low Tanimoto similarity (0.344) to validated SPDB clinical linker suggests unpredictable PK behavior and potential off-target toxicity"
+          ],
+          "validation_experiments": [
+            "Plasma stability assay in human, mouse, and cynomolgus plasma (LC-MS/MS monitoring of free MMAE release, t1/2 target >72 h)",
+            "Glutathione-mediated cleavage kinetics (10 mM GSH, 37\u00b0C, LC-MS time-course) to confirm intracellular trigger mechanism",
+            "DAR determination by HIC and intact-mass LC-MS after conjugation to trastuzumab via interchain disulfide reduction",
+            "In vitro cytotoxicity comparison (HER2+ SKBR3, HER2\u2212 MDA-MB-231) versus mc-ValCitPABC-MMAE benchmark ADC"
+          ],
+          "information_gain": "Testing this disulfide linker head-to-head against the protease-cleavable mc-ValCitPABC gold standard for MMAE would quantify the plasma stability penalty and therapeutic index cost of disulfide-triggered release, directly validating or refuting the derived rule that protease-cleavable linkers are superior for cytotoxin payloads."
+        },
+        "narrative_llm_ok": true,
+        "derived_rule": {
+          "cleavage_preference": "protease-cleavable",
+          "rigidity": "semi-rigid",
+          "stability_priority": "high",
+          "confidence": 0.762
+        }
+      },
+      {
+        "payload_class": "cytotoxin",
+        "real_payload": "MMAE",
+        "smiles": "O=C(CNC(=O)c1nc[nH]c1C(=O)SSc1ccccn1)NCc1ccccc1",
+        "assembled_smiles": "O=C(CNC(=O)c1nc[nH]c1C(=O)SSc1ccccn1)NCc1ccccc1.CC[C@H](C)[C@@H]([C@@H](CC(=O)N1CCC[C@H]1[C@@H]([C@@H](C(C)C)OC)N(C)C(=O)[C@@H](NC(=O)[C@H](C)NC)C(C)C)OC)OC(=O)OCc1ccc(N)cc1",
+        "handle": "Disulfide",
+        "trigger": "Non-cleavable",
+        "composite_score": 0.5727,
+        "subscores": {
+          "solubility": 0.6045,
+          "size": 1.0,
+          "flexibility": 0.6608,
+          "synthesizability": 0.65,
+          "cleavability": 1.0,
+          "stability": 0.8,
+          "similarity": 0.5
+        },
+        "has_cleavable_motif": true,
+        "retrosynthesis": {
+          "step_count": 6,
+          "score": 0.65,
+          "is_feasible": true,
+          "reason": "Standard coupling steps",
+          "descriptors": {
+            "mw": 427.51,
+            "chiral_centers": 0,
+            "ring_count": 3,
+            "rotatable_bonds": 8,
+            "amides": 2,
+            "disulfides": 1,
+            "esters": 0,
+            "triazoles": 0
+          }
+        },
+        "stability": {
+          "overall_stability_score": 0.8,
+          "liabilities": [
+            "disulfide_reduction"
+          ],
+          "is_protease_cleavable": false,
+          "is_disulfide": true,
+          "is_maleimide": false,
+          "is_hydrazone": false
+        },
+        "closest_analogue": {
+          "name": "SPDB disulfide",
+          "smiles": "O=C(O)CCCSSc1ccccn1",
+          "class": "redox-cleavable disulfide",
+          "adc": "mirvetuximab soravtansine (Elahere)",
+          "tanimoto": 0.339
+        },
+        "economics": {
+          "estimated_synthesis_steps": 6,
+          "estimated_cost_usd": 2400,
+          "estimated_duration_days": 15.0,
+          "probability_of_success": 0.6,
+          "note": "order-of-magnitude heuristics from step count + stability; not a quote"
+        },
+        "narrative": {
+          "design_rationale": "This linker employs a disulfide trigger (pyridyl disulfide\u2013imidazole motif) intended for intracellular glutathione-mediated release of MMAE, partially aligning with the cleavage preference for conditional release but diverging from the preferred protease-cleavable mechanism (ValCit/PABC). The bis-amide backbone with aromatic imidazole and phenyl groups provides semi-rigid character consistent with the design rule, yet the disulfide bond introduces a known plasma reduction liability that conflicts with the high stability priority. The low Tanimoto similarity (0.339) to SPDB and the absence of hydrophilic/charged stabilizing groups (Glu, Asp) further deviate from the derived best-practice scaffold for cytotoxin payloads.",
+          "synthesis_route": [
+            "Synthesis of 4,5-imidazoledicarboxylic acid mono-amide via selective mono-activation and amide coupling with benzylamine (HATU/DIPEA)",
+            "Amide coupling of remaining imidazole carboxylic acid with glycinamide spacer (EDC/HOBt)",
+            "Activation of imidazole thiol or installation of thiol via reduction of a protected precursor",
+            "Formation of asymmetric disulfide bond between imidazole-thiol and 2-mercaptopyridine (DTNB-mediated or direct thiol-disulfide exchange)",
+            "Deprotection and coupling of the benzylamine terminus to mc-MMAE or MMAE-amine via carbamate or amide bond",
+            "Final purification by preparative HPLC and characterization (LCMS, NMR)"
+          ],
+          "expected_failure_modes": [
+            "Premature disulfide reduction in plasma by serum albumin thiols and circulating glutathione, leading to off-target MMAE release and systemic toxicity",
+            "Competing disulfide scrambling during conjugation to antibody interchain cysteines, yielding heterogeneous DAR and aggregates",
+            "Suboptimal payload release kinetics: disulfide cleavage is less tumor-selective than protease-cleavable (ValCit) mechanisms for MMAE",
+            "Poor aqueous solubility due to dual aromatic rings (phenyl, pyridyl) without hydrophilic modifiers, risking aggregation at high DAR"
+          ],
+          "validation_experiments": [
+            "Plasma stability assay in human, mouse, and cynomolgus plasma (LC-MS/MS quantification of free MMAE release, t1/2 target >72 h)",
+            "Glutathione-triggered release kinetics (10 mM GSH, 37\u00b0C, LC-MS monitoring of MMAE liberation over 24 h)",
+            "HIC and SEC analysis of ADC conjugate to assess DAR distribution, aggregation, and disulfide scrambling",
+            "In vitro cytotoxicity comparison vs mc-ValCitPABC-MMAE benchmark ADC on antigen-positive and antigen-negative cell lines (IC50 ratio as selectivity index)"
+          ],
+          "information_gain": "Testing this disulfide-based MMAE linker against the protease-cleavable gold standard would quantify the plasma stability penalty and therapeutic index cost of using a reductively-cleavable trigger for MMAE, directly validating the derived rule that protease-cleavable linkers with hydrophilic modifications are superior for cytotoxin payloads."
+        },
+        "narrative_llm_ok": true,
+        "derived_rule": {
+          "cleavage_preference": "protease-cleavable",
+          "rigidity": "semi-rigid",
+          "stability_priority": "high",
+          "confidence": 0.762
+        }
+      },
+      {
+        "payload_class": "cytotoxin",
+        "real_payload": "MMAE",
+        "smiles": "O=C(NCc1ccccc1)Nc1n[nH]c(NC(=O)SSc2ccccn2)n1",
+        "assembled_smiles": "O=C(NCc1ccccc1)Nc1n[nH]c(NC(=O)SSc2ccccn2)n1.CC[C@H](C)[C@@H]([C@@H](CC(=O)N1CCC[C@H]1[C@@H]([C@@H](C(C)C)OC)N(C)C(=O)[C@@H](NC(=O)[C@H](C)NC)C(C)C)OC)OC(=O)OCc1ccc(N)cc1",
+        "handle": "Disulfide",
+        "trigger": "Non-cleavable",
+        "composite_score": 0.5615,
+        "subscores": {
+          "solubility": 0.525,
+          "size": 1.0,
+          "flexibility": 0.7914,
+          "synthesizability": 0.65,
+          "cleavability": 1.0,
+          "stability": 0.8,
+          "similarity": 0.5
+        },
+        "has_cleavable_motif": true,
+        "retrosynthesis": {
+          "step_count": 7,
+          "score": 0.65,
+          "is_feasible": true,
+          "reason": "Standard coupling steps",
+          "descriptors": {
+            "mw": 401.48,
+            "chiral_centers": 0,
+            "ring_count": 3,
+            "rotatable_bonds": 6,
+            "amides": 3,
+            "disulfides": 1,
+            "esters": 0,
+            "triazoles": 0
+          }
+        },
+        "stability": {
+          "overall_stability_score": 0.8,
+          "liabilities": [
+            "disulfide_reduction"
+          ],
+          "is_protease_cleavable": false,
+          "is_disulfide": true,
+          "is_maleimide": false,
+          "is_hydrazone": false
+        },
+        "closest_analogue": {
+          "name": "SPDB disulfide",
+          "smiles": "O=C(O)CCCSSc1ccccn1",
+          "class": "redox-cleavable disulfide",
+          "adc": "mirvetuximab soravtansine (Elahere)",
+          "tanimoto": 0.373
+        },
+        "economics": {
+          "estimated_synthesis_steps": 7,
+          "estimated_cost_usd": 2700,
+          "estimated_duration_days": 17.5,
+          "probability_of_success": 0.6,
+          "note": "order-of-magnitude heuristics from step count + stability; not a quote"
+        },
+        "narrative": {
+          "design_rationale": "This linker employs a disulfide trigger intended for intracellular glutathione-mediated release of MMAE, but the derived design rule strongly favors protease-cleavable linkers (e.g., ValCit-PABC) for MMAE payloads due to superior plasma stability and validated clinical precedent. The triazine core provides semi-rigidity consistent with the rule, yet the disulfide bond introduces a known plasma reduction liability that conflicts with the high stability priority. The low Tanimoto similarity (0.373) to the nearest clinical analogue SPDB and the contradictory 'non-cleavable' annotation alongside a disulfide trigger suggest a mechanistically ambiguous design that deviates from the optimal protease-cleavable paradigm.",
+          "synthesis_route": [
+            "Synthesis of 2-pyridyl disulfide thiol via activation of 2-mercaptopyridine with Aldrithiol-2",
+            "Preparation of 3,5-diamino-1,2,4-triazole core by condensation of aminoguanidine with cyanamide",
+            "Acylation of one triazole amine with the activated disulfide-containing carboxylic acid (EDC/HOBt)",
+            "Synthesis of N-benzylamine urea fragment via reaction of benzylamine with carbonyldiimidazole (CDI)",
+            "Urea coupling of the benzylamine-CDI adduct to the remaining triazole amine",
+            "Final disulfide exchange with thiol-bearing MMAE-linker precursor to install payload connection point"
+          ],
+          "expected_failure_modes": [
+            "Premature disulfide reduction in plasma by serum albumin thiols and circulating glutathione, causing off-target MMAE release",
+            "Low Tanimoto to validated clinical linkers suggests unpredictable PK and potentially poor therapeutic index",
+            "Triazine-urea-disulfide architecture lacks precedent for MMAE conjugation, risking poor cathepsin/lysosomal processing and incomplete payload release",
+            "Benzyl urea moiety may increase hydrophobicity, promoting ADC aggregation and accelerated clearance"
+          ],
+          "validation_experiments": [
+            "Plasma stability assay in human/mouse plasma measuring intact linker-payload by LC-MS/MS over 96 h (target t1/2 > 72 h)",
+            "Glutathione-mediated cleavage kinetics (10 mM GSH, 37\u00b0C) monitored by HPLC to quantify MMAE release rate",
+            "HIC and SEC to determine DAR distribution and aggregation propensity after conjugation to trastuzumab interchain cysteines",
+            "In vitro cytotoxicity in HER2+ (SK-BR-3) vs HER2\u2212 (MDA-MB-231) cells comparing to mc-ValCitPABC-MMAE benchmark ADC"
+          ],
+          "information_gain": "Testing this disulfide-triazine linker against the standard mc-ValCitPABC-MMAE benchmark would quantitatively establish whether non-canonical disulfide triggers on heterocyclic scaffolds can match protease-cleavable linkers in plasma stability and therapeutic index for MMAE payloads, directly challenging the derived design rule's strong protease-cleavable preference."
+        },
+        "narrative_llm_ok": true,
+        "derived_rule": {
+          "cleavage_preference": "protease-cleavable",
+          "rigidity": "semi-rigid",
+          "stability_priority": "high",
+          "confidence": 0.762
+        }
+      },
+      {
+        "payload_class": "cytotoxin",
+        "real_payload": "MMAE",
+        "smiles": "Nc1nc(NCc2ccccc2)ncc1C(=O)OCC(=O)SSc1ccccn1",
+        "assembled_smiles": "Nc1nc(NCc2ccccc2)ncc1C(=O)OCC(=O)SSc1ccccn1.CC[C@H](C)[C@@H]([C@@H](CC(=O)N1CCC[C@H]1[C@@H]([C@@H](C(C)C)OC)N(C)C(=O)[C@@H](NC(=O)[C@H](C)NC)C(C)C)OC)OC(=O)OCc1ccc(N)cc1",
+        "handle": "Disulfide",
+        "trigger": "Non-cleavable",
+        "composite_score": 0.5571,
+        "subscores": {
+          "solubility": 0.5489,
+          "size": 1.0,
+          "flexibility": 0.6608,
+          "synthesizability": 0.65,
+          "cleavability": 1.0,
+          "stability": 0.8,
+          "similarity": 0.5
+        },
+        "has_cleavable_motif": true,
+        "retrosynthesis": {
+          "step_count": 6,
+          "score": 0.65,
+          "is_feasible": true,
+          "reason": "Standard coupling steps",
+          "descriptors": {
+            "mw": 427.51,
+            "chiral_centers": 0,
+            "ring_count": 3,
+            "rotatable_bonds": 8,
+            "amides": 0,
+            "disulfides": 1,
+            "esters": 1,
+            "triazoles": 0
+          }
+        },
+        "stability": {
+          "overall_stability_score": 0.8,
+          "liabilities": [
+            "disulfide_reduction"
+          ],
+          "is_protease_cleavable": false,
+          "is_disulfide": true,
+          "is_maleimide": false,
+          "is_hydrazone": false
+        },
+        "closest_analogue": {
+          "name": "SPDB disulfide",
+          "smiles": "O=C(O)CCCSSc1ccccn1",
+          "class": "redox-cleavable disulfide",
+          "adc": "mirvetuximab soravtansine (Elahere)",
+          "tanimoto": 0.361
+        },
+        "economics": {
+          "estimated_synthesis_steps": 6,
+          "estimated_cost_usd": 2400,
+          "estimated_duration_days": 15.0,
+          "probability_of_success": 0.6,
+          "note": "order-of-magnitude heuristics from step count + stability; not a quote"
+        },
+        "narrative": {
+          "design_rationale": "This linker employs a disulfide trigger intended for intracellular glutathione-mediated cleavage, which partially aligns with the cleavable preference for MMAE payloads but contradicts the derived rule favoring protease-cleavable (ValCit-type) mechanisms that offer superior plasma stability. The aminopyrimidine-benzylamine scaffold introduces semi-rigidity, consistent with the rigidity preference, but the disulfide bond represents a significant plasma stability liability via premature reduction, directly opposing the high stability priority established by the design rule. The low Tanimoto similarity (0.361) to the nearest clinical SPDB disulfide analogue and the composite score of 0.5571 reflect these misalignments with best-practice protease-cleavable designs.",
+          "synthesis_route": [
+            "SNAr or Buchwald coupling of 2,4-dichloropyrimidine-5-carboxylic acid with benzylamine to install the NCH2Ph substituent",
+            "Amination at C-2 of the pyrimidine with ammonia or ammonium source to give the 2-amino-4-(benzylamino)pyrimidine-5-carboxylic acid",
+            "Esterification of the pyrimidine-5-carboxylic acid with chloroacetol (bromoacetic acid derivative) to form the glycolate ester linkage",
+            "Disulfide exchange or oxidative coupling of the thiol-bearing glycolate intermediate with 2-mercaptopyridine to install the activated disulfide",
+            "Thiol-maleimide or disulfide exchange conjugation of the activated pyridyl disulfide with MMAE-SH (or cysteine-bearing antibody)"
+          ],
+          "expected_failure_modes": [
+            "Premature disulfide reduction by serum albumin thiols and glutathione in plasma, causing off-target MMAE release and systemic toxicity",
+            "Ester hydrolysis of the glycolate linkage under physiological pH or by serum esterases, leading to linker fragmentation before target delivery",
+            "Poor DAR homogeneity due to disulfide scrambling during conjugation with interchain cysteine residues on the antibody",
+            "Low in vivo efficacy relative to protease-cleavable benchmarks (mc-ValCitPABC-MMAE) due to inefficient or non-selective payload release"
+          ],
+          "validation_experiments": [
+            "Plasma stability assay in human, mouse, and cynomolgus plasma (LC-MS/MS monitoring of intact ADC and free MMAE at 0\u201396 h)",
+            "Glutathione-triggered release kinetics (10 mM GSH, 37\u00b0C, pH 7.4) with LC-MS quantification of liberated MMAE",
+            "Ester hydrolysis half-life determination in PBS pH 7.4 and in 50% human serum by HPLC",
+            "DAR characterization by HIC and native SEC-MS after conjugation to trastuzumab interchain cysteines"
+          ],
+          "information_gain": "Testing this disulfide-glycolate ester hybrid linker would quantify the relative contribution of each labile bond (disulfide vs. ester) to premature payload release, directly informing whether dual-cleavable mechanisms offer any advantage over the protease-cleavable gold standard for MMAE ADCs or simply compound instability liabilities."
+        },
+        "narrative_llm_ok": true,
+        "derived_rule": {
+          "cleavage_preference": "protease-cleavable",
+          "rigidity": "semi-rigid",
+          "stability_priority": "high",
+          "confidence": 0.762
+        }
+      }
+    ],
+    "immunomodulator": [
+      {
+        "payload_class": "immunomodulator",
+        "real_payload": "R848",
+        "smiles": "O=C(Cn1c(=O)[nH]c(=O)n(CC(=O)N2Cc3ccccc3C#Cc3ccccc32)c1=O)NCc1ccccc1",
+        "assembled_smiles": "O=C(Cn1c(=O)[nH]c(=O)n(CC(=O)N2Cc3ccccc3C#Cc3ccccc32)c1=O)NCc1ccccc1.CC(C)COCc1cnc2c(n1)n(cn2)CCO",
+        "handle": "DBCO",
+        "trigger": "Non-cleavable",
+        "composite_score": 0.8229,
+        "subscores": {
+          "solubility": 0.7389,
+          "size": 1.0,
+          "flexibility": 0.7914,
+          "synthesizability": 0.65,
+          "cleavability": 0.4,
+          "stability": 1.0,
+          "similarity": 0.5
+        },
+        "has_cleavable_motif": false,
+        "retrosynthesis": {
+          "step_count": 6,
+          "score": 0.65,
+          "is_feasible": true,
+          "reason": "Standard coupling steps",
+          "descriptors": {
+            "mw": 521.53,
+            "chiral_centers": 0,
+            "ring_count": 5,
+            "rotatable_bonds": 6,
+            "amides": 2,
+            "disulfides": 0,
+            "esters": 0,
+            "triazoles": 0
+          }
+        },
+        "stability": {
+          "overall_stability_score": 1.0,
+          "liabilities": [],
+          "is_protease_cleavable": false,
+          "is_disulfide": false,
+          "is_maleimide": false,
+          "is_hydrazone": false
+        },
+        "closest_analogue": {
+          "name": "mc-GGFG",
+          "smiles": "O=C1C=CC(=O)N1CCCCCC(=O)NCC(=O)NCC(=O)NC(Cc1ccccc1)C(=O)NCC(=O)O",
+          "class": "protease-cleavable tetrapeptide",
+          "adc": "trastuzumab deruxtecan (Enhertu)",
+          "tanimoto": 0.195
+        },
+        "economics": {
+          "estimated_synthesis_steps": 6,
+          "estimated_cost_usd": 2400,
+          "estimated_duration_days": 15.0,
+          "probability_of_success": 0.65,
+          "note": "order-of-magnitude heuristics from step count + stability; not a quote"
+        },
+        "narrative": {
+          "design_rationale": "This design employs a non-cleavable linker with a DBCO click-chemistry handle, which directly contradicts the derived rule favoring protease-cleavable linkers for TLR7 agonist payloads; however, it serves as a critical non-cleavable comparator to validate the cleavage_preference hypothesis. The barbituric acid-based spacer provides semi-rigid character consistent with the rigidity guideline, while the high stability score (1.0) with no identified liabilities reflects robust plasma stability expected of non-cleavable constructs. Testing this molecule against a cleavable analogue will directly quantify the potency differential predicted by the design rule and inform whether intracellular degradation of the entire linker-payload can liberate active R848 metabolites.",
+          "synthesis_route": [
+            "Alkylation of barbituric acid with chloroacetyl chloride to install two N-chloroacetyl arms",
+            "Amide coupling of one chloroacetyl arm with benzylamine (EDC/HOBt or displacement)",
+            "Nucleophilic displacement of second chloroacetyl arm with DBCO-amine intermediate bearing isoindoline-alkyne scaffold",
+            "Copper-free SPAAC conjugation of DBCO handle with azide-functionalized R848 payload",
+            "HPLC purification and characterization of final linker-payload construct",
+            "SPAAC conjugation with azido-PEG-antibody to generate ADC"
+          ],
+          "expected_failure_modes": [
+            "Non-cleavable linker fails to release active R848 intracellularly, resulting in poor TLR7 activation and low potency consistent with BDC-1001/NJH-395 clinical limitations",
+            "Barbituric acid core may undergo ring-opening hydrolysis under lysosomal acidic conditions, generating uncharacterized metabolites with unknown TLR7 activity",
+            "Low Tanimoto similarity (0.195) to nearest clinical analogue suggests unpredictable PK behavior and potential rapid clearance",
+            "Bulky DBCO-barbiturate architecture may reduce DAR homogeneity and impair antibody binding due to steric effects at conjugation site"
+          ],
+          "validation_experiments": [
+            "Plasma stability assay in human/mouse plasma (LC-MS monitoring of intact linker-payload at 0, 24, 72, 168 h)",
+            "In vitro TLR7 NF-\u03baB reporter assay comparing free R848, non-cleavable ADC, and cleavable mcValCitPABC-R848 ADC",
+            "Lysosomal degradation assay (cathepsin B/L, pH 5.0) with LC-MS metabolite identification to determine if active R848 species are released",
+            "DAR determination by HIC and native SEC, plus Fc\u03b3R binding ELISA to confirm antibody function is preserved"
+          ],
+          "information_gain": "Making and testing this non-cleavable DBCO-barbiturate-R848 construct will quantitatively establish the potency penalty of non-cleavable versus cleavable linkers for TLR7 agonist payloads, directly validating or refuting the derived design rule that protease-cleavable linkers are essential for immunomodulator ADC efficacy."
+        },
+        "narrative_llm_ok": true,
+        "derived_rule": {
+          "cleavage_preference": "protease-cleavable",
+          "rigidity": "semi-rigid",
+          "stability_priority": "standard",
+          "confidence": 0.64
+        }
+      },
+      {
+        "payload_class": "immunomodulator",
+        "real_payload": "R848",
+        "smiles": "O=C(Cn1cc(C(=O)N2Cc3ccccc3C#Cc3ccccc32)c(=O)[nH]c1=O)NCc1ccccc1",
+        "assembled_smiles": "O=C(Cn1cc(C(=O)N2Cc3ccccc3C#Cc3ccccc32)c(=O)[nH]c1=O)NCc1ccccc1.CC(C)COCc1cnc2c(n1)n(cn2)CCO",
+        "handle": "DBCO",
+        "trigger": "Non-cleavable",
+        "composite_score": 0.8202,
+        "subscores": {
+          "solubility": 0.5746,
+          "size": 1.0,
+          "flexibility": 0.8411,
+          "synthesizability": 0.85,
+          "cleavability": 0.4,
+          "stability": 1.0,
+          "similarity": 0.5
+        },
+        "has_cleavable_motif": false,
+        "retrosynthesis": {
+          "step_count": 5,
+          "score": 0.85,
+          "is_feasible": true,
+          "reason": "Standard coupling steps",
+          "descriptors": {
+            "mw": 490.52,
+            "chiral_centers": 0,
+            "ring_count": 5,
+            "rotatable_bonds": 5,
+            "amides": 2,
+            "disulfides": 0,
+            "esters": 0,
+            "triazoles": 0
+          }
+        },
+        "stability": {
+          "overall_stability_score": 1.0,
+          "liabilities": [],
+          "is_protease_cleavable": false,
+          "is_disulfide": false,
+          "is_maleimide": false,
+          "is_hydrazone": false
+        },
+        "closest_analogue": {
+          "name": "mc-GGFG",
+          "smiles": "O=C1C=CC(=O)N1CCCCCC(=O)NCC(=O)NCC(=O)NC(Cc1ccccc1)C(=O)NCC(=O)O",
+          "class": "protease-cleavable tetrapeptide",
+          "adc": "trastuzumab deruxtecan (Enhertu)",
+          "tanimoto": 0.187
+        },
+        "economics": {
+          "estimated_synthesis_steps": 5,
+          "estimated_cost_usd": 2000,
+          "estimated_duration_days": 12.5,
+          "probability_of_success": 0.85,
+          "note": "order-of-magnitude heuristics from step count + stability; not a quote"
+        },
+        "narrative": {
+          "design_rationale": "This design employs a non-cleavable DBCO-based linker with a uracil-containing spacer, which directly contradicts the derived rule favoring protease-cleavable linkers for TLR7 agonist payloads; however, the rigid DBCO click-chemistry handle provides efficient strain-promoted azide-alkyne cycloaddition conjugation and the semi-rigid aromatic scaffold maintains structural integrity. The non-cleavable design serves as a critical comparator to validate whether the cleavable linker superiority observed with mcValCitPABC translates to DBCO-conjugated systems, and the high stability score (1.0) with no identified liabilities supports its utility as a benchmark compound. The low Tanimoto similarity (0.187) to mc-GGFG indicates a structurally novel linker architecture that could reveal orthogonal SAR for R848 immunomodulator ADCs.",
+          "synthesis_route": [
+            "Alkylation of uracil at N1 with bromoacetamide-benzylamine intermediate (K2CO3, DMF)",
+            "Sonogashira coupling of 2-iodoaniline derivative with ethynylbenzene to construct the dibenzoazacyclooctyne (DBCO) precursor",
+            "DBCO ring closure via intramolecular lactamization under high-dilution conditions",
+            "Amide coupling of uracil C5-carboxylic acid with DBCO-amine using HATU/DIPEA",
+            "Global deprotection and purification by reverse-phase HPLC to afford final linker-payload construct"
+          ],
+          "expected_failure_modes": [
+            "Non-cleavable linker fails to release active R848 intracellularly, resulting in poor TLR7 engagement and low immunostimulatory potency consistent with clinical failures of non-cleavable TLR7 ADCs (BDC-1001, NJH-395)",
+            "DBCO cyclooctyne ring strain may lead to premature thiol-yne side reactions or retro-Bergman cyclization under storage conditions",
+            "Uracil spacer may undergo oxidative metabolism or glucuronidation in vivo, altering PK and reducing tumor exposure",
+            "High hydrophobicity of the DBCO-aromatic scaffold may promote ADC aggregation at DAR >4, reducing therapeutic index"
+          ],
+          "validation_experiments": [
+            "SPAAC conjugation efficiency with azide-functionalized antibody assessed by HIC and SEC for DAR distribution and monomer purity",
+            "Plasma stability in human, mouse, and cynomolgus plasma over 14 days with LC-MS/MS quantification of intact linker-payload",
+            "In vitro TLR7 reporter assay (HEK-Blue hTLR7) comparing free R848, non-cleavable ADC, and protease-cleavable mcValCitPABC-R848 ADC to quantify potency differential",
+            "Splenocyte cytokine release assay (TNF-\u03b1, IFN-\u03b1, IL-6) with target-expressing vs. target-negative cell co-culture to assess antigen-dependent immune activation"
+          ],
+          "information_gain": "Testing this non-cleavable DBCO-R848 construct alongside a matched cleavable variant would definitively establish whether intracellular payload release is mechanistically required for TLR7 agonist ADC efficacy or whether surface-bound/lysosomal TLR7 engagement via intact conjugate can achieve sufficient immunostimulation in the DBCO conjugation format."
+        },
+        "narrative_llm_ok": true,
+        "derived_rule": {
+          "cleavage_preference": "protease-cleavable",
+          "rigidity": "semi-rigid",
+          "stability_priority": "standard",
+          "confidence": 0.64
+        }
+      },
+      {
+        "payload_class": "immunomodulator",
+        "real_payload": "R848",
+        "smiles": "NCC1CCC(Nc2ccc(S(=O)(=O)N3Cc4ccccc4C#Cc4ccccc43)cc2S(N)(=O)=O)CC1",
+        "assembled_smiles": "NCC1CCC(Nc2ccc(S(=O)(=O)N3Cc4ccccc4C#Cc4ccccc43)cc2S(N)(=O)=O)CC1.CC(C)COCc1cnc2c(n1)n(cn2)CCO",
+        "handle": "DBCO",
+        "trigger": "Non-cleavable-rigid",
+        "composite_score": 0.7995,
+        "subscores": {
+          "solubility": 0.5344,
+          "size": 1.0,
+          "flexibility": 0.7914,
+          "synthesizability": 0.85,
+          "cleavability": 0.4,
+          "stability": 1.0,
+          "similarity": 0.5
+        },
+        "has_cleavable_motif": false,
+        "retrosynthesis": {
+          "step_count": 4,
+          "score": 0.85,
+          "is_feasible": true,
+          "reason": "Standard coupling steps",
+          "descriptors": {
+            "mw": 550.71,
+            "chiral_centers": 0,
+            "ring_count": 5,
+            "rotatable_bonds": 6,
+            "amides": 0,
+            "disulfides": 0,
+            "esters": 0,
+            "triazoles": 0
+          }
+        },
+        "stability": {
+          "overall_stability_score": 1.0,
+          "liabilities": [],
+          "is_protease_cleavable": false,
+          "is_disulfide": false,
+          "is_maleimide": false,
+          "is_hydrazone": false
+        },
+        "closest_analogue": {
+          "name": "MCC (non-cleavable)",
+          "smiles": "O=C(O)C1CCC(CN2C(=O)C=CC2=O)CC1",
+          "class": "non-cleavable thioether",
+          "adc": "trastuzumab emtansine (Kadcyla)",
+          "tanimoto": 0.132
+        },
+        "economics": {
+          "estimated_synthesis_steps": 4,
+          "estimated_cost_usd": 1600,
+          "estimated_duration_days": 10.0,
+          "probability_of_success": 0.85,
+          "note": "order-of-magnitude heuristics from step count + stability; not a quote"
+        },
+        "narrative": {
+          "design_rationale": "This design employs a non-cleavable rigid linker with a DBCO conjugation handle, which directly contradicts the derived rule favoring protease-cleavable semi-rigid linkers for TLR7 agonist payloads. The rigid diarylsulfonamide-alkyne scaffold may restrict conformational freedom needed for efficient payload release, and the non-cleavable nature means R848 must be liberated solely via lysosomal antibody degradation, which clinical precedents (BDC-1001, NJH-395) suggest yields limited efficacy. However, the high stability score (1.0) and absence of chemical liabilities make this a useful negative-control benchmark to quantify the potency penalty of non-cleavable rigid designs versus cleavable alternatives.",
+          "synthesis_route": [
+            "Sonogashira coupling of 2-iodoaniline derivative with ortho-ethynylbromobenzene to form the diaryl alkyne core",
+            "Sulfonylation of the aniline nitrogen with 4-nitrobenzenesulfonyl chloride followed by reduction to the corresponding amine",
+            "Sulfonamide formation on the second ring using chlorosulfonyl isocyanate or SO2NH2 installation",
+            "Reductive amination or amide coupling of the trans-4-aminocyclohexylmethylamine spacer to the sulfonamide-aniline intermediate",
+            "DBCO-NHS ester conjugation to the terminal primary amine to install the strain-promoted azide-alkyne cycloaddition handle"
+          ],
+          "expected_failure_modes": [
+            "Insufficient intracellular R848 release due to non-cleavable linker requiring complete lysosomal antibody degradation, yielding amino acid-linker-R848 catabolites with reduced TLR7 agonism",
+            "Rigid diaryl alkyne scaffold may cause poor aqueous solubility and aggregation during conjugation, reducing DAR homogeneity",
+            "Dual sulfonamide groups susceptible to in vivo N-glucuronidation or renal clearance of released catabolites, shortening pharmacokinetic half-life",
+            "Low Tanimoto similarity (0.132) to validated MCC linker suggests unpredictable conjugation efficiency and in vivo behavior with no close clinical precedent"
+          ],
+          "validation_experiments": [
+            "Plasma stability assay in human/mouse plasma over 14 days with LC-MS/MS monitoring of intact ADC and free R848 levels",
+            "In vitro TLR7 NF-\u03baB reporter assay comparing free R848, linker-R848 catabolite (post-lysosomal digest), and intact ADC to quantify potency loss from non-cleavable design",
+            "DAR determination by HIC and native SEC-MS after SPAAC conjugation to azide-functionalized antibody, assessing aggregation propensity",
+            "Head-to-head splenocyte cytokine release assay (TNF\u03b1, IFN\u03b1) comparing this non-cleavable rigid ADC versus a matched mcValCitPABC-R848 cleavable ADC"
+          ],
+          "information_gain": "Synthesizing and testing this non-cleavable rigid linker-R848 ADC would quantitatively establish the potency penalty of non-cleavable versus cleavable linker designs for TLR7 agonist payloads, directly validating or refining the derived rule that protease-cleavable linkers are essential for immunomodulator ADC efficacy."
+        },
+        "narrative_llm_ok": true,
+        "derived_rule": {
+          "cleavage_preference": "protease-cleavable",
+          "rigidity": "semi-rigid",
+          "stability_priority": "standard",
+          "confidence": 0.64
+        }
+      },
+      {
+        "payload_class": "immunomodulator",
+        "real_payload": "R848",
+        "smiles": "NCC1CCC(NS(=O)(=O)c2ccc(S(=O)(=O)N3Cc4ccccc4C#Cc4ccccc43)cc2)CC1",
+        "assembled_smiles": "NCC1CCC(NS(=O)(=O)c2ccc(S(=O)(=O)N3Cc4ccccc4C#Cc4ccccc43)cc2)CC1.CC(C)COCc1cnc2c(n1)n(cn2)CCO",
+        "handle": "DBCO",
+        "trigger": "Non-cleavable-rigid",
+        "composite_score": 0.7822,
+        "subscores": {
+          "solubility": 0.4916,
+          "size": 1.0,
+          "flexibility": 0.7914,
+          "synthesizability": 0.85,
+          "cleavability": 0.4,
+          "stability": 1.0,
+          "similarity": 0.5
+        },
+        "has_cleavable_motif": false,
+        "retrosynthesis": {
+          "step_count": 4,
+          "score": 0.85,
+          "is_feasible": true,
+          "reason": "Standard coupling steps",
+          "descriptors": {
+            "mw": 535.69,
+            "chiral_centers": 0,
+            "ring_count": 5,
+            "rotatable_bonds": 6,
+            "amides": 0,
+            "disulfides": 0,
+            "esters": 0,
+            "triazoles": 0
+          }
+        },
+        "stability": {
+          "overall_stability_score": 1.0,
+          "liabilities": [],
+          "is_protease_cleavable": false,
+          "is_disulfide": false,
+          "is_maleimide": false,
+          "is_hydrazone": false
+        },
+        "closest_analogue": {
+          "name": "MCC (non-cleavable)",
+          "smiles": "O=C(O)C1CCC(CN2C(=O)C=CC2=O)CC1",
+          "class": "non-cleavable thioether",
+          "adc": "trastuzumab emtansine (Kadcyla)",
+          "tanimoto": 0.145
+        },
+        "economics": {
+          "estimated_synthesis_steps": 4,
+          "estimated_cost_usd": 1600,
+          "estimated_duration_days": 10.0,
+          "probability_of_success": 0.85,
+          "note": "order-of-magnitude heuristics from step count + stability; not a quote"
+        },
+        "narrative": {
+          "design_rationale": "This design employs a non-cleavable rigid linker with DBCO click-chemistry conjugation, which directly contradicts the derived rule favoring protease-cleavable, semi-rigid linkers for TLR7 agonist payloads. The bis-sulfonamide aromatic scaffold with an internal diyne provides extreme rigidity, which may limit payload release and immune activation compared to the preferred mcValCitPABC approach. However, the high stability score (1.0) and absence of chemical liabilities make this a useful negative-control comparator to validate whether cleavable linkers are indeed superior for R848-class immunomodulators.",
+          "synthesis_route": [
+            "Sonogashira coupling of 2-iodobenzylamine derivative with 2-ethynylbenzylamine to form the diaryl alkyne core",
+            "Sulfonylation of the amine on one aryl ring with 4-(chlorosulfonyl)benzenesulfonyl chloride to install the bis-sulfonamide bridge",
+            "Sulfonamide formation on the second nitrogen with the trans-4-aminocyclohexylamine fragment",
+            "Conjugation of the primary amine (NCC1CCC...) to R848 via carbamate or amide bond using activated ester chemistry",
+            "DBCO-azide SPAAC click conjugation to azide-functionalized antibody to generate the final ADC"
+          ],
+          "expected_failure_modes": [
+            "Non-cleavable linker prevents efficient intracellular R848 release, leading to poor TLR7 activation and low immunostimulatory potency",
+            "Extreme rigidity of the diaryl alkyne-bis-sulfonamide scaffold may cause aggregation or reduced conjugation efficiency due to steric constraints",
+            "Low Tanimoto similarity (0.145) to validated MCC linker suggests unpredictable PK behavior and potential rapid clearance",
+            "Bis-sulfonamide motif may undergo reductive or metabolic cleavage in hepatic environments, generating off-target toxic fragments"
+          ],
+          "validation_experiments": [
+            "In vitro TLR7 NF-\u03baB reporter assay comparing free R848 vs. linker-R848 conjugate vs. intact ADC to assess payload release requirement",
+            "Plasma stability in human and mouse plasma over 14 days with LC-MS/MS monitoring of intact ADC and free R848 levels",
+            "DAR determination by HIC and native SEC-MS after SPAAC conjugation to confirm conjugation efficiency and homogeneity",
+            "Head-to-head comparison with mcValCitPABC-R848 ADC in splenocyte cytokine release assay (TNF-\u03b1, IL-6, IFN-\u03b1) to test cleavable vs. non-cleavable hypothesis"
+          ],
+          "information_gain": "Testing this non-cleavable rigid linker-R848 ADC against a cleavable comparator will definitively validate or refute the derived hypothesis that protease-cleavable linkers are required for effective TLR7 agonist payload release and immune activation in the ADC context."
+        },
+        "narrative_llm_ok": true,
+        "derived_rule": {
+          "cleavage_preference": "protease-cleavable",
+          "rigidity": "semi-rigid",
+          "stability_priority": "standard",
+          "confidence": 0.64
+        }
+      },
+      {
+        "payload_class": "immunomodulator",
+        "real_payload": "R848",
+        "smiles": "NCC1CCC(Nc2ccc(S(=O)(=O)N3Cc4ccccc4C#Cc4ccccc43)cc2S(=O)(=O)O)CC1",
+        "assembled_smiles": "NCC1CCC(Nc2ccc(S(=O)(=O)N3Cc4ccccc4C#Cc4ccccc43)cc2S(=O)(=O)O)CC1.CC(C)COCc1cnc2c(n1)n(cn2)CCO",
+        "handle": "DBCO",
+        "trigger": "Non-cleavable-rigid",
+        "composite_score": 0.7816,
+        "subscores": {
+          "solubility": 0.4902,
+          "size": 1.0,
+          "flexibility": 0.7914,
+          "synthesizability": 0.85,
+          "cleavability": 0.4,
+          "stability": 1.0,
+          "similarity": 0.5
+        },
+        "has_cleavable_motif": false,
+        "retrosynthesis": {
+          "step_count": 4,
+          "score": 0.85,
+          "is_feasible": true,
+          "reason": "Standard coupling steps",
+          "descriptors": {
+            "mw": 551.69,
+            "chiral_centers": 0,
+            "ring_count": 5,
+            "rotatable_bonds": 6,
+            "amides": 0,
+            "disulfides": 0,
+            "esters": 0,
+            "triazoles": 0
+          }
+        },
+        "stability": {
+          "overall_stability_score": 1.0,
+          "liabilities": [],
+          "is_protease_cleavable": false,
+          "is_disulfide": false,
+          "is_maleimide": false,
+          "is_hydrazone": false
+        },
+        "closest_analogue": {
+          "name": "MCC (non-cleavable)",
+          "smiles": "O=C(O)C1CCC(CN2C(=O)C=CC2=O)CC1",
+          "class": "non-cleavable thioether",
+          "adc": "trastuzumab emtansine (Kadcyla)",
+          "tanimoto": 0.145
+        },
+        "economics": {
+          "estimated_synthesis_steps": 4,
+          "estimated_cost_usd": 1600,
+          "estimated_duration_days": 10.0,
+          "probability_of_success": 0.85,
+          "note": "order-of-magnitude heuristics from step count + stability; not a quote"
+        },
+        "narrative": {
+          "design_rationale": "This design employs a non-cleavable rigid DBCO-based linker, which directly contradicts the derived rule favoring protease-cleavable (mcValCitPABC) linkers for TLR7 agonist payloads; however, its high composite score (0.78) and perfect stability (1.0) make it a valuable negative-control comparator. The rigid dibenzocyclooctyne scaffold provides conformational constraint that may limit payload release upon internalization, testing whether non-cleavable architectures can achieve sufficient TLR7 engagement when combined with enhanced rigidity. The sulfonamide and sulfonic acid moieties contribute to aqueous solubility but the absence of a cleavable trigger is expected to limit intracellular R848 liberation, consistent with the clinical failures of non-cleavable TLR7 ADCs (BDC-1001, NJH-395).",
+          "synthesis_route": [
+            "Sulfonylation of 4-aminobenzenesulfonic acid with 2-(chlorosulfonyl)isoindoline-DBCO precursor to form the diaryl sulfonamide core",
+            "Sonogashira coupling to install the internal alkyne completing the DBCO ring system",
+            "Reductive amination or Boc-deprotection to reveal the primary amine on the trans-4-aminocyclohexyl handle",
+            "SNAr or Buchwald-Hartley coupling of the cyclohexylamine with the chloro/fluoro-arene sulfonamide intermediate",
+            "Final conjugation of the linker primary amine (NCC-) to R848 carboxylate via amide coupling (HATU/DIPEA)"
+          ],
+          "expected_failure_modes": [
+            "Insufficient intracellular R848 release due to non-cleavable linker, leading to poor TLR7 activation consistent with clinical precedent",
+            "Sulfonic acid group may impair cell membrane permeability and lysosomal escape of the intact ADC-linker-payload catabolite",
+            "DBCO ring strain may cause premature thiol-yne side reactions in plasma or with albumin cysteines, reducing effective DAR",
+            "Low Tanimoto similarity to validated clinical linkers (0.145 vs MCC) suggests unpredictable PK and biodistribution behavior"
+          ],
+          "validation_experiments": [
+            "SPAAC click conjugation efficiency to azide-functionalized antibody measured by HIC and RP-HPLC for DAR determination",
+            "Plasma stability in human and mouse plasma over 14 days with LC-MS/MS quantification of intact conjugate vs free R848",
+            "In vitro TLR7 NF-\u03baB reporter assay (HEK-Blue hTLR7) comparing free R848, linker-R848 catabolite, and intact ADC",
+            "Head-to-head comparison with mcValCitPABC-R848 ADC in primary human PBMC cytokine release assay (TNF\u03b1, IFN\u03b3 ELISA)"
+          ],
+          "information_gain": "Testing this non-cleavable rigid DBCO-R848 conjugate against the cleavable benchmark would quantify the potency penalty of non-cleavable linkers for TLR7 agonist payloads and determine whether enhanced rigidity can compensate for the lack of a cleavable trigger, directly validating or refining the derived design rule."
+        },
+        "narrative_llm_ok": true,
+        "derived_rule": {
+          "cleavage_preference": "protease-cleavable",
+          "rigidity": "semi-rigid",
+          "stability_priority": "standard",
+          "confidence": 0.64
+        }
+      }
+    ],
+    "oligonucleotide": [
+      {
+        "payload_class": "oligonucleotide",
+        "real_payload": "siRNA",
+        "smiles": "O=C(NCc1ccccc1)c1cn(C(=O)N2Cc3ccccc3C#Cc3ccccc32)c(=O)[nH]c1=O",
+        "assembled_smiles": "O=C(NCc1ccccc1)c1cn(C(=O)N2Cc3ccccc3C#Cc3ccccc32)c(=O)[nH]c1=O.COP(=O)(O)OCC1OC(N)C(O)C1OP(=O)(O)OCC",
+        "handle": "DBCO",
+        "trigger": "Non-cleavable",
+        "composite_score": 0.7968,
+        "subscores": {
+          "solubility": 0.537,
+          "size": 1.0,
+          "flexibility": 0.6608,
+          "synthesizability": 0.85,
+          "cleavability": 1.0,
+          "stability": 1.0,
+          "similarity": 0.5
+        },
+        "has_cleavable_motif": false,
+        "retrosynthesis": {
+          "step_count": 5,
+          "score": 0.85,
+          "is_feasible": true,
+          "reason": "Standard coupling steps",
+          "descriptors": {
+            "mw": 476.49,
+            "chiral_centers": 0,
+            "ring_count": 5,
+            "rotatable_bonds": 3,
+            "amides": 2,
+            "disulfides": 0,
+            "esters": 0,
+            "triazoles": 0
+          }
+        },
+        "stability": {
+          "overall_stability_score": 1.0,
+          "liabilities": [],
+          "is_protease_cleavable": false,
+          "is_disulfide": false,
+          "is_maleimide": false,
+          "is_hydrazone": false
+        },
+        "closest_analogue": {
+          "name": "mc-GGFG",
+          "smiles": "O=C1C=CC(=O)N1CCCCCC(=O)NCC(=O)NCC(=O)NC(Cc1ccccc1)C(=O)NCC(=O)O",
+          "class": "protease-cleavable tetrapeptide",
+          "adc": "trastuzumab deruxtecan (Enhertu)",
+          "tanimoto": 0.178
+        },
+        "economics": {
+          "estimated_synthesis_steps": 5,
+          "estimated_cost_usd": 2000,
+          "estimated_duration_days": 12.5,
+          "probability_of_success": 0.85,
+          "note": "order-of-magnitude heuristics from step count + stability; not a quote"
+        },
+        "narrative": {
+          "design_rationale": "This linker employs a non-cleavable DBCO-based conjugation handle consistent with the non-cleavable-rigid design rule derived for siRNA payloads, where rigidity is critical for efficient conjugation of bulky oligonucleotides. The fused dibenzoazacyclooctyne (DBCO) core and alkyne-bridged biaryl system enforce a rigid scaffold that minimizes conformational flexibility, directly addressing the finding that rigid linkers (e.g., sulfo-SMCC) outperform flexible alternatives for DAR2 siRNA conjugates. The uracil-derived amide backbone provides high plasma stability (score 1.0, no identified liabilities) while maintaining sufficient hydrophilicity for aqueous conjugation conditions required by oligonucleotide payloads.",
+          "synthesis_route": [
+            "Sonogashira coupling of 2-iodobenzylamine derivative with 2-ethynylbenzaldehyde to form the diaryl alkyne core",
+            "Cyclization to construct the DBCO azacyclooctyne ring system under intramolecular lactamization conditions",
+            "Amide coupling of 6-aminouracil carboxylic acid with benzylamine using HATU/DIPEA",
+            "N-Acylation of uracil nitrogen with the DBCO-carbonyl chloride intermediate",
+            "Global deprotection and HPLC purification to afford the final DBCO-linker construct"
+          ],
+          "expected_failure_modes": [
+            "DBCO strain-promoted click with azide-modified siRNA may be sluggish due to steric encumbrance from the rigid uracil-benzamide substituent, leading to low DAR",
+            "The extended aromatic/alkyne system may cause aggregation or poor aqueous solubility at conjugation concentrations despite the uracil polar groups",
+            "Non-cleavable linker may impair siRNA release and RISC loading in the endosome, reducing gene silencing potency",
+            "Uracil moiety may be susceptible to enzymatic deamination or oxidation in hepatic metabolism, shortening in vivo half-life"
+          ],
+          "validation_experiments": [
+            "SPAAC conjugation efficiency with azide-functionalized siRNA monitored by SEC-HPLC and native PAGE to determine DAR distribution",
+            "Plasma stability assay (mouse and human, 37\u00b0C, 48 h) with LC-MS/MS quantification of intact ADC vs. free siRNA",
+            "In vitro gene knockdown assay (dual-luciferase reporter) in HER2+ cell line comparing ADC-delivered siRNA vs. lipofectamine-delivered siRNA",
+            "Solubility and aggregation assessment by DLS and analytical SEC at 1-10 mg/mL in PBS pH 7.4"
+          ],
+          "information_gain": "Testing this linker will reveal whether incorporating a rigid uracil-DBCO hybrid scaffold improves DAR homogeneity and conjugation efficiency for siRNA payloads compared to the benchmark sulfo-SMCC maleimide approach, and whether the non-cleavable linkage permits sufficient endosomal siRNA release for functional gene silencing."
+        },
+        "narrative_llm_ok": true,
+        "derived_rule": {
+          "cleavage_preference": "non-cleavable-rigid",
+          "rigidity": "rigid",
+          "stability_priority": "high",
+          "confidence": 0.799
+        }
+      },
+      {
+        "payload_class": "oligonucleotide",
+        "real_payload": "siRNA",
+        "smiles": "Nc1nnc(C(=O)N2Cc3ccccc3C#Cc3ccccc32)c(C(=O)NCc2ccccc2)n1",
+        "assembled_smiles": "Nc1nnc(C(=O)N2Cc3ccccc3C#Cc3ccccc32)c(C(=O)NCc2ccccc2)n1.COP(=O)(O)OCC1OC(N)C(O)C1OP(=O)(O)OCC",
+        "handle": "DBCO",
+        "trigger": "Non-cleavable",
+        "composite_score": 0.7837,
+        "subscores": {
+          "solubility": 0.5542,
+          "size": 1.0,
+          "flexibility": 0.5826,
+          "synthesizability": 0.85,
+          "cleavability": 1.0,
+          "stability": 1.0,
+          "similarity": 0.5
+        },
+        "has_cleavable_motif": false,
+        "retrosynthesis": {
+          "step_count": 5,
+          "score": 0.85,
+          "is_feasible": true,
+          "reason": "Standard coupling steps",
+          "descriptors": {
+            "mw": 460.5,
+            "chiral_centers": 0,
+            "ring_count": 5,
+            "rotatable_bonds": 4,
+            "amides": 2,
+            "disulfides": 0,
+            "esters": 0,
+            "triazoles": 0
+          }
+        },
+        "stability": {
+          "overall_stability_score": 1.0,
+          "liabilities": [],
+          "is_protease_cleavable": false,
+          "is_disulfide": false,
+          "is_maleimide": false,
+          "is_hydrazone": false
+        },
+        "closest_analogue": {
+          "name": "mc-GGFG",
+          "smiles": "O=C1C=CC(=O)N1CCCCCC(=O)NCC(=O)NCC(=O)NC(Cc1ccccc1)C(=O)NCC(=O)O",
+          "class": "protease-cleavable tetrapeptide",
+          "adc": "trastuzumab deruxtecan (Enhertu)",
+          "tanimoto": 0.169
+        },
+        "economics": {
+          "estimated_synthesis_steps": 5,
+          "estimated_cost_usd": 2000,
+          "estimated_duration_days": 12.5,
+          "probability_of_success": 0.85,
+          "note": "order-of-magnitude heuristics from step count + stability; not a quote"
+        },
+        "narrative": {
+          "design_rationale": "This linker employs a non-cleavable DBCO-based conjugation handle consistent with the non-cleavable preference derived for siRNA payloads, enabling strain-promoted azide-alkyne cycloaddition (SPAAC) with azide-functionalized antibodies without requiring reducing conditions. The fused dibenzoazacyclooctyne core and flanking aromatic amide bonds provide a rigid scaffold that mirrors the sulfo-SMCC rigidity principle shown to improve DAR control for bulky oligonucleotide payloads. The aminotriazine headgroup offers hydrogen-bonding capacity and moderate polarity to aid aqueous solubility during conjugation of the hydrophilic siRNA cargo, addressing the stability and solubility priorities identified in the design rule.",
+          "synthesis_route": [
+            "Synthesis of 3-amino-1,2,4-triazine-5,6-dicarboxylic acid via condensation of aminoguanidine with oxalyl derivatives",
+            "Selective mono-amide coupling of C6-carboxylate with benzylamine (HATU/DIPEA) to install the benzylamide arm",
+            "Amide coupling of C5-carboxylate with 5,6-dihydro-11,12-didehydrodibenz[b,f]azocine (DBCO-amine) using HATU/DIPEA",
+            "DBCO ring closure or installation via Sonogashira coupling of ortho-alkynyl iodobenzene precursor with aniline nitrogen if built linearly",
+            "Global deprotection and HPLC purification to afford the final DBCO-triazine linker"
+          ],
+          "expected_failure_modes": [
+            "DBCO cyclooctyne strain may lead to slow hydrolysis or thiol-yne side reactions in plasma, reducing effective conjugation yield",
+            "Low Tanimoto similarity (0.169) to nearest clinical analogue suggests unpredictable PK behavior and potential rapid clearance",
+            "Benzylamide moiety may be susceptible to hepatic CYP-mediated oxidation, generating reactive metabolites",
+            "Rigid aromatic scaffold may cause aggregation or poor solubility at high linker-to-antibody ratios during conjugation"
+          ],
+          "validation_experiments": [
+            "SPAAC conjugation efficiency with azide-modified trastuzumab measured by HIC and native MS to determine DAR distribution",
+            "Plasma stability assay (mouse and human, 37\u00b0C, 72 h) with LC-MS/MS quantification of intact ADC and free siRNA",
+            "Dynamic light scattering and SEC to assess aggregation propensity of the conjugate at DAR 2 and DAR 4",
+            "In vitro gene knockdown assay (e.g., luciferase reporter) in HER2+ cells to confirm siRNA delivery and endosomal escape"
+          ],
+          "information_gain": "Testing this DBCO-triazine linker will reveal whether replacing thiol-maleimide chemistry with click-based SPAAC conjugation can maintain the DAR control and plasma stability advantages of rigid non-cleavable linkers while eliminating maleimide retro-Michael exchange liabilities identified as a concern for siRNA-ADCs."
+        },
+        "narrative_llm_ok": true,
+        "derived_rule": {
+          "cleavage_preference": "non-cleavable-rigid",
+          "rigidity": "rigid",
+          "stability_priority": "high",
+          "confidence": 0.799
+        }
+      },
+      {
+        "payload_class": "oligonucleotide",
+        "real_payload": "siRNA",
+        "smiles": "Nc1nc(N)c(C(=O)N2Cc3ccccc3C#Cc3ccccc32)nc1C(=O)NCc1ccccc1",
+        "assembled_smiles": "Nc1nc(N)c(C(=O)N2Cc3ccccc3C#Cc3ccccc32)nc1C(=O)NCc1ccccc1.COP(=O)(O)OCC1OC(N)C(O)C1OP(=O)(O)OCC",
+        "handle": "DBCO",
+        "trigger": "Non-cleavable",
+        "composite_score": 0.7835,
+        "subscores": {
+          "solubility": 0.5536,
+          "size": 1.0,
+          "flexibility": 0.5826,
+          "synthesizability": 0.85,
+          "cleavability": 1.0,
+          "stability": 1.0,
+          "similarity": 0.5
+        },
+        "has_cleavable_motif": false,
+        "retrosynthesis": {
+          "step_count": 5,
+          "score": 0.85,
+          "is_feasible": true,
+          "reason": "Standard coupling steps",
+          "descriptors": {
+            "mw": 474.52,
+            "chiral_centers": 0,
+            "ring_count": 5,
+            "rotatable_bonds": 4,
+            "amides": 2,
+            "disulfides": 0,
+            "esters": 0,
+            "triazoles": 0
+          }
+        },
+        "stability": {
+          "overall_stability_score": 1.0,
+          "liabilities": [],
+          "is_protease_cleavable": false,
+          "is_disulfide": false,
+          "is_maleimide": false,
+          "is_hydrazone": false
+        },
+        "closest_analogue": {
+          "name": "mc-GGFG",
+          "smiles": "O=C1C=CC(=O)N1CCCCCC(=O)NCC(=O)NCC(=O)NC(Cc1ccccc1)C(=O)NCC(=O)O",
+          "class": "protease-cleavable tetrapeptide",
+          "adc": "trastuzumab deruxtecan (Enhertu)",
+          "tanimoto": 0.17
+        },
+        "economics": {
+          "estimated_synthesis_steps": 5,
+          "estimated_cost_usd": 2000,
+          "estimated_duration_days": 12.5,
+          "probability_of_success": 0.85,
+          "note": "order-of-magnitude heuristics from step count + stability; not a quote"
+        },
+        "narrative": {
+          "design_rationale": "This linker incorporates a rigid diaminopyrimidine core fused with a diarylacetylene (alkyne-bridged biaryl) motif, directly satisfying the 'non-cleavable-rigid' cleavage preference and high rigidity requirement derived from the sulfo-SMCC precedent for siRNA payloads. The DBCO handle enables strain-promoted azide-alkyne cycloaddition (SPAAC) click conjugation to azide-modified siRNA, providing a non-cleavable triazole linkage with excellent plasma stability. The aromatic amide connections and extended conjugated scaffold minimize conformational flexibility, which should promote efficient conjugation to bulky siRNA and favor homogeneous DAR species.",
+          "synthesis_route": [
+            "Sonogashira coupling of 2-iodoaniline with 2-ethynylbenzaldehyde to form the diarylacetylene scaffold",
+            "Reductive amination or cyclization to construct the isoindoline (dihydroisoindole) DBCO-precursor ring system",
+            "Amide coupling of 2,4-diamino-5-pyrimidinecarboxylic acid with the isoindoline-DBCO amine (HATU/DIPEA)",
+            "Amide coupling of the pyrimidine C6-carboxylic acid with benzylamine (HATU/DIPEA)",
+            "Global deprotection and HPLC purification to afford the final DBCO-linker"
+          ],
+          "expected_failure_modes": [
+            "Poor aqueous solubility due to extended aromatic/hydrophobic scaffold, complicating conjugation with hydrophilic siRNA in aqueous buffer",
+            "Steric hindrance from the rigid diaminopyrimidine-diarylacetylene core may slow SPAAC click reaction kinetics with azide-siRNA",
+            "The benzylamine amide terminus lacks a charged or PEG solubilizing group, risking aggregation of the ADC construct",
+            "Low Tanimoto similarity (0.17) to any clinical linker suggests unpredictable in vivo PK and potential rapid clearance"
+          ],
+          "validation_experiments": [
+            "SPAAC conjugation efficiency with azide-functionalized siRNA monitored by SEC-HPLC and native PAGE to assess DAR distribution",
+            "Plasma stability assay (mouse and human, 37\u00b0C, 72 h) with LC-MS/MS quantification of intact conjugate vs. free siRNA",
+            "Solubility and critical aggregation concentration measurement of linker-siRNA intermediate by DLS and UV turbidity",
+            "In vitro gene knockdown potency of ADC vs. free siRNA in target-expressing cells to confirm siRNA remains functional after non-cleavable conjugation"
+          ],
+          "information_gain": "Testing this construct will reveal whether a rigid diaminopyrimidine-diarylacetylene scaffold with DBCO click chemistry can match or exceed sulfo-SMCC in conjugation efficiency and DAR homogeneity for siRNA payloads, while clarifying whether non-cleavable triazole linkages permit sufficient intracellular siRNA release for gene silencing activity."
+        },
+        "narrative_llm_ok": true,
+        "derived_rule": {
+          "cleavage_preference": "non-cleavable-rigid",
+          "rigidity": "rigid",
+          "stability_priority": "high",
+          "confidence": 0.799
+        }
+      },
+      {
+        "payload_class": "oligonucleotide",
+        "real_payload": "siRNA",
+        "smiles": "Nc1nc(C(=O)N2Cc3ccccc3C#Cc3ccccc32)c(N)nc1C(=O)NCc1ccccc1",
+        "assembled_smiles": "Nc1nc(C(=O)N2Cc3ccccc3C#Cc3ccccc32)c(N)nc1C(=O)NCc1ccccc1.COP(=O)(O)OCC1OC(N)C(O)C1OP(=O)(O)OCC",
+        "handle": "DBCO",
+        "trigger": "Non-cleavable",
+        "composite_score": 0.7835,
+        "subscores": {
+          "solubility": 0.5536,
+          "size": 1.0,
+          "flexibility": 0.5826,
+          "synthesizability": 0.85,
+          "cleavability": 1.0,
+          "stability": 1.0,
+          "similarity": 0.5
+        },
+        "has_cleavable_motif": false,
+        "retrosynthesis": {
+          "step_count": 5,
+          "score": 0.85,
+          "is_feasible": true,
+          "reason": "Standard coupling steps",
+          "descriptors": {
+            "mw": 474.52,
+            "chiral_centers": 0,
+            "ring_count": 5,
+            "rotatable_bonds": 4,
+            "amides": 2,
+            "disulfides": 0,
+            "esters": 0,
+            "triazoles": 0
+          }
+        },
+        "stability": {
+          "overall_stability_score": 1.0,
+          "liabilities": [],
+          "is_protease_cleavable": false,
+          "is_disulfide": false,
+          "is_maleimide": false,
+          "is_hydrazone": false
+        },
+        "closest_analogue": {
+          "name": "mc-GGFG",
+          "smiles": "O=C1C=CC(=O)N1CCCCCC(=O)NCC(=O)NCC(=O)NC(Cc1ccccc1)C(=O)NCC(=O)O",
+          "class": "protease-cleavable tetrapeptide",
+          "adc": "trastuzumab deruxtecan (Enhertu)",
+          "tanimoto": 0.172
+        },
+        "economics": {
+          "estimated_synthesis_steps": 5,
+          "estimated_cost_usd": 2000,
+          "estimated_duration_days": 12.5,
+          "probability_of_success": 0.85,
+          "note": "order-of-magnitude heuristics from step count + stability; not a quote"
+        },
+        "narrative": {
+          "design_rationale": "This linker employs a non-cleavable DBCO conjugation handle consistent with the non-cleavable-rigid design rule derived for siRNA payloads, where cleavable triggers are unnecessary because the intact conjugate can deliver oligonucleotide cargo upon internalization and lysosomal degradation. The fused dibenzoazacyclooctyne (DBCO) core with an internal alkyne and flanking aromatic rings provides a rigid scaffold analogous to the sulfo-SMCC benchmark, minimizing conformational flexibility that could impair conjugation efficiency with bulky siRNA. The diaminopyrimidine headgroup offers hydrogen-bonding capacity and aqueous solubility akin to the sulfo group on SMCC, addressing the stability priority for hydrophilic oligonucleotide payloads.",
+          "synthesis_route": [
+            "Synthesis of 2,4-diamino-5-pyrimidinecarboxylic acid via Atwal-type pyrimidine ring construction",
+            "Amide coupling of 2,4-diamino-5-pyrimidinecarboxylic acid with benzylamine (HATU/DIPEA) to install the benzyl amide arm",
+            "Synthesis of DBCO-amine core via Sonogashira coupling of 2-ethynylaniline with 2-iodobenzylamine followed by copper-free cyclization",
+            "Amide coupling of 2,4-diamino-6-pyrimidinecarboxylic acid moiety with DBCO-amine (HATU/DIPEA) to form the central amide linkage",
+            "SPAAC click reaction of DBCO handle with azide-functionalized siRNA to form the final ADC conjugate"
+          ],
+          "expected_failure_modes": [
+            "Diaminopyrimidine may undergo oxidative deamination or glucuronidation in vivo, reducing plasma stability below the target threshold",
+            "The benzyl amide arm lacks steric shielding and may be susceptible to hepatic amidase cleavage, leading to premature payload release",
+            "High aromatic content and planar rigidity could cause aggregation during conjugation with hydrophilic siRNA, reducing DAR homogeneity",
+            "Low Tanimoto similarity (0.172) to nearest clinical analogue mc-GGFG suggests unpredictable PK behavior with no translational precedent"
+          ],
+          "validation_experiments": [
+            "DAR analysis by HIC and native SEC to assess conjugation efficiency and homogeneity of siRNA-ADC species",
+            "Plasma stability assay (mouse and human plasma, 37\u00b0C, 0-48 h) with LC-MS/MS quantification of intact conjugate vs. free siRNA",
+            "SPAAC conjugation kinetics monitored by HPLC to measure second-order rate constant and compare to benchmark sulfo-SMCC thiol-maleimide conjugation",
+            "In vitro gene knockdown assay (RT-qPCR) in target-expressing cells to confirm siRNA activity is retained after linker conjugation and internalization"
+          ],
+          "information_gain": "Testing this DBCO-based rigid non-cleavable linker against the sulfo-SMCC benchmark will reveal whether strain-promoted click chemistry can match or exceed thiol-maleimide conjugation in DAR homogeneity and plasma stability for siRNA payloads, thereby validating an orthogonal conjugation strategy that avoids maleimide retro-Michael exchange liabilities."
+        },
+        "narrative_llm_ok": true,
+        "derived_rule": {
+          "cleavage_preference": "non-cleavable-rigid",
+          "rigidity": "rigid",
+          "stability_priority": "high",
+          "confidence": 0.799
+        }
+      },
+      {
+        "payload_class": "oligonucleotide",
+        "real_payload": "siRNA",
+        "smiles": "Cn1c(C(=O)N2Cc3ccccc3C#Cc3ccccc32)c(N)nc(C(=O)NCc2ccccc2)c1=O",
+        "assembled_smiles": "Cn1c(C(=O)N2Cc3ccccc3C#Cc3ccccc32)c(N)nc(C(=O)NCc2ccccc2)c1=O.COP(=O)(O)OCC1OC(N)C(O)C1OP(=O)(O)OCC",
+        "handle": "DBCO",
+        "trigger": "Non-cleavable",
+        "composite_score": 0.7832,
+        "subscores": {
+          "solubility": 0.5523,
+          "size": 1.0,
+          "flexibility": 0.5826,
+          "synthesizability": 0.85,
+          "cleavability": 1.0,
+          "stability": 1.0,
+          "similarity": 0.5
+        },
+        "has_cleavable_motif": false,
+        "retrosynthesis": {
+          "step_count": 5,
+          "score": 0.85,
+          "is_feasible": true,
+          "reason": "Standard coupling steps",
+          "descriptors": {
+            "mw": 489.54,
+            "chiral_centers": 0,
+            "ring_count": 5,
+            "rotatable_bonds": 4,
+            "amides": 2,
+            "disulfides": 0,
+            "esters": 0,
+            "triazoles": 0
+          }
+        },
+        "stability": {
+          "overall_stability_score": 1.0,
+          "liabilities": [],
+          "is_protease_cleavable": false,
+          "is_disulfide": false,
+          "is_maleimide": false,
+          "is_hydrazone": false
+        },
+        "closest_analogue": {
+          "name": "mc-GGFG",
+          "smiles": "O=C1C=CC(=O)N1CCCCCC(=O)NCC(=O)NCC(=O)NC(Cc1ccccc1)C(=O)NCC(=O)O",
+          "class": "protease-cleavable tetrapeptide",
+          "adc": "trastuzumab deruxtecan (Enhertu)",
+          "tanimoto": 0.183
+        },
+        "economics": {
+          "estimated_synthesis_steps": 5,
+          "estimated_cost_usd": 2000,
+          "estimated_duration_days": 12.5,
+          "probability_of_success": 0.85,
+          "note": "order-of-magnitude heuristics from step count + stability; not a quote"
+        },
+        "narrative": {
+          "design_rationale": "This linker incorporates a rigid dibenzoazacyclooctyne (DBCO) click-chemistry handle fused into a planar alkyne-bridged dibenzazepine core, directly satisfying the non-cleavable-rigid design rule derived for siRNA payloads. The non-cleavable amide backbone and extended aromatic scaffold minimize conformational flexibility, which the sulfo-SMCC precedent showed is critical for achieving high DAR with bulky oligonucleotide payloads. The aminopyrimidinone core provides polar character to partially offset hydrophobicity and aid aqueous solubility during conjugation, addressing the stability priority.",
+          "synthesis_route": [
+            "Sonogashira coupling of 2-iodoaniline with 2-ethynylaniline to form the diarylalkyne core",
+            "Cyclization of the diarylalkyne diamine to the dibenzoazepine scaffold under Pd-catalyzed or thermal conditions",
+            "Amide coupling of the dibenzoazepine nitrogen with 6-amino-1-methyl-2-oxo-1,2-dihydropyrimidine-4-carboxylic acid (HATU/DIPEA)",
+            "Amide coupling of the pyrimidinone C4-carboxylate with benzylamine (HATU/DIPEA)",
+            "DBCO-NHS ester conjugation to the free amine on the pyrimidinone C5 position to install the strain-promoted azide-alkyne cycloaddition handle"
+          ],
+          "expected_failure_modes": [
+            "Competing intramolecular cyclization or polymerization during Sonogashira/cyclization steps due to bifunctional alkyne-amine intermediates",
+            "Poor aqueous solubility of the extended aromatic scaffold limiting conjugation efficiency with hydrophilic siRNA at physiological pH",
+            "Low Tanimoto similarity (0.183) to any clinical linker suggests unpredictable in vivo PK and potential rapid clearance or off-target accumulation",
+            "Non-cleavable design may impair endosomal siRNA release, reducing gene-silencing potency despite stable plasma circulation"
+          ],
+          "validation_experiments": [
+            "SPAAC conjugation efficiency with azide-functionalized siRNA monitored by RP-HPLC and native PAGE to determine DAR distribution",
+            "Plasma stability assay (mouse and human, 37\u00b0C, 48 h) with LC-MS/MS quantification of intact ADC vs free siRNA",
+            "HIC and SEC-MALS to characterize DAR homogeneity and aggregation propensity of the antibody-linker-siRNA conjugate",
+            "Dual-luciferase reporter gene-silencing assay in HER2+ cells to assess functional siRNA delivery and endosomal escape"
+          ],
+          "information_gain": "Testing this rigid, non-cleavable DBCO-based linker will reveal whether the rigidity advantage observed with sulfo-SMCC extends to click-chemistry conjugation handles and whether the non-cleavable design fundamentally limits endosomal siRNA release, thereby defining the upper bound of the rigidity-stability tradeoff for oligonucleotide ADC linkers."
+        },
+        "narrative_llm_ok": true,
+        "derived_rule": {
+          "cleavage_preference": "non-cleavable-rigid",
+          "rigidity": "rigid",
+          "stability_priority": "high",
+          "confidence": 0.799
+        }
+      }
+    ]
+  },
+  "counts": {
+    "cytotoxin": 5,
+    "immunomodulator": 5,
+    "oligonucleotide": 5
+  }
+}

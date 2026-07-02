@@ -1,0 +1,58 @@
+[
+  {
+    "label": "cyto-Disulf-0",
+    "kind": "designed_conjugate",
+    "linker_smiles": "Nc1c(C(=O)SSc2ccccn2)nnn1CC(=O)NCc1ccccc1",
+    "payload_smiles": "CC[C@H](C)[C@@H]([C@@H](CC(=O)N1CCC[C@H]1[C@@H]([C@@H](C(C)C)OC)N(C)C(=O)[C@@H](NC(=O)[C@H](C)NC)C(C)C)OC)OC(=O)OCc1ccc(N)cc1",
+    "whole_conjugate": true,
+    "ok": true,
+    "status": "completed",
+    "iptm": 0.849,
+    "plddt": 83.82,
+    "binding_affinity_kd_nm": 1199.14,
+    "binding_energy_kcal_mol": -8.08,
+    "error": null
+  },
+  {
+    "label": "immu-DBCO-0",
+    "kind": "designed_conjugate",
+    "linker_smiles": "O=C(Cn1c(=O)[nH]c(=O)n(CC(=O)N2Cc3ccccc3C#Cc3ccccc32)c1=O)NCc1ccccc1",
+    "payload_smiles": "CC(C)COCc1cnc2c(n1)n(cn2)CCO",
+    "whole_conjugate": true,
+    "ok": true,
+    "status": "completed",
+    "iptm": 0.927,
+    "plddt": 87.72,
+    "binding_affinity_kd_nm": 43.21,
+    "binding_energy_kcal_mol": -10.05,
+    "error": null
+  },
+  {
+    "label": "olig-DBCO-0",
+    "kind": "negative_conjugate",
+    "linker_smiles": "O=C(NCc1ccccc1)c1cn(C(=O)N2Cc3ccccc3C#Cc3ccccc32)c(=O)[nH]c1=O",
+    "payload_smiles": "COP(=O)(O)OCC1OC(N)C(O)C1OP(=O)(O)OCC",
+    "whole_conjugate": true,
+    "ok": true,
+    "status": "completed",
+    "iptm": 0.871,
+    "plddt": 87.17,
+    "binding_affinity_kd_nm": 74.09,
+    "binding_energy_kcal_mol": -9.73,
+    "error": null
+  },
+  {
+    "label": "clinical-mcValCitPABC+MMAE",
+    "kind": "commercial_conjugate",
+    "linker_smiles": "O=C1C=CC(=O)N1CCCCCC(=O)NC(C(C)C)C(=O)NC(CCCNC(N)=O)C(=O)Nc1ccc(CO)cc1",
+    "payload_smiles": "CC[C@H](C)[C@@H]([C@@H](CC(=O)N1CCC[C@H]1[C@@H]([C@@H](C(C)C)OC)N(C)C(=O)[C@@H](NC(=O)[C@H](C)NC)C(C)C)OC)OC(=O)OCc1ccc(N)cc1",
+    "whole_conjugate": true,
+    "ok": true,
+    "status": "completed",
+    "iptm": 0.746,
+    "plddt": 77.12,
+    "binding_affinity_kd_nm": 44.78,
+    "binding_energy_kcal_mol": -10.03,
+    "error": null
+  }
+]
