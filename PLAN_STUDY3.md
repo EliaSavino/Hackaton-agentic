@@ -182,6 +182,21 @@ ISAC** linkers. Each gets a one-row **dossier**: `SMILES · design rationale · 
 analogue (from the KB) · proposed synthesis (from retrosynthesis) · expected failure modes ·
 suggested validation experiment`. This is the paper's payload — what a chemist actually acts on.
 
+**Build the structures — chemists read structures, not SMILES.** For every shortlisted
+candidate, render:
+- a **2D depiction** of the linker *and* of the assembled construct (conjugation handle +
+  linker + real payload), with the cleavage site / scissile bond highlighted — RDKit
+  (`rdMolDraw2D`) already available, so this is cheap;
+- a **3D structure**: at minimum an RDKit ETKDG-embedded, MMFF-minimised conformer (SDF/mol),
+  and for the top candidates the **Boltz co-fold pose** (the PDB Phase D already produces) shown
+  with the linker seated in the cathepsin-B pocket near the catalytic dyad.
+
+These become a **structure gallery figure** in the main paper (one panel per shortlisted class)
+and per-candidate structure cards in the supplementary — the single element that makes the
+output feel like a med-chem deliverable rather than a table of strings. A **rendering agent**
+owns this stage (RDKit 2D/3D + a PDB→image step such as PyMOL/py3Dmol headless), and the writer
+agent embeds the gallery.
+
 ---
 
 ## 8. Phase G — The writer + supervisor
