@@ -279,6 +279,8 @@ def score_adc_linker(
 
     from hackathon_agents.tools.predictive_scorers import score_mechanism_resolved_stability
 
+    stability_raw = round(score_mechanism_resolved_stability(smiles)["overall_stability_score"], 4)
+
     subscores: dict[str, float] = {
         "solubility": round(
             0.7 * _sigmoid_low(logp, profile.target_logp, width=2.0)
@@ -292,7 +294,7 @@ def score_adc_linker(
         # "heuristic complexity index" + feasibility filter, never as the scoring axis.
         "synthesizability": round(_sa_to_synth(sa_score, profile.max_sa_score), 4),
         "cleavability": round(cleavability, 4),
-        "stability": round(score_mechanism_resolved_stability(smiles)["overall_stability_score"], 4),
+        "stability": stability_raw,
         "similarity": 0.5,  # neutral placeholder until the corpus carries linker SMILES
     }
 
@@ -301,12 +303,16 @@ def score_adc_linker(
         key: subscores[key]
         for key in ADC_GOAL_KEYS
         if weights.get(key, 0.0) > 0.0
-        and not (key == "cleavability" and pref == "ignore")
+        and not (
+            (key == "cleavability" and pref == "ignore")
+            or (key == "stability" and not profile.enforce_stability_alerts)
+        )
     }
     composite = _weighted_geomean(active, weights)
     # Stability alerts act as a hard filter (like REINVENT CustomAlerts).
+    # Trigger metadata can relax the alert for false positives such as glucuronide.
     if profile.enforce_stability_alerts:
-        composite *= subscores["stability"]
+        composite *= stability_raw
     return round(composite, 4), subscores
 
 

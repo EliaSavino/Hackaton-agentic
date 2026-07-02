@@ -83,6 +83,17 @@ def test_reward_objective_still_rewards_cleavable():
     assert "MatchingSubstructure" in types
 
 
+def test_glucuronide_relaxes_stability_alert_in_composite():
+    prof = profile_for_payload("cytotoxin", GRID_TRIGGERS["Glucuronide"])
+    composite, sub = score_adc_linker(
+        "O=C1C=CC(=O)N1CCCCCC(=O)Nc1ccc(OC2OC(C(=O)O)C(O)C(O)C2O)cc1CO",
+        prof,
+    )
+    assert composite is not None
+    assert sub["stability"] == 0.0
+    assert composite > 0.1
+
+
 def test_derive_payload_rules_are_cited_and_deterministic():
     for payload in PAYLOAD_CLASSES:
         rule = derive_payload_rules(payload)
