@@ -119,10 +119,12 @@ def fig3_rules_steer(designs, out: Path, tmp_dir: Path | None = None, per_class:
     tmp_dir = tmp_dir or (out.parent / "_fig3_tmp")
     tmp_dir.mkdir(parents=True, exist_ok=True)
 
-    fig = plt.figure(figsize=(9.6, 4.7))
+    # Height scales with the number of molecule rows so the layout stays balanced.
+    fig = plt.figure(figsize=(9.6, 3.15 + 0.95 * per_class))
     # Explicit margins (no tight_layout -- it can't reconcile the colorbar + image subgrid).
-    gs = fig.add_gridspec(2, 2, height_ratios=[1.0, 1.02], hspace=0.5, wspace=0.24,
-                          left=0.075, right=0.97, top=0.9, bottom=0.03)
+    # left is wide enough for the full heatmap row labels ("Immunomodulator (ISAC)" etc.).
+    gs = fig.add_gridspec(2, 2, height_ratios=[1.3, 0.58 * per_class + 0.42], hspace=0.5, wspace=0.24,
+                          left=0.155, right=0.975, top=0.9, bottom=0.035)
     axh = fig.add_subplot(gs[0, 0])
     axs = fig.add_subplot(gs[0, 1])
     gs_m = gs[1, :].subgridspec(per_class, len(classes), hspace=0.12, wspace=0.06)
@@ -187,9 +189,9 @@ def fig3_rules_steer(designs, out: Path, tmp_dir: Path | None = None, per_class:
 
 
 # --------------------------------------------------------------------------- #
-# Colour = cleavage class (cleavable designs teal, rigid ARC amber, clinical substrate slate);
+# Colour = cleavage class (cleavable designs purple, rigid ARC orange, clinical substrate grey);
 # marker shape alone carries the payload class. So the cleavables cluster in one colour tight to
-# the left and the lone rigid design sits amber far to the right.
+# the left and the lone rigid design sits orange far to the right.
 _KD_LABELS = {
     "cyto-Maleim": ("Val-Cit cytotoxin design", PAL_CLEAVABLE, "o"),
     "immu-Maleim": ("Val-Ala ISAC design", PAL_CLEAVABLE, "^"),
@@ -223,20 +225,29 @@ def fig4_cofold_kd(boltz, out: Path, hypothesis: dict | None = None) -> Path:
     # below so the two tight-left cleavables (cytotoxin, hypothesis) don't collide. The marker
     # row sits above centre so the multi-line down-labels have room and clear the x-axis ticks.
     # In-plot title dropped -- the LaTeX caption carries it.
-    fig, ax = plt.subplots(figsize=(8.4, 2.8))
+    fig, ax = plt.subplots(figsize=(8.4, 2.9))
+    # Two K_d zones make the story legible at a glance: the cleavable designs + the clinical
+    # substrate cluster in one recognition regime (purple), while the rigid non-cleavable design
+    # sits an order of magnitude out (orange). Affinity indexes recognition, not cleavage.
+    ax.axvspan(6.2, 62, color=PAL_CLEAVABLE, alpha=0.07, zorder=0)
+    ax.axvspan(80, 165, color=PAL_RIGID, alpha=0.10, zorder=0)
+    ax.text(19.5, 1.1, "recognition regime", ha="center", va="center", fontsize=7.4,
+            color="#5b0a6b", style="italic", fontweight="bold")
+    ax.text(114, 1.1, "poorly recognised", ha="center", va="center", fontsize=7.4,
+            color="#9a5a00", style="italic", fontweight="bold")
     for i, r in enumerate(rows):
         name, col, mk = _kd_label(r.get("label", ""))
-        ax.scatter(r["binding_affinity_kd_nm"], 0, s=200, marker=mk, color=col, edgecolor="black", lw=0.7, zorder=3)
+        ax.scatter(r["binding_affinity_kd_nm"], 0, s=205, marker=mk, color=col, edgecolor="black", lw=0.7, zorder=3)
         up = i % 2 == 0
         ax.annotate(f"{name}\n{r['binding_affinity_kd_nm']:.0f} nM",
                     (r["binding_affinity_kd_nm"], 0), fontsize=7.2, ha="center",
                     fontweight="bold" if "hypothesis" in name else "normal",
-                    xytext=(0, 30 if up else -34), textcoords="offset points",
+                    xytext=(0, 26 if up else -30), textcoords="offset points",
                     va="bottom" if up else "top",
                     arrowprops=dict(arrowstyle="-", lw=0.4, color="#999"))
-    ax.set_xscale("log"); ax.set_yticks([]); ax.set_ylim(-1.5, 1.0)
+    ax.set_xscale("log"); ax.set_yticks([]); ax.set_ylim(-1.4, 1.35); ax.set_xlim(6.2, 165)
     ax.set_xlabel("predicted $K_\\mathrm{d}$ vs cathepsin B (nM, log) $-$ tighter = better recognition, not cleavage", fontsize=9)
-    ax.grid(axis="x", ls=":", alpha=0.5)
+    ax.grid(axis="x", ls=":", alpha=0.4)
     fig.tight_layout()
     out.parent.mkdir(parents=True, exist_ok=True); fig.savefig(out, dpi=200); plt.close(fig)
     return out
@@ -250,22 +261,25 @@ def fig5_sensitivity(sens, out: Path) -> Path:
     import matplotlib.pyplot as plt
 
     classes = ["cytotoxin", "immunomodulator", "oligonucleotide"]
+    short = {"cytotoxin": "Cytotoxin", "immunomodulator": "ISAC", "oligonucleotide": "ARC"}
     topk = [6, 8, 10, 12]
-    # Palette-aligned robust/contested bands; in-plot title dropped (the LaTeX caption is the
-    # single voice) and the height trimmed to help the main text hold five pages.
-    fig, ax = plt.subplots(figsize=(7.4, 2.7))
-    ax.axhspan(0.6, 1.02, color=PAL_ROBUST, alpha=0.10)
-    ax.axhspan(-0.02, 0.4, color=PAL_CONTESTED, alpha=0.12)
-    ax.text(6.0, 0.93, "robust", color="#3d0a75", fontsize=8, fontweight="bold")
-    ax.text(6.0, 0.05, "contested / low", color="#9a6b00", fontsize=8, fontweight="bold")
+    # Palette-aligned robust/contested bands; each class labelled at the right end of its own line
+    # (a legend box would sit on top of the data), with explicit margins so nothing is clipped.
+    fig, ax = plt.subplots(figsize=(7.8, 2.7))
+    ax.axhspan(0.6, 1.04, color=PAL_ROBUST, alpha=0.09)
+    ax.axhspan(-0.04, 0.4, color=PAL_CONTESTED, alpha=0.11)
+    ax.text(6.1, 1.0, "robust", color="#3d0a75", fontsize=7.6, fontweight="bold", va="top")
+    ax.text(6.1, 0.06, "contested / low", color="#9a6b00", fontsize=7.6, fontweight="bold", va="bottom")
     for pc in classes:
         ys = [sens["topk"][pc][str(k)]["score"] for k in topk]
-        lab = f"{_SHORT[pc]}  ({min(ys):.2f}--{max(ys):.2f})"
-        ax.plot(topk, ys, "-o", color=_COL[pc], lw=2, ms=6, label=lab)
-    ax.set_xlabel("retrieval depth (top-$k$ passages)"); ax.set_ylabel("disagreement-aware confidence $C$")
-    ax.set_ylim(0, 1.05); ax.set_xlim(5.5, 12.5); ax.set_xticks(topk)
-    ax.legend(fontsize=7.6, loc="center left", title="class (conf range over $k$)")
-    fig.tight_layout()
+        ax.plot(topk, ys, "-o", color=_COL[pc], lw=2.2, ms=6, zorder=3)
+        ax.annotate(f"{short[pc]}\n({min(ys):.2f}–{max(ys):.2f})", (topk[-1], ys[-1]),
+                    xytext=(7, 0), textcoords="offset points", va="center", ha="left",
+                    fontsize=6.9, color=_COL[pc], fontweight="bold")
+    ax.set_xlabel("retrieval depth (top-$k$ passages)")
+    ax.set_ylabel("disagreement-aware confidence $C$", fontsize=8.6)
+    ax.set_ylim(0, 1.08); ax.set_xlim(5.6, 12.5); ax.set_xticks(topk)
+    fig.subplots_adjust(left=0.11, right=0.80, top=0.965, bottom=0.16)
     out.parent.mkdir(parents=True, exist_ok=True); fig.savefig(out, dpi=200); plt.close(fig)
     return out
 
@@ -389,8 +403,8 @@ def render_study6_figures(src="deliverables/study5", out_dir="deliverables/study
     figs = {
         "fig1": fig1_journey(chains, designs, boltz, out / "fig1_journey.png", out / "_struct_cyto.png"),
         "fig2": fig2_heldout_composition(chains, heldout, out / "fig2_heldout.png"),
-        # Fig 3 now carries score (weights) + values (scatter) + molecules (gallery panel).
-        "fig3": fig3_rules_steer(designs, out / "fig3_rules_steer.png", out / "_fig3_tmp"),
+        # Fig 3 now carries score (weights) + values (scatter) + molecules (one hero design/target).
+        "fig3": fig3_rules_steer(designs, out / "fig3_rules_steer.png", out / "_fig3_tmp", per_class=2),
         "fig4": fig4_cofold_kd(boltz, out / "fig4_cofold.png", hypothesis=hypothesis),
     }
     sens_path = Path(out_dir).parent / "sensitivity.json"

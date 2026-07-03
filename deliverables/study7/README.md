@@ -45,17 +45,24 @@ Also: scissile-bond SMARTS tightened (red marks the Cit-PABC anilide, not every 
 `boltz.json` flag renamed `whole_conjugate` → `co_present`; gallery label "steps" → "cplx idx".
 
 ## Files
-- `ADC_Linker_Study6_Paper.pdf` (**5 pp**) · `ADC_Linker_Study6_Supplementary.pdf` (7 pp)
+- `ADC_Linker_Study6_Paper.pdf` (**6 pp**, references on their own page) · `ADC_Linker_Study6_Supplementary.pdf` (7 pp)
 - `figures/` — fig1_journey, fig2_heldout, fig3_rules_steer, fig4_cofold, fig5_sensitivity
   (the old fig6 gallery is now **panel (c) of Figure 3** — see Part XII)
 - Data JSONs live in `deliverables/study5/` (the ISAC objective was corrected in place by the V7
   safety gate; molecules are the same real REINVENT SMILES, re-scored under the gated objective).
 
 ## Reproduce (no pod, no LLM re-runs)
+
+> **The `.tex` is now hand-authoritative.** `adc_linker_study6.tex` was hand-tuned to 5 pages
+> (spacing, title size, `[!ht]` figure placement) and carries reviewer text revisions that are
+> **not** in the Python builder. Do **not** re-run `adc_study6_paper` for study7 — it regenerates
+> the tex and would wipe the 5-page layout and the revisions. Regenerate **figures** freely; to
+> rebuild the **PDF**, edit the tex and compile directly:
+
 ```bash
 PY=/Users/es/miniforge3/envs/hackathon-agents/bin/python; export PYTHONPATH=src
-$PY -m hackathon_agents.tools.adc_study6_figures      # 4 figures from study5 JSON
-$PY -m hackathon_agents.tools.adc_study6_paper        # build + compile PDFs
+$PY -c "from hackathon_agents.tools.adc_study6_figures import render_study6_figures as r; r(out_dir='deliverables/study7/figures')"
+cd deliverables/study7 && /Library/TeX/texbin/pdflatex adc_linker_study6.tex && /Library/TeX/texbin/pdflatex adc_linker_study6.tex
 ```
 
 ## Part VIII — the headline is now a falsifiable hypothesis (rubric criterion 1)
@@ -159,6 +166,47 @@ and figure layout:
   Discussion anchors every figure inside Results; page 5 is Discussion → Conclusion →
   Acknowledgements → References with no floats.
 - Main text holds at **5 pp**, 0 overfull; SI back to 7 pp.
+
+## Part XIII — Final spotless pass (consistency, figures 4/5, authorship)
+
+- **DBCO vs sulfo-SMCC/MCC consistency (the one real hole).** The named clinical benchmark is
+  sulfo-SMCC (residue MCC, as in Kadcyla), but the rigid ARC molecule the generator actually
+  welded and co-folded is a DBCO cap. Both are rigid + non-cleavable, so they satisfy the same
+  rule, but they are different conjugation chemistries. Fixed by keeping sulfo-SMCC/MCC as the
+  named benchmark (abstract, hypothesis, Table 2's MCC anchor with Tc 0.145) and, at every point
+  DBCO appears, framing it as *one concrete instance of the rigid non-cleavable sulfo-SMCC/MCC
+  class* (methods, §3.4 co-fold, §3.6, Figure 3(c) caption). The cathepsin-B contrast holds for
+  either cap because neither is a protease substrate.
+- **Figures 4 & 5 reworked.** Fig 4 (sensitivity): the overlapping legend is replaced by direct
+  end-of-line labels, the clipped y-axis label is fixed, plasma robust/contested bands. Fig 5
+  (co-fold): shaded plasma zones---a purple "recognition regime" holding the cleavable designs +
+  clinical substrate, an orange "poorly recognised" zone holding the lone rigid ARC design---so
+  the story reads at a glance.
+- **Hackathon authorship.** The AI-tools Acknowledgement is removed and **Claude (Opus 4.8) is
+  credited as a co-author** (Anthropic). This is a hackathon build, not a journal submission.
+- **Layout.** References now sit on their own clean page (`\clearpage`), so no figure ever shares
+  the bibliography page. Two molecules per target retained in Figure 3(c). Main is 6 pp.
+
+## Part XIV — Reviewer textual revisions (edited the tex directly, held at 5 pp)
+
+Text-only changes applied straight to the hand-tuned `.tex` (the builder is now behind):
+
+- **Introduction** now opens with a broader problem statement (tumour heterogeneity defeats
+  small molecules → modular ADCs; new refs Beck 2017 `nrd.2016.268`, ADC application
+  `bioconjchem.9b00306`) and a dedicated sentence on *why an agent*: the linker is the key,
+  payload-dependent, high-dimensional optimisation problem (linker refs moved here).
+- **Hypothesis generalised** to span all payload classes (rules derived + confidence tracking
+  the literature's consensus), with the ARC case named as its sharpest, directly-testable
+  instance — so it now matches the paper's general title.
+- **Conclusion** notes that for emerging payloads (AOCs, ISACs) the literature is tiny beside
+  cytotoxin-ADC data, and proposes feeding fresh experimental data on a new payload back into the
+  agent (an active-learning loop).
+- **AI disclaimer** (2 sentences on how Claude + this repo were used) and a small
+  **Author contributions** block with a `[per-author contributions to be completed]` placeholder.
+
+Deferred per the "text-only, keep 5 pages" instruction (both are figure/image changes that would
+risk the layout): Table 2 SMILES → drawn structures, and expanding Fig 3(b)'s Ertl-SA axis — note
+the SA subscores barely differ (0.6437 / 0.6547 / 0.6866), so a wider axis would show little.
 
 ## Standing (deferred, named in the paper as boundaries)
 Real retrosynthesis (AiZynthFinder, n=15); covalent Boltz conjugate; deeper generative sampling
